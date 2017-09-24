@@ -2,23 +2,34 @@ import './style.css!';
 
 import { BoxBufferGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from 'three.js';
 import './socket';
+import './utils/utils';
+import { Particle } from './engine/particle';
+import { assets } from './utils/assets';
 
 let camera, scene, renderer;
-let mesh;
+let mesh, particleTest;
 
-init();
-animate();
+assets.load(function() {
+	init();
+	animate();
+});
 
 function init() {
 	camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.z = 400;
+	camera.position.z = 4;
 	scene = new Scene();
-	const geometry = new BoxBufferGeometry( 200, 200, 200 );
-	const material = new MeshBasicMaterial({
-		color: 0xFFFFFF,
+	// const geometry = new BoxBufferGeometry( 200, 200, 200 );
+	// const material = new MeshBasicMaterial({
+	// 	color: 0xFFFFFF,
+	// });
+	// mesh = new Mesh( geometry, material );
+	// scene.add( mesh );
+	particleTest = new Particle({
+		position: { array: [1,0,0] },
+		normal: { array: [0,1,0] },
+		color: { array: [1,1,1,1] },
 	});
-	mesh = new Mesh( geometry, material );
-	scene.add( mesh );
+	scene.add( particleTest.mesh );
 	renderer = new WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -32,7 +43,7 @@ function onWindowResize() {
 }
 function animate() {
 	requestAnimationFrame( animate );
-	mesh.rotation.x += 0.005;
-	mesh.rotation.y += 0.01;
+	particleTest.mesh.rotation.x += 0.005;
+	particleTest.mesh.rotation.y += 0.01;
 	renderer.render( scene, camera );
 }
