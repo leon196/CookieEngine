@@ -1,0 +1,38 @@
+{
+  "name": "cookie-invitro-2017",
+  "version": "1.0.0",
+  "description": "Invitro for Cookie demoparty 2017",
+  "scripts": {
+    "start": "concurrently --kill-others \"http-server browser\" \"chokidar-socket-emitter -d browser\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leon196/CookieInvitro2017.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leon196/CookieInvitro2017/issues"
+  },
+  "homepage": "https://github.com/leon196/CookieInvitro2017",
+  "dependencies": {
+    "jspm": "^0.16.53"
+  },
+  "devDependencies": {
+    "chokidar-socket-emitter": "^0.6.0",
+    "concurrently": "^3.5.0",
+    "http-server": "^0.10.0"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "browser"
+    },
+    "dependencies": {
+      "css": "github:systemjs/plugin-css@^0.1.36",
+      "three.js": "github:mrdoob/three.js@master"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
+  }
+}
