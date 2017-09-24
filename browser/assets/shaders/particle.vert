@@ -36,8 +36,8 @@ void main() {
 	// float stretch = (1.+magnitude*spriteVelocityStretch);
 
 	// world space
-	// vec3 tangent = normalize(cross(vec3(0,1,0), vNormal));
-	// vec3 up = normalize(cross(tangent, vNormal));
+	vec3 tangent = normalize(cross(vec3(0,1,0), vNormal));
+	vec3 up = normalize(cross(tangent, vNormal));
 
 	// velocity space
 	// vec3 e = vec3(0.00001);
@@ -47,14 +47,16 @@ void main() {
 
 
 	float size = 0.1;
-	// posWorld.xyz += (anchor.x * tangent + anchor.y * up) * size;
+	posWorld.xyz += (anchor.x * tangent + anchor.y * up) * size;
 
 	vViewDir = posWorld.xyz - cameraPosition;
+
+	// vColor *= dot(normalize(vViewDir), vNormal)*.5+.5;
 
 	gl_Position = projectionMatrix * viewMatrix * posWorld;
 
 	// screen space
-	gl_Position.xy += anchor * size;
+	// gl_Position.xy += anchor * size;
 
 	vScreenUV = (gl_Position.xy/gl_Position.w) * 0.5 + 0.5;
 }
