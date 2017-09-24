@@ -40,6 +40,7 @@ function createGeometryForParticles (positionArray, colorArray, normalArray)
 	// attributes
 	var vertices = new Float32Array(count * 3 * 3);
 	var normals = new Float32Array(count * 3 * 3);
+	var colors = new Float32Array(count * 3 * 3);
 	var anchor = new Float32Array(count * 3 * 2);
 	var texcoord = new Float32Array(count * 3 * 2);
 
@@ -50,32 +51,30 @@ function createGeometryForParticles (positionArray, colorArray, normalArray)
 		ib = triangleIndex*3+1;
 		ic = triangleIndex*3+2;
 
-		x = positionArray[ia];
-		y = positionArray[ib];
-		z = positionArray[ic];
-
-		nx = normalArray[ia];
-		ny = normalArray[ib];
-		nz = normalArray[ic];
-
 		// uv is used to map vertex index to bitmap data
 		u = (triangleIndex % dimension) / dimension;
 		v = Math.floor(triangleIndex / dimension) / dimension;
 
 		// positions and normals are on the same for the 3 points
-		for (var tri = 0; tri < 3; ++tri) {
-			vertices[indexVertex] = x;
-			vertices[indexVertex+1] = y;
-			vertices[indexVertex+2] = z;
+		for (var tri = 0; tri < 3; ++tri)
+		{
+			vertices[indexVertex+0] =  positionArray[ia];
+			vertices[indexVertex+1] =  positionArray[ib];
+			vertices[indexVertex+2] =  positionArray[ic];
 
-			normals[indexVertex] = nx;
-			normals[indexVertex+1] = ny;
-			normals[indexVertex+2] = nz;
+			normals[indexVertex+0] = normalArray[ia];
+			normals[indexVertex+1] = normalArray[ib];
+			normals[indexVertex+2] = normalArray[ic];
+
+	    colors[indexVertex+0] = colorArray[ia];
+	    colors[indexVertex+1] = colorArray[ib];
+	    colors[indexVertex+2] = colorArray[ic];
+
+			texcoord[indexUV+0] = u;
+			texcoord[indexUV+1] = v;
+
 	    indexVertex += 3;
 
-			texcoord[indexUV] = u;
-			texcoord[indexUV+1] = v;
-	    indexUV += 2;
 	  }
 
 	 	// offset used to scale triangle in shader
@@ -90,6 +89,7 @@ function createGeometryForParticles (positionArray, colorArray, normalArray)
 
 	geometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
 	geometry.addAttribute( 'normal', new THREE.BufferAttribute( normals, 3 ) );
+	geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
 	geometry.addAttribute( 'anchor', new THREE.BufferAttribute( anchor, 2 ) );
 	geometry.addAttribute( 'texcoord', new THREE.BufferAttribute( texcoord, 2 ) );
 	

@@ -16,20 +16,18 @@ assets.load(function() {
 
 function init() {
 	camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.z = 4;
+	camera.position.z = 10;
 	scene = new Scene();
-	// const geometry = new BoxBufferGeometry( 200, 200, 200 );
-	// const material = new MeshBasicMaterial({
-	// 	color: 0xFFFFFF,
+
+	console.log(assets.geometries["vegetation"].attributes)
+	particleTest = new Particle(assets.geometries["vegetation"].attributes);
+	// particleTest = new Particle({
+	// 	position: { array: [1,0,0] },
+	// 	normal: { array: [0,1,0] },
+	// 	color: { array: [1,1,1,1] },
 	// });
-	// mesh = new Mesh( geometry, material );
-	// scene.add( mesh );
-	particleTest = new Particle({
-		position: { array: [1,0,0] },
-		normal: { array: [0,1,0] },
-		color: { array: [1,1,1,1] },
-	});
 	scene.add( particleTest.mesh );
+
 	renderer = new WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );

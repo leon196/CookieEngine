@@ -1,6 +1,10 @@
 import * as THREE from 'three.js'
 import './loader'
 import '../engine/parameters'
+import { PLYLoader } from '../utils/PLYLoader'
+
+var baseURL = "assets/";
+var shaderBaseURL = baseURL + 'shaders/';
 
 var textureDescriptors = {
 	// 'panorama': "images/Room.jpg",
@@ -11,15 +15,13 @@ var meshDescriptors = {
 };
 
 var geometryDescriptors = {
-	// 'Simon1': 'meshes/Simon1.ply',
+	'vegetation': 'points/vegetation.ply',
 };
 
 var shaderDescriptors = {
 	'particle.vert': 'particle.vert',
 	'color.frag': 'color.frag',
 };
-
-var shaderBaseURL = 'app/shaders/';					
 
 var pendingCallbacks = [];
 var isLoaded = false;
@@ -44,7 +46,7 @@ export var assets = {
 function notify() {
 	isLoaded = assets.shaders 
 	// && Object.keys(assets.textures).length == Object.keys(textureDescriptors).length 
-	// && Object.keys(assets.geometries).length == Object.keys(geometryDescriptors).length;
+	&& Object.keys(assets.geometries).length == Object.keys(geometryDescriptors).length;
 	// && assets.meshes;
 
 	if (isLoaded) {
@@ -114,24 +116,24 @@ assets.reload = function (assetName, callback) {
 // });
 
 
-// var plyLoader = new THREE.PLYLoader();
+var plyLoader = new PLYLoader();
 // var objLoader = new THREE.OBJLoader();
 
-// var meshURLs = [];
-// Object.keys(geometryDescriptors).forEach(function(name) {
-// 	var url = geometryDescriptors[name];
-// 	var infos = url.split('.');
-// 	var extension = infos[infos.length-1];
-// 	if (extension == 'ply') {
-// 		plyLoader.load(url, function(geometry){
-// 			assets.geometries[name] = geometry;
-// 			return notify();
-// 		});
-// 	} else if (extension == 'obj') {
-// 		objLoader.load(url, function(geometry){
-// 			assets.geometries[name] = geometry;
-// 			return notify();
-// 		});
-// 	}
-// });
+var meshURLs = [];
+Object.keys(geometryDescriptors).forEach(function(name) {
+	var url = baseURL + geometryDescriptors[name];
+	var infos = url.split('.');
+	var extension = infos[infos.length-1];
+	if (extension == 'ply') {
+		plyLoader.load(url, function(geometry){
+			assets.geometries[name] = geometry;
+			return notify();
+		});
+	}/* else if (extension == 'obj') {
+		objLoader.load(url, function(geometry){
+			assets.geometries[name] = geometry;
+			return notify();
+		});
+	}*/
+});
 
