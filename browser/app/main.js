@@ -1,5 +1,7 @@
 import './style.css!';
+
 import { BoxBufferGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from 'three.js';
+import './socket';
 
 let camera, scene, renderer;
 let mesh;
@@ -11,8 +13,8 @@ function init() {
 	camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
 	camera.position.z = 400;
 	scene = new Scene();
-	var geometry = new BoxBufferGeometry( 200, 200, 200 );
-	var material = new MeshBasicMaterial({
+	const geometry = new BoxBufferGeometry( 200, 200, 200 );
+	const material = new MeshBasicMaterial({
 		color: 0xFFFFFF,
 	});
 	mesh = new Mesh( geometry, material );
@@ -21,7 +23,6 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
-	//
 	window.addEventListener( 'resize', onWindowResize, false );
 }
 function onWindowResize() {

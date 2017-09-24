@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Invitro for Cookie demoparty 2017",
   "scripts": {
-    "start": "concurrently --kill-others \"http-server browser\" \"chokidar-socket-emitter -d browser\""
+    "start": "concurrently --kill-others \"http-server browser\" \"chokidar-socket-emitter -p browser\""
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     },
     "dependencies": {
       "css": "github:systemjs/plugin-css@^0.1.36",
+      "socket.io-client": "github:socketio/socket.io-client@^2.0.3",
       "three.js": "github:mrdoob/three.js@master"
     },
     "devDependencies": {
