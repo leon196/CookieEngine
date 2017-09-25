@@ -33,6 +33,7 @@
     },
     "dependencies": {
       "css": "github:systemjs/plugin-css@^0.1.36",
+      "dataarts/dat.gui": "github:dataarts/dat.gui@^0.6.5",
       "socket.io-client": "github:socketio/socket.io-client@^2.0.3",
       "three.js": "github:mrdoob/three.js@master"
     },

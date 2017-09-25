@@ -1,5 +1,5 @@
 
-export var parameters = {
+export const parameters = {
 	// feedbackBlend: 0.5,
 	velocitySpeed: 0.225,
 	velocityTargetBlend: 0.1,
