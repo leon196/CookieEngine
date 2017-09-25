@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Invitro for Cookie demoparty 2017",
   "scripts": {
+    "build": "node scripts/build.js",
     "start": "concurrently --kill-others \"http-server browser\" \"chokidar-socket-emitter -p browser\""
   },
   "repository": {
@@ -19,7 +20,9 @@
   "devDependencies": {
     "chokidar-socket-emitter": "^0.6.0",
     "concurrently": "^3.5.0",
-    "http-server": "^0.10.0"
+    "http-server": "^0.10.0",
+    "quickly-copy-file": "^1.0.0",
+    "rimraf-promise": "^2.0.0"
   },
   "peerDependencies": {
     "eslint": "^4.7.2"

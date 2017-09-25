@@ -1,6 +1,6 @@
 import io from 'socket.io-client/dist/socket.io';
-import { assets } from './editor/assets';
-import { materials } from './editor/materials';
+import { assets } from '../editor/assets';
+import { materials } from '../editor/materials';
 
 let socket;
 
