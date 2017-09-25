@@ -10,7 +10,7 @@ var materialFromShaderNames = [ 'position', 'velocity' ];
 var defaultUniforms = {
 	time: { value: 1.0 },
 	frameBuffer: { value: 0 },
-	resolution: { value: 0 },
+	resolution: { value: [window.innerWidth, window.innerHeight] },
 };
 
 materials.setup = function ()
@@ -28,6 +28,20 @@ materials.setup = function ()
 		uniforms: defaultUniforms,
 		vertexShader: assets.shaders['particle.vert'],
 		fragmentShader: assets.shaders['particle.frag'],
+		side: THREE.DoubleSide
+	})
+
+	materials.text = new THREE.ShaderMaterial( {
+		uniforms: defaultUniforms,
+		vertexShader: assets.shaders['text.vert'],
+		fragmentShader: assets.shaders['text.frag'],
+		side: THREE.DoubleSide
+	})
+
+	materials.line = new THREE.ShaderMaterial( {
+		uniforms: defaultUniforms,
+		vertexShader: assets.shaders['text.vert'],
+		fragmentShader: assets.shaders['line.frag'],
 		side: THREE.DoubleSide
 	})
 }

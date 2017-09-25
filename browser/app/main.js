@@ -7,9 +7,10 @@ import { assets } from './editor/assets';
 import { OrbitControls } from './utils/OrbitControls';
 import { materials } from './editor/materials';
 import { renderer } from './engine/renderer';
+import { makeText } from './utils/makeText';
 
 let camera, scene, controls;
-let mesh, particle;
+let particle;
 
 assets.load(function() {
 	init();
@@ -29,6 +30,33 @@ function init ()
 	materials.setup();
 	var attributes = assets.geometries["tree"].children[0].geometry.attributes;
 	particle = new Particle(attributes);
+
+	var textScale = .5;
+  var loader = new THREE.FontLoader();
+  loader.load(
+			'assets/fonts/helvetiker_bold.typeface.json',
+			function ( font ) {
+			  var geometry = new THREE.TextGeometry("cookie demoparty 2017 at jardin d'alice", {
+		        font: font,
+		        size: textScale,
+		        height: .01,
+		        curveSegments: 96,
+		    })
+				geometry.computeBoundingBox();
+				var max = geometry.boundingBox.max;
+
+				var xMid = - 0.5 * ( max.x - geometry.boundingBox.min.x );
+				var yMid = - 0.5 * ( max.y - geometry.boundingBox.min.y );
+				geometry.center();
+			  var mesh = new THREE.Mesh( geometry, materials.text );
+				scene.add( mesh );
+
+				geometry = new THREE.PlaneGeometry( max.x * 2., Math.abs(yMid)*2., 96, 1 );
+				var plane = new THREE.Mesh( geometry, materials.line );
+				// scene.add( plane );
+			}
+		);
+
 	scene.add( particle.mesh );
 	scene.add( assets.geometries["tree"] );
 }
@@ -37,6 +65,7 @@ function animate ()
 {
 	requestAnimationFrame( animate );
 
+	materials.text.uniforms.time.value += 0.016;
 	controls.update();
 	particle.update();
 	renderer.render( scene, camera );

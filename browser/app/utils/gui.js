@@ -16,4 +16,5 @@ Object.keys(parameters).forEach(key => {
 	) {
 		item.min(0).max(1).step(0.01);
 	}
+	gui.close();
 });

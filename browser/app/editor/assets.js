@@ -23,8 +23,12 @@ var geometryDescriptors = {
 var shaderDescriptors = {
 	'particle.vert': 'particle.vert',
 	'particle.frag': 'particle.frag',
+	'text.vert': 'text.vert',
+	'text.frag': 'text.frag',
 	'position.frag': 'position.frag',
 	'velocity.frag': 'velocity.frag',
+	'line.vert': 'line.vert',
+	'line.frag': 'line.frag',
 	'screen.vert': 'screen.vert',
 };
 
@@ -66,6 +70,7 @@ var shaderURLs = [
 	// "uniforms.glsl",
 	// "modifiers.glsl",
 	"utils.glsl",
+	"displace.glsl",
 	// "hg_sdf.glsl",
 ].map(function(name) {
 	return shaderBaseURL + name;
@@ -86,7 +91,9 @@ for (var i = 0; i < count; ++i) {
 assets.fileLoaded = {};
 
 function fileWithHeaders(name) {
-	return assets.fileLoaded[shaderBaseURL + "utils.glsl"] + parameterList + assets.fileLoaded[name];
+	return assets.fileLoaded[shaderBaseURL + "utils.glsl"]
+	// + assets.fileLoaded[shaderBaseURL + "displace.glsl"]
+	+ parameterList + assets.fileLoaded[name];
 }
 
 loadFiles(shaderURLs, function (err, files) {
