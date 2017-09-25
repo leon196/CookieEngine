@@ -1,6 +1,7 @@
 
 import * as THREE from 'three.js'
 import { FrameBuffer } from './framebuffer'
+import { renderer } from './renderer';
 
 export function ShaderPass (material, width, height, format, type)
 {

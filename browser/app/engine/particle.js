@@ -13,6 +13,13 @@ export function Particle (attributes)
 		velocityTexture: { value: 0 },
 	};
 
+	materials.position.uniforms = {
+		time: { value: 1.0 },
+		frameBuffer: { value: 0 },
+		positionTexture: { value: 0 },
+		velocityTexture: { value: 0 },
+	};
+
 	var positionArray = attributes.position.array;
 	var colorArray = attributes.color.array;
 	var normalArray = attributes.normal.array;
@@ -24,9 +31,17 @@ export function Particle (attributes)
 	this.positionTexture = createDataTextureForParticles(positionArray, 3);
 	this.positionPass = new ShaderPass(materials.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
 
+	this.time = 0;
+
 	this.update = function ()
 	{
-		materials.particle.uniforms.positionTexture.value = this.positionTexture;
+		this.positionPass.material.uniforms.time.value = this.time;
+		this.positionPass.material.uniforms.positionTexture.value = this.positionTexture;
+		this.positionPass.update();
+		// materials.particle.uniforms.positionTexture.value = this.positionTexture;
+		this.mesh.material.uniforms.time.value = this.time;
+		this.mesh.material.uniforms.positionTexture.value = this.positionPass.getTexture();
+		this.time += 0.016;
 	}
 }
 
