@@ -27,9 +27,10 @@ function init ()
 
 	scene = new THREE.Scene();
 	materials.setup();
-
-	particle = new Particle(assets.geometries["vegetation"].attributes);
+	var attributes = assets.geometries["tree"].children[0].geometry.attributes;
+	particle = new Particle(attributes);
 	scene.add( particle.mesh );
+	scene.add( assets.geometries["tree"] );
 }
 
 function animate ()
@@ -46,4 +47,5 @@ function onWindowResize ()
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	particle.uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
 }

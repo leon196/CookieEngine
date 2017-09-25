@@ -14,6 +14,7 @@ uniform sampler2D colorTexture;
 uniform sampler2D positionTexture;
 uniform sampler2D velocityTexture;
 uniform float time;
+uniform vec2 resolution;
 
 void main() {
 	vTexcoord = texcoord;
@@ -33,23 +34,23 @@ void main() {
 	float fade = smoothstep(0.0, 0.1, velocity.w) * (1. - smoothstep(0.9, 1.0, velocity.w));
 	fade = mix(fade, 1., step(1., velocity.w));
 
-	float stretch = (1.+magnitude*spriteVelocityStretch);
 	// float stretch = (1.+magnitude*spriteVelocityStretch);
 
 	// world space
-	vec3 tangent = normalize(cross(vec3(0,1,0), vNormal));
+	vec3 tangent = normalize(cross(normalize(vec3(0,1,0.1)), vNormal));
 	vec3 up = normalize(cross(tangent, vNormal));
 
 	// velocity space
-	vec3 e = vec3(0.00001);
-	velocity.xyz = normalize(velocity.xyz + e);
-	float moving = smoothstep(0.0, 0.1, magnitude);
-	tangent = mix(tangent, normalize(cross(velocity.xyz, normal))*stretch*.2, moving);
-	up = mix(up, velocity.xyz*stretch, moving);
+	// vec3 e = vec3(0.00001);
+	// velocity.xyz = normalize(velocity.xyz + e);
+	// float moving = smoothstep(0.0, 0.1, magnitude);
+	// tangent = mix(tangent, normalize(cross(velocity.xyz, normal))*stretch*.2, moving);
+	// up = mix(up, velocity.xyz*stretch, moving);
 
 
-	float size = 0.05;
-	posWorld.xyz += (anchor.x * tangent + anchor.y * up) * size;
+	float size = 0.2;
+	// posWorld.xyz += (anchor.x * tangent + anchor.y * up) * size;
+	// posWorld.xyz -= up * size / 2.5;
 
 	vViewDir = posWorld.xyz - cameraPosition;
 
@@ -58,7 +59,9 @@ void main() {
 	gl_Position = projectionMatrix * viewMatrix * posWorld;
 
 	// screen space
-	// gl_Position.xy += anchor * size;
+	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
+	gl_Position.xy += anchor * size * aspect;
+	gl_Position.y += size / 2.5;
 
 	vScreenUV = (gl_Position.xy/gl_Position.w) * 0.5 + 0.5;
 }

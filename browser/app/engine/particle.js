@@ -10,6 +10,7 @@ export function Particle (attributes)
 {
 	this.uniforms = {
 		time: { value: 1.0 },
+		resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
 		frameBuffer: { value: 0 },
 		spawnTexture: { value: 0 },
 		velocityTexture: { value: 0 },
@@ -22,10 +23,13 @@ export function Particle (attributes)
 	materials.position.uniforms = this.uniforms;
 	materials.velocity.uniforms = this.uniforms;
 
-
 	var positionArray = attributes.position.array;
-	var colorArray = attributes.color.array;
 	var normalArray = attributes.normal.array;
+
+	var colorArray;
+	if (attributes.color) colorArray = attributes.color.array;
+	else colorArray = getDefaultColorArray(positionArray.length);
+
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
 	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray);
@@ -58,6 +62,15 @@ export function Particle (attributes)
 		}
 		this.time += 0.016;
 	}
+}
+
+function getDefaultColorArray (count)
+{
+	var array = [];
+	for (var i = count - 1; i >= 0; i--) {
+		array[i] = 1;
+	}
+	return array;
 }
 
 function createGeometryForParticles (positionArray, colorArray, normalArray)

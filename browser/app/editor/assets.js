@@ -2,6 +2,7 @@ import * as THREE from 'three.js'
 import '../utils/loader'
 import { parameters } from '../editor/parameters'
 import { PLYLoader } from '../utils/PLYLoader'
+import { OBJLoader } from '../utils/OBJLoader'
 
 var baseURL = "assets/";
 var shaderBaseURL = baseURL + 'shaders/';
@@ -15,12 +16,13 @@ var meshDescriptors = {
 };
 
 var geometryDescriptors = {
-	'vegetation': 'points/vegetation.ply',
+	// 'vegetation': 'points/vegetation.ply',
+	'tree': 'points/tree.obj',
 };
 
 var shaderDescriptors = {
 	'particle.vert': 'particle.vert',
-	'color.frag': 'color.frag',
+	'particle.frag': 'particle.frag',
 	'position.frag': 'position.frag',
 	'velocity.frag': 'velocity.frag',
 	'screen.vert': 'screen.vert',
@@ -120,7 +122,7 @@ assets.reload = function (assetName, callback) {
 
 
 var plyLoader = new PLYLoader();
-// var objLoader = new THREE.OBJLoader();
+var objLoader = new OBJLoader();
 
 var meshURLs = [];
 Object.keys(geometryDescriptors).forEach(function(name) {
@@ -132,11 +134,11 @@ Object.keys(geometryDescriptors).forEach(function(name) {
 			assets.geometries[name] = geometry;
 			return notify();
 		});
-	}/* else if (extension == 'obj') {
+	} else if (extension == 'obj') {
 		objLoader.load(url, function(geometry){
 			assets.geometries[name] = geometry;
 			return notify();
 		});
-	}*/
+	}
 });
 

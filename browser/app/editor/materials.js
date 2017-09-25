@@ -27,7 +27,7 @@ materials.setup = function ()
 	materials.particle = new THREE.ShaderMaterial( {
 		uniforms: defaultUniforms,
 		vertexShader: assets.shaders['particle.vert'],
-		fragmentShader: assets.shaders['color.frag'],
+		fragmentShader: assets.shaders['particle.frag'],
 		side: THREE.DoubleSide
 	})
 }
