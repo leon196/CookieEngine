@@ -47,14 +47,32 @@ void main()	{
 	// origin
 	vec3 origin = normalize(spawn.xyz - position.xyz + epsilon) * velocityOriginBlend;
 
+	// attractor
+	// float e = .25;
+	// float a = .95;
+	// float y = .6;
+	// float o = 3.5;
+	// float b = .7;
+	// float t = .1;
+	// vec3 p = position.xyz;
+	// vec3 attractor = vec3(
+	// 	(p.z-b)*p.x-buffer.y,
+	// 	o*p.x+(p.z-b)*p.y,
+	// 	y+a*p.z-(p.z*p.z*p.z)/3.-(p.x*p.x+p.y*p.y)*(1.+e*p.z)+t*p.z*p.x*p.x*p.x
+	// );
+
 	// apply
 	// spawn.xyz = rotateX(rotateY(spawn.xyz, time*0.2),time*0.1);
 	float should = smoothstep(turbulenceRangeMin,turbulenceRangeMax,mod(noiseIQ(seed)+time*0.1,1.0));
 	vec3 offset = (tornado + dir + noisey + target) * should + origin * (1. - should);
+
+	// offset = attractor * .1;
+
+
 	gl_FragColor.xyz = mix(buffer.xyz * velocityFrictionBlend, offset * velocitySpeed, velocityDamping);
 
 	// spawning
-	float spawnOffset = rand(vUv) * 0.006 + 0.006;
+	float spawnOffset = rand(vUv) * 0.01 + 0.01;
 	gl_FragColor.w = mix(mod(buffer.w + spawnOffset, 1.0), -1.0, step(1.0, buffer.w + spawnOffset));
-	gl_FragColor.w = mix(0.5, gl_FragColor.w, should);
+	// gl_FragColor.w = mix(0.5, gl_FragColor.w, should);
 }

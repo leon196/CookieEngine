@@ -44,8 +44,8 @@ void main() {
 	vec3 e = vec3(0.00001);
 	velocity.xyz = normalize(velocity.xyz + e);
 	float moving = smoothstep(0.0, 0.1, magnitude);
-	tangent = mix(tangent, normalize(cross(velocity.xyz, normal))*stretch, moving);
-	up = mix(up, velocity.xyz*stretch*2., moving);
+	tangent = mix(tangent, normalize(cross(velocity.xyz, normal))*stretch*.2, moving);
+	up = mix(up, velocity.xyz*stretch, moving);
 
 
 	float size = 0.05;
