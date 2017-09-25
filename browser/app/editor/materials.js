@@ -5,7 +5,7 @@ import { assets } from '../editor/assets';
 
 export var materials = {};
 
-var materialFromShaderNames = [ 'position' ];
+var materialFromShaderNames = [ 'position', 'velocity' ];
 
 var defaultUniforms = {
 	time: { value: 1.0 },

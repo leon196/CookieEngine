@@ -30,9 +30,10 @@ void main() {
 	// vColor = col;
 	vNormal = normalize((modelMatrix * vec4(normal,0)).xyz);
 
-	// float fade = smoothstep(0.0, 0.1, velocity.w) * (1. - smoothstep(0.9, 1.0, velocity.w));
-	// fade = mix(fade, 1., step(1., velocity.w));
+	float fade = smoothstep(0.0, 0.1, velocity.w) * (1. - smoothstep(0.9, 1.0, velocity.w));
+	fade = mix(fade, 1., step(1., velocity.w));
 
+	float stretch = (1.+magnitude*spriteVelocityStretch);
 	// float stretch = (1.+magnitude*spriteVelocityStretch);
 
 	// world space
@@ -40,10 +41,11 @@ void main() {
 	vec3 up = normalize(cross(tangent, vNormal));
 
 	// velocity space
-	// vec3 e = vec3(0.00001);
-	// velocity.xyz = normalize(velocity.xyz + e);
-	// tangent = mix(tangent, normalize(cross(velocity.xyz, normal)), moving);
-	// up = mix(up, velocity.xyz*stretch, moving);
+	vec3 e = vec3(0.00001);
+	velocity.xyz = normalize(velocity.xyz + e);
+	float moving = smoothstep(0.0, 0.1, magnitude);
+	tangent = mix(tangent, normalize(cross(velocity.xyz, normal))*stretch, moving);
+	up = mix(up, velocity.xyz*stretch*2., moving);
 
 
 	float size = 0.05;

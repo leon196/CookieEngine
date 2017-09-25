@@ -4,21 +4,24 @@ import { closestPowerOfTwo } from '../utils/utils';
 import { assets } from '../editor/assets';
 import { ShaderPass } from './shaderpass';
 import { materials } from '../editor/materials';
+import { parameters } from '../editor/parameters';
 
 export function Particle (attributes)
 {
-	materials.particle.uniforms = {
-		time: { value: 1.0 },
-		positionTexture: { value: 0 },
-		velocityTexture: { value: 0 },
-	};
-
-	materials.position.uniforms = {
+	this.uniforms = {
 		time: { value: 1.0 },
 		frameBuffer: { value: 0 },
-		positionTexture: { value: 0 },
+		spawnTexture: { value: 0 },
 		velocityTexture: { value: 0 },
+		positionTexture: { value: 0 },
+		colorTexture: { value: 0 },
+		normalTexture: { value: 0 },
 	};
+
+	materials.particle.uniforms = this.uniforms;
+	materials.position.uniforms = this.uniforms;
+	materials.velocity.uniforms = this.uniforms;
+
 
 	var positionArray = attributes.position.array;
 	var colorArray = attributes.color.array;
@@ -29,18 +32,30 @@ export function Particle (attributes)
 	this.mesh = new THREE.Mesh(this.geometry, materials.particle);
 
 	this.positionTexture = createDataTextureForParticles(positionArray, 3);
+	this.colorTexture = createDataTextureForParticles(colorArray, 3);
+	this.normalTexture = createDataTextureForParticles(normalArray, 3);
 	this.positionPass = new ShaderPass(materials.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
+	this.velocityPass = new ShaderPass(materials.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
 
 	this.time = 0;
+	this.parameterList = Object.keys(parameters);
+	for (var i = 0; i < this.parameterList.length; i++) {
+		this.uniforms[this.parameterList[i]] = { value: 0 };
+	}
 
 	this.update = function ()
 	{
-		this.positionPass.material.uniforms.time.value = this.time;
-		this.positionPass.material.uniforms.positionTexture.value = this.positionTexture;
+		this.uniforms.time.value = this.time;
+		this.uniforms.spawnTexture.value = this.positionTexture;
+		this.uniforms.colorTexture.value = this.colorTexture;
+		this.uniforms.normalTexture.value = this.normalTexture;
 		this.positionPass.update();
-		// materials.particle.uniforms.positionTexture.value = this.positionTexture;
-		this.mesh.material.uniforms.time.value = this.time;
-		this.mesh.material.uniforms.positionTexture.value = this.positionPass.getTexture();
+		this.velocityPass.update();
+		this.uniforms.positionTexture.value = this.positionPass.getTexture();
+		this.uniforms.velocityTexture.value = this.velocityPass.getTexture();
+		for (var i = 0; i < this.parameterList.length; i++) {
+			this.uniforms[this.parameterList[i]].value = parameters[this.parameterList[i]];
+		}
 		this.time += 0.016;
 	}
 }

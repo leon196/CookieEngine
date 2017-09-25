@@ -1,7 +1,6 @@
 
-
-var parameters = {
-	feedbackBlend: 0.5,
+export var parameters = {
+	// feedbackBlend: 0.5,
 	velocitySpeed: 0.225,
 	velocityTargetBlend: 0.1,
 	velocityOriginBlend: 0.1,

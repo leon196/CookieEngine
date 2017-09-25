@@ -1,6 +1,6 @@
 import * as THREE from 'three.js'
 import '../utils/loader'
-import '../editor/parameters'
+import { parameters } from '../editor/parameters'
 import { PLYLoader } from '../utils/PLYLoader'
 
 var baseURL = "assets/";
@@ -22,6 +22,7 @@ var shaderDescriptors = {
 	'particle.vert': 'particle.vert',
 	'color.frag': 'color.frag',
 	'position.frag': 'position.frag',
+	'velocity.frag': 'velocity.frag',
 	'screen.vert': 'screen.vert',
 };
 

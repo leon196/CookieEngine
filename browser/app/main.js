@@ -8,6 +8,7 @@ import { assets } from './editor/assets';
 import { OrbitControls } from './utils/OrbitControls';
 import { materials } from './editor/materials';
 import { renderer } from './engine/renderer';
+import { gui } from './utils/gui';
 
 let camera, scene, controls;
 let mesh, particle;
