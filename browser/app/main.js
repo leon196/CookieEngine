@@ -4,19 +4,20 @@ import * as THREE from 'three.js';
 import './socket';
 import './utils/utils';
 import { Particle } from './engine/particle';
-import { assets } from './utils/assets';
+import { assets } from './editor/assets';
 import { OrbitControls } from './utils/OrbitControls';
+import { materials } from './editor/materials';
 
 let camera, scene, renderer, controls;
-let mesh, particleTest;
+let mesh, particle;
 
 assets.load(function() {
 	init();
 	animate();
 });
 
-function init() {
-
+function init()
+{
 	renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -30,26 +31,22 @@ function init() {
 	controls.rotateSpeed = 0.5;
 
 	scene = new THREE.Scene();
+	materials.setup();
 
-	console.log(assets.geometries["vegetation"].attributes)
-	particleTest = new Particle(assets.geometries["vegetation"].attributes);
-	// particleTest = new Particle({
-	// 	position: { array: [1,0,0] },
-	// 	normal: { array: [0,1,0] },
-	// 	color: { array: [1,1,1,1] },
-	// });
-	scene.add( particleTest.mesh );
+	particle = new Particle(assets.geometries["vegetation"].attributes);
+	scene.add( particle.mesh );
 }
+
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
+
 function animate() {
 	requestAnimationFrame( animate );
 
 	controls.update();
-	// particleTest.mesh.rotation.x += 0.005;
-	// particleTest.mesh.rotation.y += 0.01;
+	particle.update();
 	renderer.render( scene, camera );
 }

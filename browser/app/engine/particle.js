@@ -1,29 +1,33 @@
 
 import * as THREE from 'three.js'
 import { closestPowerOfTwo } from '../utils/utils';
-import { assets } from '../utils/assets';
+import { assets } from '../editor/assets';
+import { ShaderPass } from './shaderpass';
+import { materials } from '../editor/materials';
 
 export function Particle (attributes)
 {
-	var positionArray = attributes.position.array;
-	var colorArray = attributes.color.array;
-	var normalArray = attributes.normal.array;
-	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray);
-
-	this.uniforms = {
+	materials.particle.uniforms = {
 		time: { value: 1.0 },
 		positionTexture: { value: 0 },
 		velocityTexture: { value: 0 },
-		matrix: { value: 0 },
-		pivot: { value: 0 },
 	};
 
-	this.mesh = new THREE.Mesh(this.geometry, new THREE.ShaderMaterial( {
-		uniforms: this.uniforms,
-		vertexShader: assets.shaders["particle.vert"],
-		fragmentShader: assets.shaders["color.frag"],
-		side: THREE.DoubleSide
-	}));
+	var positionArray = attributes.position.array;
+	var colorArray = attributes.color.array;
+	var normalArray = attributes.normal.array;
+	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
+	
+	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray);
+	this.mesh = new THREE.Mesh(this.geometry, materials.particle);
+
+	this.positionTexture = createDataTextureForParticles(positionArray, 3);
+	this.positionPass = new ShaderPass(materials.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
+
+	this.update = function ()
+	{
+		materials.particle.uniforms.positionTexture.value = this.positionTexture;
+	}
 }
 
 function createGeometryForParticles (positionArray, colorArray, normalArray)
@@ -74,7 +78,7 @@ function createGeometryForParticles (positionArray, colorArray, normalArray)
 			texcoord[indexUV+1] = v;
 
 	    indexVertex += 3;
-
+	    indexUV += 2;
 	  }
 
 	 	// offset used to scale triangle in shader
@@ -98,5 +102,30 @@ function createGeometryForParticles (positionArray, colorArray, normalArray)
 	geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
 
 	return geometry;
+}	
+
+function createDataTextureForParticles (dataArray, itemSize)
+{
+	var ia, ib, ic;
+	var dimension = closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
+	var count = dataArray.length / itemSize;
+	var resolution = dimension*dimension;
+	var array = new Float32Array(resolution * itemSize);
+
+	for (var triangleIndex = 0; triangleIndex < count; triangleIndex++)
+	{
+		ia = triangleIndex*3;
+		ib = triangleIndex*3+1;
+		ic = triangleIndex*3+2;
+
+		array[ia] = dataArray[ia];
+		array[ib] = dataArray[ib];
+		array[ic] = dataArray[ic];
+	}
+
+	var texture = new THREE.DataTexture(array, dimension, dimension, THREE.RGBFormat, THREE.FloatType);
+	texture.needsUpdate = true;
+
+	return texture;
 }	
 

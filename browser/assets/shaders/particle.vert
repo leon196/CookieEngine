@@ -20,9 +20,9 @@ void main() {
 	vAnchor = anchor;
 	vColor = color;
 
-	// vec3 pos = texture2D(positionTexture, vTexcoord).xyz;
+	vec3 pos = texture2D(positionTexture, vTexcoord).xyz;
 	// vec3 col = texture2D(colorTexture, vTexcoord).xyz;
-	vec4 posWorld = modelMatrix * vec4( position, 1.0 );
+	vec4 posWorld = modelMatrix * vec4( pos, 1.0 );
 	
 	vec3 viewDir = normalize(posWorld.xyz - cameraPosition.xyz);
 	vec4 velocity = texture2D(velocityTexture, vTexcoord);
@@ -46,7 +46,7 @@ void main() {
 	// up = mix(up, velocity.xyz*stretch, moving);
 
 
-	float size = 0.1;
+	float size = 0.05;
 	posWorld.xyz += (anchor.x * tangent + anchor.y * up) * size;
 
 	vViewDir = posWorld.xyz - cameraPosition;

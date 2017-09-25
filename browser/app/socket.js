@@ -1,4 +1,6 @@
 import io from 'socket.io-client/dist/socket.io';
+import { assets } from './editor/assets';
+import { materials } from './editor/materials';
 
 let socket;
 
@@ -16,7 +18,6 @@ function change(data) {
 	var extension = infos1[infos1.length - 1];
 	var fileName = infos2[infos2.length - 1];
 	var name = fileName.split('.')[0];
-	/*
 	if (extension == 'frag' || extension == 'vert') {
 		if (materials[name] != null) {
 			assets.reload(fileName, function () {
@@ -29,7 +30,6 @@ function change(data) {
 			});
 		}
 	}
-	*/
 }
 
 connect();

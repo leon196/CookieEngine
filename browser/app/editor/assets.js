@@ -1,6 +1,6 @@
 import * as THREE from 'three.js'
-import './loader'
-import '../engine/parameters'
+import '../utils/loader'
+import '../editor/parameters'
 import { PLYLoader } from '../utils/PLYLoader'
 
 var baseURL = "assets/";
@@ -21,6 +21,8 @@ var geometryDescriptors = {
 var shaderDescriptors = {
 	'particle.vert': 'particle.vert',
 	'color.frag': 'color.frag',
+	'position.frag': 'position.frag',
+	'screen.vert': 'screen.vert',
 };
 
 var pendingCallbacks = [];
