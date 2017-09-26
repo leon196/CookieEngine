@@ -20,19 +20,17 @@ export function Point (count, mat)
 	this.geometry = createGeometryForParticles(positionArray, colorArray);
 	this.mesh = new THREE.Mesh(this.geometry, mat);
 
-	this.time = 0;
 	this.parameterList = Object.keys(parameter);
 	for (var i = 0; i < this.parameterList.length; i++) {
 		this.uniforms[this.parameterList[i]] = { value: 0 };
 	}
 
-	this.update = function ()
+	this.update = function (elapsed)
 	{
-		this.uniforms.time.value = this.time;
+		this.uniforms.time.value = elapsed;
 		for (var i = 0; i < this.parameterList.length; i++) {
 			this.uniforms[this.parameterList[i]].value = parameter[this.parameterList[i]];
 		}
-		this.time += 0.016;
 	}
 }
 

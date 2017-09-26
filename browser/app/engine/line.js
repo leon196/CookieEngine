@@ -29,19 +29,17 @@ export function Line (attributes)
 	// this.geometry = new THREE.PlaneGeometry(10., Math.abs(2.)*2., 96, 1 );
 	// this.mesh = new THREE.Mesh( this.geometry, material.line );
 
-	this.time = 0;
 	this.parameterList = Object.keys(parameter);
 	for (var i = 0; i < this.parameterList.length; i++) {
 		this.uniforms[this.parameterList[i]] = { value: 0 };
 	}
 
-	this.update = function ()
+	this.update = function (elapsed)
 	{
-		this.uniforms.time.value = this.time;
+		this.uniforms.time.value = elapsed;
 		for (var i = 0; i < this.parameterList.length; i++) {
 			this.uniforms[this.parameterList[i]].value = parameter[this.parameterList[i]];
 		}
-		this.time += 0.016;
 	}
 }
 

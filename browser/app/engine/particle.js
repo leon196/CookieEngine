@@ -42,15 +42,14 @@ export function Particle (attributes)
 	this.positionPass = new ShaderPass(material.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
 	this.velocityPass = new ShaderPass(material.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
 
-	this.time = 0;
 	this.parameterList = Object.keys(parameter);
 	for (var i = 0; i < this.parameterList.length; i++) {
 		this.uniforms[this.parameterList[i]] = { value: 0 };
 	}
 
-	this.update = function ()
+	this.update = function (elapsed)
 	{
-		this.uniforms.time.value = this.time;
+		this.uniforms.time.value = elapsed;
 		this.uniforms.spawnTexture.value = this.positionTexture;
 		this.uniforms.colorTexture.value = this.colorTexture;
 		this.uniforms.normalTexture.value = this.normalTexture;
@@ -61,7 +60,6 @@ export function Particle (attributes)
 		for (var i = 0; i < this.parameterList.length; i++) {
 			this.uniforms[this.parameterList[i]].value = parameter[this.parameterList[i]];
 		}
-		this.time += 0.016;
 	}
 }
 

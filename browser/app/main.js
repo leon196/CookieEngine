@@ -11,19 +11,26 @@ import { OrbitControls } from './utils/OrbitControls';
 import { material } from './editor/material';
 import { renderer } from './engine/renderer';
 import { makeText } from './utils/makeText';
+import { LoadingScene } from './scene/LoadingScene';
 
 let camera, scene, controls;
 let particle, line, point, text;
-let time;
+let started = false;
+let loadingScene;
+let state;
+
+init();
+animate();
 
 asset.load(function() {
-	init();
+	start();
 	window.addEventListener( 'resize', onWindowResize, false );
-	animate();
 });
 
 function init ()
 {
+	scene = new THREE.Scene();
+
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
 	camera.position.y = 10;
 	camera.position.z = 20;
@@ -31,8 +38,15 @@ function init ()
 	controls = new OrbitControls( camera, renderer.domElement );
 	controls.rotateSpeed = 0.5;
 
-	scene = new THREE.Scene();
+	loadingScene = new LoadingScene(scene);
+
+	state = 0;
+}
+
+function start ()
+{
 	material.setup();
+
 	particle = new Particle(asset.geometry["tree"].children[0].geometry.attributes);
 	scene.add( particle.mesh );
 
@@ -44,23 +58,30 @@ function init ()
 	
 	var textScale = .2;
 	text = new Text("coucou");
-	console.log(text);
 	scene.add (text.mesh);
 
-  time = 0;
+  state = 1;
 }
 
-function animate ()
+function animate (elapsed)
 {
 	requestAnimationFrame( animate );
+	elapsed /= 1000.;
+	var dt = 0.016;
 
-	material.text.uniforms.time.value += 0.016;
+	switch (state) {
+		case 0:
+		loadingScene.update(elapsed);
+		break;
+		case 1:
+		material.text.uniforms.time.value = elapsed;
+		particle.update(elapsed);
+		line.update(elapsed);
+		break;
+	}
+
 	controls.update();
-	particle.update();
-	line.update();
 	renderer.render( scene, camera );
-
-	time += 0.016;
 }
 
 function onWindowResize ()

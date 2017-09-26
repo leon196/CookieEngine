@@ -1,6 +1,8 @@
 
 import { Vector3 } from 'three.js';
 
+(function(){Math.clamp=function(a,b,c){return Math.max(b,Math.min(c,a));}})();
+
 //https://github.com/mattdesl/lerp/blob/master/index.js
 function lerp(v0, v1, t) {
     return v0*(1-t)+v1*t

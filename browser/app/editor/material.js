@@ -38,6 +38,13 @@ material.setup = function ()
 		side: THREE.DoubleSide
 	})
 
+	material.loadingText = new THREE.ShaderMaterial( {
+		uniforms: defaultUniforms,
+		vertexShader: asset.shaders['text.vert'],
+		fragmentShader: asset.shaders['text.frag'],
+		side: THREE.DoubleSide
+	})
+
 	material.line = new THREE.ShaderMaterial( {
 		uniforms: defaultUniforms,
 		vertexShader: asset.shaders['line.vert'],

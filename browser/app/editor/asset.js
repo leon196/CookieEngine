@@ -22,17 +22,18 @@ var geometryDescriptors = {
 };
 
 var shaderDescriptors = {
-	'particle.vert': 'particle.vert',
-	'particle.frag': 'particle.frag',
-	'text.vert': 'text.vert',
-	'text.frag': 'text.frag',
-	'position.frag': 'position.frag',
-	'velocity.frag': 'velocity.frag',
-	'line.vert': 'line.vert',
-	'line.frag': 'line.frag',
-	'point.frag': 'point.frag',
-	'point.vert': 'point.vert',
-	'screen.vert': 'screen.vert',
+	'particle.vert': 'triangle/particle.vert',
+	'particle.frag': 'triangle/particle.frag',
+	'text.vert': 'triangle/text.vert',
+	'text.frag': 'triangle/text.frag',
+	'position.frag': 'pass/position.frag',
+	'velocity.frag': 'pass/velocity.frag',
+	'line.vert': 'triangle/line.vert',
+	'line.frag': 'triangle/line.frag',
+	'point.frag': 'triangle/point.frag',
+	'point.vert': 'triangle/point.vert',
+	'screen.vert': 'filter/screen.vert',
+	'transition.frag': 'filter/transition.frag',
 };
 
 var fontDescriptors = {
