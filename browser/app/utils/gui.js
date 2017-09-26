@@ -1,12 +1,12 @@
 import * as dat from 'dataarts/dat.gui/build/dat.gui.js';
 
-import { parameters } from '../editor/parameters';
+import { parameter } from '../editor/parameter';
 
 export const gui = new dat.gui.GUI();
 
-gui.remember(parameters);
-Object.keys(parameters).forEach(key => {
-	const item = gui.add(parameters, key);
+gui.remember(parameter);
+Object.keys(parameter).forEach(key => {
+	const item = gui.add(parameter, key);
 	const name = key.toLowerCase();
 	if (
 		name.indexOf('blend') !== -1 ||

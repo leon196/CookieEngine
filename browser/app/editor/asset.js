@@ -1,11 +1,11 @@
 import * as THREE from 'three.js'
 import '../utils/loader'
-import { parameters } from '../editor/parameters'
+import { parameter } from '../editor/parameter'
 import { PLYLoader } from '../utils/PLYLoader'
 import { OBJLoader } from '../utils/OBJLoader'
 
-var baseURL = "assets/";
-var shaderBaseURL = baseURL + 'shaders/';
+var baseURL = "asset/";
+var shaderBaseURL = baseURL + 'shader/';
 
 var textureDescriptors = {
 	// 'panorama': "images/Room.jpg",
@@ -17,8 +17,8 @@ var meshDescriptors = {
 
 var geometryDescriptors = {
 	// 'vegetation': 'points/vegetation.ply',
-	'tree': 'points/tree.obj',
-	'branch': 'points/branch.obj',
+	'tree': 'point/tree.obj',
+	'branch': 'point/branch.obj',
 };
 
 var shaderDescriptors = {
@@ -36,7 +36,7 @@ var shaderDescriptors = {
 };
 
 var fontDescriptors = {
-	'helvetiker' : 'fonts/helvetiker_bold.typeface.json',
+	'helvetiker' : 'font/helvetiker_bold.typeface.json',
 }
 
 var pendingCallbacks = [];
@@ -45,27 +45,27 @@ var isLoaded = false;
 function load(callback) {
 	if (isLoaded) {
 		return setTimeout(function() {
-			return callback(assets);
+			return callback(asset);
 		});
 	}
 
 	return pendingCallbacks.push(callback);
 }
 
-export var assets = {
+export var asset = {
 	// 'actions': new blenderHTML5Animations.ActionLibrary(actionsDescriptor),
 	'load': load,
-	'geometries': {},
+	'geometry': {},
 	'font': {},
 	'textures': {}
 };
 
 function notify() {
-	isLoaded = assets.shaders 
-	// && Object.keys(assets.textures).length == Object.keys(textureDescriptors).length 
-	&& Object.keys(assets.font).length == Object.keys(fontDescriptors).length 
-	&& Object.keys(assets.geometries).length == Object.keys(geometryDescriptors).length;
-	// && assets.meshes;
+	isLoaded = asset.shaders 
+	// && Object.keys(asset.textures).length == Object.keys(textureDescriptors).length 
+	&& Object.keys(asset.font).length == Object.keys(fontDescriptors).length 
+	&& Object.keys(asset.geometry).length == Object.keys(geometryDescriptors).length;
+	// && asset.meshes;
 
 	if (isLoaded) {
 		return pendingCallbacks.forEach(function(callback) {
@@ -91,24 +91,24 @@ Object.keys(shaderDescriptors).forEach(function(name) {
 });
 
 var parameterList = 'uniform float ';
-var keys = Object.keys(parameters);
+var keys = Object.keys(parameter);
 var count = keys.length;
 for (var i = 0; i < count; ++i) {
 	parameterList += keys[i] + (i+1!=count?', ':';');
 }
 
-assets.fileLoaded = {};
+asset.fileLoaded = {};
 
 function fileWithHeaders(name) {
-	return assets.fileLoaded[shaderBaseURL + "utils.glsl"]
-	// + assets.fileLoaded[shaderBaseURL + "displace.glsl"]
-	+ parameterList + assets.fileLoaded[name];
+	return asset.fileLoaded[shaderBaseURL + "utils.glsl"]
+	// + asset.fileLoaded[shaderBaseURL + "displace.glsl"]
+	+ parameterList + asset.fileLoaded[name];
 }
 
 loadFiles(shaderURLs, function (err, files) {
 	if (err) throw err;
 
-	assets.fileLoaded = files;
+	asset.fileLoaded = files;
 
 	var shaders = {};
 	Object.keys(shaderDescriptors).forEach(function(name) {
@@ -116,14 +116,14 @@ loadFiles(shaderURLs, function (err, files) {
 		shaders[name] = fileWithHeaders(shaderBaseURL + url);
 	});
 
-	assets.shaders = shaders;
+	asset.shaders = shaders;
 	return notify();
 });
 
-assets.reload = function (assetName, callback) {
+asset.reload = function (assetName, callback) {
 	loadFiles([shaderBaseURL + assetName], function (err, files) {
-		assets.fileLoaded[shaderBaseURL + assetName] = files[shaderBaseURL + assetName];
-		assets.shaders[assetName] = fileWithHeaders(shaderBaseURL + shaderDescriptors[assetName]);
+		asset.fileLoaded[shaderBaseURL + assetName] = files[shaderBaseURL + assetName];
+		asset.shaders[assetName] = fileWithHeaders(shaderBaseURL + shaderDescriptors[assetName]);
 		if (callback != null) callback();
 	});
 };
@@ -131,7 +131,7 @@ assets.reload = function (assetName, callback) {
 // var textureLoader = new THREE.TextureLoader();
 // Object.keys(textureDescriptors).forEach(function(name) {
 // 	textureLoader.load(textureDescriptors[name], function(texture) {
-// 		assets.textures[name] = texture;
+// 		asset.textures[name] = texture;
 // 		return notify();
 // 	});
 // });
@@ -147,12 +147,12 @@ Object.keys(geometryDescriptors).forEach(function(name) {
 	var extension = infos[infos.length-1];
 	if (extension == 'ply') {
 		plyLoader.load(url, function(geometry){
-			assets.geometries[name] = geometry;
+			asset.geometry[name] = geometry;
 			return notify();
 		});
 	} else if (extension == 'obj') {
 		objLoader.load(url, function(geometry){
-			assets.geometries[name] = geometry;
+			asset.geometry[name] = geometry;
 			return notify();
 		});
 	}
@@ -163,7 +163,7 @@ var fontLoader = new THREE.FontLoader();
 Object.keys(fontDescriptors).forEach(function(name) {
 	var url = baseURL + fontDescriptors[name];
 	fontLoader.load(url, function(font){
-			assets.font[name] = font;
+			asset.font[name] = font;
 			return notify();
 		});
 });

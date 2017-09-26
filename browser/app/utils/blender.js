@@ -1,4 +1,4 @@
-import { actions } from '../../assets/animations/scene';
+import { actions } from '../../asset/animations/scene';
 import { blenderHTML5Animations } from './blender-html5-animations.min';
 
 var Blender = function ()

@@ -1,10 +1,10 @@
 
 import * as THREE from 'three.js'
 import { closestPowerOfTwo } from '../utils/utils';
-import { assets } from '../editor/assets';
+import { asset } from '../editor/asset';
 import { ShaderPass } from './shaderpass';
-import { materials } from '../editor/materials';
-import { parameters } from '../editor/parameters';
+import { material } from '../editor/material';
+import { parameter } from '../editor/parameter';
 
 export function Particle (attributes)
 {
@@ -19,9 +19,9 @@ export function Particle (attributes)
 		normalTexture: { value: 0 },
 	};
 
-	materials.particle.uniforms = this.uniforms;
-	materials.position.uniforms = this.uniforms;
-	materials.velocity.uniforms = this.uniforms;
+	material.particle.uniforms = this.uniforms;
+	material.position.uniforms = this.uniforms;
+	material.velocity.uniforms = this.uniforms;
 
 	var positionArray = attributes.position.array;
 
@@ -34,16 +34,16 @@ export function Particle (attributes)
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
 	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray);
-	this.mesh = new THREE.Mesh(this.geometry, materials.particle);
+	this.mesh = new THREE.Mesh(this.geometry, material.particle);
 
 	this.positionTexture = createDataTextureForParticles(positionArray, 3);
 	this.colorTexture = createDataTextureForParticles(colorArray, 3);
 	this.normalTexture = createDataTextureForParticles(normalArray, 3);
-	this.positionPass = new ShaderPass(materials.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
-	this.velocityPass = new ShaderPass(materials.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
+	this.positionPass = new ShaderPass(material.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
+	this.velocityPass = new ShaderPass(material.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
 
 	this.time = 0;
-	this.parameterList = Object.keys(parameters);
+	this.parameterList = Object.keys(parameter);
 	for (var i = 0; i < this.parameterList.length; i++) {
 		this.uniforms[this.parameterList[i]] = { value: 0 };
 	}
@@ -59,7 +59,7 @@ export function Particle (attributes)
 		this.uniforms.positionTexture.value = this.positionPass.getTexture();
 		this.uniforms.velocityTexture.value = this.velocityPass.getTexture();
 		for (var i = 0; i < this.parameterList.length; i++) {
-			this.uniforms[this.parameterList[i]].value = parameters[this.parameterList[i]];
+			this.uniforms[this.parameterList[i]].value = parameter[this.parameterList[i]];
 		}
 		this.time += 0.016;
 	}

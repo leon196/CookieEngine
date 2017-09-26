@@ -1,10 +1,10 @@
 
 import * as THREE from 'three.js'
 import { closestPowerOfTwo } from '../utils/utils';
-import { assets } from '../editor/assets';
+import { asset } from '../editor/asset';
 import { ShaderPass } from './shaderpass';
-import { materials } from '../editor/materials';
-import { parameters } from '../editor/parameters';
+import { material } from '../editor/material';
+import { parameter } from '../editor/parameter';
 
 export function Line (attributes)
 {
@@ -25,12 +25,12 @@ export function Line (attributes)
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
 	this.geometry = createGeometryForLine(positionArray, colorArray, normalArray);
-	this.mesh = new THREE.Mesh(this.geometry, materials.line);
+	this.mesh = new THREE.Mesh(this.geometry, material.line);
 	// this.geometry = new THREE.PlaneGeometry(10., Math.abs(2.)*2., 96, 1 );
-	// this.mesh = new THREE.Mesh( this.geometry, materials.line );
+	// this.mesh = new THREE.Mesh( this.geometry, material.line );
 
 	this.time = 0;
-	this.parameterList = Object.keys(parameters);
+	this.parameterList = Object.keys(parameter);
 	for (var i = 0; i < this.parameterList.length; i++) {
 		this.uniforms[this.parameterList[i]] = { value: 0 };
 	}
@@ -39,7 +39,7 @@ export function Line (attributes)
 	{
 		this.uniforms.time.value = this.time;
 		for (var i = 0; i < this.parameterList.length; i++) {
-			this.uniforms[this.parameterList[i]].value = parameters[this.parameterList[i]];
+			this.uniforms[this.parameterList[i]].value = parameter[this.parameterList[i]];
 		}
 		this.time += 0.016;
 	}

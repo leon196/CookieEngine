@@ -8,7 +8,7 @@ export var OBJLoader = function ( manager ) {
 
 	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
 
-	this.materials = null;
+	this.material = null;
 
 	this.regexp = {
 		// v float float float
@@ -61,9 +61,9 @@ OBJLoader.prototype = {
 
 	},
 
-	setMaterials: function ( materials ) {
+	setMaterials: function ( material ) {
 
-		this.materials = materials;
+		this.material = material;
 
 	},
 
@@ -108,7 +108,7 @@ OBJLoader.prototype = {
 						normals  : [],
 						uvs      : []
 					},
-					materials : [],
+					material : [],
 					smooth : true,
 
 					startMaterial : function( name, libraries ) {
@@ -119,12 +119,12 @@ OBJLoader.prototype = {
 						// after the material, then it must be preserved for proper MultiMaterial continuation.
 						if ( previous && ( previous.inherited || previous.groupCount <= 0 ) ) {
 
-							this.materials.splice( previous.index, 1 );
+							this.material.splice( previous.index, 1 );
 
 						}
 
 						var material = {
-							index      : this.materials.length,
+							index      : this.material.length,
 							name       : name || '',
 							mtllib     : ( Array.isArray( libraries ) && libraries.length > 0 ? libraries[ libraries.length - 1 ] : '' ),
 							smooth     : ( previous !== undefined ? previous.smooth : this.smooth ),
@@ -149,7 +149,7 @@ OBJLoader.prototype = {
 							}
 						};
 
-						this.materials.push( material );
+						this.material.push( material );
 
 						return material;
 
@@ -157,8 +157,8 @@ OBJLoader.prototype = {
 
 					currentMaterial : function() {
 
-						if ( this.materials.length > 0 ) {
-							return this.materials[ this.materials.length - 1 ];
+						if ( this.material.length > 0 ) {
+							return this.material[ this.material.length - 1 ];
 						}
 
 						return undefined;
@@ -176,21 +176,21 @@ OBJLoader.prototype = {
 
 						}
 
-						// Ignore objects tail materials if no face declarations followed them before a new o/g started.
-						if ( end && this.materials.length > 1 ) {
+						// Ignore objects tail material if no face declarations followed them before a new o/g started.
+						if ( end && this.material.length > 1 ) {
 
-							for ( var mi = this.materials.length - 1; mi >= 0; mi-- ) {
-								if ( this.materials[mi].groupCount <= 0 ) {
-									this.materials.splice( mi, 1 );
+							for ( var mi = this.material.length - 1; mi >= 0; mi-- ) {
+								if ( this.material[mi].groupCount <= 0 ) {
+									this.material.splice( mi, 1 );
 								}
 							}
 
 						}
 
 						// Guarantee at least one empty material, this makes the creation later more straight forward.
-						if ( end && this.materials.length === 0 ) {
+						if ( end && this.material.length === 0 ) {
 
-							this.materials.push({
+							this.material.push({
 								name   : '',
 								smooth : this.smooth
 							});
@@ -212,7 +212,7 @@ OBJLoader.prototype = {
 
 					var declared = previousMaterial.clone( 0 );
 					declared.inherited = true;
-					this.object.materials.push( declared );
+					this.object.material.push( declared );
 
 				}
 
@@ -646,7 +646,7 @@ OBJLoader.prototype = {
 
 			var object = state.objects[ i ];
 			var geometry = object.geometry;
-			var materials = object.materials;
+			var material = object.material;
 			var isLine = ( geometry.type === 'Line' );
 
 			// Skip o/g line declarations that did not follow with any faces
@@ -672,20 +672,20 @@ OBJLoader.prototype = {
 
 			}
 
-			// Create materials
+			// Create material
 
 			var createdMaterials = [];
 
-			for ( var mi = 0, miLen = materials.length; mi < miLen ; mi++ ) {
+			for ( var mi = 0, miLen = material.length; mi < miLen ; mi++ ) {
 
-				var sourceMaterial = materials[mi];
+				var sourceMaterial = material[mi];
 				var material = undefined;
 
-				if ( this.materials !== null ) {
+				if ( this.material !== null ) {
 
-					material = this.materials.create( sourceMaterial.name );
+					material = this.material.create( sourceMaterial.name );
 
-					// mtl etc. loaders probably can't create line materials correctly, copy properties to a line material.
+					// mtl etc. loaders probably can't create line material correctly, copy properties to a line material.
 					if ( isLine && material && ! ( material instanceof THREE.LineBasicMaterial ) ) {
 
 						var materialLine = new THREE.LineBasicMaterial();
@@ -716,9 +716,9 @@ OBJLoader.prototype = {
 
 			if ( createdMaterials.length > 1 ) {
 
-				for ( var mi = 0, miLen = materials.length; mi < miLen ; mi++ ) {
+				for ( var mi = 0, miLen = material.length; mi < miLen ; mi++ ) {
 
-					var sourceMaterial = materials[mi];
+					var sourceMaterial = material[mi];
 					buffergeometry.addGroup( sourceMaterial.groupStart, sourceMaterial.groupCount, mi );
 
 				}

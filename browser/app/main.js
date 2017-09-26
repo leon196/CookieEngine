@@ -6,9 +6,9 @@ import { Particle } from './engine/particle';
 import { Line } from './engine/line';
 import { Point } from './engine/point';
 import { Text } from './engine/text';
-import { assets } from './editor/assets';
+import { asset } from './editor/asset';
 import { OrbitControls } from './utils/OrbitControls';
-import { materials } from './editor/materials';
+import { material } from './editor/material';
 import { renderer } from './engine/renderer';
 import { makeText } from './utils/makeText';
 
@@ -16,7 +16,7 @@ let camera, scene, controls;
 let particle, line, point, text;
 let time;
 
-assets.load(function() {
+asset.load(function() {
 	init();
 	window.addEventListener( 'resize', onWindowResize, false );
 	animate();
@@ -32,14 +32,14 @@ function init ()
 	controls.rotateSpeed = 0.5;
 
 	scene = new THREE.Scene();
-	materials.setup();
-	particle = new Particle(assets.geometries["tree"].children[0].geometry.attributes);
+	material.setup();
+	particle = new Particle(asset.geometry["tree"].children[0].geometry.attributes);
 	scene.add( particle.mesh );
 
-	point = new Point(256*256, materials.point);
+	point = new Point(256*256, material.point);
 	scene.add( point.mesh );
 
-	line = new Line(assets.geometries["tree"].children[0].geometry.attributes);
+	line = new Line(asset.geometry["tree"].children[0].geometry.attributes);
 	scene.add( line.mesh );
 	
 	var textScale = .2;
@@ -54,7 +54,7 @@ function animate ()
 {
 	requestAnimationFrame( animate );
 
-	materials.text.uniforms.time.value += 0.016;
+	material.text.uniforms.time.value += 0.016;
 	controls.update();
 	particle.update();
 	line.update();

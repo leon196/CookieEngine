@@ -1,6 +1,6 @@
 import io from 'socket.io-client/dist/socket.io';
-import { assets } from '../editor/assets';
-import { materials } from '../editor/materials';
+import { asset } from '../editor/asset';
+import { material } from '../editor/material';
 
 let socket;
 
@@ -19,14 +19,14 @@ function change(data) {
 	var fileName = infos2[infos2.length - 1];
 	var name = fileName.split('.')[0];
 	if (extension == 'frag' || extension == 'vert') {
-		if (materials[name] != null) {
-			assets.reload(fileName, function () {
+		if (material[name] != null) {
+			asset.reload(fileName, function () {
 				if (extension == 'frag') {
-					materials[name].fragmentShader = assets.shaders[fileName];
+					material[name].fragmentShader = asset.shaders[fileName];
 				} else {
-					materials[name].vertexShader = assets.shaders[fileName];
+					material[name].vertexShader = asset.shaders[fileName];
 				}
-				materials[name].needsUpdate = true;
+				material[name].needsUpdate = true;
 			});
 		}
 	}

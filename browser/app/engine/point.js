@@ -1,12 +1,12 @@
 
 import * as THREE from 'three.js'
 import { closestPowerOfTwo } from '../utils/utils';
-import { assets } from '../editor/assets';
+import { asset } from '../editor/asset';
 import { ShaderPass } from './shaderpass';
-import { materials } from '../editor/materials';
-import { parameters } from '../editor/parameters';
+import { material } from '../editor/material';
+import { parameter } from '../editor/parameter';
 
-export function Point (count, material)
+export function Point (count, mat)
 {
 	this.uniforms = {
 		time: { value: 1.0 },
@@ -18,10 +18,10 @@ export function Point (count, material)
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
 	this.geometry = createGeometryForParticles(positionArray, colorArray);
-	this.mesh = new THREE.Mesh(this.geometry, material);
+	this.mesh = new THREE.Mesh(this.geometry, mat);
 
 	this.time = 0;
-	this.parameterList = Object.keys(parameters);
+	this.parameterList = Object.keys(parameter);
 	for (var i = 0; i < this.parameterList.length; i++) {
 		this.uniforms[this.parameterList[i]] = { value: 0 };
 	}
@@ -30,7 +30,7 @@ export function Point (count, material)
 	{
 		this.uniforms.time.value = this.time;
 		for (var i = 0; i < this.parameterList.length; i++) {
-			this.uniforms[this.parameterList[i]].value = parameters[this.parameterList[i]];
+			this.uniforms[this.parameterList[i]].value = parameter[this.parameterList[i]];
 		}
 		this.time += 0.016;
 	}
