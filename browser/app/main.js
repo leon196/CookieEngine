@@ -2,65 +2,95 @@ import './style.css!';
 
 import * as THREE from 'three.js';
 import './utils/utils';
-import { Particle } from './engine/particle';
-import { Line } from './engine/line';
-import { Point } from './engine/point';
-import { Text } from './engine/text';
 import { asset } from './editor/asset';
-import { OrbitControls } from './utils/OrbitControls';
 import { material } from './editor/material';
 import { renderer } from './engine/renderer';
-import { makeText } from './utils/makeText';
+import { key } from './utils/keyboard';
+import { FrameBuffer } from './engine/FrameBuffer';
 import { LoadingScene } from './scene/LoadingScene';
 import { TestScene } from './scene/TestScene';
+import { FilterScene } from './scene/FilterScene';
+import { SnowScene } from './scene/SnowScene';
 
-let camera, scene;
-let particle, line, point, text;
-let started = false;
-let loadingScene, testScene;
-let state;
+let camera, scene, frame;
+let started, state, stateNext, stateRatio;
+let loadingScene, filterScene, testScene, snowScene;
 
 init();
 animate();
 
 asset.load(function() {
 	start();
-	window.addEventListener( 'resize', onWindowResize, false );
+	window.addEventListener('resize', onWindowResize, false);
 });
 
 function init ()
 {
-	loadingScene = new LoadingScene(scene);
+	loadingScene = new LoadingScene();
 	state = 0;
+	stateNext = 0;
+	stateRatio = 1;
+	started = false;
 }
 
 function start ()
 {
 	material.setup();
+	frame = new FrameBuffer();
+	filterScene = new FilterScene();
 	testScene = new TestScene();
-  state = 1;
+	snowScene = new SnowScene();
+  stateNext = 1;
+	started = true;
 }
 
 function animate (elapsed)
 {
-	requestAnimationFrame( animate );
+	requestAnimationFrame(animate);
 	elapsed /= 1000.;
 	var dt = 0.016;
+
+	if (state != stateNext) {
+		if (stateRatio > 0.) {
+			stateRatio -= dt;
+		} else {
+			state = stateNext;
+		}
+	} else {
+		if (stateRatio < 1.) {
+			stateRatio += dt;
+		}
+
+		if (key.space.down) {
+			stateNext = (stateNext + 1) % 3;
+			key.space.down = false;
+		}
+	}
+
+	stateRatio = Math.clamp(stateRatio, 0., 1.);
 
 	switch (state) {
 		case 0: scene = loadingScene; break;
 		case 1: scene = testScene; break;
+		case 2: scene = snowScene; break;
 	}
-
+	
 	scene.update(elapsed);
-	renderer.render( scene.scene, scene.camera );
+	material.defaultUniforms.time.value = elapsed;
+
+	if (started) {
+		renderer.render(scene.scene, scene.camera, frame.getTarget(), true);
+		material.filter.uniforms.fadeTransition.value = stateRatio;
+		material.filter.uniforms.frameBuffer.value = frame.getTexture();
+		renderer.render(filterScene.scene, filterScene.camera);
+	} else {
+		renderer.render(scene.scene, scene.camera);
+	}
 }
 
 function onWindowResize ()
 {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	particle.uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
-	line.uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
+	renderer.setSize(window.innerWidth, window.innerHeight);
 }

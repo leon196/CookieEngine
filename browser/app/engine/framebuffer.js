@@ -1,4 +1,5 @@
 import * as THREE from 'three.js'
+import { renderer } from './renderer';
 
 export function FrameBuffer (width, height, format, type)
 {
@@ -29,12 +30,12 @@ export function FrameBuffer (width, height, format, type)
 		this.current = (this.current + 1) % this.count;
 	}
 
-	if (type == THREE.UnsignedByteType) {
-		var self = this;
-		renderer.resizeCallbacks.push(function (width, height) {
-			for (var i = 0; i < self.count; ++i) {
-				self.renderTextures[i].setSize(width, height);
-			}
-		});
-	}
+	// if (type == THREE.UnsignedByteType) {
+	// 	var self = this;
+	// 	renderer.resizeCallbacks.push(function (width, height) {
+	// 		for (var i = 0; i < self.count; ++i) {
+	// 			self.renderTextures[i].setSize(width, height);
+	// 		}
+	// 	});
+	// }
 }

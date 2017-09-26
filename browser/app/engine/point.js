@@ -27,7 +27,6 @@ export function Point (count, mat)
 
 	this.update = function (elapsed)
 	{
-		this.uniforms.time.value = elapsed;
 		for (var i = 0; i < this.parameterList.length; i++) {
 			this.uniforms[this.parameterList[i]].value = parameter[this.parameterList[i]];
 		}

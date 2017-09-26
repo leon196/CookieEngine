@@ -33,7 +33,7 @@ var shaderDescriptors = {
 	'point.frag': 'triangle/point.frag',
 	'point.vert': 'triangle/point.vert',
 	'screen.vert': 'filter/screen.vert',
-	'transition.frag': 'filter/transition.frag',
+	'filter.frag': 'filter/filter.frag',
 };
 
 var fontDescriptors = {
