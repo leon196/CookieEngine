@@ -6,22 +6,13 @@ import { ShaderPass } from './shaderpass';
 import { materials } from '../editor/materials';
 import { parameters } from '../editor/parameters';
 
-export function Particle (attributes)
+export function Line (attributes)
 {
 	this.uniforms = {
 		time: { value: 1.0 },
 		resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
 		frameBuffer: { value: 0 },
-		spawnTexture: { value: 0 },
-		velocityTexture: { value: 0 },
-		positionTexture: { value: 0 },
-		colorTexture: { value: 0 },
-		normalTexture: { value: 0 },
 	};
-
-	materials.particle.uniforms = this.uniforms;
-	materials.position.uniforms = this.uniforms;
-	materials.velocity.uniforms = this.uniforms;
 
 	var positionArray = attributes.position.array;
 
@@ -33,14 +24,10 @@ export function Particle (attributes)
 
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
-	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray);
-	this.mesh = new THREE.Mesh(this.geometry, materials.particle);
-
-	this.positionTexture = createDataTextureForParticles(positionArray, 3);
-	this.colorTexture = createDataTextureForParticles(colorArray, 3);
-	this.normalTexture = createDataTextureForParticles(normalArray, 3);
-	this.positionPass = new ShaderPass(materials.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
-	this.velocityPass = new ShaderPass(materials.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
+	this.geometry = createGeometryForLine(positionArray, colorArray, normalArray);
+	this.mesh = new THREE.Mesh(this.geometry, materials.line);
+	// this.geometry = new THREE.PlaneGeometry(10., Math.abs(2.)*2., 96, 1 );
+	// this.mesh = new THREE.Mesh( this.geometry, materials.line );
 
 	this.time = 0;
 	this.parameterList = Object.keys(parameters);
@@ -51,13 +38,6 @@ export function Particle (attributes)
 	this.update = function ()
 	{
 		this.uniforms.time.value = this.time;
-		this.uniforms.spawnTexture.value = this.positionTexture;
-		this.uniforms.colorTexture.value = this.colorTexture;
-		this.uniforms.normalTexture.value = this.normalTexture;
-		this.positionPass.update();
-		this.velocityPass.update();
-		this.uniforms.positionTexture.value = this.positionPass.getTexture();
-		this.uniforms.velocityTexture.value = this.velocityPass.getTexture();
 		for (var i = 0; i < this.parameterList.length; i++) {
 			this.uniforms[this.parameterList[i]].value = parameters[this.parameterList[i]];
 		}
@@ -74,7 +54,8 @@ function getDefaultColorArray (count)
 	return array;
 }
 
-function createGeometryForParticles (positionArray, colorArray, normalArray)
+
+function createGeometryForLine (positionArray, colorArray, normalArray)
 {
 	var geometry = new THREE.BufferGeometry();
 
@@ -82,33 +63,42 @@ function createGeometryForParticles (positionArray, colorArray, normalArray)
 	var x, y, z, ia, ib, ic, u, v, nx, ny, nz;
 	var indexVertex = 0, indexUV = 0, indexAnchor = 0;
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
-	var count = positionArray.length / 3;
+	var count = positionArray.length * 2 / 3;
 	var resolution = dimension*dimension;
 
 	// attributes
 	var vertices = new Float32Array(count * 3 * 3);
+	var lineEnd = new Float32Array(count * 3 * 3);
 	var normals = new Float32Array(count * 3 * 3);
 	var colors = new Float32Array(count * 3 * 3);
 	var anchor = new Float32Array(count * 3 * 2);
 	var texcoord = new Float32Array(count * 3 * 2);
 
 	// triangles
-	for (var triangleIndex = 0; triangleIndex < count; triangleIndex++) {
+	for (var lineIndex = 0; lineIndex < count - 2 && lineIndex*3+5 < count; lineIndex += 2) {
 
-		ia = triangleIndex*3;
-		ib = triangleIndex*3+1;
-		ic = triangleIndex*3+2;
+		ia = lineIndex*3;
+		ib = lineIndex*3+1;
+		ic = lineIndex*3+2;
+
+		id = lineIndex*3+3;
+		ie = lineIndex*3+4;
+		ig = lineIndex*3+5;
 
 		// uv is used to map vertex index to bitmap data
-		u = (triangleIndex % dimension) / dimension;
-		v = Math.floor(triangleIndex / dimension) / dimension;
+		u = (lineIndex % dimension) / dimension;
+		v = Math.floor(lineIndex / dimension) / dimension;
 
 		// positions and normals are on the same for the 3 points
-		for (var tri = 0; tri < 3; ++tri)
+		for (var tri = 0; tri < 6; ++tri)
 		{
-			vertices[indexVertex+0] =  positionArray[ia];
-			vertices[indexVertex+1] =  positionArray[ib];
-			vertices[indexVertex+2] =  positionArray[ic];
+			vertices[indexVertex+0] = positionArray[ia];
+			vertices[indexVertex+1] = positionArray[ib];
+			vertices[indexVertex+2] = positionArray[ic];
+
+			lineEnd[indexVertex+0] =  positionArray[id];
+			lineEnd[indexVertex+1] =  positionArray[ie];
+			lineEnd[indexVertex+2] =  positionArray[ig];
 
 			normals[indexVertex+0] = normalArray[ia];
 			normals[indexVertex+1] = normalArray[ib];
@@ -126,13 +116,20 @@ function createGeometryForParticles (positionArray, colorArray, normalArray)
 	  }
 
 	 	// offset used to scale triangle in shader
-		anchor[indexAnchor] = 0;
-		anchor[indexAnchor+1] = 1;
+		anchor[indexAnchor] = -1;
+		anchor[indexAnchor+1] = 0;
 		anchor[indexAnchor+2] = -1;
-		anchor[indexAnchor+3] = -1;
+		anchor[indexAnchor+3] = 1;
 		anchor[indexAnchor+4] = 1;
-		anchor[indexAnchor+5] = -1;
-		indexAnchor += 6;
+		anchor[indexAnchor+5] = 1;
+
+		anchor[indexAnchor+6] = 1;
+		anchor[indexAnchor+7] = 0;
+		anchor[indexAnchor+8] = -1;
+		anchor[indexAnchor+9] = 0;
+		anchor[indexAnchor+10] = 1;
+		anchor[indexAnchor+11] = 1;
+		indexAnchor += 12;
 	}
 
 	geometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
@@ -140,6 +137,7 @@ function createGeometryForParticles (positionArray, colorArray, normalArray)
 	geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
 	geometry.addAttribute( 'anchor', new THREE.BufferAttribute( anchor, 2 ) );
 	geometry.addAttribute( 'texcoord', new THREE.BufferAttribute( texcoord, 2 ) );
+	geometry.addAttribute( 'lineEnd', new THREE.BufferAttribute( lineEnd, 3 ) );
 	
 	var min = -100;
 	var max = 100;
@@ -156,11 +154,11 @@ function createDataTextureForParticles (dataArray, itemSize)
 	var resolution = dimension*dimension;
 	var array = new Float32Array(resolution * itemSize);
 
-	for (var triangleIndex = 0; triangleIndex < count; triangleIndex++)
+	for (var lineIndex = 0; lineIndex < count; lineIndex++)
 	{
-		ia = triangleIndex*3;
-		ib = triangleIndex*3+1;
-		ic = triangleIndex*3+2;
+		ia = lineIndex*3;
+		ib = lineIndex*3+1;
+		ic = lineIndex*3+2;
 
 		array[ia] = dataArray[ia];
 		array[ib] = dataArray[ib];

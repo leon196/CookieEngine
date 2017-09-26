@@ -40,7 +40,7 @@ materials.setup = function ()
 
 	materials.line = new THREE.ShaderMaterial( {
 		uniforms: defaultUniforms,
-		vertexShader: assets.shaders['text.vert'],
+		vertexShader: assets.shaders['line.vert'],
 		fragmentShader: assets.shaders['line.frag'],
 		side: THREE.DoubleSide
 	})

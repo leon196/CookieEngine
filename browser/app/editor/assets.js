@@ -18,6 +18,7 @@ var meshDescriptors = {
 var geometryDescriptors = {
 	// 'vegetation': 'points/vegetation.ply',
 	'tree': 'points/tree.obj',
+	'branch': 'points/branch.obj',
 };
 
 var shaderDescriptors = {

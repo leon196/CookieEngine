@@ -9,7 +9,7 @@ export const parameters = {
 	velocityDirectionBlend: 0.05,
 	velocityFrictionBlend: 1.,
 	velocityDamping: 0.05,
-	spriteVelocityStretch: 100.,
+	spriteVelocityStretch: 10.,
 	turbulenceRangeMin: 0.8,
 	turbulenceRangeMax: 0.9,
 };

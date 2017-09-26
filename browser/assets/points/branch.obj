@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: 'tree.blend'
 # www.blender.org
-mtllib tree.mtl
+mtllib branch.mtl
 o tree.001_Mesh.003
 v -0.623314 -10.641237 -0.733491
 v -0.623314 -8.757921 -0.733491
