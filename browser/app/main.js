@@ -50,6 +50,23 @@ function animate (elapsed)
 	elapsed /= 1000.;
 	var dt = 0.016;
 
+	updateState(dt);
+	
+	scene.update(elapsed);
+	material.defaultUniforms.time.value = elapsed;
+
+	if (started) {
+		renderer.render(scene.scene, scene.camera, frame.getTarget(), true);
+		material.filter.uniforms.fadeTransition.value = stateRatio;
+		material.filter.uniforms.frameBuffer.value = frame.getTexture();
+		renderer.render(filterScene.scene, filterScene.camera);
+	} else {
+		renderer.render(scene.scene, scene.camera);
+	}
+}
+
+function updateState (dt)
+{
 	if (state != stateNext) {
 		if (stateRatio > 0.) {
 			stateRatio -= dt;
@@ -60,7 +77,7 @@ function animate (elapsed)
 		if (stateRatio < 1.) {
 			stateRatio += dt;
 		}
-
+		// switch scene
 		if (key.space.down) {
 			stateNext = (stateNext + 1) % 3;
 			key.space.down = false;
@@ -73,18 +90,6 @@ function animate (elapsed)
 		case 0: scene = loadingScene; break;
 		case 1: scene = testScene; break;
 		case 2: scene = snowScene; break;
-	}
-	
-	scene.update(elapsed);
-	material.defaultUniforms.time.value = elapsed;
-
-	if (started) {
-		renderer.render(scene.scene, scene.camera, frame.getTarget(), true);
-		material.filter.uniforms.fadeTransition.value = stateRatio;
-		material.filter.uniforms.frameBuffer.value = frame.getTexture();
-		renderer.render(filterScene.scene, filterScene.camera);
-	} else {
-		renderer.render(scene.scene, scene.camera);
 	}
 }
 

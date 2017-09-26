@@ -20,11 +20,11 @@ function change(data) {
 	var name = fileName.split('.')[0];
 	if (extension == 'frag' || extension == 'vert') {
 		if (material[name] != null) {
-			asset.reload(fileName, function () {
+			asset.reloadShader(asset.shaderDescriptors[fileName], function () {
 				if (extension == 'frag') {
-					material[name].fragmentShader = asset.shaders[fileName];
+					material[name].fragmentShader = asset.shader[fileName];
 				} else {
-					material[name].vertexShader = asset.shaders[fileName];
+					material[name].vertexShader = asset.shader[fileName];
 				}
 				material[name].needsUpdate = true;
 			});

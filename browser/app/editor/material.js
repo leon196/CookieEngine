@@ -19,50 +19,50 @@ material.setup = function ()
 		var name = materialFromShaderNames[i];
 		material[name] = new THREE.ShaderMaterial( {
 			uniforms: material.defaultUniforms,
-			vertexShader: asset.shaders['screen.vert'],
-			fragmentShader: asset.shaders[name+'.frag']
+			vertexShader: asset.shader['screen.vert'],
+			fragmentShader: asset.shader[name+'.frag']
 		})	
 	}
 
 	material.particle = new THREE.ShaderMaterial( {
 		uniforms: material.defaultUniforms,
-		vertexShader: asset.shaders['particle.vert'],
-		fragmentShader: asset.shaders['particle.frag'],
+		vertexShader: asset.shader['particle.vert'],
+		fragmentShader: asset.shader['particle.frag'],
 		side: THREE.DoubleSide
 	})
 
 	material.text = new THREE.ShaderMaterial( {
 		uniforms: material.defaultUniforms,
-		vertexShader: asset.shaders['text.vert'],
-		fragmentShader: asset.shaders['text.frag'],
+		vertexShader: asset.shader['text.vert'],
+		fragmentShader: asset.shader['text.frag'],
 		side: THREE.DoubleSide
 	})
 
 	material.loadingText = new THREE.ShaderMaterial( {
 		uniforms: material.defaultUniforms,
-		vertexShader: asset.shaders['text.vert'],
-		fragmentShader: asset.shaders['text.frag'],
+		vertexShader: asset.shader['text.vert'],
+		fragmentShader: asset.shader['text.frag'],
 		side: THREE.DoubleSide
 	})
 
 	material.line = new THREE.ShaderMaterial( {
 		uniforms: material.defaultUniforms,
-		vertexShader: asset.shaders['line.vert'],
-		fragmentShader: asset.shaders['line.frag'],
+		vertexShader: asset.shader['line.vert'],
+		fragmentShader: asset.shader['line.frag'],
 		side: THREE.DoubleSide
 	})
 
 	material.point = new THREE.ShaderMaterial( {
 		uniforms: material.defaultUniforms,
-		vertexShader: asset.shaders['point.vert'],
-		fragmentShader: asset.shaders['point.frag'],
+		vertexShader: asset.shader['point.vert'],
+		fragmentShader: asset.shader['point.frag'],
 		side: THREE.DoubleSide
 	})
 
 	material.filter = new THREE.ShaderMaterial( {
 		uniforms: material.defaultUniforms,
-		vertexShader: asset.shaders['screen.vert'],
-		fragmentShader: asset.shaders['filter.frag'],
+		vertexShader: asset.shader['screen.vert'],
+		fragmentShader: asset.shader['filter.frag'],
 		side: THREE.DoubleSide
 	})
 }

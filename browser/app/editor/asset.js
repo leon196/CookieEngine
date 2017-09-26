@@ -4,6 +4,15 @@ import { parameter } from '../editor/parameter'
 import { PLYLoader } from '../utils/PLYLoader'
 import { OBJLoader } from '../utils/OBJLoader'
 
+export var asset = {
+	// 'actions': new blenderHTML5Animations.ActionLibrary(actionsDescriptor),
+	'load': load,
+	'shader': {},
+	'geometry': {},
+	'font': {},
+	'textures': {}
+};
+
 var baseURL = "asset/";
 var shaderBaseURL = baseURL + 'shader/';
 
@@ -21,19 +30,19 @@ var geometryDescriptors = {
 	'branch': 'point/branch.obj',
 };
 
-var shaderDescriptors = {
+asset.shaderDescriptors = {
 	'particle.vert': 'triangle/particle.vert',
 	'particle.frag': 'triangle/particle.frag',
 	'text.vert': 'triangle/text.vert',
 	'text.frag': 'triangle/text.frag',
-	'position.frag': 'pass/position.frag',
-	'velocity.frag': 'pass/velocity.frag',
 	'line.vert': 'triangle/line.vert',
 	'line.frag': 'triangle/line.frag',
 	'point.frag': 'triangle/point.frag',
 	'point.vert': 'triangle/point.vert',
 	'screen.vert': 'filter/screen.vert',
 	'filter.frag': 'filter/filter.frag',
+	'position.frag': 'pass/position.frag',
+	'velocity.frag': 'pass/velocity.frag',
 };
 
 var fontDescriptors = {
@@ -53,16 +62,8 @@ function load(callback) {
 	return pendingCallbacks.push(callback);
 }
 
-export var asset = {
-	// 'actions': new blenderHTML5Animations.ActionLibrary(actionsDescriptor),
-	'load': load,
-	'geometry': {},
-	'font': {},
-	'textures': {}
-};
-
 function notify() {
-	isLoaded = asset.shaders 
+	isLoaded = asset.shader 
 	// && Object.keys(asset.textures).length == Object.keys(textureDescriptors).length 
 	&& Object.keys(asset.font).length == Object.keys(fontDescriptors).length 
 	&& Object.keys(asset.geometry).length == Object.keys(geometryDescriptors).length;
@@ -86,8 +87,8 @@ var shaderURLs = [
 	return shaderBaseURL + name;
 });
 
-Object.keys(shaderDescriptors).forEach(function(name) {
-	var url = shaderDescriptors[name];
+Object.keys(asset.shaderDescriptors).forEach(function(name) {
+	var url = asset.shaderDescriptors[name];
 	shaderURLs.push( shaderBaseURL + url );
 });
 
@@ -112,19 +113,21 @@ loadFiles(shaderURLs, function (err, files) {
 	asset.fileLoaded = files;
 
 	var shaders = {};
-	Object.keys(shaderDescriptors).forEach(function(name) {
-		var url = shaderDescriptors[name];
+	Object.keys(asset.shaderDescriptors).forEach(function(name) {
+		var url = asset.shaderDescriptors[name];
 		shaders[name] = fileWithHeaders(shaderBaseURL + url);
 	});
 
-	asset.shaders = shaders;
+	asset.shader = shaders;
 	return notify();
 });
 
-asset.reload = function (assetName, callback) {
+asset.reloadShader = function (assetName, callback) {
 	loadFiles([shaderBaseURL + assetName], function (err, files) {
 		asset.fileLoaded[shaderBaseURL + assetName] = files[shaderBaseURL + assetName];
-		asset.shaders[assetName] = fileWithHeaders(shaderBaseURL + shaderDescriptors[assetName]);
+		var infos2 = assetName.split('/');
+		var fileName = infos2[infos2.length - 1];
+		asset.shader[fileName] = fileWithHeaders(shaderBaseURL + asset.shaderDescriptors[fileName]);
 		if (callback != null) callback();
 	});
 };
