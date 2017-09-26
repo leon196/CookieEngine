@@ -12,11 +12,12 @@ import { material } from './editor/material';
 import { renderer } from './engine/renderer';
 import { makeText } from './utils/makeText';
 import { LoadingScene } from './scene/LoadingScene';
+import { TestScene } from './scene/TestScene';
 
-let camera, scene, controls;
+let camera, scene;
 let particle, line, point, text;
 let started = false;
-let loadingScene;
+let loadingScene, testScene;
 let state;
 
 init();
@@ -29,37 +30,14 @@ asset.load(function() {
 
 function init ()
 {
-	scene = new THREE.Scene();
-
-	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
-	camera.position.y = 10;
-	camera.position.z = 20;
-
-	controls = new OrbitControls( camera, renderer.domElement );
-	controls.rotateSpeed = 0.5;
-
 	loadingScene = new LoadingScene(scene);
-
 	state = 0;
 }
 
 function start ()
 {
 	material.setup();
-
-	particle = new Particle(asset.geometry["tree"].children[0].geometry.attributes);
-	scene.add( particle.mesh );
-
-	point = new Point(256*256, material.point);
-	scene.add( point.mesh );
-
-	line = new Line(asset.geometry["tree"].children[0].geometry.attributes);
-	scene.add( line.mesh );
-	
-	var textScale = .2;
-	text = new Text("coucou");
-	scene.add (text.mesh);
-
+	testScene = new TestScene();
   state = 1;
 }
 
@@ -70,18 +48,12 @@ function animate (elapsed)
 	var dt = 0.016;
 
 	switch (state) {
-		case 0:
-		loadingScene.update(elapsed);
-		break;
-		case 1:
-		material.text.uniforms.time.value = elapsed;
-		particle.update(elapsed);
-		line.update(elapsed);
-		break;
+		case 0: scene = loadingScene; break;
+		case 1: scene = testScene; break;
 	}
 
-	controls.update();
-	renderer.render( scene, camera );
+	scene.update(elapsed);
+	renderer.render( scene.scene, scene.camera );
 }
 
 function onWindowResize ()

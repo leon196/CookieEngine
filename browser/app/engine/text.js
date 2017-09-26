@@ -14,4 +14,9 @@ export function Text (message)
 	this.geometry.computeBoundingBox();
 	this.geometry.center();
 	this.mesh = new THREE.Mesh( this.geometry, material.text );
+	
+	this.update = function ()
+	{
+		
+	}
 }
