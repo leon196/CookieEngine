@@ -4,6 +4,7 @@ import * as THREE from 'three.js';
 import './utils/utils';
 import { Particle } from './engine/particle';
 import { Line } from './engine/line';
+import { Point } from './engine/point';
 import { assets } from './editor/assets';
 import { OrbitControls } from './utils/OrbitControls';
 import { materials } from './editor/materials';
@@ -11,7 +12,7 @@ import { renderer } from './engine/renderer';
 import { makeText } from './utils/makeText';
 
 let camera, scene, controls;
-let particle, line;
+let particle, line, point;
 
 assets.load(function() {
 	init();
@@ -22,7 +23,8 @@ assets.load(function() {
 function init ()
 {
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
-	camera.position.z = 10;
+	camera.position.y = 10;
+	camera.position.z = 20;
 
 	controls = new OrbitControls( camera, renderer.domElement );
 	controls.rotateSpeed = 0.5;
@@ -32,7 +34,10 @@ function init ()
 	particle = new Particle(assets.geometries["tree"].children[0].geometry.attributes);
 	scene.add( particle.mesh );
 
-	line = new Line(assets.geometries["branch"].children[0].geometry.attributes);
+	point = new Point(128*128, materials.point);
+	scene.add( point.mesh );
+
+	line = new Line(assets.geometries["tree"].children[0].geometry.attributes);
 	scene.add( line.mesh );
 	
 	var textScale = .2;

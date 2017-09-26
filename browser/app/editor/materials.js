@@ -44,4 +44,11 @@ materials.setup = function ()
 		fragmentShader: assets.shaders['line.frag'],
 		side: THREE.DoubleSide
 	})
+
+	materials.point = new THREE.ShaderMaterial( {
+		uniforms: defaultUniforms,
+		vertexShader: assets.shaders['point.vert'],
+		fragmentShader: assets.shaders['point.frag'],
+		side: THREE.DoubleSide
+	})
 }

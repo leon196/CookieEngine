@@ -30,6 +30,8 @@ var shaderDescriptors = {
 	'velocity.frag': 'velocity.frag',
 	'line.vert': 'line.vert',
 	'line.frag': 'line.frag',
+	'point.frag': 'point.frag',
+	'point.vert': 'point.vert',
 	'screen.vert': 'screen.vert',
 };
 
