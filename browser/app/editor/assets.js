@@ -35,6 +35,10 @@ var shaderDescriptors = {
 	'screen.vert': 'screen.vert',
 };
 
+var fontDescriptors = {
+	'helvetiker' : 'fonts/helvetiker_bold.typeface.json',
+}
+
 var pendingCallbacks = [];
 var isLoaded = false;
 
@@ -52,12 +56,14 @@ export var assets = {
 	// 'actions': new blenderHTML5Animations.ActionLibrary(actionsDescriptor),
 	'load': load,
 	'geometries': {},
+	'font': {},
 	'textures': {}
 };
 
 function notify() {
 	isLoaded = assets.shaders 
 	// && Object.keys(assets.textures).length == Object.keys(textureDescriptors).length 
+	&& Object.keys(assets.font).length == Object.keys(fontDescriptors).length 
 	&& Object.keys(assets.geometries).length == Object.keys(geometryDescriptors).length;
 	// && assets.meshes;
 
@@ -152,3 +158,12 @@ Object.keys(geometryDescriptors).forEach(function(name) {
 	}
 });
 
+
+var fontLoader = new THREE.FontLoader();
+Object.keys(fontDescriptors).forEach(function(name) {
+	var url = baseURL + fontDescriptors[name];
+	fontLoader.load(url, function(font){
+			assets.font[name] = font;
+			return notify();
+		});
+});

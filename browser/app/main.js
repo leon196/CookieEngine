@@ -5,6 +5,7 @@ import './utils/utils';
 import { Particle } from './engine/particle';
 import { Line } from './engine/line';
 import { Point } from './engine/point';
+import { Text } from './engine/text';
 import { assets } from './editor/assets';
 import { OrbitControls } from './utils/OrbitControls';
 import { materials } from './editor/materials';
@@ -12,7 +13,8 @@ import { renderer } from './engine/renderer';
 import { makeText } from './utils/makeText';
 
 let camera, scene, controls;
-let particle, line, point;
+let particle, line, point, text;
+let time;
 
 assets.load(function() {
 	init();
@@ -41,31 +43,11 @@ function init ()
 	scene.add( line.mesh );
 	
 	var textScale = .2;
-  var loader = new THREE.FontLoader();
-  loader.load(
-			'assets/fonts/helvetiker_bold.typeface.json',
-			function ( font ) {
-			  var geometry = new THREE.TextGeometry("cookie demoparty 2017     jardin d'alice    december 8 & 9 2017    compo 8k demo wild     shader showdown    music and light show", {
-		        font: font,
-		        size: textScale,
-		        height: .01,
-		        curveSegments: 36,
-		    })
-				geometry.computeBoundingBox();
-				var max = geometry.boundingBox.max;
+	text = new Text("coucou");
+	console.log(text);
+	scene.add (text.mesh);
 
-				var xMid = - 0.5 * ( max.x - geometry.boundingBox.min.x );
-				var yMid = - 0.5 * ( max.y - geometry.boundingBox.min.y );
-				geometry.center();
-			  var mesh = new THREE.Mesh( geometry, materials.text );
-				scene.add( mesh );
-
-				// geometry = new THREE.PlaneGeometry( max.x * 2., Math.abs(yMid)*2., 96, 1 );
-				// var plane = new THREE.Mesh( geometry, materials.line );
-				// scene.add( plane );
-			}
-		);
-
+  time = 0;
 }
 
 function animate ()
@@ -77,6 +59,8 @@ function animate ()
 	particle.update();
 	line.update();
 	renderer.render( scene, camera );
+
+	time += 0.016;
 }
 
 function onWindowResize ()
