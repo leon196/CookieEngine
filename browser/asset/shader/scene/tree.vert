@@ -34,11 +34,15 @@ void main()	{
 	vDir = end - pos;
 	vDirCamera = pos - cameraPosition;
 
+	float size = .01;
+	float edge = .5+.5*sin(time);
+	size *= 1.-smoothstep(0.0, 30.*edge, length(pos));
+
 	vec4 posScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
 	vec4 lineEndScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(end,1);
 	vDirScreen = lineEndScreen.xy - posScreen.xy;
 	vec2 right = normalize(vec2(vDirScreen.y, -vDirScreen.x));
 	right.x *= resolution.y/resolution.x;
 	gl_Position = mix(posScreen, lineEndScreen, anchor.y);
-	gl_Position.xy += right * anchor.x * .01;
+	gl_Position.xy += right * anchor.x * size;
 }
