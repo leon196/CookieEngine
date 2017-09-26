@@ -61,7 +61,7 @@ void main() {
 	// up = mix(up, velocity.xyz*stretch, moving);
 
 
-	vec2 size = vec2(1., 1.) * (.1+.9*rand(vTexcoord*10.));
+	vec2 size = .3 * vec2(0.9, 1.) * (.1+.9*rand(vTexcoord*10.));
 	// posWorld.xyz += anchor.x * tangent * size.x + anchor.y * up * size.y;
 	// posWorld.xyz -= up * size / 2.5;
 
@@ -79,6 +79,7 @@ void main() {
 
 	// screen space
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
+	gl_Position.y += size.y;
 	gl_Position.xy += right * anchor.x * size.x * aspect.x;
 	gl_Position.xy += forward * anchor.y * size.y * aspect.y;
 

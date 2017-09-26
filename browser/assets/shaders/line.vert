@@ -8,6 +8,7 @@ varying vec2 vTexcoord;
 varying float vWave;
 varying vec3 vNormal;
 varying vec2 vDirScreen;
+varying vec3 vDir;
 
 vec3 displace (vec3 p)
 {
@@ -22,6 +23,8 @@ void main()	{
 
 	vec3 pos = displace(position);
 	vec3 end = displace(lineEnd);
+
+	vDir = normalize(end - pos);
 
 	vec4 posScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
 	vec4 lineEndScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(end,1);

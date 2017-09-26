@@ -115,6 +115,19 @@ float noiseIQ( vec3 x )
 	 mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
 }
 
+float fbm (vec3 p, vec3 speed) {
+    float value = 0.0;
+    float amplitud = .5;
+    for (float i = 1.; i <= 6.; i++) {
+        value += amplitud * noiseIQ(p);
+        p *= 2.;
+    	p += speed;
+        amplitud *= .5;
+    }
+    return value;
+}
+
+
 vec3 rotateY(vec3 v, float t)
 {
 	float cost = cos(t); float sint = sin(t);

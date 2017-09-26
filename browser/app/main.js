@@ -34,7 +34,7 @@ function init ()
 	particle = new Particle(assets.geometries["tree"].children[0].geometry.attributes);
 	scene.add( particle.mesh );
 
-	point = new Point(128*128, materials.point);
+	point = new Point(256*256, materials.point);
 	scene.add( point.mesh );
 
 	line = new Line(assets.geometries["tree"].children[0].geometry.attributes);
