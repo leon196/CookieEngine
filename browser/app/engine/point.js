@@ -43,6 +43,8 @@ function getGridPosition (count)
 		var y = Math.floor(i / dimension);
 		array.push((x/dimension)*2.-1.);
 		array.push((y/dimension)*2.-1.);
+		// array.push(x/dimension);
+		// array.push(y/dimension);
 		array.push(0);
 	}
 	return array;

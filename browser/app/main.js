@@ -11,10 +11,11 @@ import { LoadingScene } from './scene/LoadingScene';
 import { TestScene } from './scene/TestScene';
 import { FilterScene } from './scene/FilterScene';
 import { SnowScene } from './scene/SnowScene';
+import { TreeScene } from './scene/TreeScene';
 
-let camera, scene, frame;
+let scene, frame;
 let started, state, stateNext, stateRatio;
-let loadingScene, filterScene, testScene, snowScene;
+let loadingScene, filterScene, testScene, snowScene, treeScene;
 
 init();
 animate();
@@ -40,6 +41,7 @@ function start ()
 	filterScene = new FilterScene();
 	testScene = new TestScene();
 	snowScene = new SnowScene();
+	treeScene = new TreeScene();
   stateNext = 1;
 	started = true;
 }
@@ -51,6 +53,13 @@ function animate (elapsed)
 	var dt = 0.016;
 
 	updateState(dt);
+
+	switch (state) {
+		case 0: scene = loadingScene; break;
+		case 1: scene = treeScene; break;
+		case 2: scene = snowScene; break;
+		case 3: scene = testScene; break;
+	}
 	
 	scene.update(elapsed);
 	material.defaultUniforms.time.value = elapsed;
@@ -85,12 +94,6 @@ function updateState (dt)
 	}
 
 	stateRatio = Math.clamp(stateRatio, 0., 1.);
-
-	switch (state) {
-		case 0: scene = loadingScene; break;
-		case 1: scene = testScene; break;
-		case 2: scene = snowScene; break;
-	}
 }
 
 function onWindowResize ()

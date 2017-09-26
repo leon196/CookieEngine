@@ -6,7 +6,7 @@ import { ShaderPass } from './shaderpass';
 import { material } from '../editor/material';
 import { parameter } from '../editor/parameter';
 
-export function Particle (attributes)
+export function Particle (attributes, mat)
 {
 	this.uniforms = {
 		time: { value: 1.0 },
@@ -34,7 +34,7 @@ export function Particle (attributes)
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
 	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray);
-	this.mesh = new THREE.Mesh(this.geometry, material.particle);
+	this.mesh = new THREE.Mesh(this.geometry, mat);
 
 	this.positionTexture = createDataTextureForParticles(positionArray, 3);
 	this.colorTexture = createDataTextureForParticles(colorArray, 3);

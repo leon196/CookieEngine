@@ -43,6 +43,10 @@ asset.shaderDescriptors = {
 	'filter.frag': 'filter/filter.frag',
 	'position.frag': 'pass/position.frag',
 	'velocity.frag': 'pass/velocity.frag',
+	'snow.vert': 'scene/snow.vert',
+	'snow.frag': 'scene/snow.frag',
+	'tree.vert': 'scene/tree.vert',
+	'tree.frag': 'scene/tree.frag',
 };
 
 var fontDescriptors = {

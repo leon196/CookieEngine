@@ -6,7 +6,7 @@ import { ShaderPass } from './shaderpass';
 import { material } from '../editor/material';
 import { parameter } from '../editor/parameter';
 
-export function Line (attributes)
+export function Line (attributes, mat)
 {
 	this.uniforms = {
 		time: { value: 1.0 },
@@ -20,14 +20,16 @@ export function Line (attributes)
 	if (attributes.color) colorArray = attributes.color.array;
 	else colorArray = getDefaultColorArray(positionArray.length);
 
+	var uvArray;
+	if (attributes.uv) uvArray = attributes.uv.array;
+	else uvArray = getDefaultUVArray(positionArray.length);
+
 	var normalArray = attributes.normal.array;
 
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
-	this.geometry = createGeometryForLine(positionArray, colorArray, normalArray);
-	this.mesh = new THREE.Mesh(this.geometry, material.line);
-	// this.geometry = new THREE.PlaneGeometry(10., Math.abs(2.)*2., 96, 1 );
-	// this.mesh = new THREE.Mesh( this.geometry, material.line );
+	this.geometry = createGeometryForLine(positionArray, colorArray, normalArray, uvArray);
+	this.mesh = new THREE.Mesh(this.geometry, mat);
 
 	this.parameterList = Object.keys(parameter);
 	for (var i = 0; i < this.parameterList.length; i++) {
@@ -52,8 +54,16 @@ function getDefaultColorArray (count)
 	return array;
 }
 
+function getDefaultUVArray (count)
+{
+	var array = [];
+	for (var i = count - 1; i >= 0; i--) {
+		array[i] = 1;
+	}
+	return array;
+}
 
-function createGeometryForLine (positionArray, colorArray, normalArray)
+function createGeometryForLine (positionArray, colorArray, normalArray, uvArray)
 {
 	var geometry = new THREE.BufferGeometry();
 
@@ -71,6 +81,7 @@ function createGeometryForLine (positionArray, colorArray, normalArray)
 	var colors = new Float32Array(count * 3 * 3);
 	var anchor = new Float32Array(count * 3 * 2);
 	var texcoord = new Float32Array(count * 3 * 2);
+	var uv = new Float32Array(count * 3 * 2);
 
 	// triangles
 	for (var lineIndex = 0; lineIndex < count - 2 && lineIndex*3+5 < count; lineIndex += 2) {
@@ -109,6 +120,9 @@ function createGeometryForLine (positionArray, colorArray, normalArray)
 			texcoord[indexUV+0] = u;
 			texcoord[indexUV+1] = v;
 
+			uv[indexUV+0] = uvArray[lineIndex*2];
+			uv[indexUV+1] = uvArray[lineIndex*2+1];
+
 	    indexVertex += 3;
 	    indexUV += 2;
 	  }
@@ -135,6 +149,7 @@ function createGeometryForLine (positionArray, colorArray, normalArray)
 	geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
 	geometry.addAttribute( 'anchor', new THREE.BufferAttribute( anchor, 2 ) );
 	geometry.addAttribute( 'texcoord', new THREE.BufferAttribute( texcoord, 2 ) );
+	geometry.addAttribute( 'uv', new THREE.BufferAttribute( uv, 2 ) );
 	geometry.addAttribute( 'lineEnd', new THREE.BufferAttribute( lineEnd, 3 ) );
 	
 	var min = -100;

@@ -20,9 +20,9 @@ export function TestScene ()
 	this.controls = new OrbitControls( this.camera, renderer.domElement );
 	this.controls.rotateSpeed = 0.5;
 
-	this.particle = new Particle(asset.geometry["tree"].children[0].geometry.attributes);
+	this.particle = new Particle(asset.geometry["tree"].children[0].geometry.attributes, material.particle);
 	this.point = new Point(256*256, material.point);
-	this.line = new Line(asset.geometry["tree"].children[0].geometry.attributes);
+	this.line = new Line(asset.geometry["tree"].children[0].geometry.attributes, material.line);
 	this.text = new Text("coucou");
 
 	this.scene.add( this.particle.mesh );
