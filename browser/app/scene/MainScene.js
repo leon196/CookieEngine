@@ -10,6 +10,7 @@ import { Point } from '../engine/point';
 import { Text } from '../engine/text';
 import { OrbitControls } from '../utils/OrbitControls';
 import { renderer } from '../engine/renderer';
+import animations from '../engine/animations';
 
 export function MainScene ()
 {

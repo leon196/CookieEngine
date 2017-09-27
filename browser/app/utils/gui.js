@@ -1,4 +1,4 @@
-import * as dat from 'dataarts/dat.gui/build/dat.gui.js';
+import * as dat from 'dat.gui/build/dat.gui.js';
 
 import { parameter } from '../editor/parameter';
 

@@ -16,11 +16,14 @@ System.config({
   map: {
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
+    "blender-html5-animations": "github:KoltesDigital/blender-html5-animations@master",
     "core-js": "npm:core-js@1.2.7",
     "css": "github:systemjs/plugin-css@0.1.36",
-    "dataarts/dat.gui": "github:dataarts/dat.gui@0.6.5",
+    "dat.gui": "github:dataarts/dat.gui@0.6.5",
+    "json": "github:systemjs/plugin-json@0.3.0",
     "socket.io-client": "github:socketio/socket.io-client@2.0.3",
     "three.js": "github:mrdoob/three.js@master",
+    "gl-matrix": "github:toji/gl-matrix@2.4.0",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
     },
