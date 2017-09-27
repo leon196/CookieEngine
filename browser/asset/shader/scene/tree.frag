@@ -13,7 +13,8 @@ void main()	{
 	// vec4 color = texture2D(uTexture, uv.xy);
 	// vec4 color = vec4(vDir*.5+.5,1);
 	vec4 color = vec4(vColor, 1);
-	// color.rgb *= dot(-normalize(vDir), normalize(vDirCamera))*.5+.5;
+	float shade = dot(-normalize(vDir), normalize(vDirCamera))*.5+.5;
+	color.rgb *= .5+.5*shade;
 	// color.rg = uv;
 	// if (color.a < 0.1) discard;
 	gl_FragColor = color;

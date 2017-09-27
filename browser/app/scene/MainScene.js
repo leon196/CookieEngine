@@ -34,11 +34,14 @@ export function MainScene ()
 	var flashAttributes = asset.geometry["flash"].children[0].geometry.attributes;
 	this.flash = new Line(flashAttributes, material.flash);
 
+	this.fire = new Particle(treeAttributes, material.fire);
+
 	this.scene.add( this.tree.mesh );
 	this.scene.add( this.flash.mesh );
 	this.scene.add( this.snow.mesh );
 	this.scene.add( this.rain.mesh );
 	this.scene.add( this.smoke.mesh );
+	this.scene.add( this.fire.mesh );
 	
 	this.parameterList = Object.keys(parameter.show);
 	this.parameterMap = []
@@ -47,11 +50,7 @@ export function MainScene ()
 		name = name.slice(5, name.length);
 		this.parameterMap.push(name);
 		material[this.parameterMap[i]].uniforms[this.parameterList[i]] = { value: parameter.show[this.parameterList[i]] };
-		// material[this.parameterMap[i]].uniforms.show = { value: parameter.show[this.parameterList[i]] };
-		// console.log(material[this.parameterMap[i]].uniforms[name])
 	}
-	console.log(this.parameterMap)
-	// this.tree.uniforms.show.value = 
 
 	this.update = function (elapsed)
 	{
@@ -59,9 +58,9 @@ export function MainScene ()
 		this.snow.update(elapsed);
 		this.rain.update(elapsed);
 		this.smoke.update(elapsed);
+		this.fire.update(elapsed);
 		this.controls.update(elapsed);
 		for (var i = 0; i < this.parameterList.length; ++i) {
-		// this[this.parameterMap[i]].uniforms[name].value = parameter.show[this.parameterList[i]];
 			material[this.parameterMap[i]].uniforms[this.parameterList[i]].value = parameter.show[this.parameterList[i]];
 		}
 	}

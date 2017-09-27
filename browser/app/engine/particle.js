@@ -21,6 +21,7 @@ export function Particle (attributes, mat, step)
 	};
 
 	material.particle.uniforms = this.uniforms;
+	material.fire.uniforms = this.uniforms;
 	material.position.uniforms = this.uniforms;
 	material.velocity.uniforms = this.uniforms;
 
@@ -37,6 +38,7 @@ export function Particle (attributes, mat, step)
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
 	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray, step);
+	console.log(this.geometry)
 	this.mesh = new THREE.Mesh(this.geometry, mat);
 
 	this.positionTexture = createDataTextureForParticles(positionArray, 3);
@@ -56,12 +58,12 @@ export function Particle (attributes, mat, step)
 		this.uniforms.spawnTexture.value = this.positionTexture;
 		this.uniforms.colorTexture.value = this.colorTexture;
 		this.uniforms.normalTexture.value = this.normalTexture;
-		this.positionPass.update();
-		this.velocityPass.update();
 		this.uniforms.positionTexture.value = this.positionPass.getTexture();
 		this.uniforms.velocityTexture.value = this.velocityPass.getTexture();
+		this.positionPass.update();
+		this.velocityPass.update();
 		for (var i = 0; i < this.parameterList.length; i++) {
-			this.uniforms[this.parameterList[i]].value = parameter[this.parameterList[i]];
+			this.uniforms[this.parameterList[i]].value = parameter.particle[this.parameterList[i]];
 		}
 	}
 }

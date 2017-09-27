@@ -7,6 +7,7 @@ varying vec2 vUVMesh;
 varying vec2 vAnchor;
 varying vec2 vScreenUV;
 varying vec3 vColor;
+varying float vFade;
 varying vec3 vNormal;
 varying vec3 vVelocity;
 varying vec3 vViewDir;
@@ -16,7 +17,7 @@ uniform sampler2D positionTexture;
 uniform sampler2D velocityTexture;
 uniform float time;
 uniform vec2 resolution;
-
+uniform float spriteVelocityStretch;
 
 vec3 displace (vec3 p)
 {
@@ -41,8 +42,9 @@ void main() {
 	// vNormal = normalize((modelMatrix * vec4(normal,1)).xyz);
 	vNormal = normalize(posWorld.xyz);
 
-	float fade = smoothstep(0.0, 0.1, velocity.w) * (1. - smoothstep(0.9, 1.0, velocity.w));
+	float fade = smoothstep(0.0, 0.1, velocity.w) * (1. - smoothstep(0.8, 1.0, velocity.w));
 	fade = mix(fade, 1., step(1., velocity.w));
+	vFade = fade;
 
 	float stretch = (1.+magnitude*spriteVelocityStretch);
 
@@ -61,7 +63,7 @@ void main() {
 	// up = mix(up, velocity.xyz*stretch, moving);
 
 
-	vec2 size = .3 * vec2(0.9, 1.) * (.1+.9*rand(vTexcoord*10.));
+	vec2 size = .3 * vec2(0.4, 1.) * (.1+.9*rand(vTexcoord*10.));
 	// posWorld.xyz += anchor.x * tangent * size.x + anchor.y * up * size.y;
 	// posWorld.xyz -= up * size / 2.5;
 

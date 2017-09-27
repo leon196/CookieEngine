@@ -5,7 +5,7 @@ export var parameter = {
 		blendSnow: 0.,
 		blendRain: 0.,
 		blendSmoke: 0.,
-		blendFlash: 1.,
+		blendFlash: 0.,
 	},
 	global: {
 	},

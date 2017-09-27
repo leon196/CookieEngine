@@ -16,7 +16,7 @@ uniform sampler2D positionTexture;
 uniform sampler2D velocityTexture;
 uniform float time;
 uniform vec2 resolution;
-
+uniform float spriteVelocityStretch;
 
 vec3 displace (vec3 p)
 {

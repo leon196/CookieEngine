@@ -6,7 +6,7 @@ import { asset } from '../editor/asset';
 export var material = {};
 
 var materialFromShaderNames = [ 'particle', 'text', 'line', 'point', 'snow', 'tree', 'rain' ];
-var materialAlphaFromShaderNames = [ 'smoke', 'flash' ];
+var materialAlphaFromShaderNames = [ 'smoke', 'flash', 'fire' ];
 var materialScreenFromShaderNames = [ 'position', 'velocity', 'filter' ];
 
 material.defaultUniforms = {
