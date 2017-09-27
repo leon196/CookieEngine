@@ -15,8 +15,8 @@ export function MainScene ()
 {
 	this.scene = new THREE.Scene();
 	this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
-	this.camera.position.y = 10;
-	this.camera.position.z = 10;
+	this.camera.position.y = 30;
+	this.camera.position.z = 30;
 
 	this.controls = new OrbitControls( this.camera, renderer.domElement );
 	this.controls.rotateSpeed = 0.5;
