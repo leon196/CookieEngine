@@ -11,6 +11,7 @@ varying vec3 vNormal;
 varying vec2 vDirScreen;
 varying vec2 vAnchor;
 
+
 void main()	{
 	vTexcoord = uv;
 	vNormal = normal;

@@ -8,14 +8,12 @@ import { renderer } from './engine/renderer';
 import { key } from './utils/keyboard';
 import { FrameBuffer } from './engine/FrameBuffer';
 import { LoadingScene } from './scene/LoadingScene';
-import { TestScene } from './scene/TestScene';
+import { MainScene } from './scene/MainScene';
 import { FilterScene } from './scene/FilterScene';
-import { SnowScene } from './scene/SnowScene';
-import { TreeScene } from './scene/TreeScene';
 
 let scene, frame;
 let started, state, stateNext, stateRatio;
-let loadingScene, filterScene, testScene, snowScene, treeScene;
+let loadingScene, filterScene, mainScene;
 
 init();
 animate();
@@ -39,9 +37,7 @@ function start ()
 	material.setup();
 	frame = new FrameBuffer();
 	filterScene = new FilterScene();
-	testScene = new TestScene();
-	snowScene = new SnowScene();
-	treeScene = new TreeScene();
+	mainScene = new MainScene();
   stateNext = 1;
 	started = true;
 }
@@ -56,9 +52,7 @@ function animate (elapsed)
 
 	switch (state) {
 		case 0: scene = loadingScene; break;
-		case 1: scene = treeScene; break;
-		case 2: scene = snowScene; break;
-		case 3: scene = testScene; break;
+		case 1: scene = mainScene; break;
 	}
 	
 	scene.update(elapsed);
@@ -86,13 +80,7 @@ function updateState (dt)
 		if (stateRatio < 1.) {
 			stateRatio += dt;
 		}
-		// switch scene
-		if (key.space.down) {
-			stateNext = (stateNext + 1) % 4;
-			key.space.down = false;
-		}
 	}
-
 	stateRatio = Math.clamp(stateRatio, 0., 1.);
 }
 

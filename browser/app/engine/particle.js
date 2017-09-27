@@ -6,7 +6,7 @@ import { ShaderPass } from './shaderpass';
 import { material } from '../editor/material';
 import { parameter } from '../editor/parameter';
 
-export function Particle (attributes, mat)
+export function Particle (attributes, mat, step)
 {
 	this.uniforms = {
 		time: { value: 1.0 },
@@ -23,6 +23,8 @@ export function Particle (attributes, mat)
 	material.position.uniforms = this.uniforms;
 	material.velocity.uniforms = this.uniforms;
 
+	step = step | 1;
+
 	var positionArray = attributes.position.array;
 
 	var colorArray;
@@ -33,7 +35,7 @@ export function Particle (attributes, mat)
 
 	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
-	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray);
+	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray, step);
 	this.mesh = new THREE.Mesh(this.geometry, mat);
 
 	this.positionTexture = createDataTextureForParticles(positionArray, 3);
@@ -72,7 +74,7 @@ function getDefaultColorArray (count)
 	return array;
 }
 
-function createGeometryForParticles (positionArray, colorArray, normalArray)
+function createGeometryForParticles (positionArray, colorArray, normalArray, step)
 {
 	var geometry = new THREE.BufferGeometry();
 
@@ -91,7 +93,7 @@ function createGeometryForParticles (positionArray, colorArray, normalArray)
 	var texcoord = new Float32Array(count * 3 * 2);
 
 	// triangles
-	for (var triangleIndex = 0; triangleIndex < count; triangleIndex++) {
+	for (var triangleIndex = 0; triangleIndex + step - 1 < count; triangleIndex += step) {
 
 		ia = triangleIndex*3;
 		ib = triangleIndex*3+1;

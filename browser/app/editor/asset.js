@@ -28,6 +28,7 @@ var geometryDescriptors = {
 	// 'vegetation': 'points/vegetation.ply',
 	'tree': 'point/tree.obj',
 	'branch': 'point/branch.obj',
+	'flash': 'point/flash.obj',
 };
 
 asset.shaderDescriptors = {
@@ -49,6 +50,8 @@ asset.shaderDescriptors = {
 	'tree.frag': 'scene/tree.frag',
 	'rain.vert': 'scene/rain.vert',
 	'rain.frag': 'scene/rain.frag',
+	'smoke.vert': 'scene/smoke.vert',
+	'smoke.frag': 'scene/smoke.frag',
 };
 
 var fontDescriptors = {

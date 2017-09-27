@@ -6,6 +6,7 @@ import { asset } from '../editor/asset';
 export var material = {};
 
 var materialFromShaderNames = [ 'particle', 'text', 'line', 'point', 'snow', 'tree', 'rain' ];
+var materialAlphaFromShaderNames = [ 'smoke' ];
 var materialScreenFromShaderNames = [ 'position', 'velocity', 'filter' ];
 
 material.defaultUniforms = {
@@ -23,6 +24,18 @@ material.setup = function ()
 			vertexShader: asset.shader[name+'.vert'],
 			fragmentShader: asset.shader[name+'.frag'],
 			side: THREE.DoubleSide
+		})	
+	}
+	for (var i = materialAlphaFromShaderNames.length - 1; i >= 0; i--) {
+		var name = materialAlphaFromShaderNames[i];
+		material[name] = new THREE.ShaderMaterial( {
+			uniforms: material.defaultUniforms,
+			vertexShader: asset.shader[name+'.vert'],
+			fragmentShader: asset.shader[name+'.frag'],
+			side: THREE.DoubleSide,
+			depthTest: false,
+			opacity: .5,
+			transparent: true,
 		})	
 	}
 	
