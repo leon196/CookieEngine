@@ -10,6 +10,7 @@ export function Particle (attributes, mat, step)
 {
 	this.uniforms = {
 		time: { value: 1.0 },
+		show: { value: 1.0 },
 		resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
 		frameBuffer: { value: 0 },
 		spawnTexture: { value: 0 },
@@ -44,7 +45,7 @@ export function Particle (attributes, mat, step)
 	this.positionPass = new ShaderPass(material.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
 	this.velocityPass = new ShaderPass(material.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
 
-	this.parameterList = Object.keys(parameter);
+	this.parameterList = Object.keys(parameter.particle);
 	for (var i = 0; i < this.parameterList.length; i++) {
 		this.uniforms[this.parameterList[i]] = { value: 0 };
 	}

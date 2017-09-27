@@ -5,6 +5,7 @@ attribute vec3 lineEnd;
 uniform vec2 resolution;
 uniform float time;
 uniform float dimension;
+uniform float blendSmoke;
 varying vec2 vTexcoord;
 varying float vWave;
 varying vec3 vNormal;
@@ -33,6 +34,7 @@ void main()	{
 	size *= ratio;
 	// size *= smoothstep(0.,.3,1.-ratio);
 	size *= rand(seed);
+	size *= blendSmoke;
 	// pos.z = (y*2.-1.) * range;
 	vec4 posScreenA = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
 	// vec4 posScreenB = projectionMatrix * viewMatrix * modelMatrix * vec4(pos+vec3(0,size,0),1);

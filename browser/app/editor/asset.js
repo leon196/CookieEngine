@@ -44,15 +44,14 @@ asset.shaderDescriptors = {
 	'filter.frag': 'filter/filter.frag',
 	'position.frag': 'pass/position.frag',
 	'velocity.frag': 'pass/velocity.frag',
-	'snow.vert': 'scene/snow.vert',
-	'snow.frag': 'scene/snow.frag',
-	'tree.vert': 'scene/tree.vert',
-	'tree.frag': 'scene/tree.frag',
-	'rain.vert': 'scene/rain.vert',
-	'rain.frag': 'scene/rain.frag',
-	'smoke.vert': 'scene/smoke.vert',
-	'smoke.frag': 'scene/smoke.frag',
 };
+
+var sceneShaderNames = ['snow', 'tree', 'rain', 'smoke', 'flash'];
+for (var i = 0; i < sceneShaderNames.length; ++i) {
+	var name = sceneShaderNames[i];
+	asset.shaderDescriptors[name + '.vert'] = 'scene/' + name + '.vert';
+	asset.shaderDescriptors[name + '.frag'] = 'scene/' + name + '.frag';
+}
 
 var fontDescriptors = {
 	'helvetiker' : 'font/helvetiker_bold.typeface.json',

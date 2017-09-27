@@ -9,6 +9,17 @@ uniform sampler2D positionTexture;
 uniform sampler2D colorTexture;
 uniform sampler2D normalTexture;
 uniform mat4 matrix;
+uniform float velocitySpeed;
+uniform float velocityTargetBlend;
+uniform float velocityOriginBlend;
+uniform float velocityNoiseBlend;
+uniform float velocityTornadoBlend;
+uniform float velocityDirectionBlend;
+uniform float velocityFrictionBlend;
+uniform float velocityDamping;
+uniform float spriteVelocityStretch;
+uniform float turbulenceRangeMin;
+uniform float turbulenceRangeMax;
 
 void main()	{
 	vec3 spawn = texture2D(spawnTexture, vUv).xyz;

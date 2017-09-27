@@ -2,6 +2,7 @@
 
 import * as THREE from 'three.js';
 import { material } from '../editor/material'
+import { parameter } from '../editor/parameter'
 import { asset } from '../editor/asset'
 import { Particle } from '../engine/particle';
 import { Line } from '../engine/line';
@@ -31,13 +32,26 @@ export function MainScene ()
 	this.smoke = new Particle(treeAttributes, material.smoke, 100);
 
 	var flashAttributes = asset.geometry["flash"].children[0].geometry.attributes;
-	this.flash = new Line(flashAttributes, material.tree);
+	this.flash = new Line(flashAttributes, material.flash);
 
 	this.scene.add( this.tree.mesh );
 	this.scene.add( this.flash.mesh );
 	this.scene.add( this.snow.mesh );
 	this.scene.add( this.rain.mesh );
 	this.scene.add( this.smoke.mesh );
+	
+	this.parameterList = Object.keys(parameter.show);
+	this.parameterMap = []
+	for (var i = 0; i < this.parameterList.length; ++i) {
+		var name = this.parameterList[i].toLowerCase();
+		name = name.slice(5, name.length);
+		this.parameterMap.push(name);
+		material[this.parameterMap[i]].uniforms[this.parameterList[i]] = { value: parameter.show[this.parameterList[i]] };
+		// material[this.parameterMap[i]].uniforms.show = { value: parameter.show[this.parameterList[i]] };
+		// console.log(material[this.parameterMap[i]].uniforms[name])
+	}
+	console.log(this.parameterMap)
+	// this.tree.uniforms.show.value = 
 
 	this.update = function (elapsed)
 	{
@@ -46,5 +60,9 @@ export function MainScene ()
 		this.rain.update(elapsed);
 		this.smoke.update(elapsed);
 		this.controls.update(elapsed);
+		for (var i = 0; i < this.parameterList.length; ++i) {
+		// this[this.parameterMap[i]].uniforms[name].value = parameter.show[this.parameterList[i]];
+			material[this.parameterMap[i]].uniforms[this.parameterList[i]].value = parameter.show[this.parameterList[i]];
+		}
 	}
 }

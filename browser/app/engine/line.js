@@ -10,6 +10,7 @@ export function Line (attributes, mat)
 {
 	this.uniforms = {
 		time: { value: 1.0 },
+		show: { value: 1.0 },
 		resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
 		frameBuffer: { value: 0 },
 	};
@@ -31,7 +32,7 @@ export function Line (attributes, mat)
 	this.geometry = createGeometryForLine(positionArray, colorArray, normalArray, uvArray);
 	this.mesh = new THREE.Mesh(this.geometry, mat);
 
-	this.parameterList = Object.keys(parameter);
+	this.parameterList = Object.keys(parameter.global);
 	for (var i = 0; i < this.parameterList.length; i++) {
 		this.uniforms[this.parameterList[i]] = { value: 0 };
 	}

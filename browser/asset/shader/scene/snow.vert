@@ -4,6 +4,7 @@ attribute vec2 texcoord;
 attribute vec3 lineEnd;
 uniform vec2 resolution;
 uniform float time;
+uniform float blendSnow;
 uniform float dimension;
 varying vec2 vTexcoord;
 varying float vWave;
@@ -43,6 +44,7 @@ void main()	{
 	float size = .04 + .02 * rand(uv);
 	size *= (1.-smoothstep(.8,1.,1.-ratio));
 	size *= (1.-smoothstep(.8,1.,length(pos)/range));
+	size *= blendSnow;
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
 	gl_Position.x += anchor.x * size * aspect.x;
 	gl_Position.y += anchor.y * size * aspect.y;

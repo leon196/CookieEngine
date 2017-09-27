@@ -86,7 +86,7 @@ function updateState (dt)
 
 function onWindowResize ()
 {
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
+	scene.camera.aspect = window.innerWidth / window.innerHeight;
+	scene.camera.updateProjectionMatrix();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }

@@ -4,6 +4,7 @@ attribute vec2 texcoord;
 attribute vec3 lineEnd;
 uniform vec2 resolution;
 uniform float time;
+uniform float blendRain;
 uniform float dimension;
 varying vec2 vTexcoord;
 varying float vWave;
@@ -22,6 +23,7 @@ void main()	{
 	float range = 20.;
 	float height = 20.;
 	vec2 size = vec2(.02,3.);
+	size *= blendRain;
 	float speed = 8. + 30. * noiseIQ(vec3(seed*100.,0.));
 	vec3 pos = position;
 	pos.x = (x*2.-1.) * range;

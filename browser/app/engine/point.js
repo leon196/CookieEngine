@@ -9,6 +9,7 @@ import { parameter } from '../editor/parameter';
 export function Point (count, mat)
 {
 	this.uniforms = {
+		show: { value: 1.0 },
 		time: { value: 1.0 },
 		resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
 	};
@@ -20,7 +21,7 @@ export function Point (count, mat)
 	this.geometry = createGeometryForParticles(positionArray, colorArray);
 	this.mesh = new THREE.Mesh(this.geometry, mat);
 
-	this.parameterList = Object.keys(parameter);
+	this.parameterList = Object.keys(parameter.global);
 	for (var i = 0; i < this.parameterList.length; i++) {
 		this.uniforms[this.parameterList[i]] = { value: 0 };
 	}
