@@ -11,6 +11,7 @@ import { Text } from '../engine/text';
 import { OrbitControls } from '../utils/OrbitControls';
 import { renderer } from '../engine/renderer';
 import animations from '../engine/animations';
+import getTime from '../engine/getTime';
 
 export function MainScene ()
 {
@@ -43,7 +44,7 @@ export function MainScene ()
 	this.scene.add( this.rain.mesh );
 	this.scene.add( this.smoke.mesh );
 	this.scene.add( this.fire.mesh );
-	
+
 	this.parameterList = Object.keys(parameter.show);
 	this.parameterMap = []
 	for (var i = 0; i < this.parameterList.length; ++i) {
