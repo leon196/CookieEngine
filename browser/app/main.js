@@ -88,7 +88,7 @@ function updateState (dt)
 		}
 		// switch scene
 		if (key.space.down) {
-			stateNext = (stateNext + 1) % 3;
+			stateNext = (stateNext + 1) % 4;
 			key.space.down = false;
 		}
 	}

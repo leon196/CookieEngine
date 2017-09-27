@@ -21,12 +21,23 @@ export function TreeScene ()
 	this.controls.rotateSpeed = 0.5;
 
 	this.line = new Line(asset.geometry["tree"].children[0].geometry.attributes, material.tree);
-
 	this.scene.add( this.line.mesh );
+	
+	var dimension = 512;
+	material.snow.uniforms.dimension = { value: dimension };
+	this.snow = new Point(dimension*dimension, material.snow);
+	this.scene.add( this.snow.mesh );
+	
+	dimension = 64;
+	material.rain.uniforms.dimension = { value: dimension };
+	this.rain = new Point(dimension*dimension, material.rain);
+	this.scene.add( this.rain.mesh );
 
 	this.update = function (elapsed)
 	{
 		this.line.update(elapsed);
+		this.snow.update(elapsed);
+		this.rain.update(elapsed);
 		this.controls.update(elapsed);
 	}
 }

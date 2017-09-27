@@ -18,9 +18,9 @@ void main()	{
 	float x = position.x*.5+.5;
 	float y = position.y*.5+.5;
 	float index = x * dimension + y * dimension * dimension;
-	float range = 6.;
+	float range = 20.;
 	float radius = index / (dimension*dimension);
-	float angle = radius * 30.;
+	float angle = radius * 20.;
 	radius = mod(radius + time *.03, 1.);
 	x = cos(angle) * radius;
 	y = sin(angle) * radius;
@@ -33,13 +33,13 @@ void main()	{
 	pos.y = max(pos.y, ground);
 
 	angle = rand(position.xz) * PI2;
-	radius = noiseIQ(position.xzz * 10.);
+	radius = noiseIQ(position * 10.) * 5.;
 	pos.x += cos(angle) * radius;
 	pos.z += sin(angle) * radius;
 	pos = normalize(pos) * min(length(pos), range);
 	vec4 posScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
 	gl_Position = posScreen;
-	float size = .03 + .02 * rand(uv);
+	float size = .04 + .02 * rand(uv);
 	size *= (1.-smoothstep(.8,1.,1.-ratio));
 	size *= (1.-smoothstep(.8,1.,length(pos)/range));
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);

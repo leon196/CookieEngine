@@ -23,7 +23,6 @@ export function SnowScene ()
 	this.dimension = 256;
 	material.snow.uniforms.dimension = { value: this.dimension };
 	this.point = new Point(this.dimension*this.dimension, material.snow);
-
 	this.scene.add( this.point.mesh );
 
 	this.update = function (elapsed)

@@ -34,9 +34,12 @@ void main()	{
 	vDir = end - pos;
 	vDirCamera = pos - cameraPosition;
 
-	float size = .01;
-	float edge = .5+.5*sin(time);
-	size *= 1.-smoothstep(0.0, 30.*edge, length(pos));
+	float fadeDist = (1.-clamp(length(pos.xz)*.2,0.,1.));
+	fadeDist *= (1.-clamp(pos.y*.05,0.,1.));
+	float size = .01 + .1 * fadeDist;
+	vColor *= 1.-fadeDist;
+	// float edge = .5+.5*sin(time);
+	// size *= 1.-smoothstep(0.0, 30.*edge, length(pos));
 
 	vec4 posScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
 	vec4 lineEndScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(end,1);

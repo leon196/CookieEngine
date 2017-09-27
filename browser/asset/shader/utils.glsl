@@ -4,6 +4,9 @@
 #define HALFPI 1.5707963267948966192313216916398
 #define HALF3PI 4.7123889803846898576939650749194
 
+// LJ
+mat2 rot (float a) { float c = cos(a), s=sin(a); return mat2(c,-s,s,c); }
+
 // mercury
 float pModPolar(inout vec2 p, float repetitions) {
 	float angle = 2.*PI/repetitions;

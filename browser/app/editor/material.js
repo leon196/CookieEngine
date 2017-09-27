@@ -5,7 +5,7 @@ import { asset } from '../editor/asset';
 
 export var material = {};
 
-var materialFromShaderNames = [ 'particle', 'text', 'line', 'point', 'snow', 'tree' ];
+var materialFromShaderNames = [ 'particle', 'text', 'line', 'point', 'snow', 'tree', 'rain' ];
 var materialScreenFromShaderNames = [ 'position', 'velocity', 'filter' ];
 
 material.defaultUniforms = {

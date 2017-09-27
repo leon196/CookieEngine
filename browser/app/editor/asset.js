@@ -47,6 +47,8 @@ asset.shaderDescriptors = {
 	'snow.frag': 'scene/snow.frag',
 	'tree.vert': 'scene/tree.vert',
 	'tree.frag': 'scene/tree.frag',
+	'rain.vert': 'scene/rain.vert',
+	'rain.frag': 'scene/rain.frag',
 };
 
 var fontDescriptors = {
