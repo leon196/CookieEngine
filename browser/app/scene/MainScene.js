@@ -82,6 +82,9 @@ export function MainScene ()
 		this.controls.update(elapsed);
 
 		this.updateMessage();
+		
+		animations.evaluate(this.camera.matrix, 'camera', elapsed);
+		this.camera.updateMatrixWorld(true);
 
 		for (var i = 0; i < this.parameterList.length; ++i) {
 			// material[this.parameterMap[i]].uniforms[this.parameterList[i]].value = parameter.show[this.parameterList[i]];
