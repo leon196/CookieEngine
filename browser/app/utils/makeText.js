@@ -1,26 +1,31 @@
 
 export var makeText = {};
 
-makeText.simple = function (message, resolution)
+makeText.simple = function (message, fontSize, resolution, center)
 {
-	var font = "monospace";
-	font = resolution / 4 + "px " + font;
+	var font = "coffee";
+	font = fontSize + "px " + font;
 	var canvas = document.createElement('canvas');
 	var ctx = canvas.getContext('2d');
 	ctx.font = font;
-	ctx.canvas.width  = ctx.canvas.height = resolution;
+	ctx.canvas.width  = resolution;// | window.innerWidth;
+	ctx.canvas.height = resolution;// | window.innerHeight;
 	ctx.font = font;
 	ctx.fillStyle = "white";
 	ctx.textAlign = "center";
 	ctx.textBaseline = "middle";
 
-	ctx.fillText(message, ctx.canvas.width / 2 | 0, ctx.canvas.height / 2 | 0);
+	if (!center) {
+		ctx.fillText(message, ctx.canvas.width / 2 | 0, ctx.canvas.height - fontSize);
+	} else {
+		ctx.fillText(message, ctx.canvas.width / 2 | 0, ctx.canvas.height / 2 | 0);
+	}
 	return ctx.canvas;
 };
 
 makeText.color = function (message, font, fontSize, scale, colors)
 {
-	font = font || "monospace";
+	font = font || "coffee";
 	font = fontSize + "px " + font;
 	scale = scale || [0.01, 0.01];
 	var ctx = document.createElement("canvas").getContext("2d");

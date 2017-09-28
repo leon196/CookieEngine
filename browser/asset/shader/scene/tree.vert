@@ -18,7 +18,7 @@ varying vec3 vDirCamera;
 vec3 displace (vec3 p)
 {
 	float a = noiseIQ(p/3.)*PI2;
-	float intensity = .5*clamp(p.y*.2,0.,1.);
+	float intensity = .15*clamp(p.y*.2,0.,1.);
 	p.z += sin(a + time * 3.)*intensity;
 	p.z += cos(a + time * 3.)*intensity;
 

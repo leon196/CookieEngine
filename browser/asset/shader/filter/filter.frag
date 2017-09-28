@@ -1,6 +1,7 @@
 
 uniform sampler2D frameBuffer;
 uniform float fadeTransition;
+uniform float blendLight;
 varying vec2 vUv;
 
 void main ()	{
@@ -11,5 +12,6 @@ void main ()	{
 	vignette *= sin(vUv.y * PI);
 	color.rgb *= smoothstep(-.3,.3,vignette);
 	// color.rgb *= .8 + .2 * rand(vUv);
+	color = mix(color, 1.-color, blendLight);
 	gl_FragColor = color;
 }

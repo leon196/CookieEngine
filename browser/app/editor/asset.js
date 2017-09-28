@@ -56,6 +56,7 @@ for (var i = 0; i < sceneShaderNames.length; ++i) {
 var fontDescriptors = {
 	'helvetiker' : 'font/helvetiker_bold.typeface.json',
 	'Kanit' : 'font/Kanit_Bold.json',
+	'coffee' : 'font/coffee.json',
 	// 'SoukouMincho' : 'font/SoukouMincho_Regular.json',
 }
 

@@ -2,3 +2,10 @@ body {
 	margin: 0;
 	overflow: hidden;
 }
+
+@font-face {
+	font-family: 'coffee';
+	src: url('coffee-webfont.woff2') format('woff2'), url('coffee-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}

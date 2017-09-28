@@ -16,6 +16,7 @@ import { State } from '../utils/State';
 import { key } from '../utils/keyboard';
 import { message } from '../editor/message';
 import getTime from '../engine/getTime';
+import { makeText } from '../utils/makeText';
 
 export function MainScene ()
 {
@@ -47,8 +48,12 @@ export function MainScene ()
 	this.hideMessage = false;
 	this.labels = [];
 	for (var i = 0; i < message.text.length; i++) {
-		this.labels.push(new Text(message.text[i], material.label));
+		var center = i == 0;
+		this.labels.push(new THREE.Texture(makeText.simple(message.text[i], 80, 1024, center)));
+		this.labels[i].needsUpdate = true;
 	}
+	material.label.uniforms.uTexture = { value: this.labels[0] };
+	this.screen = new THREE.Mesh(new THREE.PlaneGeometry( 5, 20, 32 ), material.label);
 	this.labelFireState = new State();
 	this.messageStart = 0;
 
@@ -58,7 +63,7 @@ export function MainScene ()
 	this.scene.add( this.rain.mesh );
 	this.scene.add( this.smoke.mesh );
 	this.scene.add( this.fire.mesh );
-	// this.scene.add( this.labels[this.currentMessage].mesh );
+	this.scene.add(this.screen)
 
 	this.globalParameter = Object.keys(parameter.global);
 	for (var i = 0; i < this.globalParameter.length; ++i) {
@@ -86,6 +91,17 @@ export function MainScene ()
 		this.fire.update(elapsed);
 		// this.controls.update(elapsed);
 
+		parameter.global.blendLight = animations.getValue('blendLight', elapsed);
+		parameter.global.blendLabelAlpha = animations.getValue('blendLabelAlpha', elapsed);
+		parameter.global.blendLabelFire = animations.getValue('blendLabelFire', elapsed);
+		var messageIndex = animations.getValue('messageIndex', elapsed);
+		if (messageIndex != this.currentMessage) {
+
+			// this.scene.remove( this.labels[this.currentMessage].mesh );
+			this.currentMessage = messageIndex;
+			material.label.uniforms.uTexture.value = this.labels[this.currentMessage];
+			// this.scene.add( this.labels[this.currentMessage].mesh );
+		}
 		// this.updateMessage(elapsed);
 		parameter.global.blendStorm = animations.getValue('blendStorm', elapsed);
 		material.rain.uniforms.blendStorm.value = parameter.global.blendStorm;
@@ -96,9 +112,12 @@ export function MainScene ()
 		this.camera.position.x = utils.lerp(this.camera.position.x, -cameraPos[0], .5);
 		this.camera.position.y = utils.lerp(this.camera.position.y, cameraPos[2], .5);
 		this.camera.position.z = utils.lerp(this.camera.position.z, cameraPos[1], .5);
+		// this.camera.position.x = -cameraPos[0];
+		// this.camera.position.y = cameraPos[2];
+		// this.camera.position.z = cameraPos[1];
 		this.camera.lookAt(new THREE.Vector3());
 		var cameraRot = animations.getRotation('camera', elapsed);
-		this.camera.rotation.x = (cameraRot[0] - Math.PI * 0.5);
+		this.camera.rotation.x = -(cameraRot[0] - Math.PI * 0.5);
 		this.camera.rotation.y = cameraRot[2] - Math.PI;
 		this.camera.rotation.z = cameraRot[1];
 		this.camera.updateMatrixWorld(true);
@@ -109,70 +128,6 @@ export function MainScene ()
 		}
 		for (var i = 0; i < this.globalParameter.length; ++i) {
 			material.defaultUniforms[this.globalParameter[i]].value = parameter.global[this.globalParameter[i]];
-		}
-	}
-
-	this.updateMessage = function (elapsed)
-	{
-		// if (this.currentMessage < message.timing.length) {
-			if (this.showMessage == false) {
-				if (elapsed >= message.timing[this.currentMessage]) {
-					this.showMessage = true;
-					this.messageStart = elapsed;
-					this.nextMessageStep();
-					console.log('start')
-				}
-			} else if (this.hideMessage == false) {
-				if (this.messageStart + message.delay < elapsed) {
-					console.log('next')
-					this.nextMessageStep();
-					this.hideMessage = true;
-					// this.messageStart = elapsed;
-					// this.showMessage = false;
-				}
-			}
-		// }
-		// if (key.space.down) {
-		// 	key.space.down = false;
-		// 	this.nextMessageStep();
-		// }
-
-		var dt = 0.016;
-		switch (this.labelFireState.current) {
-			// fade in
-			case 0:
-			parameter.global.blendLabelAlpha = 1.-this.labelFireState.ratio;
-			this.labelFireState.update(dt);
-			break;
-			// idle
-			case 1:
-			this.labelFireState.update(1.);
-			break;
-			// burn
-			case 2:
-			parameter.global.blendLabelFire = this.labelFireState.ratio;
-			this.labelFireState.update(dt);
-			if (this.labelFireState.ratio == 1.) {
-				this.nextMessageStep();
-			}
-			break;
-		}
-	}
-
-	this.nextMessageStep = function ()
-	{
-		if (this.labelFireState.next < 2) {
-			this.labelFireState.next = this.labelFireState.current+1;
-		} else {
-			this.labelFireState.set(0,0);
-			parameter.global.blendLabelAlpha = 0;
-			parameter.global.blendLabelFire = 0;
-			this.scene.remove( this.labels[this.currentMessage].mesh );
-			this.currentMessage += 1;
-			this.scene.add( this.labels[this.currentMessage].mesh );
-			this.showMessage = false;
-			this.hideMessage = false;
-					console.log('end')
 		}
 	}
 }

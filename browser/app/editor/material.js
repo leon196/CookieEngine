@@ -16,6 +16,7 @@ material.defaultUniforms = {
 	blendLabelFire: { value: 0 },
 	blendLabelAlpha: { value: 0 },
 	blendStorm: { value: 0 },
+	blendLight: { value: 0 },
 };
 
 material.setup = function ()

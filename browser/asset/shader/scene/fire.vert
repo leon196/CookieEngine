@@ -46,7 +46,7 @@ void main() {
 	fade = mix(fade, 1., step(1., velocity.w));
 	vFade = fade;
 
-	float stretch = (1.+magnitude*spriteVelocityStretch);
+	float stretch = 1.;//(1.+magnitude*spriteVelocityStretch);
 
 	// world space
 	vec3 tangent = normalize(cross(normalize(vec3(0,1,0.1)), vNormal));

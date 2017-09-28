@@ -1,5 +1,5 @@
-
 uniform vec2 resolution;
+/*
 uniform float time;
 varying vec2 vTexcoord;
 varying float vWave;
@@ -33,4 +33,13 @@ void main()	{
 	// pos = projectionMatrix * viewMatrix * pos;
 	vec2 aspectRatio = vec2(resolution.y/resolution.x, 1.);
 	gl_Position = vec4(pos.xy*.2*aspectRatio,0.,1.);
+}
+
+*/
+varying vec2 vUv;
+
+void main()	{
+	vUv = uv;
+	gl_Position = vec4(mix(-1., 1., uv.x), mix(-1., 1., uv.y), 0., 1.);
+	gl_Position.x *= resolution.y/resolution.x;
 }
