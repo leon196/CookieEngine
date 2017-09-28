@@ -14,7 +14,7 @@ export var message =
 		,'COOKIE DEMOPARTY'
 		,'8-9 December 2017\nParis France'
 		,'Thanksfully the beers were still cold.'
-		,'greets to\nResistance X-Men\nUnix Calodox\nFlush LJ Raxter'
+		,'greets to\nLJ Raxter Flush\nResistance X-Men\nUnix Calodox\n'
 		,'we love\nmercury still\nasd cocoon razor1911\nhoodlum paradox'
 		,'credits\nartcode ponk\ncode koltes\nmusic fergus'
 		]

@@ -1,5 +1,5 @@
-import actionDescriptors from '../../asset/src/animations/icicles';
-// import actionDescriptors from '../../asset/animation/scene.json!json';
+// import actionDescriptors from '../../asset/animation/icicles';
+import actionDescriptors from '../../asset/animation/scene.json!json';
 import blenderHTML5Animations from 'blender-html5-animations/js/dist/blender-html5-animations.js';
 
 const actions = new blenderHTML5Animations.ActionLibrary(actionDescriptors);
