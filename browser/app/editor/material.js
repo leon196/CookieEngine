@@ -5,8 +5,8 @@ import { asset } from '../editor/asset';
 
 export var material = {};
 
-var materialFromShaderNames = [ 'particle', 'text', 'line', 'point', 'snow', 'tree', 'rain' ];
-var materialAlphaFromShaderNames = [ 'smoke', 'flash', 'fire', 'label' ];
+var materialFromShaderNames = [ 'particle', 'text', 'line', 'point', 'snow', 'tree', 'rain', 'fire' ];
+var materialAlphaFromShaderNames = [ 'smoke', 'flash', 'label' ];
 var materialScreenFromShaderNames = [ 'position', 'velocity', 'filter' ];
 
 material.defaultUniforms = {
@@ -17,6 +17,8 @@ material.defaultUniforms = {
 	blendLabelAlpha: { value: 0 },
 	blendStorm: { value: 0 },
 	blendLight: { value: 0 },
+	blendHeat: { value: 0 },
+	blendBurnOut: { value: 0 },
 };
 
 material.setup = function ()

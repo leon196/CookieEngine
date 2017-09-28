@@ -11,6 +11,7 @@ import { FrameBuffer } from './engine/FrameBuffer';
 import { LoadingScene } from './scene/LoadingScene';
 import { MainScene } from './scene/MainScene';
 import { FilterScene } from './scene/FilterScene';
+import getTime from './engine/getTime';
 
 let frame, scene, sceneState;
 let loadingScene, filterScene, mainScene;
@@ -41,7 +42,7 @@ function start ()
 function animate (elapsed)
 {
 	requestAnimationFrame(animate);
-	elapsed /= 1000.;
+	elapsed = getTime();
 	var dt = 0.016;
 
 	sceneState.update(dt);

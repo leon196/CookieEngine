@@ -63,7 +63,9 @@ export function Particle (attributes, mat, step)
 		this.positionPass.update();
 		this.velocityPass.update();
 		for (var i = 0; i < this.parameterList.length; i++) {
-			this.uniforms[this.parameterList[i]].value = parameter.particle[this.parameterList[i]];
+			var param = parameter.particle[this.parameterList[i]];
+			param = utils.lerp(param, parameter.particleHeat[this.parameterList[i]], parameter.global.blendHeat);
+			this.uniforms[this.parameterList[i]].value = param;
 		}
 	}
 }

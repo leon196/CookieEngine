@@ -15,27 +15,13 @@ varying vec2 vDirScreen;
 varying vec3 vDir;
 varying vec3 vDirCamera;
 
-vec3 displace (vec3 p)
-{
-	float a = noiseIQ(p/3.)*PI2;
-	float intensity = .15*clamp(p.y*.2,0.,1.);
-	p.z += sin(a + time * 3.)*intensity;
-	p.z += cos(a + time * 3.)*intensity;
-
-	float speed = 3.;
-	intensity = 1.5*clamp(p.y*.1,0.,1.) * blendStorm;
-	p.x += cos(time * speed) * intensity;
-	p.z += sin(time * speed) * intensity;
-	return p;
-}
-
 void main()	{
 	vTexcoord = uv;
 	vNormal = normal;
 	vColor = color;
 
-	vec3 pos = displace(position);
-	vec3 end = displace(lineEnd);
+	vec3 pos = displaceTree(position, time, blendStorm);
+	vec3 end = displaceTree(lineEnd, time, blendStorm);
 
 	float dist = length(end - pos);
 	vDir = end - pos;

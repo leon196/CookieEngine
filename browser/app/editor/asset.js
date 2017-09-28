@@ -114,7 +114,7 @@ asset.fileLoaded = {};
 
 function fileWithHeaders(name) {
 	return asset.fileLoaded[shaderBaseURL + "utils.glsl"]
-	// + asset.fileLoaded[shaderBaseURL + "displace.glsl"]
+	+ asset.fileLoaded[shaderBaseURL + "displace.glsl"]
 	+ parameterList + asset.fileLoaded[name];
 }
 

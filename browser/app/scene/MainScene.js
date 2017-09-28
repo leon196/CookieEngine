@@ -73,6 +73,7 @@ export function MainScene ()
 	}
 
 	material.rain.uniforms.blendStorm = { value: parameter.global.blendStorm };
+	this.fire.uniforms.blendBurnOut = { value: parameter.global.blendBurnOut };
 
 	this.parameterList = Object.keys(parameter.show);
 	this.parameterMap = []
@@ -106,9 +107,12 @@ export function MainScene ()
 		}
 		// this.updateMessage(elapsed);
 		parameter.global.blendStorm = animations.getValue('blendStorm', elapsed);
+		parameter.global.blendHeat = animations.getValue('blendHeat', elapsed);
+		parameter.global.blendBurnOut = animations.getValue('blendBurnOut', elapsed);
 		material.rain.uniforms.blendStorm.value = parameter.global.blendStorm;
 		material.snow.uniforms.blendStorm.value = parameter.global.blendStorm;
 		material.tree.uniforms.blendStorm.value = parameter.global.blendStorm;
+		this.fire.uniforms.blendBurnOut.value = parameter.global.blendBurnOut;
 		
 		var cameraPos = animations.getPosition('camera', elapsed);
 		this.camera.position.x = utils.lerp(this.camera.position.x, -cameraPos[0], .5);
