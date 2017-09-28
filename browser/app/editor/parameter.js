@@ -15,6 +15,7 @@ export var parameter = {
 		blendLight: 0,
 		blendHeat: 0,
 		blendBurnOut: 0,
+		blendLeaf: 0,
 	},
 	particle: {
 		// feedbackBlend: 0.5,

@@ -19,6 +19,7 @@ material.defaultUniforms = {
 	blendLight: { value: 0 },
 	blendHeat: { value: 0 },
 	blendBurnOut: { value: 0 },
+	blendLeaf: { value: 0 },
 };
 
 material.setup = function ()

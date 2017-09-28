@@ -42,6 +42,7 @@ export function MainScene ()
 	this.flash = new Line(flashAttributes, material.flash);
 
 	this.fire = new Particle(treeAttributes, material.fire, 1, true);
+	this.leaf = new Particle(treeAttributes, material.leaf, 10);
 	
 	this.currentMessage = 0;
 	this.showMessage = false;
@@ -65,6 +66,7 @@ export function MainScene ()
 	this.scene.add( this.rain.mesh );
 	this.scene.add( this.smoke.mesh );
 	this.scene.add( this.fire.mesh );
+	this.scene.add( this.leaf.mesh );
 	this.scene.add(this.screen)
 
 	this.globalParameter = Object.keys(parameter.global);
@@ -92,6 +94,7 @@ export function MainScene ()
 		this.rain.update(elapsed);
 		this.smoke.update(elapsed);
 		this.fire.update(elapsed);
+		this.leaf.update(elapsed);
 		// this.controls.update(elapsed);
 
 		parameter.global.blendLight = animations.getValue('blendLight', elapsed);
@@ -109,6 +112,7 @@ export function MainScene ()
 		parameter.global.blendStorm = animations.getValue('blendStorm', elapsed);
 		parameter.global.blendHeat = animations.getValue('blendHeat', elapsed);
 		parameter.global.blendBurnOut = animations.getValue('blendBurnOut', elapsed);
+		parameter.global.blendLeaf = animations.getValue('blendLeaf', elapsed);
 		material.rain.uniforms.blendStorm.value = parameter.global.blendStorm;
 		material.snow.uniforms.blendStorm.value = parameter.global.blendStorm;
 		material.tree.uniforms.blendStorm.value = parameter.global.blendStorm;

@@ -8,6 +8,9 @@ import { parameter } from '../editor/parameter';
 
 export function Particle (attributes, mat, step, gpu)
 {
+	gpu = gpu | false;
+	step = step | 1;
+	
 	this.uniforms = {
 		time: { value: 1.0 },
 		show: { value: 1.0 },
@@ -20,13 +23,13 @@ export function Particle (attributes, mat, step, gpu)
 		normalTexture: { value: 0 },
 	};
 
-	material.particle.uniforms = this.uniforms;
-	material.fire.uniforms = this.uniforms;
-	material.position.uniforms = this.uniforms;
-	material.velocity.uniforms = this.uniforms;
+	if (gpu) {
+		material.particle.uniforms = this.uniforms;
+		material.fire.uniforms = this.uniforms;
+		material.position.uniforms = this.uniforms;
+		material.velocity.uniforms = this.uniforms;
+	}
 
-	step = step | 1;
-	gpu = gpu | false;
 
 	var positionArray = attributes.position.array;
 
