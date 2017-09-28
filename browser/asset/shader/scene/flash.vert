@@ -4,6 +4,7 @@ attribute vec2 texcoord;
 attribute vec3 lineEnd;
 uniform vec2 resolution;
 uniform float time;
+uniform float blendFlash;
 varying vec2 vTexcoord;
 varying float vWave;
 varying vec3 vNormal;
@@ -45,5 +46,6 @@ void main()	{
 	vec2 right = normalize(vec2(vDirScreen.y, -vDirScreen.x));
 	right.x *= resolution.y/resolution.x;
 	gl_Position = mix(posScreen, lineEndScreen, anchor.y);
-	gl_Position.xy += right * anchor.x;
+	float fadeDist = (1.-clamp(length(pos.xz)*.5,0.,1.));
+	gl_Position.xy += right * anchor.x * blendFlash * (.5+2.*fadeDist);
 }

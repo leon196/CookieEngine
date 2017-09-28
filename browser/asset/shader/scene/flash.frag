@@ -27,6 +27,7 @@ void main()	{
 	// color.rgb *= dot(normalize(vDir), vec3(0,1,0));
 	// color.rg = uv;
 	// if (color.a < 0.1) discard;
-	color.a *= blendFlash;
+	// color.a *= blendFlash;
+	// color.a *= mix(0., 1., step(1.-blendFlash, vPos.y / 20.));
 	gl_FragColor = color;
 }

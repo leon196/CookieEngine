@@ -5,6 +5,7 @@ attribute vec3 lineEnd;
 uniform vec2 resolution;
 uniform float time;
 uniform float blendSnow;
+uniform float blendStorm;
 uniform float dimension;
 varying vec2 vTexcoord;
 varying float vWave;
@@ -23,6 +24,7 @@ void main()	{
 	float range = 20.;
 	float radius = index / (dimension*dimension);
 	float angle = radius * 20.;
+	// angle = mix(angle, mod(angle + time * 5., PI2), blendStorm);
 	radius = mod(radius + time *.03, 1.);
 	x = cos(angle) * radius;
 	y = sin(angle) * radius;
@@ -35,10 +37,12 @@ void main()	{
 	pos.y = max(pos.y, ground);
 
 	angle = rand(position.xz) * PI2;
+	angle = mix(angle, mod(angle + time, PI2), blendStorm);
 	radius = noiseIQ(position * 10.) * 5.;
 	pos.x += cos(angle) * radius;
 	pos.z += sin(angle) * radius;
 	pos = normalize(pos) * min(length(pos), range);
+	// pos.xz = mix(pos.xz, pos.xz*rot(time), blendStorm);
 	vec4 posScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
 	gl_Position = posScreen;
 	float size = .04 + .02 * rand(uv);

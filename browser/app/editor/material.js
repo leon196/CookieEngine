@@ -15,6 +15,7 @@ material.defaultUniforms = {
 	resolution: { value: [window.innerWidth, window.innerHeight] },
 	blendLabelFire: { value: 0 },
 	blendLabelAlpha: { value: 0 },
+	blendStorm: { value: 0 },
 };
 
 material.setup = function ()

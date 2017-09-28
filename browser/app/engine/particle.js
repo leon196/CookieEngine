@@ -1,6 +1,6 @@
 
 import * as THREE from 'three.js'
-import { closestPowerOfTwo } from '../utils/utils';
+import utils from '../utils/utils';
 import { asset } from '../editor/asset';
 import { ShaderPass } from './shaderpass';
 import { material } from '../editor/material';
@@ -35,7 +35,7 @@ export function Particle (attributes, mat, step)
 
 	var normalArray = attributes.normal.array;
 
-	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
+	var dimension = utils.closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
 	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray, step);
 	console.log(this.geometry)
@@ -84,7 +84,7 @@ function createGeometryForParticles (positionArray, colorArray, normalArray, ste
 	// variables
 	var x, y, z, ia, ib, ic, u, v, nx, ny, nz;
 	var indexVertex = 0, indexUV = 0, indexAnchor = 0;
-	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
+	var dimension = utils.closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	var count = positionArray.length / 3;
 	var resolution = dimension*dimension;
 
@@ -155,7 +155,7 @@ function createGeometryForParticles (positionArray, colorArray, normalArray, ste
 function createDataTextureForParticles (dataArray, itemSize)
 {
 	var ia, ib, ic;
-	var dimension = closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
+	var dimension = utils.closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
 	var count = dataArray.length / itemSize;
 	var resolution = dimension*dimension;
 	var array = new Float32Array(resolution * itemSize);

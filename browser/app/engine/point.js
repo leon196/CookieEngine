@@ -1,6 +1,6 @@
 
 import * as THREE from 'three.js'
-import { closestPowerOfTwo } from '../utils/utils';
+import utils from '../utils/utils';
 import { asset } from '../editor/asset';
 import { ShaderPass } from './shaderpass';
 import { material } from '../editor/material';
@@ -16,7 +16,7 @@ export function Point (count, mat)
 
 	var positionArray = getGridPosition(count);
 	var colorArray = getDefaultColorArray(positionArray.length);
-	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
+	var dimension = utils.closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	
 	this.geometry = createGeometryForParticles(positionArray, colorArray);
 	this.mesh = new THREE.Mesh(this.geometry, mat);
@@ -37,7 +37,7 @@ export function Point (count, mat)
 function getGridPosition (count)
 {
 	var array = [];
-	var dimension = closestPowerOfTwo(Math.sqrt(count));
+	var dimension = utils.closestPowerOfTwo(Math.sqrt(count));
 	for (var i = 0; i < count; ++i)
 	{
 		var x = i % dimension;
@@ -67,7 +67,7 @@ function createGeometryForParticles (positionArray, colorArray)
 	// variables
 	var x, y, z, ia, ib, ic, u, v, nx, ny, nz;
 	var indexVertex = 0, indexUV = 0, indexAnchor = 0;
-	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
+	var dimension = utils.closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	var count = positionArray.length / 3;
 	var resolution = dimension*dimension;
 

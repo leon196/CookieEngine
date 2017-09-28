@@ -11,6 +11,7 @@ export var parameter = {
 	global: {
 		blendLabelAlpha: 1,
 		blendLabelFire: 0,
+		blendStorm: 0,
 	},
 	particle: {
 		// feedbackBlend: 0.5,

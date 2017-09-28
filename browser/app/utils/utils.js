@@ -9,7 +9,7 @@ function lerp(v0, v1, t) {
 }
 
 // Find the closest power of 2
-export function closestPowerOfTwo (num) {
+function closestPowerOfTwo (num) {
 		return Math.pow(2, Math.ceil(Math.log(num) / Math.log(2)));
 }
 
@@ -160,3 +160,8 @@ function triBoxOverlap(boxcenter, boxhalfsize, a, b, c)
 	if ( 0 == planeBoxOverlap(normal, v0, boxhalfsize)) return 0;	
 	return 1;   /* box and triangle overlaps */
 }
+
+export default {
+	closestPowerOfTwo,
+	lerp,
+};
