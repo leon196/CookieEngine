@@ -42,7 +42,11 @@ export function MainScene ()
 	this.fire = new Particle(treeAttributes, material.fire);
 	
 	this.currentMessage = 0;
-	this.label = new Text(message[this.currentMessage], material.label);
+	this.showMessage = false;
+	this.labels = [];
+	for (var i = 0; i < message.length; i++) {
+		this.labels.push(new Text(message[i], material.label));
+	}
 	this.labelFireState = new State();
 
 	this.scene.add( this.tree.mesh );
@@ -51,7 +55,7 @@ export function MainScene ()
 	this.scene.add( this.rain.mesh );
 	this.scene.add( this.smoke.mesh );
 	this.scene.add( this.fire.mesh );
-	this.scene.add( this.label.mesh );
+	this.scene.add( this.labels[this.currentMessage].mesh );
 	
 	this.globalParameter = Object.keys(parameter.global);
 	for (var i = 0; i < this.globalParameter.length; ++i) {
@@ -67,8 +71,9 @@ export function MainScene ()
 		material[this.parameterMap[i]].uniforms[this.parameterList[i]] = { value: parameter.show[this.parameterList[i]] };
 	}
 
-	this.update = function (elapsed)
+	this.update = function ()
 	{
+		var elapsed = getTime();
 		this.tree.update(elapsed);
 		this.snow.update(elapsed);
 		this.rain.update(elapsed);
@@ -76,7 +81,7 @@ export function MainScene ()
 		this.fire.update(elapsed);
 		this.controls.update(elapsed);
 
-		this.updateLabelFire();
+		this.updateMessage();
 
 		for (var i = 0; i < this.parameterList.length; ++i) {
 			material[this.parameterMap[i]].uniforms[this.parameterList[i]].value = parameter.show[this.parameterList[i]];
@@ -86,22 +91,42 @@ export function MainScene ()
 		}
 	}
 
-	this.updateLabelFire = function ()
+	this.updateMessage = function ()
 	{
 		var dt = 0.016;
-		this.labelFireState.update(dt);
 		switch (this.labelFireState.current) {
 			// fade in
-			case 0: parameter.global.blendLabelAlpha = 1.-this.labelFireState.ratio; break;
+			case 0:
+			parameter.global.blendLabelAlpha = 1.-this.labelFireState.ratio;
+			this.labelFireState.update(dt);
+			break;
 			// idle
-			case 1: break;
+			case 1:
+			this.labelFireState.update(1.);
+			break;
 			// burn
-			case 2: parameter.global.blendLabelFire = this.labelFireState.ratio; break;
+			case 2:
+			parameter.global.blendLabelFire = this.labelFireState.ratio;
+			this.labelFireState.update(dt);
+			break;
 		}
-
 		if (key.space.down) {
 			key.space.down = false;
-			this.labelFireState.next = (this.labelFireState.current+1)%3;
+			this.nextMessageStep();
+		}
+	}
+
+	this.nextMessageStep = function ()
+	{
+		if (this.labelFireState.next < 2) {
+			this.labelFireState.next = this.labelFireState.current+1;
+		} else {
+			this.labelFireState.set(0,1);
+			parameter.global.blendLabelAlpha = 0;
+			parameter.global.blendLabelFire = 0;
+			this.scene.remove( this.labels[this.currentMessage].mesh );
+			this.currentMessage += 1;
+			this.scene.add( this.labels[this.currentMessage].mesh );
 		}
 	}
 }

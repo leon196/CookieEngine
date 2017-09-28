@@ -32,5 +32,5 @@ void main()	{
 
 	// pos = projectionMatrix * viewMatrix * pos;
 	vec2 aspectRatio = vec2(resolution.y/resolution.x, 1.);
-	gl_Position = vec4(pos.xy*.1*aspectRatio,0.,1.);
+	gl_Position = vec4(pos.xy*.2*aspectRatio,0.,1.);
 }
