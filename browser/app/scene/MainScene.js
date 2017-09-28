@@ -14,6 +14,7 @@ import animations from '../engine/animations';
 import { State } from '../utils/State';
 import { key } from '../utils/keyboard';
 import { message } from '../editor/message';
+import getTime from '../engine/getTime';
 
 export function MainScene ()
 {
