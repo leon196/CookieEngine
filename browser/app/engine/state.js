@@ -1,12 +1,13 @@
+import { clamp } from '../libs/misc';
 
-export function State ()
-{
-	this.current = 0;
-	this.next = 0;
-	this.ratio = 1;
+export default class {
+	constructor() {
+		this.current = 0;
+		this.next = 0;
+		this.ratio = 1;
+	}
 
-	this.update = function (dt)
-	{
+	update(dt) {
 		if (this.current != this.next) {
 			if (this.ratio > 0.) {
 				this.ratio -= dt;
@@ -18,11 +19,10 @@ export function State ()
 				this.ratio += dt;
 			}
 		}
-		this.ratio = Math.clamp(this.ratio, 0., 1.);
+		this.ratio = clamp(this.ratio, 0., 1.);
 	}
 
-	this.set = function (a, b)
-	{
+	set(a, b) {
 		this.current = a;
 		this.next = b;
 	}

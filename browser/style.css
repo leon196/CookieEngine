@@ -1,8 +1,3 @@
-body {
-	margin: 0;
-	overflow: hidden;
-}
-
 .hide {
 	visibility: hidden;
 	position: absolute;
@@ -23,11 +18,16 @@ body {
 	font-style: normal;
 }
 
-
 @font-face {
 	font-family: 'lemon';
 	src: url('dk_lemon_yellow_sun-webfont.woff2') format('woff2'),
 	url('dk_lemon_yellow_sun-webfont.woff') format('woff');
 	font-weight: normal;
 	font-style: normal;
+}
+
+body {
+	background: #000;
+	margin: 0;
+	overflow: hidden;
 }

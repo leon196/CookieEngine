@@ -1,35 +1,32 @@
 
-import * as THREE from 'three.js'
-import utils from '../utils/utils';
-import { asset } from '../editor/asset';
-import { ShaderPass } from './shaderpass';
-import { material } from '../editor/material';
-import { parameter } from '../editor/parameter';
+import * as THREE from 'three.js';
+import { closestPowerOfTwo } from '../libs/misc';
+import parameters from '../engine/parameters';
 
-export function Point (count, mat)
-{
-	this.uniforms = {
-		show: { value: 1.0 },
-		time: { value: 1.0 },
-		resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-	};
+export default class {
+	constructor(count, mat) {
+		this.uniforms = {
+			show: { value: 1.0 },
+			time: { value: 1.0 },
+			resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+		};
 
-	var positionArray = getGridPosition(count);
-	var colorArray = getDefaultColorArray(positionArray.length);
-	var dimension = utils.closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
-	
-	this.geometry = createGeometryForParticles(positionArray, colorArray);
-	this.mesh = new THREE.Mesh(this.geometry, mat);
+		var positionArray = getGridPosition(count);
+		var colorArray = getDefaultColorArray(positionArray.length);
 
-	this.parameterList = Object.keys(parameter.global);
-	for (var i = 0; i < this.parameterList.length; i++) {
-		this.uniforms[this.parameterList[i]] = { value: 0 };
+		this.geometry = createGeometryForParticles(positionArray, colorArray);
+		this.mesh = new THREE.Mesh(this.geometry, mat);
+
+		this.parameterList = Object.keys(parameters.global);
+		for (var i = 0; i < this.parameterList.length; i++) {
+			this.uniforms[this.parameterList[i]] = { value: 0 };
+		}
 	}
 
-	this.update = function (elapsed)
+	update()
 	{
 		for (var i = 0; i < this.parameterList.length; i++) {
-			this.uniforms[this.parameterList[i]].value = parameter[this.parameterList[i]];
+			this.uniforms[this.parameterList[i]].value = parameters[this.parameterList[i]];
 		}
 	}
 }
@@ -37,7 +34,7 @@ export function Point (count, mat)
 function getGridPosition (count)
 {
 	var array = [];
-	var dimension = utils.closestPowerOfTwo(Math.sqrt(count));
+	var dimension = closestPowerOfTwo(Math.sqrt(count));
 	for (var i = 0; i < count; ++i)
 	{
 		var x = i % dimension;
@@ -67,7 +64,7 @@ function createGeometryForParticles (positionArray, colorArray)
 	// variables
 	var x, y, z, ia, ib, ic, u, v, nx, ny, nz;
 	var indexVertex = 0, indexUV = 0, indexAnchor = 0;
-	var dimension = utils.closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
+	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	var count = positionArray.length / 3;
 	var resolution = dimension*dimension;
 
@@ -120,11 +117,11 @@ function createGeometryForParticles (positionArray, colorArray)
 	geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
 	geometry.addAttribute( 'anchor', new THREE.BufferAttribute( anchor, 2 ) );
 	geometry.addAttribute( 'texcoord', new THREE.BufferAttribute( texcoord, 2 ) );
-	
+
 	var min = -1000;
 	var max = 1000;
 	geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
 	geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
 
 	return geometry;
-}	
+}

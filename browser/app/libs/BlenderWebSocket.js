@@ -1,27 +1,10 @@
 // Light version of https://github.com/KoltesDigital/websocket-server-for-blender
 
-function isObject(input) {
-	return (Object.prototype.toString.call(input) === '[object Object]');
-}
+const url = 'ws://localhost:8137/';
 
-// recursive
-function merge(target) {
-	for (var i = 1, n = arguments.length; i < n; ++i) {
-		var arg = arguments[i];
-		if (!isObject(arg)) continue;
-		for (var prop in arg) {
-			if (isObject(target[prop]) && isObject(arg[prop]))
-				merge(target[prop], arg[prop]);
-			else
-				target[prop] = arg[prop];
-		}
-	}
-	return target;
-}
-
-export default class {
-	constructor(options) {
-		var listeners = this.listeners = {};
+class BlenderWebSocket {
+	constructor() {
+		const listeners = this.listeners = {};
 
 		function emit(event) {
 			var handlers = listeners[event];
@@ -33,14 +16,10 @@ export default class {
 			}
 		}
 
-		options = merge({
-			url: 'ws://localhost:8137/'
-		}, options);
-
-		var websocket;
+		let websocket;
 
 		function connect() {
-			websocket = new WebSocket(options.url);
+			websocket = new WebSocket(url);
 
 			websocket.onopen = function () {
 				emit('open');
@@ -98,3 +77,5 @@ export default class {
 			this.listeners[event].splice(index, 1);
 	}
 }
+
+export default new BlenderWebSocket();
