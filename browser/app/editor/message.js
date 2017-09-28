@@ -9,16 +9,10 @@ export var message =
 		,'The scene was dead.'
 		,'But there it came!'
 		,'A new hope was born,'
-		,'and the crowd gathered at'
-		,'Cookie demoparty'
-		,'8-9 Dec. 2017, Paris FR'
-		,'Thanksfully the beers were still cold.'],
+		,'arising from the ashes of the past,'
+		,'the crowd gathered at'
+		,'COOKIE DEMOPARTY'
+		,'8-9 December 2017 Paris FR'
+		,'Thanksfully the beers were still cold.']
 		// 'クッキー'
-	timing: [
-	17,
-	22,
-	27,
-	32,
-	],
-	delay: 3,
 }

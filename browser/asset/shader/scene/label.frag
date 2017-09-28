@@ -16,7 +16,7 @@ void main()	{
 	// float shade = dot(-normalize(vViewDir), normalize(vNormal))*.5+.5;
 	// color.rgb *= shade;
 	// color.rg = uv;
-	vec3 vPos = vec3(vUv.xyy)*30.;
+	vec3 vPos = vec3(vUv.xyy)*10.;
 	float noisy = fbm(vPos*6., vec3(time))*noiseIQ(vPos*3.);
 	// noisy = mod(noisy + time, 1.);
 	// noisy += sin(time);

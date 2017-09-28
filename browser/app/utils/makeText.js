@@ -1,9 +1,8 @@
 
 export var makeText = {};
 
-makeText.simple = function (message, fontSize, resolution, center)
+makeText.simple = function (message, font, fontSize, resolution, center)
 {
-	var font = "coffee";
 	font = fontSize + "px " + font;
 	var canvas = document.createElement('canvas');
 	var ctx = canvas.getContext('2d');
@@ -16,7 +15,7 @@ makeText.simple = function (message, fontSize, resolution, center)
 	ctx.textBaseline = "middle";
 
 	if (!center) {
-		ctx.fillText(message, ctx.canvas.width / 2 | 0, ctx.canvas.height - fontSize);
+		ctx.fillText(message, ctx.canvas.width / 2 | 0, ctx.canvas.height - fontSize * 1.5);
 	} else {
 		ctx.fillText(message, ctx.canvas.width / 2 | 0, ctx.canvas.height / 2 | 0);
 	}

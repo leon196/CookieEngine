@@ -48,8 +48,10 @@ export function MainScene ()
 	this.hideMessage = false;
 	this.labels = [];
 	for (var i = 0; i < message.text.length; i++) {
-		var center = i == 0;
-		this.labels.push(new THREE.Texture(makeText.simple(message.text[i], 80, 1024, center)));
+		var center = i == 0 || i == 10;
+		var size = i == 10 ? 180 : 80;
+		var font = i == 10 ? 'sunrise' : 'lemon';
+		this.labels.push(new THREE.Texture(makeText.simple(message.text[i], font, size, 1024, center)));
 		this.labels[i].needsUpdate = true;
 	}
 	material.label.uniforms.uTexture = { value: this.labels[0] };
