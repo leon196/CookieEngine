@@ -6,7 +6,7 @@ import { ShaderPass } from './shaderpass';
 import { material } from '../editor/material';
 import { parameter } from '../editor/parameter';
 
-export function Particle (attributes, mat, step)
+export function Particle (attributes, mat, step, gpu)
 {
 	this.uniforms = {
 		time: { value: 1.0 },
@@ -26,6 +26,7 @@ export function Particle (attributes, mat, step)
 	material.velocity.uniforms = this.uniforms;
 
 	step = step | 1;
+	gpu = gpu | false;
 
 	var positionArray = attributes.position.array;
 
@@ -55,13 +56,15 @@ export function Particle (attributes, mat, step)
 	this.update = function (elapsed)
 	{
 		this.uniforms.time.value = elapsed;
-		this.uniforms.spawnTexture.value = this.positionTexture;
-		this.uniforms.colorTexture.value = this.colorTexture;
-		this.uniforms.normalTexture.value = this.normalTexture;
-		this.uniforms.positionTexture.value = this.positionPass.getTexture();
-		this.uniforms.velocityTexture.value = this.velocityPass.getTexture();
-		this.positionPass.update();
-		this.velocityPass.update();
+		if (gpu) {
+			this.uniforms.spawnTexture.value = this.positionTexture;
+			this.uniforms.colorTexture.value = this.colorTexture;
+			this.uniforms.normalTexture.value = this.normalTexture;
+			this.uniforms.positionTexture.value = this.positionPass.getTexture();
+			this.uniforms.velocityTexture.value = this.velocityPass.getTexture();
+			this.positionPass.update();
+			this.velocityPass.update();
+		}
 		for (var i = 0; i < this.parameterList.length; i++) {
 			var param = parameter.particle[this.parameterList[i]];
 			param = utils.lerp(param, parameter.particleHeat[this.parameterList[i]], parameter.global.blendHeat);

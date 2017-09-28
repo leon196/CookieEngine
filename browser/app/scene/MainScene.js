@@ -41,14 +41,14 @@ export function MainScene ()
 	var flashAttributes = asset.geometry["flash"].children[0].geometry.attributes;
 	this.flash = new Line(flashAttributes, material.flash);
 
-	this.fire = new Particle(treeAttributes, material.fire);
+	this.fire = new Particle(treeAttributes, material.fire, 1, true);
 	
 	this.currentMessage = 0;
 	this.showMessage = false;
 	this.hideMessage = false;
 	this.labels = [];
 	for (var i = 0; i < message.text.length; i++) {
-		var center = i == 0 || i == 10;
+		var center = i == 0 || i == 10 || i == 11 || i == 5 || i > 12;
 		var size = i == 10 ? 180 : 80;
 		var font = i == 10 ? 'sunrise' : 'lemon';
 		this.labels.push(new THREE.Texture(makeText.simple(message.text[i], font, size, 1024, center)));

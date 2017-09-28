@@ -12,7 +12,10 @@ export var message =
 		,'arising from the ashes of the past,'
 		,'the crowd gathered at'
 		,'COOKIE DEMOPARTY'
-		,'8-9 December 2017 Paris FR'
-		,'Thanksfully the beers were still cold.']
+		,'8-9 December 2017\nParis France'
+		,'Thanksfully the beers were still cold.'
+		,'greets to\nResistance X-Men\nUnix\nFlush LJ Raxter'
+		,'we love\nmercury still\nasd cocoon razor1911\nhoodlum paradox'
+		]
 		// 'クッキー'
 }

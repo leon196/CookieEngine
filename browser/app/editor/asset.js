@@ -46,7 +46,7 @@ asset.shaderDescriptors = {
 	'velocity.frag': 'pass/velocity.frag',
 };
 
-var sceneShaderNames = ['snow', 'tree', 'rain', 'smoke', 'flash', 'fire', 'label'];
+var sceneShaderNames = ['snow', 'tree', 'rain', 'smoke', 'flash', 'fire', 'label', 'leaf'];
 for (var i = 0; i < sceneShaderNames.length; ++i) {
 	var name = sceneShaderNames[i];
 	asset.shaderDescriptors[name + '.vert'] = 'scene/' + name + '.vert';
