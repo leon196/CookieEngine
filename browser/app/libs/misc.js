@@ -1,29 +1,32 @@
-
 import { Vector3 } from 'three.js';
 
-(function(){Math.clamp=function(a,b,c){return Math.max(b,Math.min(c,a));}})();
+export function clamp(value, min, max) {
+	return Math.max(min, Math.min(max, value));
+}
 
 //https://github.com/mattdesl/lerp/blob/master/index.js
-function lerp(v0, v1, t) {
-    return v0*(1-t)+v1*t
+export function lerp(v0, v1, t) {
+	return v0*(1-t)+v1*t;
 }
 
 // Find the closest power of 2
-function closestPowerOfTwo (num) {
-		return Math.pow(2, Math.ceil(Math.log(num) / Math.log(2)));
+export function closestPowerOfTwo (num) {
+	return Math.pow(2, Math.ceil(Math.log(num) / Math.log(2)));
 }
 
 // Used to calculate length of vector from center of box to corner of box
-var sqrt3 = Math.sqrt(3);
+export const sqrt3 = Math.sqrt(3);
 
 //
-function distanceBetween(a, b) { return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)+(a.z-b.z)*(a.z-b.z)); }
+export function distanceBetween(a, b) {
+	return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)+(a.z-b.z)*(a.z-b.z));
+}
 
 // Thank to Tomas Akenine-Möller
 // For sharing his Triangle Box Overlaping algorithm
 // http://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/tribox3.txt
 
-function planeBoxOverlap(normal, vert, maxbox)
+export function planeBoxOverlap(normal, vert, maxbox)
 {
 	var vmin = new Vector3(0,0,0);
 	var vmax = new Vector3(0,0,0);
@@ -35,19 +38,19 @@ function planeBoxOverlap(normal, vert, maxbox)
 	else { vmin.z = maxbox.z - vert.z; vmax.z = -maxbox.z - vert.z; }
 	var min = new Vector3(normal.x, normal.y, normal.z);
 	var max = new Vector3(normal.x, normal.y, normal.z);
-	if (min.dot(vmin) > 0) return 0;	
-	if (max.dot(vmax) >= 0) return 1;	
+	if (min.dot(vmin) > 0) return 0;
+	if (max.dot(vmax) >= 0) return 1;
 	return 0;
 }
 
-function triangleArea (a, b, c)
+export function triangleArea (a, b, c)
 {
 	var ab = (new Vector3(a.x,a.y,a.z)).sub(b);
 	var ac = (new Vector3(a.x,a.y,a.z)).sub(c);
 	return ab.cross(ac).length() / 2;
 }
 
-function triBoxOverlap(boxcenter, boxhalfsize, a, b, c)
+export function triBoxOverlap(boxcenter, boxhalfsize, a, b, c)
 {
 	var v0 = {x:0, y:0, z:0};
 	var v1 = {x:0, y:0, z:0};
@@ -76,19 +79,19 @@ function triBoxOverlap(boxcenter, boxhalfsize, a, b, c)
 	//
 	p0 = e0.z * v0.y - e0.y * v0.z;
 	p2 = e0.z * v2.y - e0.y * v2.z;
-	if (p0 < p2) { min = p0; max = p2; } else { min = p2; max = p0; }  
+	if (p0 < p2) { min = p0; max = p2; } else { min = p2; max = p0; }
 	rad = fez * boxhalfsize.y + fey * boxhalfsize.z;
 	if (min > rad || max < -rad) return 0;
 	//
 	p0 = -e0.z * v0.x + e0.x * v0.z;
-	p2 = -e0.z * v2.x + e0.x * v2.z;	
-    if(p0 < p2) { min = p0; max = p2; } else { min = p2; max = p0; }
+	p2 = -e0.z * v2.x + e0.x * v2.z;
+	if(p0 < p2) { min = p0; max = p2; } else { min = p2; max = p0; }
 	rad = fez * boxhalfsize.x + fex * boxhalfsize.z;
 	if (min > rad || max < -rad) return 0;
 	//
 	p1 = e0.y * v1.x - e0.x * v1.y;
 	p2 = e0.y * v2.x - e0.x * v2.y;
-    if (p2 < p1) { min = p2; max = p1; } else { min = p1; max = p2; }
+	if (p2 < p1) { min = p2; max = p1; } else { min = p1; max = p2; }
 	rad = fey * boxhalfsize.x + fex * boxhalfsize.y;
 	if (min > rad || max < -rad) return 0;
 	//
@@ -98,16 +101,16 @@ function triBoxOverlap(boxcenter, boxhalfsize, a, b, c)
 	//
 	p0 = e1.z * v0.y - e1.y * v0.z;
 	p2 = e1.z * v2.y - e1.y * v2.z;
-	if (p0 < p2) { min = p0; max = p2; } else { min = p2; max = p0; }  
+	if (p0 < p2) { min = p0; max = p2; } else { min = p2; max = p0; }
 	rad = fez * boxhalfsize.y + fey * boxhalfsize.z;
 	if (min > rad || max < -rad) return 0;
 	//
 	p0 = -e1.z * v0.x + e1.x * v0.z;
 	p2 = -e1.z * v2.x + e1.x * v2.z;
-    if (p0 < p2) { min = p0; max = p2; } else { min = p2; max = p0; }
+	if (p0 < p2) { min = p0; max = p2; } else { min = p2; max = p0; }
 	rad = fez * boxhalfsize.x + fex * boxhalfsize.z;
 	if (min > rad || max < -rad) return 0;
-	//	
+	//
 	p0 = e1.y * v0.x - e1.x * v0.y;
 	p1 = e1.y * v1.x - e1.x * v1.y;
 	if (p0 < p1) { min = p0; max = p1; } else { min = p1; max = p0; }
@@ -120,7 +123,7 @@ function triBoxOverlap(boxcenter, boxhalfsize, a, b, c)
 	//
 	p0 = e2.z * v0.y - e2.y * v0.z;
 	p1 = e2.z * v1.y - e2.y * v1.z;
-    if (p0 < p1) { min = p0; max = p1; } else { min = p1; max = p0; }
+	if (p0 < p1) { min = p0; max = p1; } else { min = p1; max = p0; }
 	rad = fez * boxhalfsize.y + fey * boxhalfsize.z;
 	if (min > rad || max < -rad) return 0;
 	//
@@ -157,11 +160,6 @@ function triBoxOverlap(boxcenter, boxhalfsize, a, b, c)
 	/*  test if the box intersects the plane of the triangle */
 	/*  compute plane equation of triangle: normal*x+d=0 */
 	normal.crossVectors(e0, e1);
-	if ( 0 == planeBoxOverlap(normal, v0, boxhalfsize)) return 0;	
+	if ( 0 == planeBoxOverlap(normal, v0, boxhalfsize)) return 0;
 	return 1;   /* box and triangle overlaps */
 }
-
-export default {
-	closestPowerOfTwo,
-	lerp,
-};

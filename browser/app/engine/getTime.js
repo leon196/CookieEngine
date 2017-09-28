@@ -1,9 +1,7 @@
-import BlenderWebSocket from '../utils/blender-web-socket';
+import blenderWS from '../libs/BlenderWebSocket';
 
 let time = 0;
 let connected = false;
-
-const blenderWS = new BlenderWebSocket();
 
 blenderWS.addListener('refresh', function() {
 	location.reload();
@@ -16,7 +14,7 @@ blenderWS.addListener('time', function(newTime) {
 
 export default function() {
 	if (!connected)
-		time += 0.016; // TODO
+		time += 0.016;
 
 	return time;
 }

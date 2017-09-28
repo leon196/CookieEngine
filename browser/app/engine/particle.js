@@ -1,65 +1,63 @@
 
-import * as THREE from 'three.js'
-import utils from '../utils/utils';
-import { asset } from '../editor/asset';
-import { ShaderPass } from './shaderpass';
-import { material } from '../editor/material';
-import { parameter } from '../editor/parameter';
+import * as THREE from 'three.js';
+import { closestPowerOfTwo, lerp } from '../libs/misc';
+import assets from './assets';
+import ShaderPass from './shaderpass';
+import parameters from './parameters';
 
-export function Particle (attributes, mat, step, gpu)
-{
-	gpu = gpu | false;
-	step = step | 1;
-	
-	this.uniforms = {
-		time: { value: 1.0 },
-		show: { value: 1.0 },
-		resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-		frameBuffer: { value: 0 },
-		spawnTexture: { value: 0 },
-		velocityTexture: { value: 0 },
-		positionTexture: { value: 0 },
-		colorTexture: { value: 0 },
-		normalTexture: { value: 0 },
-	};
+export default class {
+	constructor(attributes, mat, step, gpu) {
+		this.gpu = gpu | false;
+		step = step | 1;
 
-	if (gpu) {
-		material.particle.uniforms = this.uniforms;
-		material.fire.uniforms = this.uniforms;
-		material.position.uniforms = this.uniforms;
-		material.velocity.uniforms = this.uniforms;
-	}
+		this.uniforms = {
+			time: { value: 1.0 },
+			show: { value: 1.0 },
+			resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+			frameBuffer: { value: 0 },
+			spawnTexture: { value: 0 },
+			velocityTexture: { value: 0 },
+			positionTexture: { value: 0 },
+			colorTexture: { value: 0 },
+			normalTexture: { value: 0 },
+		};
 
-
-	var positionArray = attributes.position.array;
-
-	var colorArray;
-	if (attributes.color) colorArray = attributes.color.array;
-	else colorArray = getDefaultColorArray(positionArray.length);
-
-	var normalArray = attributes.normal.array;
-
-	var dimension = utils.closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
-	
-	this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray, step);
-	console.log(this.geometry)
-	this.mesh = new THREE.Mesh(this.geometry, mat);
-
-	this.positionTexture = createDataTextureForParticles(positionArray, 3);
-	this.colorTexture = createDataTextureForParticles(colorArray, 3);
-	this.normalTexture = createDataTextureForParticles(normalArray, 3);
-	this.positionPass = new ShaderPass(material.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
-	this.velocityPass = new ShaderPass(material.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
-
-	this.parameterList = Object.keys(parameter.particle);
-	for (var i = 0; i < this.parameterList.length; i++) {
-		this.uniforms[this.parameterList[i]] = { value: 0 };
-	}
-
-	this.update = function (elapsed)
-	{
-		this.uniforms.time.value = elapsed;
 		if (gpu) {
+			assets.shaderMaterials.particle.uniforms = this.uniforms;
+			assets.shaderMaterials.fire.uniforms = this.uniforms;
+			assets.shaderMaterials.position.uniforms = this.uniforms;
+			assets.shaderMaterials.velocity.uniforms = this.uniforms;
+		}
+
+		var positionArray = attributes.position.array;
+
+		var colorArray;
+		if (attributes.color) colorArray = attributes.color.array;
+		else colorArray = getDefaultColorArray(positionArray.length);
+
+		var normalArray = attributes.normal.array;
+
+		var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
+
+		this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray, step);
+
+		this.mesh = new THREE.Mesh(this.geometry, mat);
+
+		this.positionTexture = createDataTextureForParticles(positionArray, 3);
+		this.colorTexture = createDataTextureForParticles(colorArray, 3);
+		this.normalTexture = createDataTextureForParticles(normalArray, 3);
+		this.positionPass = new ShaderPass(assets.shaderMaterials.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
+		this.velocityPass = new ShaderPass(assets.shaderMaterials.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
+
+		this.parameterList = Object.keys(parameters.particle);
+		for (var i = 0; i < this.parameterList.length; i++) {
+			this.uniforms[this.parameterList[i]] = { value: 0 };
+		}
+	}
+
+	update(elapsed) {
+		this.uniforms.time.value = elapsed;
+		if (this.gpu) {
 			this.uniforms.spawnTexture.value = this.positionTexture;
 			this.uniforms.colorTexture.value = this.colorTexture;
 			this.uniforms.normalTexture.value = this.normalTexture;
@@ -69,8 +67,8 @@ export function Particle (attributes, mat, step, gpu)
 			this.velocityPass.update();
 		}
 		for (var i = 0; i < this.parameterList.length; i++) {
-			var param = parameter.particle[this.parameterList[i]];
-			param = utils.lerp(param, parameter.particleHeat[this.parameterList[i]], parameter.global.blendHeat);
+			var param = parameters.particle[this.parameterList[i]];
+			param = lerp(param, parameters.particleHeat[this.parameterList[i]], parameters.global.blendHeat);
 			this.uniforms[this.parameterList[i]].value = param;
 		}
 	}
@@ -92,7 +90,7 @@ function createGeometryForParticles (positionArray, colorArray, normalArray, ste
 	// variables
 	var x, y, z, ia, ib, ic, u, v, nx, ny, nz;
 	var indexVertex = 0, indexUV = 0, indexAnchor = 0;
-	var dimension = utils.closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
+	var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
 	var count = positionArray.length / 3;
 	var resolution = dimension*dimension;
 
@@ -151,19 +149,19 @@ function createGeometryForParticles (positionArray, colorArray, normalArray, ste
 	geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
 	geometry.addAttribute( 'anchor', new THREE.BufferAttribute( anchor, 2 ) );
 	geometry.addAttribute( 'texcoord', new THREE.BufferAttribute( texcoord, 2 ) );
-	
+
 	var min = -1000;
 	var max = 1000;
 	geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
 	geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
 
 	return geometry;
-}	
+}
 
 function createDataTextureForParticles (dataArray, itemSize)
 {
 	var ia, ib, ic;
-	var dimension = utils.closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
+	var dimension = closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
 	var count = dataArray.length / itemSize;
 	var resolution = dimension*dimension;
 	var array = new Float32Array(resolution * itemSize);
@@ -183,5 +181,5 @@ function createDataTextureForParticles (dataArray, itemSize)
 	texture.needsUpdate = true;
 
 	return texture;
-}	
+}
 

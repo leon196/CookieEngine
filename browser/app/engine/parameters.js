@@ -1,5 +1,4 @@
-
-export var parameter = {
+export default {
 	show: {
 		blendTree: 1.,
 		blendSnow: 0.,
