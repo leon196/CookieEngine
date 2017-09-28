@@ -11,6 +11,9 @@ import { Text } from '../engine/text';
 import { OrbitControls } from '../utils/OrbitControls';
 import { renderer } from '../engine/renderer';
 import animations from '../engine/animations';
+import { State } from '../utils/State';
+import { key } from '../utils/keyboard';
+import { message } from '../editor/message';
 
 export function MainScene ()
 {
@@ -36,6 +39,10 @@ export function MainScene ()
 	this.flash = new Line(flashAttributes, material.flash);
 
 	this.fire = new Particle(treeAttributes, material.fire);
+	
+	this.currentMessage = 0;
+	this.label = new Text(message[this.currentMessage], material.label);
+	this.labelFireState = new State();
 
 	this.scene.add( this.tree.mesh );
 	this.scene.add( this.flash.mesh );
@@ -43,7 +50,13 @@ export function MainScene ()
 	this.scene.add( this.rain.mesh );
 	this.scene.add( this.smoke.mesh );
 	this.scene.add( this.fire.mesh );
+	this.scene.add( this.label.mesh );
 	
+	this.globalParameter = Object.keys(parameter.global);
+	for (var i = 0; i < this.globalParameter.length; ++i) {
+		material.defaultUniforms[this.globalParameter[i]].value = parameter.global[this.globalParameter[i]];
+	}
+
 	this.parameterList = Object.keys(parameter.show);
 	this.parameterMap = []
 	for (var i = 0; i < this.parameterList.length; ++i) {
@@ -61,8 +74,33 @@ export function MainScene ()
 		this.smoke.update(elapsed);
 		this.fire.update(elapsed);
 		this.controls.update(elapsed);
+
+		this.updateLabelFire();
+
 		for (var i = 0; i < this.parameterList.length; ++i) {
 			material[this.parameterMap[i]].uniforms[this.parameterList[i]].value = parameter.show[this.parameterList[i]];
+		}
+		for (var i = 0; i < this.globalParameter.length; ++i) {
+			material.defaultUniforms[this.globalParameter[i]].value = parameter.global[this.globalParameter[i]];
+		}
+	}
+
+	this.updateLabelFire = function ()
+	{
+		var dt = 0.016;
+		this.labelFireState.update(dt);
+		switch (this.labelFireState.current) {
+			// fade in
+			case 0: parameter.global.blendLabelAlpha = 1.-this.labelFireState.ratio; break;
+			// idle
+			case 1: break;
+			// burn
+			case 2: parameter.global.blendLabelFire = this.labelFireState.ratio; break;
+		}
+
+		if (key.space.down) {
+			key.space.down = false;
+			this.labelFireState.next = (this.labelFireState.current+1)%3;
 		}
 	}
 }

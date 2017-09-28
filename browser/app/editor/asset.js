@@ -46,7 +46,7 @@ asset.shaderDescriptors = {
 	'velocity.frag': 'pass/velocity.frag',
 };
 
-var sceneShaderNames = ['snow', 'tree', 'rain', 'smoke', 'flash', 'fire'];
+var sceneShaderNames = ['snow', 'tree', 'rain', 'smoke', 'flash', 'fire', 'label'];
 for (var i = 0; i < sceneShaderNames.length; ++i) {
 	var name = sceneShaderNames[i];
 	asset.shaderDescriptors[name + '.vert'] = 'scene/' + name + '.vert';
@@ -55,6 +55,8 @@ for (var i = 0; i < sceneShaderNames.length; ++i) {
 
 var fontDescriptors = {
 	'helvetiker' : 'font/helvetiker_bold.typeface.json',
+	'Kanit' : 'font/Kanit_Bold.json',
+	// 'SoukouMincho' : 'font/SoukouMincho_Regular.json',
 }
 
 var pendingCallbacks = [];

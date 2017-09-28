@@ -6,13 +6,13 @@ import { asset } from './editor/asset';
 import { material } from './editor/material';
 import { renderer } from './engine/renderer';
 import { key } from './utils/keyboard';
+import { State } from './utils/State';
 import { FrameBuffer } from './engine/FrameBuffer';
 import { LoadingScene } from './scene/LoadingScene';
 import { MainScene } from './scene/MainScene';
 import { FilterScene } from './scene/FilterScene';
 
-let scene, frame;
-let started, state, stateNext, stateRatio;
+let frame, scene, sceneState;
 let loadingScene, filterScene, mainScene;
 
 init();
@@ -26,10 +26,7 @@ asset.load(function() {
 function init ()
 {
 	loadingScene = new LoadingScene();
-	state = 0;
-	stateNext = 0;
-	stateRatio = 1;
-	started = false;
+	sceneState = new State();
 }
 
 function start ()
@@ -38,8 +35,7 @@ function start ()
 	frame = new FrameBuffer();
 	filterScene = new FilterScene();
 	mainScene = new MainScene();
-  stateNext = 1;
-	started = true;
+  sceneState.next = 1;
 }
 
 function animate (elapsed)
@@ -48,9 +44,9 @@ function animate (elapsed)
 	elapsed /= 1000.;
 	var dt = 0.016;
 
-	updateState(dt);
+	sceneState.update(dt);
 
-	switch (state) {
+	switch (sceneState.current) {
 		case 0: scene = loadingScene; break;
 		case 1: scene = mainScene; break;
 	}
@@ -58,30 +54,14 @@ function animate (elapsed)
 	scene.update(elapsed);
 	material.defaultUniforms.time.value = elapsed;
 
-	if (started) {
+	if (sceneState.next != 0) {
 		renderer.render(scene.scene, scene.camera, frame.getTarget(), true);
-		material.filter.uniforms.fadeTransition.value = stateRatio;
+		material.filter.uniforms.fadeTransition.value = sceneState.ratio;
 		material.filter.uniforms.frameBuffer.value = frame.getTexture();
 		renderer.render(filterScene.scene, filterScene.camera);
 	} else {
 		renderer.render(scene.scene, scene.camera);
 	}
-}
-
-function updateState (dt)
-{
-	if (state != stateNext) {
-		if (stateRatio > 0.) {
-			stateRatio -= dt;
-		} else {
-			state = stateNext;
-		}
-	} else {
-		if (stateRatio < 1.) {
-			stateRatio += dt;
-		}
-	}
-	stateRatio = Math.clamp(stateRatio, 0., 1.);
 }
 
 function onWindowResize ()

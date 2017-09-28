@@ -6,8 +6,11 @@ export var parameter = {
 		blendRain: 0.,
 		blendSmoke: 0.,
 		blendFlash: 0.,
+		blendFire: 0.,
 	},
 	global: {
+		blendLabelAlpha: 1,
+		blendLabelFire: 0,
 	},
 	particle: {
 		// feedbackBlend: 0.5,

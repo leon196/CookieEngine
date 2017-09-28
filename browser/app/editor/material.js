@@ -6,13 +6,15 @@ import { asset } from '../editor/asset';
 export var material = {};
 
 var materialFromShaderNames = [ 'particle', 'text', 'line', 'point', 'snow', 'tree', 'rain' ];
-var materialAlphaFromShaderNames = [ 'smoke', 'flash', 'fire' ];
+var materialAlphaFromShaderNames = [ 'smoke', 'flash', 'fire', 'label' ];
 var materialScreenFromShaderNames = [ 'position', 'velocity', 'filter' ];
 
 material.defaultUniforms = {
 	time: { value: 1.0 },
 	frameBuffer: { value: 0 },
 	resolution: { value: [window.innerWidth, window.innerHeight] },
+	blendLabelFire: { value: 0 },
+	blendLabelAlpha: { value: 0 },
 };
 
 material.setup = function ()
