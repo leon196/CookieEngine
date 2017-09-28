@@ -56,7 +56,7 @@ export function MainScene ()
 	this.scene.add( this.smoke.mesh );
 	this.scene.add( this.fire.mesh );
 	this.scene.add( this.labels[this.currentMessage].mesh );
-	
+
 	this.globalParameter = Object.keys(parameter.global);
 	for (var i = 0; i < this.globalParameter.length; ++i) {
 		material.defaultUniforms[this.globalParameter[i]].value = parameter.global[this.globalParameter[i]];
@@ -84,7 +84,8 @@ export function MainScene ()
 		this.updateMessage();
 
 		for (var i = 0; i < this.parameterList.length; ++i) {
-			material[this.parameterMap[i]].uniforms[this.parameterList[i]].value = parameter.show[this.parameterList[i]];
+			// material[this.parameterMap[i]].uniforms[this.parameterList[i]].value = parameter.show[this.parameterList[i]];
+			material[this.parameterMap[i]].uniforms[this.parameterList[i]].value = animations.getValue(this.parameterList[i], elapsed);
 		}
 		for (var i = 0; i < this.globalParameter.length; ++i) {
 			material.defaultUniforms[this.globalParameter[i]].value = parameter.global[this.globalParameter[i]];
