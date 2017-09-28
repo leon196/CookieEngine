@@ -40,9 +40,6 @@ export default {
 			vertexShader: 'shader/scene/fire.vert',
 			fragmentShader: 'shader/scene/fire.frag',
 			side: THREE.DoubleSide,
-			depthTest: false,
-			opacity: .5,
-			transparent: true,
 		},
 		label: {
 			vertexShader: 'shader/scene/label.vert',
@@ -87,6 +84,11 @@ export default {
 		snow: {
 			vertexShader: 'shader/scene/snow.vert',
 			fragmentShader: 'shader/scene/snow.frag',
+			side: THREE.DoubleSide,
+		},
+		leaf: {
+			vertexShader: 'shader/scene/leaf.vert',
+			fragmentShader: 'shader/scene/leaf.frag',
 			side: THREE.DoubleSide,
 		},
 		text: {
