@@ -12,7 +12,7 @@ import { OrbitControls } from '../utils/OrbitControls';
 import utils from '../utils/utils';
 import { renderer } from '../engine/renderer';
 import animations from '../engine/animations';
-import { State } from '../utils/State';
+import { State } from '../utils/state';
 import { key } from '../utils/keyboard';
 import { message } from '../editor/message';
 import getTime from '../engine/getTime';

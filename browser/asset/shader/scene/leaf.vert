@@ -36,7 +36,7 @@ void main()	{
 	size *= blendLeaf;
 	pos.y += size.y*.5;
 	float a = rand(seed) * PI2 + time;
-	pos.x += cos(a) * .5 * clamp(vAnchor.y,0.,1.) * rand(seed);
+	pos.x += cos(a) * .5 * clamp(vAnchor.y,0.,1.) * rand(seed) * blendLeaf;
 	vAngle = a;
 	// vNormal = pos - position;
 	// pos.x = (x*2.-1.) * range;
