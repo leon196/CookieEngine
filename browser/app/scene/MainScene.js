@@ -20,14 +20,15 @@ export function MainScene ()
 {
 	this.scene = new THREE.Scene();
 	this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
-	this.camera.position.y = 30;
-	this.camera.position.z = 30;
+	this.camera.position.y = 10;
+	this.camera.position.z = 20;
 
-	this.controls = new OrbitControls( this.camera, renderer.domElement );
-	this.controls.rotateSpeed = 0.5;
+	// this.controls = new OrbitControls( this.camera, renderer.domElement );
+	// this.controls.rotateSpeed = 0.5;
 
 	var treeAttributes = asset.geometry["tree"].children[0].geometry.attributes;
 	this.tree = new Line(treeAttributes, material.tree);
+	this.tree.mesh.position.z = 3.;
 	var dimension = 512;
 	material.snow.uniforms.dimension = { value: dimension };
 	this.snow = new Point(dimension*dimension, material.snow);
@@ -79,11 +80,19 @@ export function MainScene ()
 		this.rain.update(elapsed);
 		this.smoke.update(elapsed);
 		this.fire.update(elapsed);
-		this.controls.update(elapsed);
+		// this.controls.update(elapsed);
 
 		this.updateMessage();
 		
-		animations.evaluate(this.camera.matrix, 'camera', elapsed);
+		var cameraPos = animations.getPosition('camera', elapsed);
+		this.camera.position.x = -cameraPos[0];
+		this.camera.position.y = cameraPos[2];
+		this.camera.position.z = cameraPos[1];
+		this.camera.lookAt(new THREE.Vector3());
+		var cameraRot = animations.getRotation('camera', elapsed);
+		this.camera.rotation.x = (cameraRot[0] - Math.PI * 0.5);
+		this.camera.rotation.y = cameraRot[2] - Math.PI;
+		this.camera.rotation.z = cameraRot[1];
 		this.camera.updateMatrixWorld(true);
 
 		for (var i = 0; i < this.parameterList.length; ++i) {

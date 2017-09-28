@@ -144,9 +144,10 @@ function createGeometryForParticles (positionArray, colorArray, normalArray, ste
 	geometry.addAttribute( 'anchor', new THREE.BufferAttribute( anchor, 2 ) );
 	geometry.addAttribute( 'texcoord', new THREE.BufferAttribute( texcoord, 2 ) );
 	
-	var min = -100;
-	var max = 100;
+	var min = -1000;
+	var max = 1000;
 	geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
+	geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
 
 	return geometry;
 }	

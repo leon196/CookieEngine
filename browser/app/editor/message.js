@@ -1,5 +1,5 @@
 export var message = [
-	'Once upon a time'
+	'クッキー'
 	,'during a cold winter'];
 	// ,'the demoscene spirit was in danger.'
 	// ,'The elite sceners were all asleep.'

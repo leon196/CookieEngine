@@ -153,9 +153,10 @@ function createGeometryForLine (positionArray, colorArray, normalArray, uvArray)
 	geometry.addAttribute( 'uv', new THREE.BufferAttribute( uv, 2 ) );
 	geometry.addAttribute( 'lineEnd', new THREE.BufferAttribute( lineEnd, 3 ) );
 	
-	var min = -100;
-	var max = 100;
+	var min = -1000;
+	var max = 1000;
 	geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
+	geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
 
 	return geometry;
 }	
