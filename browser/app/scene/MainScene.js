@@ -46,7 +46,7 @@ export default class {
 		this.labels = message.texts.map((text, i) => {
 			const center = i == 0 || i == 10 || i == 11 || i == 5 || i > 12;
 			const size = i == 10 ? 180 : 80;
-			const font = i == 10 ? 'sunrise' : 'lemon';
+			const font = i == 10 ? 'sunrise' : 'trashhand';
 			const label = new THREE.Texture(simpleText(text, font, size, 1024, center));
 			label.needsUpdate = true;
 			return label;
