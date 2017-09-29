@@ -1,7 +1,7 @@
 
 export function simpleText(message, font, fontSize, resolution, center)//, colors)
 {
-	font = font || 'coffee';
+	font = font || 'arial';
 	font = fontSize + 'px ' + font;
 	var ctx = document.createElement('canvas').getContext('2d');
 	ctx.font = font;
@@ -30,7 +30,7 @@ export function simpleText(message, font, fontSize, resolution, center)//, color
 	if (!center) {
 		y = ctx.canvas.height - fontSize * 1.5;
 	}
-	// y -=  - Math.max(0, words.length - 1) * fontSize;
+	y -= Math.max(0, words.length - 1) * fontSize / 2;
 
 	for (var n = 0; n < words.length; n++) {
 		// var testLine = line + words[n] + ' ';

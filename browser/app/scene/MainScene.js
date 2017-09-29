@@ -45,8 +45,8 @@ export default class {
 		this.hideMessage = false;
 		this.labels = message.texts.map((text, i) => {
 			const center = i == 0 || i == 10 || i == 11 || i == 5 || i > 12;
-			const size = i == 10 ? 180 : 80;
-			const font = i == 10 ? 'sunrise' : 'trashhand';
+			const size = i == 10 ? 220 : 80;
+			const font = i == 10 ? 'rhinos_rocksregular' : 'trashhand';
 			const label = new THREE.Texture(simpleText(text, font, size, 1024, center));
 			label.needsUpdate = true;
 			return label;
@@ -85,7 +85,7 @@ export default class {
 	}
 
 	update(elapsed) {
-		var dt = clamp(elapsed - this.lastElapsed, 0., 1.);
+		var dt = clamp(Math.abs(elapsed - this.lastElapsed), 0., 1.);
 		this.lastElapsed = elapsed;
 		this.tree.update(elapsed);
 		this.snow.update(elapsed);

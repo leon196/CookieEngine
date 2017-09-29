@@ -15,22 +15,27 @@ void main()	{
 	float rnd2 = rand(seed.xz);
 	float a = rnd2 * PI2 + time;
 	float t = time * .6;
-	vec2 size = vec2(.9,1.) * .5;
-	vec3 pos = displaceTree(position, time, blendStorm);
-
-	vShade = sin(a)*.5+.5;
+	vShade = sin(rnd2 * PI2)*.5+.5;
 	float blendSize = smoothstep(.3, .7,noiseIQ(rotateY(rotateX(seed*.3, t), t*.5)));
 	float blendType = smoothstep(.8,1.,vShade);
+
+	vec3 pos = displaceTree(position, time, blendStorm);
+	vec2 size = mix(vec2(.5,1.), vec2(1.,.8), blendType);
+
 
 	size *= .1+.9*rnd1;
 	size *= blendSize * blendLeaf;
 
-	float x = cos(a) * .5 * clamp(vAnchor.y,0.,1.) * rnd1 * blendLeaf;
-	float y = size.y*.5*mix(0.7,-1.,blendType);
+	vec2 pivot = vAnchor;
+	// pivot.x *= aspect.x;
+	pivot.xy = mix(pivot.xy, pivot.xy*rot(sin(a)*.3),blendType);
+
+	float x = cos(a) * .5 * clamp(pivot.y,0.,1.) * rnd1 * blendLeaf;
+	float y = size.y*.5*mix(0.7,-.5,blendType);
 	pos.x += x * (1.-blendType);
 	pos.y += y;
 
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
-	gl_Position.x += vAnchor.x * aspect.x * size.x;
-	gl_Position.y += vAnchor.y * aspect.y * size.y;
+	gl_Position.x += pivot.x * size.x * aspect.x;
+	gl_Position.y += pivot.y * size.y * aspect.y;
 }

@@ -10,7 +10,7 @@ export default {
 		'A new hope was born,',
 		'arising from the ashes of the past,',
 		'the crowd gathered at',
-		'COOKIE DEMOPARTY',
+		'Cookie\nDeMoPARTy',
 		'8-9 December 2017\nParis France',
 		'Thankfully the beers were still cold.',
 		'greets to\nLJ Raxter Flush\nResistance X-Men\nUnix Calodox\nGLKT XT95 Eybor',
