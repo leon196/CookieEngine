@@ -13,6 +13,21 @@ System.config({
     "npm:*": "jspm_packages/npm/*"
   },
 
+  packages: {
+    "app": {
+      "main": "index/app.js",
+      "format": "esm",
+      "map": {
+        "./engine/assets.js": {
+          "~production": "./engine/assets-development.js"
+        },
+        "./engine/getTime.js": {
+          "~production": "./engine/getTime-development.js"
+        }
+      }
+    }
+  },
+
   map: {
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
@@ -23,6 +38,7 @@ System.config({
     "gl-matrix": "github:toji/gl-matrix@2.4.0",
     "json": "github:systemjs/plugin-json@0.3.0",
     "socket.io-client": "github:socketio/socket.io-client@2.0.3",
+    "text": "github:systemjs/plugin-text@0.0.11",
     "three.js": "github:mrdoob/three.js@master",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Invitro for Cookie demoparty 2017",
   "scripts": {
+    "assets": "node scripts/assets.js",
     "build": "node scripts/build.js",
     "start": "concurrently --kill-others \"http-server browser\" \"chokidar-socket-emitter -p browser\""
   },
@@ -38,6 +39,7 @@
       "gl-matrix": "github:toji/gl-matrix@^2.4.0",
       "json": "github:systemjs/plugin-json@^0.3.0",
       "socket.io-client": "github:socketio/socket.io-client@^2.0.3",
+      "text": "github:systemjs/plugin-text@^0.0.11",
       "three.js": "github:mrdoob/three.js@master"
     },
     "devDependencies": {

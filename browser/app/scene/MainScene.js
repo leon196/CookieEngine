@@ -8,7 +8,6 @@ import Line from '../engine/line';
 import Point from '../engine/point';
 import animations from '../engine/animations';
 import State from '../engine/state';
-import getTime from '../engine/getTime';
 import { simpleText } from '../engine/makeText';
 import uniforms from '../engine/uniforms';
 import message from '../../asset/message';

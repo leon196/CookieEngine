@@ -26,6 +26,6 @@ Promise.all([
 	.then(() => {
 		console.log('Bundling JSPM app');
 		return bundleSFX('app/main-release.js', join(buildPath, 'index.js'), {
-			minify: true,
+			minify: false,
 		});
 	});
