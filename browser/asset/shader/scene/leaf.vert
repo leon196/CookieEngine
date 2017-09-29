@@ -27,11 +27,15 @@ void main()	{
 	size *= blendSize * blendLeaf;
 
 	vec2 pivot = vAnchor;
+	pivot.y = 1.-pivot.y;
 	// pivot.x *= aspect.x;
 	pivot.xy = mix(pivot.xy, pivot.xy*rot(sin(a)*.3),blendType);
 
 	float x = cos(a) * .5 * clamp(pivot.y,0.,1.) * rnd1 * blendLeaf;
 	float y = size.y*.5*mix(0.7,-.5,blendType);
+
+	y -= blendType * blendSize * size.y;
+
 	pos.x += x * (1.-blendType);
 	pos.y += y;
 

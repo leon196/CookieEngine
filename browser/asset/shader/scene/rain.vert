@@ -52,6 +52,6 @@ void main()	{
 	float aspect = resolution.y / resolution.x;
 	gl_Position.x += anchor.x * size.x * aspect;
 
-	gl_Position.x += anchor.x * .8*(.8+.2*rnd) * splashRatio * blendRain;
-	gl_Position.y += anchor.y * .6*(.8+.2*rnd) * splashRatio * blendRain;
+	gl_Position.x += anchor.x * 2.*(.5+.5*rnd) * splashRatio * blendRain;
+	gl_Position.y += anchor.y * .8*(.5+.5*rnd) * splashRatio * blendRain;
 }

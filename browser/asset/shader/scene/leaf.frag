@@ -12,6 +12,7 @@ vec3 purple1 = vec3(0.686, 0.239, 0.819);
 void main ()	{
 	float blendType = smoothstep(.8,1.,vShade);
 	vec2 uv = vAnchor;
+	uv.y = -uv.y;
 	float heart = cos((abs(uv.x)+.2)*PI)*.1;
 	heart += (1.-clamp(abs(uv.x)*6.,0.,1.))*.15;
 	uv.y += heart * blendType;

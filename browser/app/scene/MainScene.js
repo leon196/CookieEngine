@@ -33,7 +33,7 @@ export default class {
 		dimension = 64;
 		assets.shaderMaterials.rain.uniforms.dimension = { value: dimension };
 		this.rain = new Point(dimension*dimension, assets.shaderMaterials.rain);
-		this.droplet = new Particle(treeAttributes, assets.shaderMaterials.droplet, 100);
+		this.droplet = new Particle(treeAttributes, assets.shaderMaterials.droplet, 50);
 		this.smoke = new Particle(treeAttributes, assets.shaderMaterials.smoke, 100);
 
 		var flashAttributes = assets.geometries.flash.children[0].geometry.attributes;

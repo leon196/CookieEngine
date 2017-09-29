@@ -46,7 +46,7 @@ void main()	{
 	// pos.xz = mix(pos.xz, pos.xz*rot(time), blendStorm);
 	vec4 posScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
 	gl_Position = posScreen;
-	float size = .04 + .02 * rand(uv);
+	float size = .04 + .01 * rand(uv);
 	size *= (1.-smoothstep(.8,1.,1.-ratio));
 	size *= (1.-smoothstep(.8,1.,length(pos)/range));
 	size *= blendSnow;

@@ -16,29 +16,33 @@ varying vec2 vDirScreen;
 varying vec2 vAnchor;
 varying float vRatio;
 varying float vSplash;
+varying float vSplashRatio;
 
 void main()	{
 	vTexcoord = uv;
 	vNormal = normal;
 	vAnchor = anchor;
-	vec2 seed = vec2(position.xz);
-	float height = 4.;
+	vec2 seed = vec2(position.xy);
+	float height = 5.;
 	float rnd = rand(seed);
 	vec2 size = vec2(.05,2.);
-	float speed = 3. + 3. * noiseIQ(vec3(seed,1));
+	float speed = 1. + 1. * noiseIQ(vec3(seed,1));
 	vec3 pos = displaceTree(position, time, blendStorm);
 	vPos = position;
 	float ratio = mod(rnd*2.+time*speed, 1.);
 	vRatio = ratio;
 
-	// vSplashRatio = splashRatio;
+	float startAt = .7;
+	float yRatio = smoothstep(0.,startAt,ratio);
+	vSplashRatio = smoothstep(startAt, 1., ratio);
 
-	pos.x -= blendStorm * ratio * .5;
+	pos.x -= blendStorm * yRatio;
 	pos.x += anchor.y * blendStorm * .2;
 
-	pos.y -= ratio * height;
+	pos.y -= yRatio * height;
 	size *= smoothstep(.0,.1,ratio) * blendRain;
 
+	// vSplash = step(startAt,yRatio);
 	vSplash = step(pos.y,size.y);
 	pos.y = max(0., pos.y);
 
@@ -47,6 +51,6 @@ void main()	{
 	gl_Position.x += anchor.x * aspect.x * size.x * (1.-vSplash);
 	gl_Position.y += anchor.y * aspect.y * size.y * (1.-vSplash);
 
-	gl_Position.x += anchor.x * 1.5*(.8+.2*rnd) * vSplash * blendRain;
-	gl_Position.y += anchor.y * .4*(.8+.2*rnd) * vSplash * blendRain;
+	gl_Position.x += anchor.x * 2.5*(.8+.2*rnd) * vSplash * blendRain * vSplashRatio;
+	gl_Position.y += anchor.y * 1.4*(.8+.2*rnd) * vSplash * blendRain * vSplashRatio;
 }
