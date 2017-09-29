@@ -12,35 +12,46 @@ varying float vWave;
 varying vec3 vNormal;
 varying vec2 vDirScreen;
 varying vec2 vAnchor;
+varying float vSplash;
+varying float vSplashRatio;
 
 void main()	{
 	vTexcoord = uv;
 	vNormal = normal;
 	vAnchor = anchor;
-	float x = position.x*.5+.5;
-	float y = position.y*.5+.5;
-	vec2 seed = vec2(x,y);
-	float index = x * dimension + y * dimension * dimension;
-	float range = 20.;
+	vec2 seed = position.xy;
+	float rnd = rand(seed);
+
+	float range = 15.;
 	float height = 20.;
 	vec2 size = vec2(.02,3.);
 	size *= blendRain;
-	float speed = 8. + 30. * noiseIQ(vec3(seed*100.,0.));
-	vec3 pos = position;
-	pos.x = (x*2.-1.) * range;
-	pos.y = mod(rand(seed)*height*2.-time*speed, height);
-	float yRatio = pos.y / height;
-	pos.x += blendStorm * (yRatio) * 10.;
-	pos.z = (y*2.-1.) * range;
-	pos.y += anchor.y * size.y;// * rand(seed);
-	pos.x += anchor.y * blendStorm;
-	vec4 posScreenA = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
-	// vec4 posScreenB = projectionMatrix * viewMatrix * modelMatrix * vec4(pos+vec3(0,size,0),1);
-	gl_Position = posScreenA;
-	vec2 pivot = anchor;
-	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
-	gl_Position.x += pivot.x * aspect.x * size.x;
-	// gl_Position.y += pivot.y * aspect.y * size * 4.;
-	// gl_Position.x = mix(gl_Position.x, posScreenB.x, clamp(anchor.x,0.,1.));
-	// gl_Position.y = mix(gl_Position.y, posScreenB.y, clamp(anchor.y,0.,1.));
+	float speed = 1. + 3. * noiseIQ(vec3(seed*100.,0.));
+	vec3 pos = position.xzy * range;
+
+	float splashAt = .7;
+
+	float ratio = mod(rnd*2.+time*speed, 1.);
+	float yRatio = 1.-smoothstep(0.,splashAt,ratio);
+	float splash = step(splashAt,ratio);
+	float splashRatio = smoothstep(splashAt,1.,ratio);
+	vSplash = splash;
+	vSplashRatio = splashRatio;
+
+	float x = pos.x + blendStorm * (yRatio) * 10.;
+	x += anchor.y * blendStorm * (1.-splash);
+
+	float y = yRatio * height + anchor.y * size.y * (1.-splash);
+
+	pos.x = x;
+	pos.y = y;
+
+
+	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
+
+	float aspect = resolution.y / resolution.x;
+	gl_Position.x += anchor.x * size.x * aspect;
+
+	gl_Position.x += anchor.x * .8*(.8+.2*rnd) * splashRatio * blendRain;
+	gl_Position.y += anchor.y * .6*(.8+.2*rnd) * splashRatio * blendRain;
 }
