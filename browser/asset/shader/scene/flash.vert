@@ -16,7 +16,7 @@ varying vec3 vPos;
 vec3 displace (vec3 p)
 {
 	float lod = 10.1;
-	float speed = 10.;
+	float speed = 0.;
 	float scale = 2.;
 	float seedScale = .3;
 	p = ceil(p*lod)/lod;

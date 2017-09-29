@@ -14,6 +14,8 @@ import shader_filter_filter_frag from "../../asset/shader/filter/filter.frag!tex
 import shader_filter_screen_vert from "../../asset/shader/filter/screen.vert!text";
 import shader_pass_position_frag from "../../asset/shader/pass/position.frag!text";
 import shader_pass_velocity_frag from "../../asset/shader/pass/velocity.frag!text";
+import shader_scene_droplet_frag from "../../asset/shader/scene/droplet.frag!text";
+import shader_scene_droplet_vert from "../../asset/shader/scene/droplet.vert!text";
 import shader_scene_fire_frag from "../../asset/shader/scene/fire.frag!text";
 import shader_scene_fire_vert from "../../asset/shader/scene/fire.vert!text";
 import shader_scene_flash_frag from "../../asset/shader/scene/flash.frag!text";
@@ -119,6 +121,11 @@ uniforms: uniforms,
 tree: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials.tree, {
 vertexShader: shaderHeader + shader_scene_tree_vert,
 fragmentShader: shaderHeader + shader_scene_tree_frag,
+uniforms: uniforms,
+})),
+droplet: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials.droplet, {
+vertexShader: shaderHeader + shader_scene_droplet_vert,
+fragmentShader: shaderHeader + shader_scene_droplet_frag,
 uniforms: uniforms,
 })),
 velocity: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials.velocity, {

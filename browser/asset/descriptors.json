@@ -93,6 +93,11 @@
 			"fragmentShader": "shader/scene/tree.frag",
 			"side": 2
 		},
+		"droplet": {
+			"vertexShader": "shader/scene/droplet.vert",
+			"fragmentShader": "shader/scene/droplet.frag",
+			"side": 2
+		},
 		"velocity": {
 			"vertexShader": "shader/filter/screen.vert",
 			"fragmentShader": "shader/pass/velocity.frag"

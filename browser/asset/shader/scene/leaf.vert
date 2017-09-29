@@ -20,7 +20,7 @@ void main()	{
 	float blendType = smoothstep(.8,1.,vShade);
 
 	vec3 pos = displaceTree(position, time, blendStorm);
-	vec2 size = mix(vec2(.5,1.), vec2(1.,.8), blendType);
+	vec2 size = mix(vec2(.5,1.), vec2(1.,.8)*.7, blendType);
 
 
 	size *= .1+.9*rnd1;

@@ -10,5 +10,6 @@ void main()	{
 	// color.rgb *= .5+.5*shade;
 	// color.rgb *= .5+.5*(1.-(sin(abs(vAnchor.x))*.5+.5));
 	color.rgb *= .5 + .5 * (1.-smoothstep(0.5,1., abs(vAnchor.x)));
+	// color.rgb = 1.-color.rgb;
 	gl_FragColor = color;
 }

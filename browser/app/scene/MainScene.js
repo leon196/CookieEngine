@@ -19,6 +19,7 @@ export default class {
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
 		this.camera.position.y = 10;
 		this.camera.position.z = 20;
+		this.lookAt = new THREE.Vector3();
 		this.lastElapsed = 0;
 
 		// this.controls = new OrbitControls( this.camera, renderer.domElement );
@@ -32,6 +33,7 @@ export default class {
 		dimension = 64;
 		assets.shaderMaterials.rain.uniforms.dimension = { value: dimension };
 		this.rain = new Point(dimension*dimension, assets.shaderMaterials.rain);
+		this.droplet = new Particle(treeAttributes, assets.shaderMaterials.droplet, 100);
 		this.smoke = new Particle(treeAttributes, assets.shaderMaterials.smoke, 100);
 
 		var flashAttributes = assets.geometries.flash.children[0].geometry.attributes;
@@ -59,6 +61,7 @@ export default class {
 		this.scene.add( this.flash.mesh );
 		this.scene.add( this.snow.mesh );
 		this.scene.add( this.rain.mesh );
+		this.scene.add( this.droplet.mesh );
 		this.scene.add( this.smoke.mesh );
 		this.scene.add( this.fire.mesh );
 		this.scene.add( this.leaf.mesh );
@@ -88,6 +91,7 @@ export default class {
 		this.tree.update(elapsed);
 		this.snow.update(elapsed);
 		this.rain.update(elapsed);
+		this.droplet.update(elapsed);
 		this.smoke.update(elapsed);
 		this.fire.update(elapsed);
 		this.leaf.update(elapsed);
@@ -121,11 +125,16 @@ export default class {
 		// this.camera.position.x = -cameraPos[0];
 		// this.camera.position.y = cameraPos[2];
 		// this.camera.position.z = cameraPos[1];
-		this.camera.lookAt(new THREE.Vector3());
-		var cameraRot = animations.getRotation('camera', elapsed);
-		this.camera.rotation.x = -(cameraRot[0] - Math.PI * 0.5);
-		this.camera.rotation.y = cameraRot[2] - Math.PI;
-		this.camera.rotation.z = cameraRot[1];
+		// console.log(animations.getPosition('lookAt', elapsed))
+		var lookAtPos = animations.getPosition('lookAt', elapsed);
+		this.lookAt.x = lerp(this.lookAt.x, -lookAtPos[0], dt);
+		this.lookAt.y = lerp(this.lookAt.y, lookAtPos[2], dt);
+		this.lookAt.z = lerp(this.lookAt.z, lookAtPos[1], dt);
+		this.camera.lookAt(this.lookAt);
+		// var cameraRot = animations.getRotation('camera', elapsed);
+		// this.camera.rotation.x = -(cameraRot[0] - Math.PI * 0.5);
+		// this.camera.rotation.y = cameraRot[2] - Math.PI;
+		// this.camera.rotation.z = cameraRot[1];
 		this.camera.updateMatrixWorld(true);
 
 		for (var i = 0; i < this.parameterList.length; ++i) {

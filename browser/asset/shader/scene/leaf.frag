@@ -25,11 +25,11 @@ void main ()	{
 	float shade = sin(vShade*20.)*.5+.5;
 	vec3 green = mix(green1, green2, shade);
 	vec3 yellow = mix(yellow1, red1, shade);
-	vec3 blue = mix(purple1, red1, shade);
-	vec3 color = mix(green, blue, blendType);
+	vec3 red = mix(purple1, red1, shade);
+	vec3 color = mix(green, red, blendType);
 
 	// edge
-	shade = 1.-smoothstep(.1, .4, clamp(len/2.,0.,1.));
+	shade = mix(1.-smoothstep(.1, .8, clamp(len,0.,1.)), 1.,blendType);
 	// middle x
 	shade *= mix(1.-clamp(.1/(abs(uv.x)+.2),0.,1.), 1., blendType);
 	color.rgb *= .5+.5*shade;

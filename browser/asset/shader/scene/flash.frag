@@ -18,7 +18,7 @@ void main()	{
 	float fade = sin(uv.y*PI);
 	vec3 seed = vPos;
 	// float noisy = noiseIQ(seed*100.);
-	float speed = 10.;
+	float speed = 100.;
 	float noisy = sin(uv.y*5.-time*speed)+sin(uv.y*20.);
 	float scale = .1;
 	// uv.x += fade * sin(uv.y*5.*sin(uv.y*3.+time)+time) * .1;

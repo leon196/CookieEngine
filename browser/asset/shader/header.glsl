@@ -235,9 +235,9 @@ vec3 displaceTree (vec3 p, float t, float blend)
     p.z += sin(a + t * 3.)*intensity;
     p.z += cos(a + t * 3.)*intensity;
 
-    float speed = 3.;
-    intensity = 1.5*clamp(p.y*.1,0.,1.) * blend;
-    p.x += cos(t * speed) * intensity;
-    p.z += sin(t * speed) * intensity;
+    float speed = 10.;
+    intensity = 3.*clamp(p.y*.05,0.,1.) * blend;
+    p.x += (-intensity + .2*cos(t * speed)) * intensity;
+    p.y += .2*sin(-t * speed + length(p.xz)) * intensity;
     return p;
 }
