@@ -29,10 +29,10 @@ void main ()	{
 	vec3 color = mix(green, blue, blendType);
 
 	// edge
-	shade = .6+.4*(1.-clamp(len/2.,0.,1.));
+	shade = 1.-smoothstep(.1, .4, clamp(len/2.,0.,1.));
 	// middle x
-	shade *= mix(.6+.4*(1.-clamp(.1/(abs(uv.x)+.2),0.,1.)), 1., blendType);
-	color.rgb *= shade;
+	shade *= mix(1.-clamp(.1/(abs(uv.x)+.2),0.,1.), 1., blendType);
+	color.rgb *= .5+.5*shade;
 
 	gl_FragColor = vec4(color,1);
 }

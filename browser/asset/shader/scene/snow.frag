@@ -10,5 +10,6 @@ void main()	{
 	vec2 uv = vTexcoord;
 	vec4 color = vec4(1);
 	color.rgb *= 1.-clamp(length(vAnchor+vec2(0.,-.25))/2., 0., 1.);
+	color.rgb *= .9 + .1 * rand(vAnchor);
 	gl_FragColor = color;
 }
