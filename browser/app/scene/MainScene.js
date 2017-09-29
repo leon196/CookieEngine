@@ -45,14 +45,13 @@ export default class {
 		this.hideMessage = false;
 		this.labels = message.texts.map((text, i) => {
 			const center = i == 0 || i == 10 || i == 11 || i == 5 || i > 12;
-			const size = i == 10 ? 220 : 80;
+			const size = i == 10 ? 200 : 80;
 			const font = i == 10 ? 'rhinos_rocksregular' : 'trashhand';
 			const label = new THREE.Texture(simpleText(text, font, size, 1024, center));
 			label.needsUpdate = true;
 			return label;
 		});
-		assets.shaderMaterials.label.uniforms.uTexture = { value: this.labels[0] };
-		this.screen = new THREE.Mesh(new THREE.PlaneGeometry( 5, 20, 32 ), assets.shaderMaterials.label);
+		assets.shaderMaterials.filter.uniforms.uTexture = { value: this.labels[0] };
 		this.labelFireState = new State();
 		this.messageStart = 0;
 
@@ -63,7 +62,6 @@ export default class {
 		this.scene.add( this.smoke.mesh );
 		this.scene.add( this.fire.mesh );
 		this.scene.add( this.leaf.mesh );
-		this.scene.add(this.screen);
 
 		this.globalParameter = Object.keys(parameters.global);
 		for (var i = 0; i < this.globalParameter.length; ++i) {
