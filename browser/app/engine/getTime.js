@@ -1,7 +1,9 @@
-let time = 0;
+const music = document.getElementById('music');
+music.load();
+music.oncanplaythrough = function() {
+	music.play();
+};
 
-export default function () {
-	time += 0.016;
-
-	return time;
+export default function() {
+	return music.currentTime;
 }

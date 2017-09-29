@@ -18,6 +18,10 @@ Promise.all([
 		return copyFile(join(rootPath, 'browser', 'index-release.html'), join(buildPath, 'index.html'));
 	})
 	.then(() => {
+		console.log('Copying music');
+		return copyFile(join(rootPath, 'browser', 'asset', 'music', 'invitro_pre.mp3'), join(buildPath, 'music.mp3'));
+	})
+	.then(() => {
 		console.log('Copying static files');
 		const staticDirectory = join(rootPath, 'browser', 'static');
 		const files = readdirSync(staticDirectory);
