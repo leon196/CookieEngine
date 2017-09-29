@@ -68,16 +68,24 @@ function load(callback) {
 		Object.keys(descriptors.shaderMaterials).forEach(name => {
 			const vertexShaderUrl = descriptors.shaderMaterials[name].vertexShader;
 			const fragmentShaderUrl = descriptors.shaderMaterials[name].fragmentShader;
-
 			register([vertexShaderUrl, fragmentShaderUrl], () => {
-				assets.shaderMaterials[name] = new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials[name], {
-					vertexShader: shaderHeader + files[vertexShaderUrl],
-					fragmentShader: shaderHeader + files[fragmentShaderUrl],
-					uniforms: uniforms,
-				}));
-				// .fragmentShader = asset.shader[fileName];
-				// .vertexShader = asset.shader[fileName];
-				// .needsUpdate = true;
+				if (assets.shaderMaterials[name] === undefined) {
+					assets.shaderMaterials[name] = new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials[name], {
+						vertexShader: shaderHeader + files[vertexShaderUrl],
+						fragmentShader: shaderHeader + files[fragmentShaderUrl],
+						uniforms: uniforms,
+					}));
+				} else {
+					loader.load(baseUrl + fragmentShaderUrl, data => {
+						files[fragmentShaderUrl] = data;
+						loader.load(baseUrl + vertexShaderUrl, data => {
+							files[vertexShaderUrl] = data;
+							assets.shaderMaterials[name].vertexShader = shaderHeader + files[vertexShaderUrl];
+							assets.shaderMaterials[name].fragmentShader = shaderHeader + files[fragmentShaderUrl];
+							assets.shaderMaterials[name].needsUpdate = true;
+						});
+					});
+				}
 			});
 		});
 
