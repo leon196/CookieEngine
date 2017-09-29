@@ -19,7 +19,7 @@ Promise.all([
 	})
 	.then(() => {
 		console.log('Copying music');
-		return copyFile(join(rootPath, 'browser', 'asset', 'music', 'invitro_pre.mp3'), join(buildPath, 'music.mp3'));
+		return copyFile(join(rootPath, 'browser', 'asset', 'music', 'cookie-invitro-2017.ogg'), join(buildPath, 'music.ogg'));
 	})
 	.then(() => {
 		console.log('Copying static files');
