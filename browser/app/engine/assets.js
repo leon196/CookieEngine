@@ -9,6 +9,7 @@ import shaderHeader from "../../asset/shader/header.glsl!text";
 import font_coffee_json from "../../asset/font/coffee.json!text";
 import point_branch_obj from "../../asset/point/branch.obj!text";
 import point_flash_obj from "../../asset/point/flash.obj!text";
+import point_root_obj from "../../asset/point/root.obj!text";
 import point_tree_obj from "../../asset/point/tree.obj!text";
 import shader_filter_filter_frag from "../../asset/shader/filter/filter.frag!text";
 import shader_filter_screen_vert from "../../asset/shader/filter/screen.vert!text";
@@ -48,6 +49,7 @@ geometries: {
 branch: objLoader.parse(point_branch_obj),
 flash: objLoader.parse(point_flash_obj),
 tree: objLoader.parse(point_tree_obj),
+root: objLoader.parse(point_root_obj),
 },
 fonts: {
 coffee: fontLoader.parse(font_coffee_json),
