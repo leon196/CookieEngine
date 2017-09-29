@@ -41,6 +41,9 @@ export default class {
 
 		this.fire = new Particle(treeAttributes, assets.shaderMaterials.fire, 1, true);
 		this.leaf = new Particle(treeAttributes, assets.shaderMaterials.leaf, 10);
+		
+		var rootAttributes = assets.geometries.root.children[0].geometry.attributes;
+		this.root = new Line(rootAttributes, assets.shaderMaterials.tree);
 
 		this.currentMessage = 0;
 		this.showMessage = false;
@@ -65,6 +68,7 @@ export default class {
 		this.scene.add( this.smoke.mesh );
 		this.scene.add( this.fire.mesh );
 		this.scene.add( this.leaf.mesh );
+		this.scene.add( this.root.mesh );
 
 		this.globalParameter = Object.keys(parameters.global);
 		for (var i = 0; i < this.globalParameter.length; ++i) {
@@ -95,6 +99,7 @@ export default class {
 		this.smoke.update(elapsed);
 		this.fire.update(elapsed);
 		this.leaf.update(elapsed);
+		this.root.update(elapsed);
 		// this.controls.update(elapsed);
 
 		parameters.global.blendLight = animations.getValue('blendLight', elapsed);

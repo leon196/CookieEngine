@@ -12,12 +12,13 @@ varying float vWave;
 varying vec3 vNormal;
 varying vec2 vDirScreen;
 varying vec2 vAnchor;
-
+varying vec2 vSpotTarget;
 
 void main()	{
 	vTexcoord = uv;
 	vNormal = normal;
 	vAnchor = anchor;
+	vSpotTarget = vec2(0);
 	float x = position.x*.5+.5;
 	float y = position.y*.5+.5;
 	float index = x * dimension + y * dimension * dimension;
@@ -52,4 +53,6 @@ void main()	{
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
 	gl_Position.x += anchor.x * size * aspect.x;
 	gl_Position.y += anchor.y * size * aspect.y;
+
+	vSpotTarget = gl_Position.xy;
 }

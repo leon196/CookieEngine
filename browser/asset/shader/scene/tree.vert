@@ -49,9 +49,9 @@ void main()	{
 	vDirCamera = pos - cameraPosition;
 
 	float fadeDist = (1.-clamp(length(pos.xz)*.2,0.,1.));
-	fadeDist *= (1.-clamp(pos.y*.1,0.,1.));
+	fadeDist *= (1.-clamp(abs(pos.y)*.2,0.,1.));
 	float size = .01 + .1 * fadeDist;
-	fadeDist = .9+.1*sin(length(pos)*.5-time*10.+dot(vec3(0,1,0),normalize(vNormal))*8.);
+	fadeDist = 1.-fadeDist;
 	vColor *= fadeDist;
 	size *= blendTree;
 	// float edge = .5+.5*sin(time);

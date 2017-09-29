@@ -13,6 +13,9 @@
 		},
 		"tree": {
 			"file": "point/tree.obj"
+		},
+		"root": {
+			"file": "point/root.obj"
 		}
 	},
 	"shaderMaterials": {
