@@ -7,12 +7,12 @@ import Particle from '../engine/particle';
 import Line from '../engine/line';
 import Point from '../engine/point';
 import animations from '../engine/animations';
-import State from '../engine/State';
+import State from '../engine/state';
 import getTime from '../engine/getTime';
 import { simpleText } from '../engine/makeText';
 import uniforms from '../engine/uniforms';
 import message from '../../asset/message';
-import { lerp } from '../libs/misc';
+import { lerp, clamp } from '../libs/misc';
 
 export default class {
 	constructor() {
@@ -20,6 +20,7 @@ export default class {
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
 		this.camera.position.y = 10;
 		this.camera.position.z = 20;
+		this.lastElapsed = 0;
 
 		// this.controls = new OrbitControls( this.camera, renderer.domElement );
 		// this.controls.rotateSpeed = 0.5;
@@ -84,8 +85,10 @@ export default class {
 
 	}
 
-	update() {
-		var elapsed = getTime();
+	update(elapsed) {
+		// var elapsed = getTime();
+		var dt = clamp(elapsed - this.lastElapsed, 0., 1.);
+		this.lastElapsed = elapsed;
 		this.tree.update(elapsed);
 		this.snow.update(elapsed);
 		this.rain.update(elapsed);
@@ -116,9 +119,9 @@ export default class {
 		this.fire.uniforms.blendBurnOut.value = parameters.global.blendBurnOut;
 
 		var cameraPos = animations.getPosition('camera', elapsed);
-		this.camera.position.x = lerp(this.camera.position.x, -cameraPos[0], .5);
-		this.camera.position.y = lerp(this.camera.position.y, cameraPos[2], .5);
-		this.camera.position.z = lerp(this.camera.position.z, cameraPos[1], .5);
+		this.camera.position.x = lerp(this.camera.position.x, -cameraPos[0], dt);
+		this.camera.position.y = lerp(this.camera.position.y, cameraPos[2], dt);
+		this.camera.position.z = lerp(this.camera.position.z, cameraPos[1], dt);
 		// this.camera.position.x = -cameraPos[0];
 		// this.camera.position.y = cameraPos[2];
 		// this.camera.position.z = cameraPos[1];

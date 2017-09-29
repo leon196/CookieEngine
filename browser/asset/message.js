@@ -14,7 +14,7 @@ export default {
 		'8-9 December 2017\nParis France',
 		'Thankfully the beers were still cold.',
 		'greets to\nLJ Raxter Flush\nResistance X-Men\nUnix Calodox\n',
-		'we love\nmercury still\nasd cocoon razor1911\nhoodlum paradox',
+		'we love\nmercury still\nasd cocoon razor1911\nhoodlum paradox\nyou',
 		'credits\nartcode ponk\ncode koltes\nmusic fergus',
 	],
 };

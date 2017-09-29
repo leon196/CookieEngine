@@ -6,6 +6,7 @@ uniform vec2 resolution;
 uniform float time;
 uniform float dimension;
 uniform float blendSmoke;
+uniform float blendStorm;
 uniform float blendLeaf;
 varying vec2 vTexcoord;
 varying float vWave;
@@ -32,7 +33,7 @@ void main()	{
 	size *= .1+.9*rand(seed);
 	float t = time * .3;
 	size *= smoothstep(.2, .8,noiseIQ(rotateY(rotateX(seed.xyy*.9, t), t*.5)));
-	vec3 pos = position;
+	vec3 pos = displaceTree(position, time, blendStorm);
 	size *= blendLeaf;
 	pos.y += size.y*.5;
 	float a = rand(seed) * PI2 + time;
