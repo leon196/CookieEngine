@@ -20,13 +20,13 @@ void main()	{
 
 	vShade = sin(a)*.5+.5;
 	float blendSize = smoothstep(.3, .7,noiseIQ(rotateY(rotateX(seed*.3, t), t*.5)));
-	float blendType = smoothstep(.7,.9,vShade);
+	float blendType = smoothstep(.8,1.,vShade);
 
 	size *= .1+.9*rnd1;
 	size *= blendSize * blendLeaf;
 
 	float x = cos(a) * .5 * clamp(vAnchor.y,0.,1.) * rnd1 * blendLeaf;
-	float y = size.y*.5*mix(1.,-1.,blendType);
+	float y = size.y*.5*mix(0.7,-1.,blendType);
 	pos.x += x * (1.-blendType);
 	pos.y += y;
 
