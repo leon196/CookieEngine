@@ -21,8 +21,8 @@ System.config({
         "./engine/assets.js": {
           "~production": "./engine/assets-development.js"
         },
-        "./engine/getTime.js": {
-          "~production": "./engine/getTime-development.js"
+        "./engine/timeline.js": {
+          "~production": "./engine/timeline-development.js"
         }
       }
     }

@@ -15,7 +15,11 @@ blenderWS.addListener('time', function(newTime) {
 	connected = true;
 });
 
-export default function() {
+export function start() {
+	clock.start();
+}
+
+export function getTime() {
 	if (connected)
 		return time;
 	else

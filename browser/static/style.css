@@ -1,8 +1,3 @@
-.hide {
-	visibility: hidden;
-	position: absolute;
-}
-
 @font-face {
 	font-family: 'coffee';
 	src: url('coffee-webfont.woff2') format('woff2'), url('coffee-webfont.woff') format('woff');
@@ -30,4 +25,26 @@ body {
 	background: #000;
 	margin: 0;
 	overflow: hidden;
+}
+
+@keyframes fadeOut {
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+#message {
+	animation: fadeOut 5s forwards;
+	color: #fff;
+	font: 24px coffee;
+	padding: 20px;
+	text-align: center;
+}
+
+.hide {
+	visibility: hidden;
+	position: absolute;
 }

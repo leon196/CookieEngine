@@ -85,7 +85,6 @@ export default class {
 	}
 
 	update(elapsed) {
-		// var elapsed = getTime();
 		var dt = clamp(elapsed - this.lastElapsed, 0., 1.);
 		this.lastElapsed = elapsed;
 		this.tree.update(elapsed);
