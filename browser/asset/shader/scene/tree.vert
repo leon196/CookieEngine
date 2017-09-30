@@ -50,10 +50,10 @@ void main()	{
 	vDirCamera = pos - cameraPosition;
 
 	float fadeDist = (1.-clamp(length(pos.xz)*.3,0.,1.));
-	fadeDist *= (1.-clamp(abs(pos.y)*.3,0.,1.));
-	float size = .01 + .2 * fadeDist;
+	fadeDist *= (1.-clamp(abs(pos.y)*.06,0.,1.));
+	float size = .01 + .1 * fadeDist;
 	fadeDist = 1.-fadeDist;
-	vColor *= fadeDist;
+	vColor *= .6+.4*fadeDist;
 	size *= blendTree;
 	// float edge = .5+.5*sin(time);
 	// size *= 1.-smoothstep(0.0, 30.*edge, length(pos));

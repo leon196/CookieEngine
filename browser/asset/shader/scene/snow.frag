@@ -25,7 +25,7 @@ void main()	{
 	float shade = 1.-clamp(length(vAnchor)*.05, 0., 1.);
 	// shade *= mix(1.-clamp(length(vSpotTarget)*.01, 0., 1.), 1., blendStorm);
 	float light = 0.;
-	light += mix(1.-clamp(length(vSpotTarget)/mix(length(cameraPosition)*8.,200., blendStorm), 0., 1.), 1., blendStorm);
+	light += mix(1.-clamp(length(vSpotTarget)/mix(length(cameraPosition)*10.,200., blendStorm), 0., 1.), 1., blendStorm);
 	// light += mix(1.-clamp(length(vSpotTarget.x)/mix(20.,200., blendStorm), 0., 1.), 1., blendStorm);
 	// light += mix(1.-clamp(length(vSpotTarget.y)/mix(10.,200., blendStorm), 0., 1.), 1., blendStorm);
 	shade *= clamp(light,0.,1.);

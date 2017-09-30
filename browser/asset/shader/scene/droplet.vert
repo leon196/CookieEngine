@@ -32,7 +32,7 @@ void main()	{
 	float ratio = mod(rnd*2.+time*speed, 1.);
 	vRatio = ratio;
 
-	float startAt = .7;
+	float startAt = .5;
 	float yRatio = smoothstep(0.,startAt,ratio);
 	vSplashRatio = smoothstep(startAt, 1., ratio);
 
@@ -47,10 +47,11 @@ void main()	{
 	pos.y = max(0., pos.y);
 
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
+	vec2 pivot = anchor;
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
-	gl_Position.x += anchor.x * aspect.x * size.x * (1.-vSplash);
-	gl_Position.y += anchor.y * aspect.y * size.y * (1.-vSplash);
+	gl_Position.x += pivot.x * aspect.x * size.x * (1.-vSplash);
+	gl_Position.y += pivot.y * aspect.y * size.y * (1.-vSplash);
 
-	gl_Position.x += anchor.x * 2.5*(.8+.2*rnd) * vSplash * blendRain * vSplashRatio;
-	gl_Position.y += anchor.y * 1.4*(.8+.2*rnd) * vSplash * blendRain * vSplashRatio;
+	gl_Position.x += pivot.x * 3.5*(.8+.2*rnd) * vSplash * blendRain * vSplashRatio;
+	gl_Position.y += pivot.y * 1.*(.8+.2*rnd) * vSplash * blendRain * vSplashRatio;
 }

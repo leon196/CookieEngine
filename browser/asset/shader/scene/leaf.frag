@@ -14,8 +14,9 @@ void main ()	{
 	vec2 uv = vAnchor;
 	uv.x *= mix(.5,.75,blendType);
 	uv.y = mix(uv.y, -uv.y, blendType);
-	float heart = cos((abs(uv.x)+.2)*PI)*.3;
-	heart += (1.-clamp(abs(uv.x)*10.,0.,1.))*.2;
+	float heart = cos((abs(uv.x)+.2)*PI)*.2;
+	// heart += (1.-clamp(abs(uv.x)*10.,0.,1.))*.2;
+	heart += (1.-clamp(sin(abs(uv.x)*8.),0.,1.))*.2;
 	uv.y += heart * blendType;
 
 	float leaf = clamp(uv.y,0.,1.);
@@ -31,7 +32,7 @@ void main ()	{
 	vec3 color = mix(green, red, blendType);
 
 	// edge
-	shade = 1.-smoothstep(.1, .8, clamp(len,0.,1.));
+	shade = 1.-smoothstep(.0, .8, clamp(len,0.,1.));
 	// shade = mix(shade, 1.,blendType);
 	// middle x
 	shade *= mix(1.-clamp(.1/(abs(uv.x)+.2),0.,1.), 1., blendType);
