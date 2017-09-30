@@ -19,17 +19,17 @@ Promise.all([
 	})
 	.then(() => {
 		console.log('Copying music');
-		return copyFile(join(rootPath, 'browser', 'asset', 'music', 'cookie-invitro-2017.ogg'), join(buildPath, 'music.ogg'));
+		return copyFile(join(rootPath, 'browser', 'asset', 'music', 'cookie-invitro-2017.ogg'), join(buildPath, 'files', 'music.ogg'));
 	})
 	.then(() => {
 		console.log('Copying static files');
 		const staticDirectory = join(rootPath, 'browser', 'static');
 		const files = readdirSync(staticDirectory);
-		return Promise.all(files.map(file => copyFile(join(staticDirectory, file), join(buildPath, 'static', file))));
+		return Promise.all(files.map(file => copyFile(join(staticDirectory, file), join(buildPath, 'files', file))));
 	})
 	.then(() => {
 		console.log('Bundling JSPM app');
-		return bundleSFX('app/main-release.js', join(buildPath, 'index.js'), {
+		return bundleSFX('app/main-release.js', join(buildPath, 'files', 'demo.js'), {
 			minify: false,
 		});
 	});
