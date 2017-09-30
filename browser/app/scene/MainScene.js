@@ -6,10 +6,9 @@ import { OrbitControls } from '../libs/OrbitControls';
 import renderer from '../engine/renderer'
 import assets from '../engine/assets';
 import Particle from '../engine/particle';
-import Line from '../engine/line';
 import Point from '../engine/point';
+import Line from '../engine/line';
 import animations from '../engine/animations';
-import State from '../engine/state';
 import { simpleText } from '../engine/makeText';
 import uniforms from '../engine/uniforms';
 import message from '../../asset/message';
@@ -31,20 +30,22 @@ export default class {
 		this.root = new Line(rootAttributes, assets.shaderMaterials.tree);
 		this.fire = new Particle(treeAttributes, assets.shaderMaterials.fire, 1, true);
 		this.leaf = new Particle(treeAttributes, assets.shaderMaterials.leaf);
+		this.snow = new Point(128*128, assets.shaderMaterials.snow);
 
-		var textureTitle = new THREE.Texture(simpleText('CooKie\nDemopaRty', 'rhinos_rocksregular', 150, 1024, true));
-		var textureDate = new THREE.Texture(simpleText('8, 9 December 2017', 'trashhand', 70, 1024, true));
+		var textureTitle = new THREE.Texture(simpleText('CooKie\nDemopaRty', 'rhinos_rocksregular', 220, 1024, true));
+		var textureDate = new THREE.Texture(simpleText('December 8th and 9th, 2017', 'trashhand', 80, 1024, true));
 		textureTitle.needsUpdate = true;
 		textureDate.needsUpdate = true;
 		assets.shaderMaterials.filter.uniforms.uTextureTitle = { value: textureTitle };
 		assets.shaderMaterials.filter.uniforms.uTextureDate = { value: textureDate };
-
 		assets.shaderMaterials.velocity.uniforms.blendHeat = { value: parameters.global.blendHeat };
+		assets.shaderMaterials.snow.uniforms.blendSnow = { value: 1 };
 
 		this.scene.add( this.tree.mesh );
 		this.scene.add( this.fire.mesh );
 		this.scene.add( this.root.mesh );
 		this.scene.add( this.leaf.mesh );
+		this.scene.add( this.snow.mesh );
 
 		this.globalParameter = Object.keys(parameters.global);
 		for (var i = 0; i < this.globalParameter.length; ++i) {
@@ -63,9 +64,12 @@ export default class {
 		this.camera.updateMatrixWorld(true);
 
 		this.controls = new OrbitControls( this.camera, renderer.domElement );
-		this.controls.rotateSpeed = 0.5;
+		this.controls.rotateSpeed = 0.1;
+		this.controls.zoomSpeed = 2.5;
 		this.controls.target = this.lookAt;
 		this.controls.enablePan = false;
+		this.controls.enableDamping = true;
+		this.controls.dampingFactor = .1;
 	}
 
 	update(elapsed) 
@@ -76,12 +80,14 @@ export default class {
 		this.fire.update(elapsed);
 		this.root.update(elapsed);
 		this.leaf.update(elapsed);
+		this.snow.update(elapsed);
 		this.controls.update(elapsed);
 
 		var wave = Math.sin(elapsed*.2)*.5+.5;
 		assets.shaderMaterials.velocity.uniforms.blendHeat.value = wave;
 		assets.shaderMaterials.filter.uniforms.blendHeat.value = wave;
 		assets.shaderMaterials.leaf.uniforms.blendLeaf.value = 1.-wave;
+		assets.shaderMaterials.snow.uniforms.blendSnow.value = 1.-wave;
 	}
 }
 

@@ -14,6 +14,7 @@
 //    Pan - right mouse, or arrow keys / touch: three finger swipe
 
 import * as THREE from 'three.js'
+import { lerp } from './misc'
 
 export var OrbitControls = function ( object, domElement ) {
 
@@ -81,6 +82,8 @@ export var OrbitControls = function ( object, domElement ) {
 	this.target0 = this.target.clone();
 	this.position0 = this.object.position.clone();
 	this.zoom0 = this.object.zoom;
+
+	this.radiusDelta = 0;
 
 	//
 	// public methods
@@ -154,8 +157,10 @@ export var OrbitControls = function ( object, domElement ) {
 
 			spherical.makeSafe();
 
+			this.radiusDelta += scale-1.;
+			this.radiusDelta *= ( 1 - scope.dampingFactor );
 
-			spherical.radius *= scale;
+			spherical.radius += this.radiusDelta;
 
 			// restrict radius to be between desired limits
 			spherical.radius = Math.max( scope.minDistance, Math.min( scope.maxDistance, spherical.radius ) );

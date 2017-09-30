@@ -1,16 +1,7 @@
 {
 	"fonts": {
-		"coffee": {
-			"file": "font/coffee.json"
-		}
 	},
 	"geometries": {
-		"branch": {
-			"file": "point/branch.obj"
-		},
-		"flash": {
-			"file": "point/flash.obj"
-		},
 		"tree": {
 			"file": "point/tree.obj"
 		},
@@ -19,14 +10,6 @@
 		}
 	},
 	"shaderMaterials": {
-		"flash": {
-			"vertexShader": "shader/scene/flash.vert",
-			"fragmentShader": "shader/scene/flash.frag",
-			"side": 2,
-			"depthTest": false,
-			"opacity": 0.5,
-			"transparent": true
-		},
 		"filter": {
 			"vertexShader": "shader/filter/screen.vert",
 			"fragmentShader": "shader/filter/filter.frag"
@@ -36,69 +19,23 @@
 			"fragmentShader": "shader/scene/fire.frag",
 			"side": 2
 		},
-		"label": {
-			"vertexShader": "shader/scene/label.vert",
-			"fragmentShader": "shader/scene/label.frag",
-			"side": 2,
-			"depthTest": false,
-			"opacity": 0.5,
-			"transparent": true
-		},
 		"leaf": {
 			"vertexShader": "shader/scene/leaf.vert",
 			"fragmentShader": "shader/scene/leaf.frag",
-			"side": 2
-		},
-		"line": {
-			"vertexShader": "shader/triangle/line.vert",
-			"fragmentShader": "shader/triangle/line.frag",
-			"side": 2
-		},
-		"particle": {
-			"vertexShader": "shader/triangle/particle.vert",
-			"fragmentShader": "shader/triangle/particle.frag",
-			"side": 2
-		},
-		"point": {
-			"vertexShader": "shader/triangle/point.vert",
-			"fragmentShader": "shader/triangle/point.frag",
 			"side": 2
 		},
 		"position": {
 			"vertexShader": "shader/filter/screen.vert",
 			"fragmentShader": "shader/pass/position.frag"
 		},
-		"rain": {
-			"vertexShader": "shader/scene/rain.vert",
-			"fragmentShader": "shader/scene/rain.frag",
-			"side": 2
-		},
-		"smoke": {
-			"vertexShader": "shader/scene/smoke.vert",
-			"fragmentShader": "shader/scene/smoke.frag",
-			"side": 2,
-			"depthTest": false,
-			"opacity": 0.5,
-			"transparent": true
-		},
 		"snow": {
 			"vertexShader": "shader/scene/snow.vert",
 			"fragmentShader": "shader/scene/snow.frag",
 			"side": 2
 		},
-		"text": {
-			"vertexShader": "shader/triangle/text.vert",
-			"fragmentShader": "shader/triangle/text.frag",
-			"side": 2
-		},
 		"tree": {
 			"vertexShader": "shader/scene/tree.vert",
 			"fragmentShader": "shader/scene/tree.frag",
-			"side": 2
-		},
-		"droplet": {
-			"vertexShader": "shader/scene/droplet.vert",
-			"fragmentShader": "shader/scene/droplet.frag",
 			"side": 2
 		},
 		"velocity": {

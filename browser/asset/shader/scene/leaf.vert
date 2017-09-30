@@ -22,20 +22,16 @@ void main()	{
 	vec3 pos = displaceTree(position, time, blendStorm);
 	vec2 size = mix(vec2(.5,.6), vec2(1.5,.8)*.7, blendType);
 
-
 	size *= .1+.9*rnd1;
 	size *= blendSize * blendLeaf;
 
 	vec2 pivot = vAnchor;
 	pivot.y = mix(pivot.y, -pivot.y, blendType);
 	pivot.y += mix(1.,-0.25, blendType);
-	// pivot.x *= aspect.x;
 	pivot.xy = mix(pivot.xy, pivot.xy*rot(sin(a)*.3),blendType);
 
 	float x = cos(a) * .5 * clamp(pivot.y,0.,1.) * rnd1 * blendLeaf;
 	float y = size.y*.5*mix(0.,-.1,blendType);
-
-	// y -= blendType * blendSize * size.y * .5;
 
 	pos.x += x * (1.-blendType);
 	pos.y += y;

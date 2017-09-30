@@ -23,7 +23,6 @@ export default class {
 		};
 
 		if (gpu) {
-			assets.shaderMaterials.particle.uniforms = this.uniforms;
 			assets.shaderMaterials.fire.uniforms = this.uniforms;
 			assets.shaderMaterials.position.uniforms = this.uniforms;
 			assets.shaderMaterials.velocity.uniforms = this.uniforms;

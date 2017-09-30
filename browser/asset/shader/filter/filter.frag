@@ -33,22 +33,15 @@ void main ()	{
 	uvLabel.x *= aspect;
 	uvLabel += .5;
 	vec2 uvDate = uvLabel;
-	uvDate.y += .2;
+	uvDate.y += .3;
 	vec4 label = texture2D(uTextureTitle, uvLabel) + texture2D(uTextureDate, uvDate);
-	vec3 seed = uvLabel.xyy*10.;
-	float noisy = fbm(seed*4., vec3(time));//*noiseIQ(seed*3.);
-	// float ratio = -1.+blendLabelFire*2.+noisy;
-	// ratio = sin(time*.3+noisy)*.5+.5;
+	vec3 seed = uvLabel.xyy*3.;
+	float noisy = fbm(seed*8., vec3(time));
 	float ratio = mix(0., noisy+1., blendHeat);
-	// ratio = smoothstep(0.1,1.,ratio);
-	// label.rgb *= ratio;
+	ratio = smoothstep(.4,.6,ratio);
 	label.rgb *= (1.-ratio);
-	vec3 c = vec3(0.733, 0.160, 0.105);
-	// vec3 c = mix(vec3(0.733, 0.160, 0.105), vec3(01, 0.898, 0.478), rand(seed.xy)*.2+.4);
-	label.rgb = mix(label.rgb, c*(1.-ratio), smoothstep(.6,.7,ratio));
+	label.rgb = mix(label.rgb, vec3(0.733, 0.160, 0.105)*(1.-ratio), smoothstep(.6,.7,ratio));
 	label.rgb = mix(label.rgb, vec3(0), smoothstep(.8,.9,ratio));
-	// label.a *= 1.-smoothstep(.9,.95,ratio);
-	// label.a *= blendLabelAlpha;
 
 	color = mix(color, label, label.a);
 
