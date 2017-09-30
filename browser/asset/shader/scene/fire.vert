@@ -19,6 +19,7 @@ uniform float time;
 uniform vec2 resolution;
 uniform float spriteVelocityStretch;
 uniform float blendFire;
+uniform float blendHeat;
 
 vec3 displace (vec3 p)
 {
@@ -82,7 +83,7 @@ void main() {
 
 	// screen space
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
-	size *= blendFire * vFade;
+	size *= vFade * blendHeat;
 	gl_Position.y += size.y;
 	gl_Position.xy += right * anchor.x * size.x * aspect.x;
 	gl_Position.xy += forward * anchor.y * size.y * aspect.y;

@@ -17,7 +17,7 @@ void main()	{
 	buffer.xyz += velocity.xyz;
 	// float shouldRespawn = sin(time*3.+noiseIQ(buffer.xyz*.3)*PI2*2.)*.5+.5;
 	float shouldRespawn = clamp(step(velocity.w, 0.0) + step(1.0, velocity.w),0.,1.);
-	shouldRespawn *= 1.-blendBurnOut;
+	// shouldRespawn *= 1.-blendBurnOut;
 	gl_FragColor = mix(buffer, spawn, shouldRespawn);
 	// gl_FragColor = velocity;
 }

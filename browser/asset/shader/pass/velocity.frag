@@ -20,6 +20,7 @@ uniform float velocityDamping;
 uniform float spriteVelocityStretch;
 uniform float turbulenceRangeMin;
 uniform float turbulenceRangeMax;
+uniform float blendHeat;
 
 void main()	{
 	vec3 spawn = texture2D(spawnTexture, vUv).xyz;
@@ -64,8 +65,9 @@ void main()	{
 
 	// offset = attractor * .1;
 
-
-	gl_FragColor.xyz = mix(buffer.xyz * velocityFrictionBlend, offset * velocitySpeed, velocityDamping);
+	float speed = velocitySpeed*.1;
+	speed += mix(0., .5, blendHeat);
+	gl_FragColor.xyz = mix(buffer.xyz * velocityFrictionBlend, offset * speed, velocityDamping);
 
 	// spawning
 }

@@ -25,11 +25,12 @@ export default function() {
 		ready = true;
 	});
 
-	function animate() {
+	function animate(elapsed) {
 		requestAnimationFrame(animate);
 
 		if (ready) {
-			const time = timeline.getTime();
+			// const time = timeline.getTime();
+			var time = elapsed / 1000.;
 
 			mainScene.update(time);
 			uniforms.time.value = time;

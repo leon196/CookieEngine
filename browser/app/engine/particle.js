@@ -49,7 +49,7 @@ export default class {
 		this.positionPass = new ShaderPass(assets.shaderMaterials.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
 		this.velocityPass = new ShaderPass(assets.shaderMaterials.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
 
-		this.parameterList = Object.keys(parameters.particle);
+		this.parameterList = Object.keys(parameters.particleHeat);
 		for (var i = 0; i < this.parameterList.length; i++) {
 			this.uniforms[this.parameterList[i]] = { value: 0 };
 		}
@@ -67,8 +67,8 @@ export default class {
 			this.velocityPass.update();
 		}
 		for (var i = 0; i < this.parameterList.length; i++) {
-			var param = parameters.particle[this.parameterList[i]];
-			param = lerp(param, parameters.particleHeat[this.parameterList[i]], parameters.global.blendHeat);
+			var param = parameters.particleHeat[this.parameterList[i]];
+			// param = lerp(param, parameters.particleHeat[this.parameterList[i]], parameters.global.blendHeat);
 			this.uniforms[this.parameterList[i]].value = param;
 		}
 	}

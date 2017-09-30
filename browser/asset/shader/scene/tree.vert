@@ -54,7 +54,7 @@ void main()	{
 	float size = .01 + .1 * fadeDist;
 	fadeDist = 1.-fadeDist;
 	vColor *= .6+.4*fadeDist;
-	size *= blendTree;
+	// size *= blendTree;
 	// float edge = .5+.5*sin(time);
 	// size *= 1.-smoothstep(0.0, 30.*edge, length(pos));
 

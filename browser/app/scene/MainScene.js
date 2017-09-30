@@ -2,6 +2,8 @@
 
 import * as THREE from 'three.js';
 import parameters from '../engine/parameters';
+import { OrbitControls } from '../libs/OrbitControls';
+import renderer from '../engine/renderer'
 import assets from '../engine/assets';
 import Particle from '../engine/particle';
 import Line from '../engine/line';
@@ -16,141 +18,70 @@ import { lerp, clamp } from '../libs/misc';
 export default class {
 	constructor() {
 		this.scene = new THREE.Scene();
-		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
+		this.camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.01, 1000 );
 		this.camera.position.y = 10;
 		this.camera.position.z = 20;
 		this.lookAt = new THREE.Vector3();
 		this.lastElapsed = 0;
 
-		// this.controls = new OrbitControls( this.camera, renderer.domElement );
-		// this.controls.rotateSpeed = 0.5;
 
 		var treeAttributes = assets.geometries.tree.children[0].geometry.attributes;
-		this.tree = new Line(treeAttributes, assets.shaderMaterials.tree);
-		var dimension = 512;
-		assets.shaderMaterials.snow.uniforms.dimension = { value: dimension };
-		this.snow = new Point(dimension*dimension, assets.shaderMaterials.snow);
-		dimension = 64;
-		assets.shaderMaterials.rain.uniforms.dimension = { value: dimension };
-		this.rain = new Point(dimension*dimension, assets.shaderMaterials.rain);
-		this.droplet = new Particle(treeAttributes, assets.shaderMaterials.droplet, 50);
-		this.smoke = new Particle(treeAttributes, assets.shaderMaterials.smoke, 100);
-
-		var flashAttributes = assets.geometries.flash.children[0].geometry.attributes;
-		this.flash = new Line(flashAttributes, assets.shaderMaterials.flash);
-
-		this.fire = new Particle(treeAttributes, assets.shaderMaterials.fire, 1, true);
-		this.leaf = new Particle(treeAttributes, assets.shaderMaterials.leaf, 10);
-		
 		var rootAttributes = assets.geometries.root.children[0].geometry.attributes;
+		this.tree = new Line(treeAttributes, assets.shaderMaterials.tree);
 		this.root = new Line(rootAttributes, assets.shaderMaterials.tree);
+		this.fire = new Particle(treeAttributes, assets.shaderMaterials.fire, 1, true);
+		this.leaf = new Particle(treeAttributes, assets.shaderMaterials.leaf);
 
-		this.currentMessage = 0;
-		this.showMessage = false;
-		this.hideMessage = false;
-		this.labels = message.texts.map((text, i) => {
-			const center = i == 0 || i == 10 || i == 11 || i == 5 || i > 12;
-			const size = i == 10 ? 200 : 80;
-			const font = i == 10 ? 'rhinos_rocksregular' : 'trashhand';
-			const label = new THREE.Texture(simpleText(text, font, size, 1024, center));
-			label.needsUpdate = true;
-			return label;
-		});
-		assets.shaderMaterials.filter.uniforms.uTexture = { value: this.labels[0] };
-		this.labelFireState = new State();
-		this.messageStart = 0;
+		var textureTitle = new THREE.Texture(simpleText('CooKie\nDemopaRty', 'rhinos_rocksregular', 150, 1024, true));
+		var textureDate = new THREE.Texture(simpleText('8, 9 December 2017', 'trashhand', 70, 1024, true));
+		textureTitle.needsUpdate = true;
+		textureDate.needsUpdate = true;
+		assets.shaderMaterials.filter.uniforms.uTextureTitle = { value: textureTitle };
+		assets.shaderMaterials.filter.uniforms.uTextureDate = { value: textureDate };
+
+		assets.shaderMaterials.velocity.uniforms.blendHeat = { value: parameters.global.blendHeat };
 
 		this.scene.add( this.tree.mesh );
-		this.scene.add( this.flash.mesh );
-		this.scene.add( this.snow.mesh );
-		this.scene.add( this.rain.mesh );
-		this.scene.add( this.droplet.mesh );
-		this.scene.add( this.smoke.mesh );
 		this.scene.add( this.fire.mesh );
-		this.scene.add( this.leaf.mesh );
 		this.scene.add( this.root.mesh );
+		this.scene.add( this.leaf.mesh );
 
 		this.globalParameter = Object.keys(parameters.global);
 		for (var i = 0; i < this.globalParameter.length; ++i) {
 			uniforms[this.globalParameter[i]].value = parameters.global[this.globalParameter[i]];
 		}
 
-		assets.shaderMaterials.rain.uniforms.blendStorm = { value: parameters.global.blendStorm };
-		assets.shaderMaterials.snow.uniforms.blendFire = { value: parameters.show.blendFire };
-		this.fire.uniforms.blendBurnOut = { value: parameters.global.blendBurnOut };
+		var cameraPos = animations.getPosition('camera', 0);
+		var lookAtPos = animations.getPosition('lookAt', 0);
+		this.camera.position.x = -cameraPos[0];
+		this.camera.position.y = cameraPos[2];
+		this.camera.position.z = cameraPos[1];
+		this.lookAt.x = -lookAtPos[0];
+		this.lookAt.y = lookAtPos[2];
+		this.lookAt.z = lookAtPos[1];
+		this.camera.lookAt(this.lookAt);
+		this.camera.updateMatrixWorld(true);
 
-		this.parameterList = Object.keys(parameters.show);
-		this.parameterMap = [];
-		for (var i = 0; i < this.parameterList.length; ++i) {
-			var name = this.parameterList[i].toLowerCase();
-			name = name.slice(5, name.length);
-			this.parameterMap.push(name);
-			assets.shaderMaterials[this.parameterMap[i]].uniforms[this.parameterList[i]] = { value: parameters.show[this.parameterList[i]] };
-		}
-
+		this.controls = new OrbitControls( this.camera, renderer.domElement );
+		this.controls.rotateSpeed = 0.5;
+		this.controls.target = this.lookAt;
+		this.controls.enablePan = false;
 	}
 
-	update(elapsed) {
+	update(elapsed) 
+	{
 		var dt = clamp(Math.abs(elapsed - this.lastElapsed), 0., 1.);
 		this.lastElapsed = elapsed;
 		this.tree.update(elapsed);
-		this.snow.update(elapsed);
-		this.rain.update(elapsed);
-		this.droplet.update(elapsed);
-		this.smoke.update(elapsed);
 		this.fire.update(elapsed);
-		this.leaf.update(elapsed);
 		this.root.update(elapsed);
-		// this.controls.update(elapsed);
+		this.leaf.update(elapsed);
+		this.controls.update(elapsed);
 
-		parameters.global.blendLight = animations.getValue('blendLight', elapsed);
-		parameters.global.blendLabelAlpha = animations.getValue('blendLabelAlpha', elapsed);
-		parameters.global.blendLabelFire = animations.getValue('blendLabelFire', elapsed);
-		var messageIndex = animations.getValue('messageIndex', elapsed);
-		if (messageIndex != this.currentMessage) {
-
-			// this.scene.remove( this.labels[this.currentMessage].mesh );
-			this.currentMessage = messageIndex;
-			assets.shaderMaterials.label.uniforms.uTexture.value = this.labels[this.currentMessage];
-			// this.scene.add( this.labels[this.currentMessage].mesh );
-		}
-		// this.updateMessage(elapsed);
-		parameters.global.blendStorm = animations.getValue('blendStorm', elapsed);
-		parameters.global.blendHeat = animations.getValue('blendHeat', elapsed);
-		parameters.global.blendBurnOut = animations.getValue('blendBurnOut', elapsed);
-		parameters.global.blendLeaf = animations.getValue('blendLeaf', elapsed);
-		assets.shaderMaterials.rain.uniforms.blendStorm.value = parameters.global.blendStorm;
-		assets.shaderMaterials.snow.uniforms.blendStorm.value = parameters.global.blendStorm;
-		assets.shaderMaterials.snow.uniforms.blendFire.value = parameters.show.blendFire;
-		assets.shaderMaterials.tree.uniforms.blendStorm.value = parameters.global.blendStorm;
-		this.fire.uniforms.blendBurnOut.value = parameters.global.blendBurnOut;
-
-		var cameraPos = animations.getPosition('camera', elapsed);
-		this.camera.position.x = lerp(this.camera.position.x, -cameraPos[0], dt);
-		this.camera.position.y = lerp(this.camera.position.y, cameraPos[2], dt);
-		this.camera.position.z = lerp(this.camera.position.z, cameraPos[1], dt);
-		// this.camera.position.x = -cameraPos[0];
-		// this.camera.position.y = cameraPos[2];
-		// this.camera.position.z = cameraPos[1];
-		// console.log(animations.getPosition('lookAt', elapsed))
-		var lookAtPos = animations.getPosition('lookAt', elapsed);
-		this.lookAt.x = lerp(this.lookAt.x, -lookAtPos[0], dt);
-		this.lookAt.y = lerp(this.lookAt.y, lookAtPos[2], dt);
-		this.lookAt.z = lerp(this.lookAt.z, lookAtPos[1], dt);
-		this.camera.lookAt(this.lookAt);
-		// var cameraRot = animations.getRotation('camera', elapsed);
-		// this.camera.rotation.x = -(cameraRot[0] - Math.PI * 0.5);
-		// this.camera.rotation.y = cameraRot[2] - Math.PI;
-		// this.camera.rotation.z = cameraRot[1];
-		this.camera.updateMatrixWorld(true);
-
-		for (var i = 0; i < this.parameterList.length; ++i) {
-			// assets.shaderMaterials[this.parameterMap[i]].uniforms[this.parameterList[i]].value = parameter.show[this.parameterList[i]];
-			assets.shaderMaterials[this.parameterMap[i]].uniforms[this.parameterList[i]].value = animations.getValue(this.parameterList[i], elapsed);
-		}
-		for (var i = 0; i < this.globalParameter.length; ++i) {
-			uniforms[this.globalParameter[i]].value = parameters.global[this.globalParameter[i]];
-		}
+		var wave = Math.sin(elapsed*.2)*.5+.5;
+		assets.shaderMaterials.velocity.uniforms.blendHeat.value = wave;
+		assets.shaderMaterials.filter.uniforms.blendHeat.value = wave;
+		assets.shaderMaterials.leaf.uniforms.blendLeaf.value = 1.-wave;
 	}
 }
 
