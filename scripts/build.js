@@ -7,7 +7,7 @@ const copyFile = require('quickly-copy-file');
 const rimraf = require('rimraf-promise');
 
 const rootPath = resolve(__dirname, '..');
-const buildPath = resolve(rootPath, 'dist', 'invitro-cookie-2017');
+const buildPath = resolve(rootPath, 'dist', 'and-the-crowd-gathered-at-cookie-by-ponk-koltes-fergus');
 
 console.log('Cleaning build directories');
 Promise.all([
