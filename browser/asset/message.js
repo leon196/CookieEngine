@@ -11,7 +11,7 @@ export default {
 		'arising from the ashes of the past,',
 		'the crowd gathered at',
 		'Cookie\nDeMoPARTy',
-		'8, 9 December 2017\nParis France',
+		'December 8th and 9th 2017\nParis France',
 		'Thankfully the beers were still cold.',
 		'greets to\nLJ Raxter Flush\nResistance X-Men\nUnix Calodox\nGLKT XT95 Eybor',
 		'we love\nmercury still\nasd cocoon razor1911\nhoodlum paradox\nyou',
