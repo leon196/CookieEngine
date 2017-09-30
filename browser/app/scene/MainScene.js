@@ -32,7 +32,7 @@ export default class {
 		this.leaf = new Particle(treeAttributes, assets.shaderMaterials.leaf);
 		this.snow = new Point(128*128, assets.shaderMaterials.snow);
 
-		var textureTitle = new THREE.Texture(simpleText('CooKie\nDemopaRty', 'rhinos_rocksregular', 220, 1024, true));
+		var textureTitle = new THREE.Texture(simpleText('Cookie\nDemopaRty', 'rhinos_rocksregular', 220, 1024, true));
 		var textureDate = new THREE.Texture(simpleText('December 8th and 9th, 2017', 'trashhand', 80, 1024, true));
 		textureTitle.needsUpdate = true;
 		textureDate.needsUpdate = true;
