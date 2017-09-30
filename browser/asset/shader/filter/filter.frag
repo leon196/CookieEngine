@@ -13,11 +13,16 @@ varying vec2 vUv;
 
 void main ()	{
 	vec4 color = texture2D(frameBuffer, vUv);
+
+	float aspect = resolution.x/resolution.y;
 	
 	// vignette
 	float vignette = sin(vUv.x * PI);
-	vignette *= sin(vUv.y * PI);
-	color.rgb *= smoothstep(-.3,.3,vignette);
+	color.rgb *= smoothstep(-.3,.6,vignette);
+	color.rgb *= smoothstep(0.,.1/aspect,vignette);
+	vignette = sin(vUv.y * PI);
+	color.rgb *= smoothstep(-.3,.6,vignette);
+	color.rgb *= smoothstep(0.,.1,vignette);
 
 	// inverse colors
 	color = mix(color, 1.-color, blendLight);
@@ -25,7 +30,7 @@ void main ()	{
 	// label
 	vec2 uvLabel = vUv;
 	uvLabel -= .5;
-	uvLabel.x *= resolution.x/resolution.y;
+	uvLabel.x *= aspect;
 	uvLabel += .5;
 	vec2 uvDate = uvLabel;
 	uvDate.y += .2;
