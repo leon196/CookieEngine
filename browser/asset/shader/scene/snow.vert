@@ -10,6 +10,8 @@ uniform float dimension;
 varying vec2 vTexcoord;
 varying float vWave;
 varying vec3 vNormal;
+varying vec3 vPos;
+varying vec4 vPosScreen;
 varying vec2 vDirScreen;
 varying vec2 vAnchor;
 varying vec2 vSpotTarget;
@@ -44,15 +46,24 @@ void main()	{
 	pos.z += sin(angle) * radius;
 	pos = normalize(pos) * min(length(pos), range);
 	// pos.xz = mix(pos.xz, pos.xz*rot(time), blendStorm);
-	vec4 posScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
-	gl_Position = posScreen;
-	float size = .04 + .01 * rand(uv);
-	size *= (1.-smoothstep(.8,1.,1.-ratio));
-	size *= (1.-smoothstep(.8,1.,length(pos)/range));
+	float a = atan(pos.z, pos.x);
+	float r = length(pos.xz);
+	float shade = sin(r+a+time*10.)*.5+.5;
+	shade = smoothstep(.0,.5,shade);
+	pos.y += shade * rand(position.xz) * 10. * blendStorm * (1.-clamp(r*.1+a,0.,1.));
+	vPos = pos;
+	vPosScreen = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
+	gl_Position = vPosScreen;
+	float size = .04;// + .01 * rand(uv);
+	size *= smoothstep(.0,.5,ratio);
+	size += blendStorm*.02;
+	// size *= (1.-smoothstep(.8,1.,1.-ratio));
+	// size *= (1.-smoothstep(.8,1.,length(pos)/range));
 	size *= blendSnow;
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
 	gl_Position.x += anchor.x * size * aspect.x;
 	gl_Position.y += anchor.y * size * aspect.y;
 
 	vSpotTarget = gl_Position.xy;
+	// vSpotTarget = (projectionMatrix * viewMatrix * modelMatrix * vec4(pos.x,pos.y+cameraPosition.y,pos.z,1)).xy;
 }

@@ -12,15 +12,16 @@ vec3 purple1 = vec3(0.686, 0.239, 0.819);
 void main ()	{
 	float blendType = smoothstep(.8,1.,vShade);
 	vec2 uv = vAnchor;
-	uv.y = -uv.y;
-	float heart = cos((abs(uv.x)+.2)*PI)*.1;
-	heart += (1.-clamp(abs(uv.x)*6.,0.,1.))*.15;
+	uv.x *= mix(.5,.75,blendType);
+	uv.y = mix(uv.y, -uv.y, blendType);
+	float heart = cos((abs(uv.x)+.2)*PI)*.3;
+	heart += (1.-clamp(abs(uv.x)*10.,0.,1.))*.2;
 	uv.y += heart * blendType;
 
 	float leaf = clamp(uv.y,0.,1.);
-	uv.x = abs(uv.x) + leaf * (1.-blendType);
-
+	uv.y += .5 * (1.-blendType);
 	float len = length(uv);
+	len += abs(uv.x)-.1 * (1.-blendType);
 	if (len > 0.45) discard;
 	
 	float shade = sin(vShade*20.)*.5+.5;
@@ -30,7 +31,8 @@ void main ()	{
 	vec3 color = mix(green, red, blendType);
 
 	// edge
-	shade = mix(1.-smoothstep(.1, .8, clamp(len,0.,1.)), 1.,blendType);
+	shade = 1.-smoothstep(.1, .8, clamp(len,0.,1.));
+	// shade = mix(shade, 1.,blendType);
 	// middle x
 	shade *= mix(1.-clamp(.1/(abs(uv.x)+.2),0.,1.), 1., blendType);
 	color.rgb *= .5+.5*shade;

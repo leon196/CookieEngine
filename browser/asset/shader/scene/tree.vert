@@ -13,6 +13,7 @@ varying vec3 vNormal;
 varying vec3 vColor;
 varying vec3 vDirCamera;
 varying vec2 vAnchor;
+varying vec4 vPosScreen;
 
 vec3 displaceTree2 (vec3 p, float t, float blend)
 {
@@ -48,9 +49,9 @@ void main()	{
 	vNormal = end - pos;
 	vDirCamera = pos - cameraPosition;
 
-	float fadeDist = (1.-clamp(length(pos.xz)*.2,0.,1.));
-	fadeDist *= (1.-clamp(abs(pos.y)*.2,0.,1.));
-	float size = .01 + .1 * fadeDist;
+	float fadeDist = (1.-clamp(length(pos.xz)*.3,0.,1.));
+	fadeDist *= (1.-clamp(abs(pos.y)*.3,0.,1.));
+	float size = .01 + .2 * fadeDist;
 	fadeDist = 1.-fadeDist;
 	vColor *= fadeDist;
 	size *= blendTree;
@@ -64,4 +65,6 @@ void main()	{
 	right.x *= resolution.y/resolution.x;
 	gl_Position = mix(posScreen, lineEndScreen, anchor.y);
 	gl_Position.xy += right * anchor.x * size;
+
+	vPosScreen = gl_Position;
 }

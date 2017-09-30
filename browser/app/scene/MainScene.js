@@ -76,6 +76,7 @@ export default class {
 		}
 
 		assets.shaderMaterials.rain.uniforms.blendStorm = { value: parameters.global.blendStorm };
+		assets.shaderMaterials.snow.uniforms.blendFire = { value: parameters.show.blendFire };
 		this.fire.uniforms.blendBurnOut = { value: parameters.global.blendBurnOut };
 
 		this.parameterList = Object.keys(parameters.show);
@@ -120,6 +121,7 @@ export default class {
 		parameters.global.blendLeaf = animations.getValue('blendLeaf', elapsed);
 		assets.shaderMaterials.rain.uniforms.blendStorm.value = parameters.global.blendStorm;
 		assets.shaderMaterials.snow.uniforms.blendStorm.value = parameters.global.blendStorm;
+		assets.shaderMaterials.snow.uniforms.blendFire.value = parameters.show.blendFire;
 		assets.shaderMaterials.tree.uniforms.blendStorm.value = parameters.global.blendStorm;
 		this.fire.uniforms.blendBurnOut.value = parameters.global.blendBurnOut;
 
