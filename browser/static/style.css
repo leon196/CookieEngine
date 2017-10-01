@@ -1,46 +1,8 @@
-@font-face {
-	font-family: 'coffee';
-	src: url('coffee-webfont.woff2') format('woff2'), url('coffee-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'sunrise';
-	src: url('sunrise_international_demo-webfont.woff2') format('woff2'),
-	url('sunrise_international_demo-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'lemon';
-	src: url('dk_lemon_yellow_sun-webfont.woff2') format('woff2'),
-	url('dk_lemon_yellow_sun-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
 
 @font-face {
 	font-family: 'trashhand';
 	src: url('trashhand-webfont.woff2') format('woff2'),
 	url('trashhand-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'better_togethercaps';
-	src: url('better_together_caps-webfont.woff2') format('woff2'),
-	url('better_together_caps-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'edo_szregular';
-	src: url('edosz-webfont.woff2') format('woff2'),
-	url('edosz-webfont.woff') format('woff');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -57,23 +19,6 @@ body {
 	background: #000;
 	margin: 0;
 	overflow: hidden;
-}
-
-@keyframes fadeOut {
-	50% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-	}
-}
-
-#message {
-	animation: fadeOut 5s forwards;
-	color: #fff;
-	font: 24px coffee;
-	padding: 20px;
-	text-align: center;
 }
 
 .hide {
