@@ -21,6 +21,9 @@ export default function() {
 		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);
 
+		document.getElementById('tree').appendChild(renderer.domElement);
+		document.getElementById('header').remove();
+
 		timeline.start();
 		ready = true;
 	});
@@ -42,8 +45,10 @@ export default function() {
 	}
 
 	function onWindowResize () {
-		mainScene.camera.aspect = window.innerWidth / window.innerHeight;
+		const width = document.documentElement.clientWidth;
+		const height = document.documentElement.clientHeight * .7;
+		mainScene.camera.aspect = width / height;
 		mainScene.camera.updateProjectionMatrix();
-		renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.setSize(width, height);
 	}
 }

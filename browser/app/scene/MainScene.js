@@ -70,9 +70,10 @@ export default class {
 		this.controls.enablePan = false;
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = .1;
+		this.controls.enableZoom = false;
 	}
 
-	update(elapsed) 
+	update(elapsed)
 	{
 		var dt = clamp(Math.abs(elapsed - this.lastElapsed), 0., 1.);
 		this.lastElapsed = elapsed;
