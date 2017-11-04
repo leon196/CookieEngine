@@ -6,7 +6,6 @@ import assets from '../engine/assets';
 import Particle from '../engine/particle';
 import Line from '../engine/line';
 import Point from '../engine/point';
-import animations from '../engine/animations';
 import State from '../engine/state';
 import { simpleText } from '../engine/makeText';
 import uniforms from '../engine/uniforms';
@@ -41,7 +40,7 @@ export default class {
 
 		this.fire = new Particle(treeAttributes, assets.shaderMaterials.fire, 1, true);
 		this.leaf = new Particle(treeAttributes, assets.shaderMaterials.leaf, 10);
-		
+
 		var rootAttributes = assets.geometries.root.children[0].geometry.attributes;
 		this.root = new Line(rootAttributes, assets.shaderMaterials.tree);
 
@@ -103,10 +102,10 @@ export default class {
 		this.root.update(elapsed);
 		// this.controls.update(elapsed);
 
-		parameters.global.blendLight = animations.getValue('blendLight', elapsed);
-		parameters.global.blendLabelAlpha = animations.getValue('blendLabelAlpha', elapsed);
-		parameters.global.blendLabelFire = animations.getValue('blendLabelFire', elapsed);
-		var messageIndex = animations.getValue('messageIndex', elapsed);
+		parameters.global.blendLight = assets.animations.getValue('blendLight', elapsed);
+		parameters.global.blendLabelAlpha = assets.animations.getValue('blendLabelAlpha', elapsed);
+		parameters.global.blendLabelFire = assets.animations.getValue('blendLabelFire', elapsed);
+		var messageIndex = assets.animations.getValue('messageIndex', elapsed);
 		if (messageIndex != this.currentMessage) {
 
 			// this.scene.remove( this.labels[this.currentMessage].mesh );
@@ -115,30 +114,30 @@ export default class {
 			// this.scene.add( this.labels[this.currentMessage].mesh );
 		}
 		// this.updateMessage(elapsed);
-		parameters.global.blendStorm = animations.getValue('blendStorm', elapsed);
-		parameters.global.blendHeat = animations.getValue('blendHeat', elapsed);
-		parameters.global.blendBurnOut = animations.getValue('blendBurnOut', elapsed);
-		parameters.global.blendLeaf = animations.getValue('blendLeaf', elapsed);
+		parameters.global.blendStorm = assets.animations.getValue('blendStorm', elapsed);
+		parameters.global.blendHeat = assets.animations.getValue('blendHeat', elapsed);
+		parameters.global.blendBurnOut = assets.animations.getValue('blendBurnOut', elapsed);
+		parameters.global.blendLeaf = assets.animations.getValue('blendLeaf', elapsed);
 		assets.shaderMaterials.rain.uniforms.blendStorm.value = parameters.global.blendStorm;
 		assets.shaderMaterials.snow.uniforms.blendStorm.value = parameters.global.blendStorm;
 		assets.shaderMaterials.snow.uniforms.blendFire.value = parameters.show.blendFire;
 		assets.shaderMaterials.tree.uniforms.blendStorm.value = parameters.global.blendStorm;
 		this.fire.uniforms.blendBurnOut.value = parameters.global.blendBurnOut;
 
-		var cameraPos = animations.getPosition('camera', elapsed);
+		var cameraPos = assets.animations.getPosition('camera', elapsed);
 		this.camera.position.x = lerp(this.camera.position.x, -cameraPos[0], dt);
 		this.camera.position.y = lerp(this.camera.position.y, cameraPos[2], dt);
 		this.camera.position.z = lerp(this.camera.position.z, cameraPos[1], dt);
 		// this.camera.position.x = -cameraPos[0];
 		// this.camera.position.y = cameraPos[2];
 		// this.camera.position.z = cameraPos[1];
-		// console.log(animations.getPosition('lookAt', elapsed))
-		var lookAtPos = animations.getPosition('lookAt', elapsed);
+		// console.log(assets.animations.getPosition('lookAt', elapsed))
+		var lookAtPos = assets.animations.getPosition('lookAt', elapsed);
 		this.lookAt.x = lerp(this.lookAt.x, -lookAtPos[0], dt);
 		this.lookAt.y = lerp(this.lookAt.y, lookAtPos[2], dt);
 		this.lookAt.z = lerp(this.lookAt.z, lookAtPos[1], dt);
 		this.camera.lookAt(this.lookAt);
-		// var cameraRot = animations.getRotation('camera', elapsed);
+		// var cameraRot = assets.animations.getRotation('camera', elapsed);
 		// this.camera.rotation.x = -(cameraRot[0] - Math.PI * 0.5);
 		// this.camera.rotation.y = cameraRot[2] - Math.PI;
 		// this.camera.rotation.z = cameraRot[1];
@@ -146,7 +145,7 @@ export default class {
 
 		for (var i = 0; i < this.parameterList.length; ++i) {
 			// assets.shaderMaterials[this.parameterMap[i]].uniforms[this.parameterList[i]].value = parameter.show[this.parameterList[i]];
-			assets.shaderMaterials[this.parameterMap[i]].uniforms[this.parameterList[i]].value = animations.getValue(this.parameterList[i], elapsed);
+			assets.shaderMaterials[this.parameterMap[i]].uniforms[this.parameterList[i]].value = assets.animations.getValue(this.parameterList[i], elapsed);
 		}
 		for (var i = 0; i < this.globalParameter.length; ++i) {
 			uniforms[this.globalParameter[i]].value = parameters.global[this.globalParameter[i]];

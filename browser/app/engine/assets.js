@@ -1,11 +1,13 @@
 /* eslint-disable */
 /* This file is generated with "npm run assets", do not edit by hand. */
 import descriptors from "../../asset/descriptors.json!";
+import makeAnimations from "./make-animations";
 import uniforms from "./uniforms";
 import { OBJLoader } from "../libs/OBJLoader";
 import { PLYLoader } from "../libs/PLYLoader";
 import * as THREE from "three.js";
 import shaderHeader from "../../asset/shader/header.glsl!text";
+import animation_scene_json from "../../asset/animation/scene.json!text";
 import font_coffee_json from "../../asset/font/coffee.json!text";
 import point_branch_obj from "../../asset/point/branch.obj!text";
 import point_flash_obj from "../../asset/point/flash.obj!text";
@@ -45,6 +47,7 @@ const plyLoader = new PLYLoader();
 const objLoader = new OBJLoader();
 const fontLoader = new THREE.FontLoader();
 export default {
+animations: makeAnimations(JSON.parse(animation_scene_json)),
 geometries: {
 branch: objLoader.parse(point_branch_obj),
 flash: objLoader.parse(point_flash_obj),

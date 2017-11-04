@@ -1,4 +1,5 @@
 import descriptors from '../../asset/descriptors.json!';
+import makeAnimations from './make-animations';
 import parameters from './parameters';
 import uniforms from './uniforms';
 import { OBJLoader } from '../libs/OBJLoader';
@@ -18,6 +19,7 @@ function register(urls, callback) {
 const files = {};
 
 const assets = {
+	animations: null,
 	geometries: {},
 	fonts: {},
 	shaderMaterials: {},
@@ -25,6 +27,10 @@ const assets = {
 };
 
 function load(callback) {
+	register([descriptors.animations], () => {
+		assets.animations = makeAnimations(JSON.parse(files[descriptors.animations]));
+	});
+
 	const loader = new THREE.FileLoader();
 
 	loader.load(baseUrl + 'shader/header.glsl', shaderHeader => {
@@ -76,15 +82,9 @@ function load(callback) {
 						uniforms: uniforms,
 					}));
 				} else {
-					loader.load(baseUrl + fragmentShaderUrl, data => {
-						files[fragmentShaderUrl] = data;
-						loader.load(baseUrl + vertexShaderUrl, data => {
-							files[vertexShaderUrl] = data;
-							assets.shaderMaterials[name].vertexShader = shaderHeader + files[vertexShaderUrl];
-							assets.shaderMaterials[name].fragmentShader = shaderHeader + files[fragmentShaderUrl];
-							assets.shaderMaterials[name].needsUpdate = true;
-						});
-					});
+					assets.shaderMaterials[name].vertexShader = shaderHeader + files[vertexShaderUrl];
+					assets.shaderMaterials[name].fragmentShader = shaderHeader + files[fragmentShaderUrl];
+					assets.shaderMaterials[name].needsUpdate = true;
 				}
 			});
 		});
@@ -121,7 +121,10 @@ function load(callback) {
 				const callback = urlCallbacks[url];
 				if (callback) {
 					console.log('Reloading asset', url);
-					callback();
+					return loader.load(baseUrl + url, data => {
+						files[url] = data;
+						return callback();
+					});
 				}
 			}
 		}

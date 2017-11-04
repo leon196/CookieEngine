@@ -188,7 +188,6 @@ class WebSocketServerSettings(AddonPreferences, OrientationHelper):
 
         col.prop(self, 'filepath')
         col.prop(self, 'js_json_pretty_formatting')
-        col.prop(self, 'js_variable_name')
 
         col.prop(self, "change_coordinate_system")
         if self.change_coordinate_system:

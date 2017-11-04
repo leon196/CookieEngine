@@ -1,4 +1,5 @@
 {
+	"animations": "animation/scene.json",
 	"fonts": {
 		"coffee": {
 			"file": "font/coffee.json"
