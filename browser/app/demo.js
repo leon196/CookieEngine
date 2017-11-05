@@ -3,20 +3,24 @@ import renderer from './engine/renderer';
 import FrameBuffer from './engine/framebuffer';
 import uniforms from './engine/uniforms';
 import FilterScene from './scene/FilterScene';
-import MainScene from './scene/MainScene';
+import BufferScene from './scene/BufferScene';
+import RaymarchingScene from './scene/RaymarchingScene';
+import SputnikScene from './scene/SputnikScene';
 import * as timeline from './engine/timeline';
 
 export default function() {
 	let frame;
-	let filterScene, mainScene;
+	let filterScene, mainScene, bufferScene, raymarchingScene;
 	let ready = false;
 
 	requestAnimationFrame(animate);
 
 	assets.load(function() {
 		frame = new FrameBuffer();
+		bufferScene = new BufferScene();
 		filterScene = new FilterScene();
-		mainScene = new MainScene();
+		raymarchingScene = new RaymarchingScene();
+		mainScene = new SputnikScene();
 
 		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);
@@ -35,9 +39,14 @@ export default function() {
 			mainScene.update(time);
 			uniforms.time.value = time;
 
-			renderer.render(mainScene.scene, mainScene.camera, frame.getTarget(), true);
-			assets.shaderMaterials.filter.uniforms.frameBuffer.value = frame.getTexture();
-			renderer.render(filterScene.scene, filterScene.camera);
+			// raymarchingScene.update(time);
+			// renderer.render(mainScene.scene, mainScene.camera, frame.getTarget(), true);
+			// uniforms.buffer.value = bufferScene.buffer.getTexture();
+			// uniforms.frame.value = frame.getTexture();
+			// bufferScene.update();
+			// uniforms.frame.value = bufferScene.buffer.getTexture();
+			// renderer.render(filterScene.scene, filterScene.camera);
+			renderer.render(raymarchingScene.scene, raymarchingScene.camera);
 		}
 	}
 

@@ -1,5 +1,13 @@
 import { Vector3 } from 'three.js';
 
+export function randomRange(min, max) {
+	return min+Math.random()*(max-min);
+}
+
+export function randomVector(min, max) {
+	return new Vector3(randomRange(min,max), randomRange(min,max), randomRange(min,max));
+}
+
 export function clamp(value, min, max) {
 	return Math.max(min, Math.min(max, value));
 }

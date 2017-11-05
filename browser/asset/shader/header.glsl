@@ -124,7 +124,7 @@ float fbm (vec3 p, vec3 speed) {
     for (float i = 1.; i <= 5.; i++) {
         value += amplitud * noiseIQ(p);
         p *= 2.;
-    	// p += speed;
+    	p += speed;
         amplitud *= .5;
     }
     return value;

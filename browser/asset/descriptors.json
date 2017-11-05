@@ -10,9 +10,27 @@
 		}
 	},
 	"shaderMaterials": {
+		"simple": {
+			"vertexShader": "shader/triangle/simple.vert",
+			"fragmentShader": "shader/triangle/simple.frag",
+			"side": 2
+		},
+		"sprite": {
+			"vertexShader": "shader/lab/sprite.vert",
+			"fragmentShader": "shader/lab/sprite.frag",
+			"side": 2
+		},
 		"filter": {
 			"vertexShader": "shader/filter/screen.vert",
 			"fragmentShader": "shader/filter/filter.frag"
+		},
+		"buffer": {
+			"vertexShader": "shader/filter/screen.vert",
+			"fragmentShader": "shader/filter/buffer.frag"
+		},
+		"raymarching": {
+			"vertexShader": "shader/filter/screen.vert",
+			"fragmentShader": "shader/filter/raymarching.frag"
 		},
 		"fire": {
 			"vertexShader": "shader/scene/fire.vert",

@@ -1,5 +1,5 @@
 
-uniform sampler2D frameBuffer;
+uniform sampler2D frame;
 uniform sampler2D uTextureTitle;
 uniform sampler2D uTextureDate;
 uniform float fadeTransition;
@@ -12,38 +12,34 @@ uniform float time;
 varying vec2 vUv;
 
 void main ()	{
-	vec4 color = texture2D(frameBuffer, vUv);
+	// vec2 uv = vUv;
+	// uv.x += sin(uv.y*1000.+time*10.)*.001;
+	// vec4 color = texture2D(frame, uv);
+	// float aspect = resolution.x / resolution.y;
+	// vec4 color = vec4(0.);
+	// vec2 target = vec2(.5);
+	// for (float i = 0.; i < 20.; ++i) {
+	// 	vec2 u = uv;
+	// 	vec2 p = vec2(0.);
+	// 	float rnd = rand(vec2(i));
+	// 	p.x = rand(vec2(i,0));
+	// 	p.y = rand(vec2(0,i));
+	// 	p = normalize(p-target)*mod(length(p-target)+time*.1,.5)+target;
+	// 	float fade = 1.-clamp(length(p-target)*2.,0.,1.);
+	// 	fade = sin(fade*PI);
+	// 	float thin = 0.001+0.001*rnd;
+	// 	float dist = length(u - p);
+	// 	// u *= rot(rnd*PI2);
+	// 	// p *= rot(rnd*PI2);
+	// 	float cros = abs(u.x - p.x)*abs(u.y - p.y);
+	// 	float intensity = 1000.+1000.*rnd;
+	// 	float offset = .01+.9*rnd;
+	// 	color.rgb += fade*thin/(dist*max(0.,cros*intensity+offset));
 
-	float aspect = resolution.x/resolution.y;
-	
-	// vignette
-	float vignette = sin(vUv.x * PI);
-	color.rgb *= smoothstep(-.3,.6,vignette);
-	color.rgb *= smoothstep(0.,.1/aspect,vignette);
-	vignette = sin(vUv.y * PI);
-	color.rgb *= smoothstep(-.3,.6,vignette);
-	color.rgb *= smoothstep(0.,.1,vignette);
-
-	// inverse colors
-	color = mix(color, 1.-color, blendLight);
-
-	// label
-	vec2 uvLabel = vUv;
-	uvLabel -= .5;
-	uvLabel.x *= aspect;
-	uvLabel += .5;
-	vec2 uvDate = uvLabel;
-	uvDate.y += .3;
-	vec4 label = texture2D(uTextureTitle, uvLabel) + texture2D(uTextureDate, uvDate);
-	vec3 seed = uvLabel.xyy*3.;
-	float noisy = fbm(seed*8., vec3(time));
-	float ratio = mix(0., noisy+1., blendHeat);
-	ratio = smoothstep(.4,.6,ratio);
-	label.rgb *= (1.-ratio);
-	label.rgb = mix(label.rgb, vec3(0.733, 0.160, 0.105)*(1.-ratio), smoothstep(.6,.7,ratio));
-	label.rgb = mix(label.rgb, vec3(0), smoothstep(.8,.9,ratio));
-
-	color = mix(color, label, label.a);
-
-	gl_FragColor = color;
+	// 	// u = uv;
+	// 	u.y -= sin(length(u.x-p.x))*.75;
+	// 	dist = length(u-p);
+	// 	color.r += 1.-smoothstep(0.05,.1, (dist+.1*rnd)/fade);
+	// }
+	gl_FragColor = texture2D(frame, vUv);
 }

@@ -41,11 +41,6 @@ export default class {
 		assets.shaderMaterials.velocity.uniforms.blendHeat = { value: parameters.global.blendHeat };
 		assets.shaderMaterials.snow.uniforms.blendSnow = { value: 1 };
 
-		this.scene.add( this.tree.mesh );
-		this.scene.add( this.fire.mesh );
-		this.scene.add( this.root.mesh );
-		this.scene.add( this.leaf.mesh );
-		this.scene.add( this.snow.mesh );
 
 		this.globalParameter = Object.keys(parameters.global);
 		for (var i = 0; i < this.globalParameter.length; ++i) {
