@@ -15,6 +15,11 @@
 			"fragmentShader": "shader/triangle/simple.frag",
 			"side": 2
 		},
+		"paper": {
+			"vertexShader": "shader/lab/paper.vert",
+			"fragmentShader": "shader/lab/paper.frag",
+			"side": 2
+		},
 		"sprite": {
 			"vertexShader": "shader/lab/sprite.vert",
 			"fragmentShader": "shader/lab/sprite.frag",

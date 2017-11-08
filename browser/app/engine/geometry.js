@@ -99,77 +99,57 @@ export default class Geometry {
 
 		return geometry;
 	}
-	static createQuadFromPoints (attributes)
+	static createQuadFromPoints (attributes, slices)
 	{
 		// variables
+		var slices = slices || [1,1];
 		var count = attributes.position.array.length / 3;
 		var dimension = closestPowerOfTwo(Math.sqrt(count));
-		var indexVertex = 0, indexUV = 0, indexAnchor = 0, indexIndex = 0, vertexIndex = 0, u, v;
 
 		// attributes
 		var arrays = {};
 		var attributeNames = Object.keys(attributes);
-		attributeNames.forEach(name => {
-			arrays[name] = new Float32Array(count * 4 * attributes[name].itemSize);
-		});
-		var anchors = new Float32Array(count * 4 * 2);
-		var indexMap = new Float32Array(count * 4 * 2);
-		var indices = new Uint16Array(count * 6);
+		attributeNames.forEach(name => { arrays[name] = []; });
+		var anchors = [];
+		var indexMap = [];
+		var indices = [];
 
-		for (var i = 0; i+5 < indices.length; i+=6) {
-		}
-
-		// console.log()
-
-		// triangles
-		for (var quadIndex = 0; quadIndex < count; quadIndex++) {
+		for (var pointIndex = 0; pointIndex < count; pointIndex++) {
 
 			// uv is used to map vertex index to bitmap data
-			u = (quadIndex % dimension) / dimension;
-			v = Math.floor(quadIndex / dimension) / dimension;
+			var u = (pointIndex % dimension) / dimension;
+			var v = Math.floor(pointIndex / dimension) / dimension;
 
-			// positions and normals are on the same for the 4 points
-			for (var quad = 0; quad < 4; ++quad)
-			{
-				attributeNames.forEach(name => {
-					var itemSize = attributes[name].itemSize;
-					for (var i = 0; i < itemSize; i++) {
-						arrays[name][quadIndex*4*itemSize+quad*itemSize+i] = attributes[name].array[quadIndex*itemSize+i];
+			for (var x = 0; x < slices[0]; ++x) {
+				for (var y = 0; y < slices[1]; ++y) {
+					for (var vertex = 0; vertex < 4; ++vertex) {
+						attributeNames.forEach(name => {
+							var itemSize = attributes[name].itemSize;
+							for (var i = 0; i < itemSize; i++) {
+								arrays[name].push(attributes[name].array[pointIndex*itemSize+i]);
+							}
+						});
+						var xx = (x+(vertex < 2 ? 1-vertex%2 : vertex%2)) / Math.max(1,slices[0]-1);
+						var yy = (y+Math.floor(vertex/2)) / Math.max(1,slices[1]-1);
+						anchors.push(xx, yy);
+						indexMap.push(u,v);
+				  }
+
+					var vertexIndex = (pointIndex+x+y*slices[0]*3*2)*4*3;
+					for (var i = 0; i < 3*2; i++) {
+						indices.push(vertexIndex + (i<3 ? i : ((i-1)%4)));
 					}
-				});
-
-				indexMap[indexUV+0] = u;
-				indexMap[indexUV+1] = v;
-		    indexUV += 2;
-		  }
-
-			vertexIndex = quadIndex*4*3;
-			indices[quadIndex*6+0] = vertexIndex+0;
-			indices[quadIndex*6+1] = vertexIndex+1;
-			indices[quadIndex*6+2] = vertexIndex+2;
-			indices[quadIndex*6+3] = vertexIndex+2;
-			indices[quadIndex*6+4] = vertexIndex+3;
-			indices[quadIndex*6+5] = vertexIndex+0;
-
-		 	// offset used to scale quad in shader
-			anchors[indexAnchor+0] = -1;
-			anchors[indexAnchor+1] = -1;
-			anchors[indexAnchor+2] = -1;
-			anchors[indexAnchor+3] = 1;
-			anchors[indexAnchor+4] = 1;
-			anchors[indexAnchor+5] = 1;
-			anchors[indexAnchor+6] = 1;
-			anchors[indexAnchor+7] = -1;
-			indexAnchor += 8;
+				}
+			}
 		}
 
 		var geometry = new THREE.BufferGeometry();
 		attributeNames.forEach(name => {
-			geometry.addAttribute(name, new THREE.BufferAttribute(arrays[name], attributes[name].itemSize));
+			geometry.addAttribute(name, new THREE.BufferAttribute(new Float32Array(arrays[name]), attributes[name].itemSize));
 		});
-		geometry.addAttribute( 'anchor', new THREE.BufferAttribute( anchors, 2 ) );
-		geometry.addAttribute( 'indexMap', new THREE.BufferAttribute( indexMap, 2 ) );
-		geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+		geometry.addAttribute( 'anchor', new THREE.BufferAttribute( new Float32Array(anchors), 2 ) );
+		geometry.addAttribute( 'indexMap', new THREE.BufferAttribute( new Float32Array(indexMap), 2 ) );
+		geometry.setIndex(new THREE.BufferAttribute(new Uint16Array(indices), 1));
 
 		var min = -100;
 		var max = 100;

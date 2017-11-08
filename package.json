@@ -38,6 +38,7 @@
       "dat.gui": "github:dataarts/dat.gui@^0.6.5",
       "gl-matrix": "github:toji/gl-matrix@^2.4.0",
       "json": "github:systemjs/plugin-json@^0.3.0",
+      "postprocessing": "github:vanruesc/postprocessing@^3.1.0",
       "socket.io-client": "github:socketio/socket.io-client@^2.0.3",
       "text": "github:systemjs/plugin-text@^0.0.11",
       "three.js": "github:mrdoob/three.js@master"
