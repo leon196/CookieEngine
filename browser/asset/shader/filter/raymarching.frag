@@ -47,7 +47,7 @@ float map (vec3 p) {
 		pp.y = mod(pp.y + time * speed + rnd*c + seed.x*c, c)-c*.5;
 		float size = 1./i;
 		scene = smin(scene, sdSphere(pp, .5), smoothBlend);
-		scene = smin(scene, sdCylinder(p, size), smoothBlend);	
+		scene = smin(scene, sdCylinder(p, size), smoothBlend);
 	}
 	return scene;
 }
@@ -57,10 +57,10 @@ void main ()	{
 	uv.x *= resolution.x/resolution.y;
 	// uv.x += sin(uv.y*1000.+time*10.)*.001;
 	// vec4 color = texture2D(frame, uv);
-	vec3 eye = vec3(uv, 0.) + cameraPosition;
+	vec3 eye = cameraPosition;
 	vec3 forward = -normalize(cameraPosition);
 	vec3 right = normalize(cross(forward, vec3(0,1,0)));
-	vec3 up = normalize(cross(forward, right));
+	vec3 up = normalize(cross(right, forward));
 	// vec3 ray = normalize(vec3(uv, 1));
 	vec3 ray = normalize(right * uv.x + up * uv.y + forward);
 	vec3 pos = eye;
@@ -79,5 +79,6 @@ void main ()	{
 	}
 	vec4 color = vec4(1.);
 	color.rgb *= shade;
+  color.a = length(eye-pos);
 	gl_FragColor = color;
 }

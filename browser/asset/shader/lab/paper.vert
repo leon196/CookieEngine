@@ -9,6 +9,7 @@ varying vec3 vDirection;
 varying vec3 vView;
 varying vec3 vNormal;
 varying vec2 vAnchor;
+varying float vDepth;
 
 vec3 displace (vec3 pos, float ratio) {
 	vec3 p = pos;
@@ -44,6 +45,7 @@ void main()	{
 	pos = displace(pos, ratio);
 	pos += vDirection * anchor.y * size.y;
 	pos += vNormal * anchor.x * size.x;
+	vDepth = length(cameraPosition - pos);
 	// pos.x += .5*sin(anchor.y+time+noiseIQ(pos)*5.)*(1.-anchor.y);
 	vView = normalize(cameraPosition - pos);
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
