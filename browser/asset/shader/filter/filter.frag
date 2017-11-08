@@ -46,7 +46,11 @@ void main ()	{
 	vec4 scene = texture2D(frame, vUv);
 	vec4 depth = texture2D(frameDepth, vUv);
 	vec4 ray = texture2D(frameRay, vUv);
-	// gl_FragColor = mix(scene, ray, step(ray.a, depth.r));
-	gl_FragColor = scene;
-	gl_FragColor += ray * step(depth.r, ray.a);
+	depth.r += 1000. * (1.-depth.r) * step(depth.r, .01);
+	gl_FragColor = mix(scene, ray, step(ray.a, depth.r));
+	// gl_FragColor = scene;
+	// gl_FragColor += ray * step(ray.a, depth.r+20.);
+	// ray = vec4(1)*fract(ray.a);
+	// scene = vec4(1)*fract(depth);
+	// gl_FragColor = fract(depth);
 }

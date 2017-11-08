@@ -11,7 +11,7 @@ void main()	{
 	// float shade = (1.-abs(vAnchor.x)) * (1.-abs(vAnchor.y));
 	float shade = 1.;
 	shade *= dot(-vView, vNormal)*.5+.5;
-	vec3 color = vec3(1) * shade;
-	// color.rg = fract(vAnchor.xy);
+	vec3 color = vec3(1);// * shade;
+	color.rg = fract(vAnchor.xy);
 	gl_FragColor = vec4(color, 1);
 }

@@ -24,8 +24,8 @@ export default function() {
 
 
 		frame = new FrameBuffer();
-		frameDepth = new FrameBuffer();
-		frameRay = new FrameBuffer();
+		frameDepth = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
+		frameRay = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
 		bufferScene = new BufferScene();
 		filterScene = new FilterScene();
 		rayScene = new RaymarchingScene();
