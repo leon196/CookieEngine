@@ -5,51 +5,45 @@ attribute vec2 indexMap;
 uniform float time;
 uniform vec2 resolution;
 
-varying vec3 vDirection;
+varying float vSeed;
 varying vec3 vView;
-varying vec3 vNormal;
 varying vec2 vAnchor;
 varying float vDepth;
-
-vec3 displace (vec3 pos, float ratio) {
-	vec3 p = pos;
-	float dist = length(p);
-	vec3 offset = vec3(noiseIQ(pos));
-	float a = noiseIQ(pos)*PI2;
-	offset.xz = vec2(cos(a),sin(a));
-	offset.xz *= rot(ratio * PI2 + dist + time);
-	offset.xy *= rot(ratio * PI2 + dist + time);
-	// p += offset;
-	return p;
-}
 
 void main()	{
 	vAnchor = anchor;
 	vec3 pos;
-	// pos = position;
+	pos = position*2.-1.;
+	float ratio = rand(pos.xz + pos.y);
 	// pos = vec3(indexMap.x, 0, indexMap.y)*5.;
+	float seed = noiseIQ(pos*.5);
 	float a = indexMap.y * PI2;
 	pos.xy = vec2(cos(a),sin(a));
-	pos.z = (indexMap.x*2.-1.) * 4.;
-	pos *= 5.;
-	vec2 size = vec2(2.);
-	float ratio = mod(rand(pos.xz), 1.);
-	float delta = .01;
-	vec3 prev = displace(pos, mod(ratio+1.-delta, 1.));
-	vec3 next = displace(pos, mod(ratio+delta, 1.));
-	vec3 up = vec3(0,1,0);
-	// up.xy *= rot(ratio*2.);
-	// up.zy *= rot(ratio*3.);
-	vDirection = normalize(next-prev);
-	vNormal = cross(vDirection, up);
-	pos = displace(pos, ratio);
-	// pos += vDirection * anchor.y * size.y;
-	// pos += vNormal * anchor.x * size.x;
+	pos.z = (indexMap.x*2.-1.) * 100.;
+	pos.z += atan(pos.x,pos.y);
+	// pos.z *= 10.;
+	float dist = length(pos);
+	vec3 offset = vec3(seed);
+	a = noiseIQ(pos)*PI2;
+	offset.xz = vec2(cos(a),sin(a));
+	offset.xz *= rot(ratio * PI2 + time);
+	offset.xy *= rot(ratio * PI2 + time);
+	float waveGrow = clamp(sin(pos.z*.5+time), 0.,1.);
+	pos += offset*.2*waveGrow;
+	// p.xy += normalize(p.xz) * waveFast * seed * 2.;
+	pos.z = repeat(pos.z*2.+time*.5, 5.);
+	pos.xy *= rot(time*.5);
+	vec2 size = vec2(1.);
+	pos *= 20.;
 	vDepth = length(cameraPosition - pos);
+	vSeed = seed;
 	// pos.x += .5*sin(anchor.y+time+noiseIQ(pos)*5.)*(1.-anchor.y);
 	vView = normalize(cameraPosition - pos);
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
+
+	// size += smoothstep(.99,1.,length(gl_Position.xy)*.05);
+	size *= clamp(waveGrow, 0.,1.);
 	gl_Position.x += anchor.x * aspect.x * size.x;
 	gl_Position.y += anchor.y * aspect.y * size.y;
 }

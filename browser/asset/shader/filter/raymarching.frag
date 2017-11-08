@@ -16,64 +16,45 @@ varying vec2 vUv;
 #define VOLUME_BIAS .01
 #define STEP_MIN .1
 
-float sdSphere (vec3 p, float r) { return length(p)-r; }
-float sdCylinder (vec3 p, float r) { return length(p.xz)-r; }
-float smin (float a, float b, float r) {
-    float h = clamp(.5+.5*(b-a)/r,0.,1.);
-    return mix(b,a,h)-r*h*(1.-h);
+float shape (vec3 pos, float radius, float margin) {
+	float shape = 1000.;
+  vec3 p = pos;
+  p.xy *= rot(p.z*.1 + time);
+  radius += 2. * sin(p.z * .1 - time);
+  shape = sdBox(p, vec3(radius,radius,1000));
+  p.xy *= rot(PI/4.);
+  shape = max(shape, -sdBox(p, vec3(radius*margin, radius*margin, 1000)));
+
+  // p = pos;
+  p.z = repeat(p.z, 2.);
+  shape = smin(shape, max(sdCylinder(p.xz, .4), abs(length(p.xy))-radius*margin), 2.);
+  return shape;
 }
 
-float map (vec3 p) {
+float map (vec3 pos) {
 	float scene = 1000.;
-	float a = p.y + time;
-	float r = 1.;
-	// p.x += cos(a)*r;
-	// p.z += sin(a)*r;
-	vec3 pp;
-	const float repeat = 4.;
-	float count = 3.;
-	float smoothBlend = .5;
-	float c = 15.;
-	for (float i = 1.; i <= repeat; ++i) {
-		p.xz *= rot(clamp(p.y*.05*i, -1.,1.));
-		float index = pModPolar(p.xz, count);
-		a = (p.y*.01+sin(p.y*1.5+time*5.)*.01)*(1./i);
-		p.xy *= rot(a);
-		p.x -= 4./i;
-		pp = p;
-		vec2 seed = vec2(index/count, i/repeat);
-		float rnd = rand(seed);
-		float speed = (1.+rnd*10.) * mix(-1.,1.,step(.5,rnd));
-		pp.y = mod(pp.y + time * speed + rnd*c + seed.x*c, c)-c*.5;
-		float size = 1./i;
-		scene = smin(scene, sdSphere(pp, .5), smoothBlend);
-		scene = smin(scene, sdCylinder(p, size), smoothBlend);
-	}
+  scene = shape(pos, 10., 1.1);
 	return scene;
 }
 
 void main ()	{
 	vec2 uv = vUv*2.-1.;
 	uv.x *= resolution.x/resolution.y;
-	// uv.x += sin(uv.y*1000.+time*10.)*.001;
-	// vec4 color = texture2D(frame, uv);
 	vec3 eye = cameraPosition;
 	vec3 forward = -normalize(cameraPosition);
 	vec3 right = normalize(cross(forward, vec3(0,1,0)));
 	vec3 up = normalize(cross(right, forward));
-	// vec3 ray = normalize(vec3(uv, 1));
 	vec3 ray = normalize(right * uv.x + up * uv.y + forward);
 	vec3 pos = eye;
 	vec2 seed = vUv + fract(time);
 	float shade = 0.;
-	for (float i = 0.; i < STEPS; ++i) {
+	for (float i = 0.; i <= 1.; i += 1./STEPS) {
 		float dist = map(pos);
 		if (dist < VOLUME_BIAS) {
-			shade = 1. - i / STEPS;
+			shade = 1.-i;
 			break;
-			// shade += i / STEPS;
 		}
-		dist = abs(dist)*(.8+0.2*rand(seed*vec2(i)));
+		dist *= .9+.1*rand(seed*vec2(i));
 		dist = max(dist, STEP_MIN);
 		pos += ray * dist;
 	}

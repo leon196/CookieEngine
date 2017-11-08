@@ -44,8 +44,10 @@ void main ()	{
 	// }
 	vec4 scene = texture2D(frame, vUv);
 	vec4 ray = texture2D(frameRay, vUv);
+	float lum = luminance(scene.rgb);
 	scene.a += 1000. * (1.-scene.a) * step(scene.a, .01);
 	gl_FragColor = mix(scene, ray, step(ray.a, scene.a));
+	gl_FragColor = mix(gl_FragColor, ray, 1.-lum);
 	// gl_FragColor = scene;
 	// gl_FragColor += ray * step(ray.a, depth.r+20.);
 	// ray = vec4(1)*fract(ray.a);

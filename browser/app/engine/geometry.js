@@ -133,7 +133,7 @@ export default class Geometry {
 				});
 				var x = (vertex % faces[0]) / faces[0];
 				var y = Math.floor(vertex / faces[0]) / faces[1];
-				anchors.push(x, y);
+				anchors.push(x*2-1, y*2-1);
 				indexMap.push(u,v);
 			}
 
