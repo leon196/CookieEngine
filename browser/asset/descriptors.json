@@ -7,6 +7,9 @@
 		},
 		"root": {
 			"file": "point/root.obj"
+		},
+		"cyl": {
+			"file": "point/cyl.obj"
 		}
 	},
 	"shaderMaterials": {

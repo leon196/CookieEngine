@@ -19,16 +19,34 @@ export default function() {
 	requestAnimationFrame(animate);
 
 	assets.load(function() {
+
+
+
 		frame = new FrameBuffer();
 		bufferScene = new BufferScene();
 		filterScene = new FilterScene();
 		raymarchingScene = new RaymarchingScene();
 		mainScene = new PaperScene();
 		composer = new FX.EffectComposer(renderer);
+
 		composer.addPass(new FX.RenderPass(mainScene.scene, mainScene.camera));
-		let pass = new FX.BloomPass();
-		pass.renderToScreen = true;
-		composer.addPass(pass);
+
+		// let imageSearch = new Image();
+		// let imageArea = new Image();
+		// imageSearch.src = FX.SMAAPass.searchImageDataUrl;
+		// imageArea.src = FX.SMAAPass.areaImageDataUrl;
+		// let smaapass = new FX.SMAAPass(imageSearch, imageArea);
+		// smaapass.renderToScreen = true;
+		// composer.addPass(smaapass);
+		// let texturepass = new FX.TexturePass(smaapass.renderTargetColorEdges.texture);
+		// texturepass.renderToScreen = true;
+		// texturepass.enabled = false;
+		// composer.addPass(texturepass);
+
+		let bloom = new FX.BloomPass();
+		bloom.renderToScreen = true;
+		composer.addPass(bloom);
+
 		clock = new THREE.Clock();
 
 		onWindowResize();

@@ -29,8 +29,8 @@ export default class Geometry {
 	static getRandomAttributes(count) {
 		return {
 			position: Geometry.getRandomBuffer(count, 3),
-			color: Geometry.getRandomBuffer(count, 3),
 			normal: Geometry.getRandomBuffer(count, 3),
+			color: Geometry.getRandomBuffer(count, 3),
 			uv: Geometry.getRandomBuffer(count, 2),
 		}
 	}
@@ -113,33 +113,55 @@ export default class Geometry {
 		var anchors = [];
 		var indexMap = [];
 		var indices = [];
+		// var vertexIndex = 0;
 
-		for (var pointIndex = 0; pointIndex < count; pointIndex++) {
+		var faces = [slices[0]+1, slices[1]+1];
+		var vertexCount = faces[0] * faces[1];
+		var quadCount = slices[0] * slices[1];
+		for (var pointIndex = 0; pointIndex < count; ++pointIndex) {
 
 			// uv is used to map vertex index to bitmap data
 			var u = (pointIndex % dimension) / dimension;
 			var v = Math.floor(pointIndex / dimension) / dimension;
 
-			for (var x = 0; x < slices[0]; ++x) {
-				for (var y = 0; y < slices[1]; ++y) {
-					for (var vertex = 0; vertex < 4; ++vertex) {
-						attributeNames.forEach(name => {
-							var itemSize = attributes[name].itemSize;
-							for (var i = 0; i < itemSize; i++) {
-								arrays[name].push(attributes[name].array[pointIndex*itemSize+i]);
-							}
-						});
-						var xx = (x+(vertex < 2 ? 1-vertex%2 : vertex%2)) / Math.max(1,slices[0]-1);
-						var yy = (y+Math.floor(vertex/2)) / Math.max(1,slices[1]-1);
-						anchors.push(xx, yy);
-						indexMap.push(u,v);
-				  }
-
-					var vertexIndex = (pointIndex+x+y*slices[0]*3*2)*4*3;
-					for (var i = 0; i < 3*2; i++) {
-						indices.push(vertexIndex + (i<3 ? i : ((i-1)%4)));
+			for (var vertex = 0; vertex < vertexCount; ++vertex) {
+				attributeNames.forEach(name => {
+					var itemSize = attributes[name].itemSize;
+					for (var i = 0; i < itemSize; i++) {
+						arrays[name].push(attributes[name].array[pointIndex*itemSize+i]);
 					}
-				}
+				});
+				var x = (vertex % faces[0]) / faces[0];
+				var y = Math.floor(vertex / faces[0]) / faces[1];
+				anchors.push(x, y);
+				indexMap.push(u,v);
+			}
+
+			// FIX ME
+			var vertexIndex = pointIndex * vertexCount;
+			for (var quad = 0; quad < quadCount; ++quad) {
+
+				var x = quad % faces[0];
+				var y = Math.floor(quad / faces[0]);
+				var ia = x + y * faces[0];
+				var a = vertexIndex + ia;
+
+				var xb = x + 1;
+				var yb = y;
+				var ib = xb + yb * faces[0];
+				var b = vertexIndex + ib;
+
+				var xc = x;
+				var yc = y + 1;
+				var ic = xc + yc * faces[0];
+				var c = vertexIndex + ic;
+
+				var xd = x + 1;
+				var yd = y + 1;
+				var id = xd + yd * faces[0];
+				var d = vertexIndex + id;
+
+				indices.push(a, b, c, b, c, d);
 			}
 		}
 
