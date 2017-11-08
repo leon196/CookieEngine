@@ -5,6 +5,7 @@ varying vec3 vDirection;
 varying vec3 vView;
 varying vec3 vNormal;
 varying vec2 vAnchor;
+varying float vDepth;
 
 void main()	{
 	// vec3 color = vDirection * .5 + .5;
@@ -13,5 +14,5 @@ void main()	{
 	shade *= dot(-vView, vNormal)*.5+.5;
 	vec3 color = vec3(1);// * shade;
 	color.rg = fract(vAnchor.xy);
-	gl_FragColor = vec4(color, 1);
+	gl_FragColor = vec4(color, vDepth);
 }

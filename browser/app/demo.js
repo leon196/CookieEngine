@@ -6,14 +6,13 @@ import FilterScene from './scene/FilterScene';
 import BufferScene from './scene/BufferScene';
 import RaymarchingScene from './scene/RaymarchingScene';
 import PaperScene from './scene/PaperScene';
-import PaperDepthScene from './scene/PaperDepthScene';
 import * as THREE from 'three.js';
 import * as timeline from './engine/timeline';
 import * as FX from "postprocessing"
 
 export default function() {
-	let frame, frameDepth, frameRay;
-	let filterScene, paperScene, bufferScene, rayScene, depthScene;
+	let frame, frameRay;
+	let filterScene, paperScene, bufferScene, rayScene;
 	let composer, pass, clock;
 	let ready = false;
 
@@ -23,14 +22,12 @@ export default function() {
 
 
 
-		frame = new FrameBuffer();
-		frameDepth = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
+		frame = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
 		frameRay = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
 		bufferScene = new BufferScene();
 		filterScene = new FilterScene();
 		rayScene = new RaymarchingScene();
 		paperScene = new PaperScene();
-		depthScene = new PaperDepthScene();
 		composer = new FX.EffectComposer(renderer);
 
 		composer.addPass(new FX.RenderPass(filterScene.scene, filterScene.camera));
@@ -68,16 +65,13 @@ export default function() {
 			var time = elapsed / 1000.;
 
 			paperScene.update(time);
-			depthScene.update(time);
 			rayScene.update(time);
 			uniforms.time.value = time;
 
 			renderer.render(paperScene.scene, paperScene.camera, frame.getTarget(), true);
-			renderer.render(depthScene.scene, depthScene.camera, frameDepth.getTarget(), true);
 			renderer.render(rayScene.scene, rayScene.camera, frameRay.getTarget(), true);
 			// uniforms.buffer.value = bufferScene.buffer.getTexture();
 			uniforms.frame.value = frame.getTexture();
-			uniforms.frameDepth.value = frameDepth.getTexture();
 			uniforms.frameRay.value = frameRay.getTexture();
 			// bufferScene.update();
 			// uniforms.frame.value = bufferScene.buffer.getTexture();
@@ -90,8 +84,6 @@ export default function() {
 	function onWindowResize () {
 		paperScene.camera.aspect = window.innerWidth / window.innerHeight;
 		paperScene.camera.updateProjectionMatrix();
-		depthScene.camera.aspect = window.innerWidth / window.innerHeight;
-		depthScene.camera.updateProjectionMatrix();
 		renderer.setSize(window.innerWidth, window.innerHeight);
 	}
 }

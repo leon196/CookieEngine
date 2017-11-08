@@ -1,6 +1,5 @@
 
 uniform sampler2D frame;
-uniform sampler2D frameDepth;
 uniform sampler2D frameRay;
 uniform sampler2D uTextureTitle;
 uniform sampler2D uTextureDate;
@@ -44,10 +43,9 @@ void main ()	{
 	// 	color.r += 1.-smoothstep(0.05,.1, (dist+.1*rnd)/fade);
 	// }
 	vec4 scene = texture2D(frame, vUv);
-	vec4 depth = texture2D(frameDepth, vUv);
 	vec4 ray = texture2D(frameRay, vUv);
-	depth.r += 1000. * (1.-depth.r) * step(depth.r, .01);
-	gl_FragColor = mix(scene, ray, step(ray.a, depth.r));
+	scene.a += 1000. * (1.-scene.a) * step(scene.a, .01);
+	gl_FragColor = mix(scene, ray, step(ray.a, scene.a));
 	// gl_FragColor = scene;
 	// gl_FragColor += ray * step(ray.a, depth.r+20.);
 	// ray = vec4(1)*fract(ray.a);
