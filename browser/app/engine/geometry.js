@@ -26,6 +26,14 @@ export default class Geometry {
 		return new THREE.BufferAttribute(array, step);
 	}
 
+	static getRandomPoints(count, step) {
+		var points = [];
+		for (var i = 0; i < count*step; i++) {
+			points.push(randomRange(0,1));
+		}
+		return points;
+	}
+
 	static getRandomAttributes(count) {
 		return {
 			position: Geometry.getRandomBuffer(count, 3),
@@ -99,85 +107,106 @@ export default class Geometry {
 
 		return geometry;
 	}
-	static createQuadFromPoints (attributes, slices)
+	static createQuadFromPoints (points, material, slices)
 	{
 		// variables
 		var slices = slices || [1,1];
-		var count = attributes.position.array.length / 3;
+		var count = points.length / 3;
 		var dimension = closestPowerOfTwo(Math.sqrt(count));
-
-		// attributes
-		var arrays = {};
-		var attributeNames = Object.keys(attributes);
-		attributeNames.forEach(name => { arrays[name] = []; });
-		var anchors = [];
-		var indexMap = [];
-		var indices = [];
-		// var vertexIndex = 0;
-
 		var faces = [slices[0]+1, slices[1]+1];
 		var vertexCount = faces[0] * faces[1];
 		var quadCount = slices[0] * slices[1];
-		for (var pointIndex = 0; pointIndex < count; ++pointIndex) {
 
-			// uv is used to map vertex index to bitmap data
-			var u = (pointIndex % dimension) / dimension;
-			var v = Math.floor(pointIndex / dimension) / dimension;
+		var meshes = [];
+		var verticesMax = 65000;
+		var totalVertices = count * vertexCount;
+		var meshCount = 1 + Math.floor(totalVertices / verticesMax);
+		var pointIndex = 0;
+		for (var m = 0; m < meshCount; ++m) {
 
-			for (var vertex = 0; vertex < vertexCount; ++vertex) {
-				attributeNames.forEach(name => {
-					var itemSize = attributes[name].itemSize;
-					for (var i = 0; i < itemSize; i++) {
-						arrays[name].push(attributes[name].array[pointIndex*itemSize+i]);
-					}
-				});
-				var x = (vertex % faces[0]) / faces[0];
-				var y = Math.floor(vertex / faces[0]) / faces[1];
-				anchors.push(x*2-1, y*2-1);
-				indexMap.push(u,v);
+			var count;
+			if (meshCount > 1) {
+				if (m == meshCount - 1) count = totalVertices % verticesMax;
+				else count = verticesMax;
+			} else count = totalVertices;
+
+			// attributes
+			// var arrays = {};
+			var positions = [];
+			var anchors = [];
+			var indexMap = [];
+			var indices = [];
+			// var attributeNames = Object.keys(attributes);
+			// attributeNames.forEach(name => { arrays[name] = []; });
+
+			for (var index = 0; index < count; ++index) {
+
+				// uv is used to map vertex index to bitmap data
+				var u = (pointIndex % dimension) / dimension;
+				var v = Math.floor(pointIndex / dimension) / dimension;
+
+				for (var vertex = 0; vertex < vertexCount; ++vertex) {
+					// attributeNames.forEach(name => {
+
+						var itemSize = 3;
+						for (var i = 0; i < itemSize; i++) {
+							positions.push(points[pointIndex*itemSize+i]);
+						}
+					// });
+					var x = (vertex % faces[0]) / faces[0];
+					var y = Math.floor(vertex / faces[0]) / faces[1];
+					anchors.push(x*2-1, y*2-1);
+					indexMap.push(u,v);
+				}
+
+				// FIX ME
+				var vertexIndex = index * vertexCount;
+				for (var quad = 0; quad < quadCount; ++quad) {
+
+					var x = quad % faces[0];
+					var y = Math.floor(quad / faces[0]);
+					var ia = x + y * faces[0];
+					var a = vertexIndex + ia;
+
+					var xb = x + 1;
+					var yb = y;
+					var ib = xb + yb * faces[0];
+					var b = vertexIndex + ib;
+
+					var xc = x;
+					var yc = y + 1;
+					var ic = xc + yc * faces[0];
+					var c = vertexIndex + ic;
+
+					var xd = x + 1;
+					var yd = y + 1;
+					var id = xd + yd * faces[0];
+					var d = vertexIndex + id;
+
+					indices.push(a, b, c, b, c, d);
+				}
+
+				pointIndex += 1;
 			}
 
-			// FIX ME
-			var vertexIndex = pointIndex * vertexCount;
-			for (var quad = 0; quad < quadCount; ++quad) {
+			var geometry = new THREE.BufferGeometry();
+			// attributeNames.forEach(name => {
+			// 	geometry.addAttribute(name, new THREE.BufferAttribute(new Float32Array(arrays[name]), attributes[name].itemSize));
+			// });
+			geometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array(positions), 2 ) );
+			geometry.addAttribute( 'anchor', new THREE.BufferAttribute( new Float32Array(anchors), 2 ) );
+			geometry.addAttribute( 'indexMap', new THREE.BufferAttribute( new Float32Array(indexMap), 2 ) );
+			geometry.setIndex(new THREE.BufferAttribute(new Uint16Array(indices), 1));
 
-				var x = quad % faces[0];
-				var y = Math.floor(quad / faces[0]);
-				var ia = x + y * faces[0];
-				var a = vertexIndex + ia;
+			var min = -100;
+			var max = 100;
+			geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
+			geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
 
-				var xb = x + 1;
-				var yb = y;
-				var ib = xb + yb * faces[0];
-				var b = vertexIndex + ib;
-
-				var xc = x;
-				var yc = y + 1;
-				var ic = xc + yc * faces[0];
-				var c = vertexIndex + ic;
-
-				var xd = x + 1;
-				var yd = y + 1;
-				var id = xd + yd * faces[0];
-				var d = vertexIndex + id;
-
-				indices.push(a, b, c, b, c, d);
-			}
+			let mesh = new THREE.Mesh(geometry, material);
+			meshes.push(mesh);
 		}
 
-		var geometry = new THREE.BufferGeometry();
-		attributeNames.forEach(name => {
-			geometry.addAttribute(name, new THREE.BufferAttribute(new Float32Array(arrays[name]), attributes[name].itemSize));
-		});
-		geometry.addAttribute( 'anchor', new THREE.BufferAttribute( new Float32Array(anchors), 2 ) );
-		geometry.addAttribute( 'indexMap', new THREE.BufferAttribute( new Float32Array(indexMap), 2 ) );
-		geometry.setIndex(new THREE.BufferAttribute(new Uint16Array(indices), 1));
-
-		var min = -100;
-		var max = 100;
-		geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
-		geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
-
-		return geometry;
+		return meshes;
 	}
 }

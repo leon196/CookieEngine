@@ -1,0 +1,25 @@
+
+uniform float time;
+
+varying vec3 vDirection;
+varying vec3 vView;
+varying vec3 vNormal;
+varying vec2 vAnchor;
+varying float vDepth;
+varying float vSeed;
+
+void main()	{
+	float dist = length(vAnchor+.5);
+	// dist = -dist + smoothstep(.2, .4, dist);
+	// dist = 1.- dist;
+	// if (dist > .5) discard;
+	// vec3 color = vDirection * .5 + .5;
+	// float shade = (1.-abs(vAnchor.x)) * (1.-abs(vAnchor.y));
+	float shade = 1.;
+ shade *= dot(vView, vNormal)*.5+.5; 
+	// shade *= vAnchor.y;
+	vec3 color = vec3(1) * (.5+.5*shade);// * vAnchor.y;
+	float depth = vDepth;
+	// depth *= vAnchor.y;
+	gl_FragColor = vec4(color, depth);
+}

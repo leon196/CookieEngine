@@ -23,6 +23,16 @@
 			"fragmentShader": "shader/lab/paper.frag",
 			"side": 2
 		},
+		"lines": {
+			"vertexShader": "shader/lab/lines.vert",
+			"fragmentShader": "shader/lab/lines.frag",
+			"side": 2
+		},
+		"paint": {
+			"vertexShader": "shader/lab/paint.vert",
+			"fragmentShader": "shader/lab/paint.frag",
+			"side": 2
+		},
 		"sprite": {
 			"vertexShader": "shader/lab/sprite.vert",
 			"fragmentShader": "shader/lab/sprite.frag",

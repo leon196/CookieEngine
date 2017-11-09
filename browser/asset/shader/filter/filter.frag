@@ -1,6 +1,7 @@
 
 uniform sampler2D frame;
 uniform sampler2D frameRay;
+uniform sampler2D framePaint;
 uniform sampler2D uTextureTitle;
 uniform sampler2D uTextureDate;
 uniform float fadeTransition;
@@ -48,9 +49,10 @@ void main ()	{
 	scene.a += 1000. * (1.-scene.a) * step(scene.a, .01);
 	gl_FragColor = mix(scene, ray, step(ray.a, scene.a));
 	gl_FragColor = mix(gl_FragColor, ray, 1.-lum);
+	// gl_FragColor.rgb = pow(gl_FragColor.rgb, vec3(1./2.));
 	// gl_FragColor = scene;
 	// gl_FragColor += ray * step(ray.a, depth.r+20.);
 	// ray = vec4(1)*fract(ray.a);
 	// scene = vec4(1)*fract(depth);
-	// gl_FragColor = fract(depth);
+	// gl_FragColor = texture2D(framePaint, vUv);
 }

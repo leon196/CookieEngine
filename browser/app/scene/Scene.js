@@ -25,5 +25,8 @@ export default class Scene {
 	add(mesh) {
 		this.scene.add(mesh);
 	}
-}
 
+	addChildren(meshes) {
+		for (var i = 0; i < meshes.length; ++i) this.scene.add(meshes[i]);
+	}
+}

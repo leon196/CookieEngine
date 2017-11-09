@@ -14,26 +14,39 @@ varying vec2 vUv;
 
 #define STEPS 50.
 #define VOLUME_BIAS .01
-#define STEP_MIN .1
+#define STEP_MIN .001
 
 float shape (vec3 pos, float radius, float margin) {
 	float shape = 1000.;
   vec3 p = pos;
-  p.xy *= rot(p.z*.1 + time);
-  radius += 2. * sin(p.z * .1 - time);
+  p.xy *= rot(p.z*.1 + time * 2.);
+  radius *= 1. + .5 * sin(p.z * .1 - time * 2.);
   shape = sdBox(p, vec3(radius,radius,1000));
   p.xy *= rot(PI/4.);
   shape = max(shape, -sdBox(p, vec3(radius*margin, radius*margin, 1000)));
 
   // p = pos;
-  p.z = repeat(p.z, 2.);
-  shape = smin(shape, max(sdCylinder(p.xz, .4), abs(length(p.xy))-radius*margin), 2.);
+  amod(p.yx, 4.);
+  // p.y -= radius*margin;
+  p.z = repeat(p.z+time*10., TAU);
+  // shape = smin(shape, sdCylinder(p.xz, .4), 1.);
+  shape = smin(shape, max(sdCylinder(p.xz, .4), abs(length(p.xy))-radius*margin), .25*radius);
+
+  shape = smin(shape, sdSphere(p, .3 * radius), .25*radius);
+
   return shape;
 }
 
 float map (vec3 pos) {
 	float scene = 1000.;
-  scene = shape(pos, 10., 1.1);
+  vec3 p = pos;
+  scene = shape(p, 5., 1.2);
+  // p /= 10.;
+  p.yz *= rot(PI/2.);
+  p.xz = displaceLoop(p.xz, 20.);
+  p.z *= 20.;
+  p.y = repeat(p.y+time*10., 50.);
+  scene = min(scene, shape(p, 2., 1.1));
 	return scene;
 }
 
