@@ -6,6 +6,8 @@ varying vec3 vView;
 varying vec3 vNormal;
 varying vec2 vAnchor;
 varying float vDepth;
+varying float vRatio;
+varying float vDisp;
 varying float vSeed;
 
 void main()	{
@@ -14,5 +16,5 @@ void main()	{
 	vec3 color = vec3(1);// * (.9+.1*vSeed);
 	// color *= 1.-dist;
 	float depth = vDepth;
-	gl_FragColor = vec4(color, depth);
+	gl_FragColor = vec4(color, (1.-vDisp));
 }

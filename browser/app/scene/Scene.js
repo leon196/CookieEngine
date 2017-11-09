@@ -8,8 +8,8 @@ export default class Scene {
 	constructor() {
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.01, 1000 );
-		this.camera.position.y = 2;
-		this.camera.position.z = 5;
+		this.camera.position.y = 1;
+		this.camera.position.x = -40;
 
 		this.controls = new OrbitControls( this.camera, renderer.domElement );
 		this.controls.rotateSpeed = 0.1;

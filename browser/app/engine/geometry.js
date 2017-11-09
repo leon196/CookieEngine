@@ -147,7 +147,6 @@ export default class Geometry {
 
 				for (var vertex = 0; vertex < vertexCount; ++vertex) {
 					// attributeNames.forEach(name => {
-
 						var itemSize = 3;
 						for (var i = 0; i < itemSize; i++) {
 							positions.push(points[pointIndex*itemSize+i]);

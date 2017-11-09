@@ -18,9 +18,13 @@ vec3 displace (vec3 pos, float ratio) {
   vec3 offset = vec3(noiseIQ(pos));
   float a = noiseIQ(pos)*PI2;
   offset.xz = vec2(cos(a),sin(a));
-  offset.xz *= rot(ratio * PI2 + dist + time * 2.);
-  offset.xy *= rot(ratio * PI2 + dist + time * 2.);
-  p += offset * 10.;
+  offset.xz *= rot(ratio * PI2 + dist);
+  offset.xy *= rot(ratio * PI2 + dist);
+  p += offset * 2.;
+  float range = 40.;
+  dist = mod(length(p.xyz)/range+time*.1+ratio, 1.);
+  dist *= range;
+  p.xyz = normalize(p.xyz)*(dist);
   return p;
 }
 void main()  {
@@ -29,10 +33,11 @@ void main()  {
   // pos = position;
 float a = indexMap.y * PI2;
 pos.xy = vec2(cos(a),sin(a));
-pos.z = (indexMap.x*2.-1.)*10.;
-pos *= 5.;
-vec2 size = vec2(.3);
-float ratio = mod(rand(pos.xz) + anchor.y/5., 1.);
+pos.z = (indexMap.x*2.-1.);
+pos *= 1.;
+vec2 size = vec2(.1);
+// float scale = 10.+10.*waveFast;
+float ratio = mod(rand(pos.xz) + anchor.y/2., 1.);
 float delta = .001;
 vec3 prev = displace(pos, mod(ratio+1.-delta, 1.));
 vec3 next = displace(pos, mod(ratio+delta, 1.));
@@ -47,9 +52,9 @@ pos = displace(pos, ratio);
 // pos += offset;
 // prev += offset;
 // next += offset;
-size *= sin(anchor.y*PI);
-pos += vDirection * size.y;
-pos += vNormal * anchor.x * size.x;
+// size *= sin(anchor.y*PI);
+// pos += vDirection *  size.y;
+// pos += vNormal * anchor.x * size.x;
   vDepth = length(cameraPosition - pos);
 // pos.x += .5*sin(anchor.y+time+noiseIQ(pos)*5.)*(1.-anchor.y);
 vView = normalize(cameraPosition - pos);

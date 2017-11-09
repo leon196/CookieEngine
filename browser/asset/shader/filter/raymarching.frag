@@ -41,6 +41,10 @@ float map (vec3 pos) {
 	float scene = 1000.;
   vec3 p = pos;
   scene = shape(p, 5., 1.2);
+  p = pos;
+	// amod(p.xy, 3.);
+	// p.x -= 4.;
+  scene = shape(p, 5., 1.2);
   // p /= 10.;
   p.yz *= rot(PI/2.);
   p.xz = displaceLoop(p.xz, 20.);

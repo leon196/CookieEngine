@@ -13,13 +13,13 @@ varying float vDepth;
 void main()	{
 	vAnchor = anchor;
 	vec3 pos;
-	pos = position*2.-1.;
-	float ratio = rand(pos.xz + pos.y);
+	// pos = position*2.-1.;
+	float ratio = mod(rand(pos.xz + pos.y), 1.);
 	// pos = vec3(indexMap.x, 0, indexMap.y)*5.;
 	float seed = noiseIQ(pos*.5);
 	float a = indexMap.y * PI2;
 	pos.xy = vec2(cos(a),sin(a));
-	pos.z = (indexMap.x*2.-1.) * 100.;
+	pos.z = (indexMap.x*2.-1.) * 10.;
 	pos.z += atan(pos.x,pos.y);
 	// pos.z *= 10.;
 	float dist = length(pos);
@@ -28,7 +28,7 @@ void main()	{
 	offset.xz = vec2(cos(a),sin(a));
 	offset.xz *= rot(ratio * PI2 + time);
 	offset.xy *= rot(ratio * PI2 + time);
-	float waveGrow = clamp(sin(pos.z*.5+time), 0.,1.);
+	float waveGrow = clamp(sin(pos.z+time), 0.,1.);
 	pos += offset*.2*waveGrow;
 	// p.xy += normalize(p.xz) * waveFast * seed * 2.;
 	pos.z = repeat(pos.z*2.+time*.5, 5.);
@@ -43,7 +43,7 @@ void main()	{
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
 
 	// size += smoothstep(.99,1.,length(gl_Position.xy)*.05);
-	size *= clamp(waveGrow, 0.,1.);
+	// size *= clamp(waveGrow, 0.,1.);
 	gl_Position.x += anchor.x * aspect.x * size.x;
 	gl_Position.y += anchor.y * aspect.y * size.y;
 }

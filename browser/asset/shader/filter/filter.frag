@@ -55,4 +55,5 @@ void main ()	{
 	// ray = vec4(1)*fract(ray.a);
 	// scene = vec4(1)*fract(depth);
 	// gl_FragColor = texture2D(framePaint, vUv);
+	// gl_FragColor = ray;
 }

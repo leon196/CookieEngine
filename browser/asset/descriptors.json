@@ -31,7 +31,10 @@
 		"paint": {
 			"vertexShader": "shader/lab/paint.vert",
 			"fragmentShader": "shader/lab/paint.frag",
-			"side": 2
+			"side": 2,
+			"depthTest": false,
+			"opacity": 1,
+"transparent": true
 		},
 		"sprite": {
 			"vertexShader": "shader/lab/sprite.vert",
