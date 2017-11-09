@@ -9,18 +9,22 @@ uniform sampler2D framePaint;
 varying float vSeed;
 varying vec3 vView;
 varying vec2 vAnchor;
+varying vec2 vUv;
 varying float vDepth;
 varying float vRatio;
 varying float vDisp;
 
 void main()	{
-	vec2 size = vec2(.01);
+	vec2 size = vec2(15.)/resolution.y;
 	vec2 uv = indexMap;
 	float scale = 1.;
 	uv = (uv-.5)*scale+.5;
+	vUv = uv;
 	// uv.x += sin(uv.y*5.+time)*.1;
 	float lum = luminance(texture2D(framePaint, uv).rgb);
 	size *= lum;
+	// size *= clamp(lum*3.,0.,1.);
+	// size *= smoothstep(.0,1.,lum);
 	vAnchor = anchor;
 	vec3 pos = vec3(indexMap*2.-1., 0.1);
 	float seed = rand(pos.xy);
@@ -40,6 +44,7 @@ void main()	{
 	vDepth = pos.z;
 	// gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
+	pos.x *= aspect.x;
 	gl_Position = vec4(pos, 1.);
 	vec2 pivot = anchor;
 	pivot *= rot(PI/4.);

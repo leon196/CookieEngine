@@ -10,7 +10,7 @@ varying float vSeed;
 
 void main()	{
 	float dist = length(vAnchor+.5);
-	dist = -dist + smoothstep(.2, .4, dist);
+	dist = -dist + smoothstep(.0, .4, dist);
 	dist = 1.- dist;
 	if (dist > .5) discard;
 	// vec3 color = vDirection * .5 + .5;

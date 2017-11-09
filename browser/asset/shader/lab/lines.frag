@@ -1,5 +1,6 @@
 
 uniform float time;
+uniform float blendLines;
 
 varying vec3 vDirection;
 varying vec3 vView;
@@ -19,7 +20,7 @@ void main()	{
 	float shade = 1.;
  shade *= dot(vView, vNormal)*.5+.5;
 	// shade *= vAnchor.y;
-	vec3 color = vec3(1.);// * (.5+.5*shade);// * vAnchor.y;
+	vec3 color = vec3(1.)*blendLines;// * (.5+.5*shade);// * vAnchor.y;
 	// color *= step(.5,fract(vAnchor.y*100.));
 	float depth = vDepth;
 	// depth *= vAnchor.y;

@@ -3,6 +3,7 @@ attribute vec2 anchor;
 attribute vec2 indexMap;
 
 uniform float time;
+uniform float blendLines;
 uniform vec2 resolution;
 
 varying float vSeed;
@@ -18,9 +19,9 @@ vec3 displace (vec3 pos, float ratio) {
   vec3 offset = vec3(noiseIQ(pos));
   float a = noiseIQ(pos)*PI2;
   offset.xz = vec2(cos(a),sin(a));
-  offset.xz *= rot(ratio * PI2 + dist);
-  offset.xy *= rot(ratio * PI2 + dist);
-  p += offset * 2.;
+  offset.xz *= rot(ratio * PI2 + dist + time*.2);
+  offset.xy *= rot(ratio * PI2 + dist + time*.2);
+  p += offset * 5.;
   float range = 40.;
   dist = mod(length(p.xyz)/range+time*.1+ratio, 1.);
   dist *= range;
@@ -35,7 +36,7 @@ float a = indexMap.y * PI2;
 pos.xy = vec2(cos(a),sin(a));
 pos.z = (indexMap.x*2.-1.);
 pos *= 1.;
-vec2 size = vec2(.1);
+vec2 size = vec2(.1)*blendLines;
 // float scale = 10.+10.*waveFast;
 float ratio = mod(rand(pos.xz) + anchor.y/2., 1.);
 float delta = .001;

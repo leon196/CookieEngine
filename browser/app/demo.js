@@ -1,7 +1,9 @@
 import assets from './engine/assets';
+import animations from './engine/animations';
 import renderer from './engine/renderer';
 import FrameBuffer from './engine/framebuffer';
 import uniforms from './engine/uniforms';
+import parameters from './engine/parameters';
 import FilterScene from './scene/FilterScene';
 import BufferScene from './scene/BufferScene';
 import RaymarchingScene from './scene/RaymarchingScene';
@@ -64,13 +66,20 @@ export default function() {
 		requestAnimationFrame(animate);
 
 		if (ready) {
-			// const time = timeline.getTime();
-			var time = elapsed / 1000.;
+			const time = timeline.getTime();
+			// var time = elapsed / 1000.;
 
 			paperScene.update(time);
 			rayScene.update(time);
 			paintScene.update(time);
 			uniforms.time.value = time;
+
+			Object.keys(parameters.show).forEach(key => {
+				// gui parameters
+				uniforms[key].value = parameters.show[key];
+				// blender animation parameters
+				// uniforms[key].value = animations.getValue(key, time);
+			});
 
 			renderer.render(paperScene.scene, paperScene.camera, frame.getTarget(), true);
 			renderer.render(rayScene.scene, rayScene.camera, frameRay.getTarget(), true);

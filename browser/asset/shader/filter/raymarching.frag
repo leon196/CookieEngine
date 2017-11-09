@@ -10,6 +10,7 @@ uniform float blendHeat;
 uniform vec2 resolution;
 uniform vec3 cameraForward;
 uniform float time;
+uniform float blendRay;
 varying vec2 vUv;
 
 #define STEPS 50.
@@ -39,6 +40,7 @@ float shape (vec3 pos, float radius, float margin) {
 
 float map (vec3 pos) {
 	float scene = 1000.;
+	float fade = smoothstep(0., 200., -pos.z - 200. * (blendRay*2.-1.));
   vec3 p = pos;
   scene = shape(p, 5., 1.2);
   p = pos;
@@ -51,6 +53,10 @@ float map (vec3 pos) {
   p.z *= 20.;
   p.y = repeat(p.y+time*10., 50.);
   scene = min(scene, shape(p, 2., 1.1));
+
+	scene += fade * 10.;
+	// scene = max(scene, -pos.z - 100. * (blendRay*2.-1.));
+
 	return scene;
 }
 

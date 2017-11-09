@@ -16,7 +16,7 @@ export default class PaperScene extends Scene {
 		// geometry = Geometry.createQuadFromPoints(attributes, [1,20]);
 		// material = assets.shaderMaterials.lines;
 		// this.add(new THREE.Mesh(geometry, material));
-		this.addChildren(Geometry.createQuadFromPoints(Geometry.getRandomPoints(32*32, 3), assets.shaderMaterials.paper));
+		this.addChildren(Geometry.createQuadFromPoints(Geometry.getRandomPoints(96*96, 3), assets.shaderMaterials.paper));
 		this.addChildren(Geometry.createQuadFromPoints(Geometry.getRandomPoints(5*5, 3), assets.shaderMaterials.lines, [1,30]));
 		this.addChildren(Geometry.createQuadFromPoints(Geometry.getRandomPoints(96*96, 3), assets.shaderMaterials.paint));
 	}

@@ -16,8 +16,13 @@ function getRotation(actionName, time) {
 }
 
 function getValue(actionName, time) {
-	var pos = actions[actionName].paths['location'].evaluate(time, blenderHTML5Animations.FCurveArray.DefaultValues.LOCATION);
-	return pos[2];
+	if (actions[actionName] !== undefined) {
+		var pos = actions[actionName].paths['location'].evaluate(time, blenderHTML5Animations.FCurveArray.DefaultValues.LOCATION);
+		return pos[2];
+	} else {
+		console.log('did not find actionName ' + actionName);
+		return 0;
+	}
 }
 
 export default {

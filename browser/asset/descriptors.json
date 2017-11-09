@@ -34,7 +34,7 @@
 			"side": 2,
 			"depthTest": false,
 			"opacity": 1,
-"transparent": true
+			"transparent": true
 		},
 		"sprite": {
 			"vertexShader": "shader/lab/sprite.vert",
