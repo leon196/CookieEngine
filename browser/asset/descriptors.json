@@ -28,6 +28,11 @@
 			"fragmentShader": "shader/lab/lines.frag",
 			"side": 2
 		},
+		"feather": {
+			"vertexShader": "shader/lab/feather.vert",
+			"fragmentShader": "shader/lab/feather.frag",
+			"side": 2
+		},
 		"paint": {
 			"vertexShader": "shader/lab/paint.vert",
 			"fragmentShader": "shader/lab/paint.frag",

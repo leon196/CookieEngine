@@ -16,14 +16,12 @@ import * as FX from "postprocessing"
 export default function() {
 	let frame, frameRay, framePaint;
 	let filterScene, paperScene, bufferScene, rayScene, paintScene;
-	let composer, pass, clock;
+	let composer, pass, clock, composerPaint;
 	let ready = false;
 
 	requestAnimationFrame(animate);
 
 	assets.load(function() {
-
-
 
 		frame = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
 		frameRay = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
@@ -34,8 +32,31 @@ export default function() {
 		paintScene = new PaintScene();
 		paperScene = new PaperScene();
 		composer = new FX.EffectComposer(renderer);
+		composerPaint = new FX.EffectComposer(renderer);
 
 		composer.addPass(new FX.RenderPass(filterScene.scene, filterScene.camera));
+		composerPaint.addPass(new FX.RenderPass(paintScene.scene, paintScene.camera));
+
+		let bloom = new FX.BloomPass();
+		bloom.renderToScreen = true;
+		composer.addPass(bloom);
+
+		// let savepass = new FX.SavePass();
+		// composer.addPass(savepass);
+
+		// let blur = new FX.BlurPass();
+		// blur.renderToScreen = true;
+		// composerPaint.addPass(blur);
+
+		// console.log((composerPaint));
+		// uniforms.framePaintBlur = { value: blur.renderTarget.texture };
+
+		// let pass = new FX.ShaderPass(new FX.CombineMaterial(), "texture1");
+		// pass.material.uniforms.texture2.value = savepass.renderTarget.texture;
+		// pass.material.uniforms.opacity1.value = 1.;
+		// pass.material.uniforms.opacity2.value = 1.;
+		// pass.renderToScreen = true;
+		// composer.addPass(pass);
 
 		// let imageSearch = new Image();
 		// let imageArea = new Image();
@@ -49,10 +70,6 @@ export default function() {
 		// texturepass.enabled = false;
 		// composer.addPass(texturepass);
 
-		let bloom = new FX.BloomPass();
-		bloom.renderToScreen = true;
-		composer.addPass(bloom);
-
 		clock = new THREE.Clock();
 
 		onWindowResize();
@@ -60,6 +77,8 @@ export default function() {
 
 		timeline.start();
 		ready = true;
+
+		console.log('ready');
 	});
 
 	function animate(elapsed) {
@@ -76,23 +95,24 @@ export default function() {
 
 			Object.keys(parameters.show).forEach(key => {
 				// gui parameters
-				uniforms[key].value = parameters.show[key];
+				// uniforms[key].value = parameters.show[key];
 				// blender animation parameters
-				// uniforms[key].value = animations.getValue(key, time);
+				uniforms[key].value = animations.getValue(key, time);
 			});
 
 			renderer.render(paperScene.scene, paperScene.camera, frame.getTarget(), true);
-			renderer.render(rayScene.scene, rayScene.camera, frameRay.getTarget(), true);
-			// renderer.render(paintScene.scene, paintScene.camera, framePaint.getTarget(), true);
+			renderer.render(rayScene.scene, paperScene.camera, frameRay.getTarget(), true);
+			renderer.render(paintScene.scene, paintScene.camera, framePaint.getTarget(), true);
 			// uniforms.buffer.value = bufferScene.buffer.getTexture();
 			uniforms.frame.value = frame.getTexture();
 			uniforms.frameRay.value = frameRay.getTexture();
-			// uniforms.framePaint.value = framePaint.getTexture();
+			uniforms.framePaint.value = framePaint.getTexture();
 			// bufferScene.update();
 			// uniforms.frame.value = bufferScene.buffer.getTexture();
 			renderer.render(filterScene.scene, filterScene.camera);
 
 			composer.render(clock.getDelta());
+			// composerPaint.render(clock.getDelta());
 		}
 	}
 

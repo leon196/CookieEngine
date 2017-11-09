@@ -2,7 +2,8 @@
 import * as THREE from 'three.js';
 
 const renderer = new THREE.WebGLRenderer({
-	antialias: true,
+	logarithmicDepthBuffer: true,
+	antialias: false
 });
 
 renderer.setPixelRatio( window.devicePixelRatio );

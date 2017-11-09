@@ -4,6 +4,7 @@ attribute vec2 indexMap;
 
 uniform float time;
 uniform float blendPaper;
+uniform float blendPaper1;
 uniform vec2 resolution;
 
 varying float vSeed;
@@ -11,31 +12,36 @@ varying vec3 vView;
 varying vec2 vAnchor;
 varying float vDepth;
 
+
 void main()	{
 	vAnchor = anchor;
 	vec3 pos;
-	// pos = position*2.-1.;
+	pos = position*2.-1.;
 	float ratio = mod(rand(pos.xz + pos.y), 1.);
 	// pos = vec3(indexMap.x, 0, indexMap.y)*5.;
-	float a = indexMap.y * PI2;
+	float a = indexMap.y*PI;
 	pos.xy = vec2(cos(a),sin(a));
-	pos.z = (indexMap.x*2.-1.)*5.;
-	pos.z += atan(pos.x,pos.y);
+	pos.z = (indexMap.x*2.-1.)*10.;//(.5+.5*sin(time)));
+	// pos.yz *= rot(pos.x*.02*waveB);
+	pos.z += atan(pos.x,pos.y)*.5;
 	// pos.z *= 10.;
-	float seed = noiseIQ(pos*.5);
+	float seed = noiseIQ(pos*10.);
 	float dist = length(pos);
 	vec3 offset = vec3(seed);
 	a = noiseIQ(pos*5.)*PI2;
 	offset.xz = vec2(cos(a),sin(a));
-	offset.xz *= rot(ratio * PI2 + time);
-	offset.xy *= rot(ratio * PI2 + time);
-	float waveGrow = .1+.9*clamp(sin(pos.z+time), 0.,1.);
-	pos += offset*.5*waveGrow;
+	offset.xz *= rot(time);
+	offset.xy *= rot(time);
+	float waveGrow = .1+.9*clamp(cos(pos.z*2.+time*.5), 0.,1.);
+	// float waveGrow = .1+.9*(.5+.5*cos(pos.z*5.+time*.5), 0.,1.);
+	pos += offset*.5*(.5 + waveB * .5)*waveGrow * blendPaper1;
 	// pos.xy += normalize(pos.xz) * wave * .1;
 	pos.z = repeat(pos.z*2.+time*.5, TAU*2.);
-	pos.xy *= rot(time*.5);
-	vec2 size = vec2(.5) * blendPaper;
-	// size *= 1. + 1.*wave;
+	float fade = smoothstep(0., 10., pos.z + (blendPaper*2.-1.) * 10.);
+	pos.xy *= rot(pos.z * waveGrow + time);
+	vec2 size = vec2(.25) * fade;
+	size *= 1. + 1. * seed;// + 2. * waveB * seed;
+	pos.xy *= .8+.2*cos(abs(pos.z));
 	pos *= 20.;
 	vDepth = length(cameraPosition - pos);
 	vSeed = seed;

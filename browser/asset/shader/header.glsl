@@ -5,7 +5,8 @@
 #define HALFPI 1.5707963267948966192313216916398
 #define HALF3PI 4.7123889803846898576939650749194
 
-#define wave smoothstep(.7,.9,abs(sin(time*2.*3.14159)))
+#define waveA smoothstep(.7,.9,abs(sin(time*3.14159)))
+#define waveB smoothstep(.3,1.,abs(sin(time*3.145159*2.)))
 #define waveFast smoothstep(.0,1.,abs(sin(time*4.*3.14159)))
 
 // LJ

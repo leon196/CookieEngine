@@ -20,8 +20,9 @@ varying vec2 vUv;
 float shape (vec3 pos, float radius, float margin) {
 	float shape = 1000.;
   vec3 p = pos;
-  p.xy *= rot(p.z*.1 + time * 2.);
-  radius *= 1. + .5 * sin(p.z * .1 - time * 2.);
+	float twist = .1;
+  p.xy *= rot(p.z*twist + time * 3.);
+  radius *= 1. + .5 * sin(p.z * .05 - time * 2.);
   shape = sdBox(p, vec3(radius,radius,1000));
   p.xy *= rot(PI/4.);
   shape = max(shape, -sdBox(p, vec3(radius*margin, radius*margin, 1000)));
@@ -29,11 +30,12 @@ float shape (vec3 pos, float radius, float margin) {
   // p = pos;
   amod(p.yx, 4.);
   // p.y -= radius*margin;
-  p.z = repeat(p.z+time*10., TAU);
+  p.z = repeat(p.z+time*10., TAU * 2.);
   // shape = smin(shape, sdCylinder(p.xz, .4), 1.);
-  shape = smin(shape, max(sdCylinder(p.xz, .4), abs(length(p.xy))-radius*margin), .25*radius);
+  shape = smin(shape, max(sdCylinder(p.xz, .1*radius), abs(length(p.xy))-radius*margin), .25*radius);
 
-  shape = smin(shape, sdSphere(p, .3 * radius), .25*radius);
+  shape = smin(shape, sdIso(p, .5 * radius * (.5+.5*waveB)), .1*radius);
+  shape = smin(shape, sdCylinder(p.xy, .2 * radius * (.5+.5*waveB)), .25*radius);
 
   return shape;
 }
@@ -42,19 +44,23 @@ float map (vec3 pos) {
 	float scene = 1000.;
 	float fade = smoothstep(0., 200., -pos.z - 200. * (blendRay*2.-1.));
   vec3 p = pos;
-  scene = shape(p, 5., 1.2);
+	float a = pos.z* .05  + time;
+	pos.xy += vec2(cos(a),sin(a)) * 10.;
+	float margin = 1.3 - .1 * waveB;
+  scene = shape(p, 5., margin);
   p = pos;
 	// amod(p.xy, 3.);
 	// p.x -= 4.;
-  scene = shape(p, 5., 1.2);
+  scene = shape(p, 5., margin);
   // p /= 10.;
-  p.yz *= rot(PI/2.);
+  p.yz *= rot(PI/2.+sin(time)*.3);
+  p.xz *= rot(sin(time)*.2);
   p.xz = displaceLoop(p.xz, 20.);
   p.z *= 20.;
-  p.y = repeat(p.y+time*10., 50.);
+  p.y = repeat(p.y+time*10., 60.);
   scene = min(scene, shape(p, 2., 1.1));
 
-	// scene += fade * 10.;
+	scene += fade * 10.;
 	// scene = max(scene, -pos.z - 100. * (blendRay*2.-1.));
 
 	return scene;
@@ -91,5 +97,6 @@ void main ()	{
 	// shade *= 1.-smoothstep(100.,200., color.a);
 	color.rgb *= shade;
 	color.a = dist;
+	// color.rgb = pow(color.rgb, vec3(1./2.));
 	gl_FragColor = color;
 }

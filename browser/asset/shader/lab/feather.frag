@@ -11,7 +11,7 @@ varying float vSeed;
 
 void main()	{
 	float dist = length(vAnchor+.5);
-	if (fract(vAnchor.y*10.) > .1+waveB*.1) discard;
+	// if (fract(vAnchor.y*10.+time) > .2) discard;
 	// dist = -dist + smoothstep(.2, .4, dist);
 	// dist = 1.- dist;
 	// if (dist > .5) discard;
@@ -20,7 +20,7 @@ void main()	{
 	float shade = 1.;
  shade *= dot(vView, vNormal)*.5+.5;
 	// shade *= vAnchor.y;
-	vec3 color = vec3(1.)*(.8+.2*shade);//*blendLines;// * (.5+.5*shade);// * vAnchor.y;
+	vec3 color = vec3(1.) * (.8+.2*shade);// * vAnchor.y;
 	// color *= step(.5,fract(vAnchor.y*100.));
 	float depth = vDepth;
 	// depth *= vAnchor.y;

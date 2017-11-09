@@ -118,7 +118,7 @@ export default class Geometry {
 		var quadCount = slices[0] * slices[1];
 
 		var meshes = [];
-		var verticesMax = 65000;
+		var verticesMax = 65000-1;
 		var totalVertices = count * vertexCount;
 		var meshCount = 1 + Math.floor(totalVertices / verticesMax);
 		var pointIndex = 0;
@@ -126,9 +126,15 @@ export default class Geometry {
 
 			var count;
 			if (meshCount > 1) {
-				if (m == meshCount - 1) count = totalVertices % verticesMax;
-				else count = verticesMax;
-			} else count = totalVertices;
+				if (m == meshCount - 1) {
+					count = totalVertices % verticesMax;
+				}
+				else {
+					count = verticesMax;
+				}
+			} else {
+				count = totalVertices;
+			}
 
 			// attributes
 			// var arrays = {};

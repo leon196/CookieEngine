@@ -6,6 +6,7 @@ uniform sampler2D uTextureTitle;
 uniform sampler2D uTextureDate;
 uniform float fadeTransition;
 uniform float blendLight;
+uniform float blendGlitch;
 uniform float blendLabelFire;
 uniform float blendLabelAlpha;
 uniform float blendHeat;
@@ -43,12 +44,16 @@ void main ()	{
 	// 	dist = length(u-p);
 	// 	color.r += 1.-smoothstep(0.05,.1, (dist+.1*rnd)/fade);
 	// }
-	vec4 scene = texture2D(frame, vUv);
-	vec4 ray = texture2D(frameRay, vUv);
+	vec2 uv = vUv;
+	uv.x += (rand(uv.yy)*2.-1.)*blendGlitch * smoothstep(.5*(1.-blendGlitch),1.,noiseIQ(uv.yyy*10.+time*blendGlitch));
+	vec4 scene = texture2D(frame, uv);
+	vec4 ray = texture2D(frameRay, uv);
+	vec4 paint = texture2D(framePaint, uv);
 	float lum = luminance(scene.rgb);
 	scene.a += 1000. * (1.-scene.a) * step(scene.a, .01);
 	gl_FragColor = mix(scene, ray, step(ray.a, scene.a));
 	gl_FragColor = mix(gl_FragColor, ray, 1.-lum);
+	gl_FragColor = mix(gl_FragColor, paint, paint.a);
 	// gl_FragColor.rgb = pow(gl_FragColor.rgb, vec3(1./2.));
 	// gl_FragColor = scene;
 	// gl_FragColor += ray * step(ray.a, depth.r+20.);
