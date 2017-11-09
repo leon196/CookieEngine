@@ -13,7 +13,7 @@ uniform float time;
 uniform float blendRay;
 varying vec2 vUv;
 
-#define STEPS 50.
+#define STEPS 30.
 #define VOLUME_BIAS .01
 #define STEP_MIN .001
 
@@ -54,7 +54,7 @@ float map (vec3 pos) {
   p.y = repeat(p.y+time*10., 50.);
   scene = min(scene, shape(p, 2., 1.1));
 
-	scene += fade * 10.;
+	// scene += fade * 10.;
 	// scene = max(scene, -pos.z - 100. * (blendRay*2.-1.));
 
 	return scene;
@@ -71,18 +71,25 @@ void main ()	{
 	vec3 pos = eye;
 	vec2 seed = vUv + fract(time);
 	float shade = 0.;
+	float dist = 0.;
 	for (float i = 0.; i <= 1.; i += 1./STEPS) {
-		float dist = map(pos);
-		if (dist < VOLUME_BIAS) {
+		float d = map(pos);
+		if (d < VOLUME_BIAS) {
 			shade = 1.-i;
 			break;
 		}
-		dist *= .9+.1*rand(seed*vec2(i));
-		dist = max(dist, STEP_MIN);
-		pos += ray * dist;
+		d *= .9+.1*rand(seed*vec2(i));
+		d = max(d, STEP_MIN);
+		dist += d;
+		if (dist > 100.) {
+			shade = 0.;
+			break;
+		}
+		pos = eye + ray * dist;
 	}
 	vec4 color = vec4(1.);
+	// shade *= 1.-smoothstep(100.,200., color.a);
 	color.rgb *= shade;
-  color.a = length(eye-pos);
+	color.a = dist;
 	gl_FragColor = color;
 }
