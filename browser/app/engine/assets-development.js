@@ -22,6 +22,7 @@ const assets = {
 	animations: null,
 	geometries: {},
 	fonts: {},
+	materials: {},
 	shaderMaterials: {},
 	load,
 };
@@ -36,8 +37,9 @@ function load(callback) {
 	loader.load(baseUrl + 'shader/header.glsl', shaderHeader => {
 		shaderHeader += 'uniform float ' + Object.keys(parameters).join(', ') + ';';
 
-		const plyLoader = new PLYLoader();
 		const objLoader = new OBJLoader();
+		const plyLoader = new PLYLoader();
+		const textureLoader = new THREE.TextureLoader();
 
 		Object.keys(descriptors.geometries).forEach(name => {
 			const url = descriptors.geometries[name].file;
@@ -96,16 +98,37 @@ function load(callback) {
 			return callback();
 		}
 
-		let pending = urls.length;
-		urls.forEach(url => {
-			loader.load(baseUrl + url, data => {
-				files[url] = data;
+		const materialNames = Object.keys(descriptors.materials)
+		let pending = materialNames.length;
+		if (!pending)
+			return loadOtherAssets();
+		else
+			materialNames.forEach(name => {
+				const textureUrl = descriptors.materials[name].texture;
 
-				--pending;
-				if (!pending)
-					return parse();
+				textureLoader.load(baseUrl + textureUrl, (texture) => {
+					assets.materials[name] = new THREE.MeshBasicMaterial({
+						map: texture,
+					});
+
+					--pending;
+					if (!pending)
+						return loadOtherAssets();
+				});
 			});
-		});
+
+		function loadOtherAssets() {
+			let pending = urls.length;
+			urls.forEach(url => {
+				loader.load(baseUrl + url, data => {
+					files[url] = data;
+
+					--pending;
+					if (!pending)
+						return parse();
+				});
+			});
+		}
 
 		let socket;
 

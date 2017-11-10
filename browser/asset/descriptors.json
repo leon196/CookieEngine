@@ -12,11 +12,19 @@
 		"flash": {
 			"file": "point/flash.obj"
 		},
+		"Jonathan2": {
+			"file": "point/Jonathan2.obj"
+		},
 		"tree": {
 			"file": "point/tree.obj"
 		},
 		"root": {
 			"file": "point/root.obj"
+		}
+	},
+	"materials": {
+		"Jonathan2": {
+			"texture": "point/Jonathan2.jpg"
 		}
 	},
 	"shaderMaterials": {
