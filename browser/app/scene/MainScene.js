@@ -10,6 +10,7 @@ import renderer from '../engine/renderer';
 import State from '../engine/state';
 import { simpleText } from '../engine/makeText';
 import uniforms from '../engine/uniforms';
+import Geometry from '../engine/geometry';
 import message from '../../asset/message';
 import { OrbitControls } from '../libs/OrbitControls';
 import { lerp, clamp } from '../libs/misc';
@@ -28,6 +29,11 @@ export default class {
 
 		uniforms.jonathanTexture = { value: assets.materials.Jonathan2.map };
 		this.generate(10);
+
+		var meshes = Geometry.createQuadFromPoints(Geometry.getRandomPoints(5, 3), assets.shaderMaterials.paper, [1,40]);
+		for (var i = 0; i < meshes.length; ++i) {
+			this.scene.add(meshes[i]);
+		}
 	}
 
 	generate(count) {

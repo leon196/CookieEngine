@@ -13,7 +13,7 @@
 			"file": "point/flash.obj"
 		},
 		"Jonathan2": {
-			"file": "point/Jonathan2.obj"
+			"file": "point/Jonathan1k.obj"
 		},
 		"tree": {
 			"file": "point/tree.obj"
@@ -39,6 +39,11 @@
 		"filter": {
 			"vertexShader": "shader/filter/screen.vert",
 			"fragmentShader": "shader/filter/filter.frag"
+		},
+		"paper": {
+			"vertexShader": "shader/scene/paper.vert",
+			"fragmentShader": "shader/scene/paper.frag",
+			"side": 2
 		},
 		"mesh": {
 			"vertexShader": "shader/scene/mesh.vert",

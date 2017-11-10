@@ -1,8 +1,13 @@
 
 #define PI 3.1415926535897932384626433832795
 #define PI2 6.283185307179586476925286766559
+#define TAU 6.283185307179586476925286766559
 #define HALFPI 1.5707963267948966192313216916398
 #define HALF3PI 4.7123889803846898576939650749194
+
+#define waveA smoothstep(.7,.9,abs(sin(time*3.14159)))
+#define waveB smoothstep(.3,1.,abs(sin(time*3.145159*2.)))
+#define waveFast smoothstep(.0,1.,abs(sin(time*4.*3.14159)))
 
 // LJ
 mat2 rot (float a) { float c = cos(a), s=sin(a); return mat2(c,-s,s,c); }
@@ -20,6 +25,24 @@ float pModPolar(inout vec2 p, float repetitions) {
 	if (abs(c) >= (repetitions/2.)) c = abs(c);
 	return c;
 }
+
+
+// raymarch toolbox
+float rng (vec2 seed) { return fract(sin(dot(seed*.1684,vec2(54.649,321.547)))*450315.); }
+float sdSphere (vec3 p, float r) { return length(p)-r; }
+float sdCylinder (vec2 p, float r) { return length(p)-r; }
+float sdDisk (vec3 p, vec3 s) { return max(max(length(p.xz)-s.x, s.y), abs(p.y)-s.z); }
+float sdIso(vec3 p, float r) { return max(0.,dot(p,normalize(sign(p))))-r; }
+float sdBox( vec3 p, vec3 b ) { vec3 d = abs(p) - b; return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0)); }
+float sdTorus( vec3 p, vec2 t ) { vec2 q = vec2(length(p.xz)-t.x,p.y); return length(q)-t.y; }
+float amod (inout vec2 p, float count) { float an = TAU/count; float a = atan(p.y,p.x)+an/2.; float c = floor(a/an); c = mix(c,abs(c),step(count*.5,abs(c))); a = mod(a,an)-an/2.; p.xy = vec2(cos(a),sin(a))*length(p); return c; }
+float repeat (float v, float c) { return mod(v,c)-c/2.; }
+vec2 repeat (vec2 v, float c) { return mod(v,c)-c/2.; }
+vec3 repeat (vec3 v, float c) { return mod(v,c)-c/2.; }
+float smoo (float a, float b, float r) { return clamp(.5+.5*(b-a)/r, 0., 1.); }
+float smin (float a, float b, float r) { float h = smoo(a,b,r); return mix(b,a,h)-r*h*(1.-h); }
+float smax (float a, float b, float r) { float h = smoo(a,b,r); return mix(a,b,h)+r*h*(1.-h); }
+vec2 displaceLoop (vec2 p, float r) { return vec2(length(p.xy)-r, atan(p.y,p.x)); }
 
 float colorDistance (vec4 a, vec4 b) {
   return (abs(a.r-b.r)+abs(a.g-b.g)+abs(a.b-b.b))/3.0;
@@ -121,15 +144,19 @@ float noiseIQ( vec3 x )
 float fbm (vec3 p, vec3 speed) {
     float value = 0.0;
     float amplitud = .5;
-    for (float i = 1.; i <= 3.; i++) {
+    for (float i = 1.; i <= 5.; i++) {
         value += amplitud * noiseIQ(p);
         p *= 2.;
-    	// p += speed;
+    	p += speed;
         amplitud *= .5;
     }
     return value;
 }
 
+float pattern (vec3 p) {
+  vec3 q = vec3(noiseIQ(p), noiseIQ(p+vec3(12.5,51.5,7.5423)), noiseIQ(p+vec3(151.24,1254.324,658.6)));
+  return noiseIQ(p + 2. * q);
+}
 
 vec3 rotateY(vec3 v, float t)
 {
@@ -156,11 +183,6 @@ float reflectance(vec3 a, vec3 b) { return dot(normalize(a), normalize(b)) * 0.5
 vec2 kaelidoGrid(vec2 p) { return vec2(step(mod(p, 2.0), vec2(1.0))); }
 
 float sphere( vec3 p, float s ) { return length(p)-s; }
-
-float sdBox( vec3 p, vec3 b ) {
-  vec3 d = abs(p) - b;
-  return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
-}
 
 
 
