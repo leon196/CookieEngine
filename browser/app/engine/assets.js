@@ -9,6 +9,7 @@ import * as THREE from "three.js";
 import shaderHeader from "../../asset/shader/header.glsl!text";
 import animation_scene_json from "../../asset/animation/scene.json!text";
 import font_coffee_json from "../../asset/font/coffee.json!text";
+import point_Jonathan2_obj from "../../asset/point/Jonathan2.obj!text";
 import point_branch_obj from "../../asset/point/branch.obj!text";
 import point_flash_obj from "../../asset/point/flash.obj!text";
 import point_root_obj from "../../asset/point/root.obj!text";
@@ -51,6 +52,7 @@ animations: makeAnimations(JSON.parse(animation_scene_json)),
 geometries: {
 branch: objLoader.parse(point_branch_obj),
 flash: objLoader.parse(point_flash_obj),
+Jonathan2: objLoader.parse(point_Jonathan2_obj),
 tree: objLoader.parse(point_tree_obj),
 root: objLoader.parse(point_root_obj),
 },

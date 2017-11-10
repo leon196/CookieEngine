@@ -40,6 +40,10 @@
 			"vertexShader": "shader/filter/screen.vert",
 			"fragmentShader": "shader/filter/filter.frag"
 		},
+		"mesh": {
+			"vertexShader": "shader/scene/mesh.vert",
+			"fragmentShader": "shader/scene/mesh.frag"
+		},
 		"fire": {
 			"vertexShader": "shader/scene/fire.vert",
 			"fragmentShader": "shader/scene/fire.frag",
