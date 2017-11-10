@@ -2,7 +2,6 @@
 import * as THREE from 'three.js'
 import Scene from './Scene.js'
 import assets from '../engine/assets.js'
-import animations from '../engine/animations.js'
 import Geometry from '../engine/geometry.js'
 import uniforms from '../engine/uniforms.js'
 import { simpleText } from '../engine/makeText';
@@ -16,7 +15,7 @@ export default class PaintScene extends Scene {
 			{ text: 'La Chimie\ndu Cookie',
 				font: 'trashhand',
 				size: 220, },
-			{ text: 'code by ponk\nmusic by gaeel',
+			{ text: 'artcode by ponk\nmusic by gaeel',
 				font: 'trashhand',
 				size: 150, },
 			{ text: 'made with love\nfor alchimie 12',
@@ -46,7 +45,7 @@ export default class PaintScene extends Scene {
 	update(elapsed) {
 		super.update(elapsed);
 
-		var messageIndex = animations.getValue('blendMessageIndex', elapsed);
+		var messageIndex = assets.animations.getValue('blendMessageIndex', elapsed);
 		if (this.currentMessage != messageIndex) {
 			this.currentMessage = messageIndex;
 			uniforms.frameText.value = this.textures[this.currentMessage];

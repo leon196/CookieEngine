@@ -1,7 +1,6 @@
 
 import * as THREE from 'three.js'
 import Scene from './Scene.js'
-import animations from '../engine/animations.js'
 import assets from '../engine/assets.js'
 import Geometry from '../engine/geometry.js'
 import { lerp } from '../libs/misc.js'
@@ -32,8 +31,8 @@ export default class PaperScene extends Scene {
 		super.update(elapsed);
 		var delta = Math.min(1., Math.max(.01,(elapsed - this.last)*5.));
 
-		var position = animations.getPosition('Camera', elapsed);
-		var target = animations.getPosition('Target', elapsed);
+		var position = assets.animations.getPosition('Camera', elapsed);
+		var target = assets.animations.getPosition('Target', elapsed);
 		this.positionDelta[0] = lerp(this.positionDelta[0], position[0], delta);
 		this.positionDelta[1] = lerp(this.positionDelta[1], position[1], delta);
 		this.positionDelta[2] = lerp(this.positionDelta[2], position[2], delta);

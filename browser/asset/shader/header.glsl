@@ -153,6 +153,10 @@ float fbm (vec3 p, vec3 speed) {
     return value;
 }
 
+float pattern (vec3 p) {
+  vec3 q = vec3(noiseIQ(p), noiseIQ(p+vec3(12.5,51.5,7.5423)), noiseIQ(p+vec3(151.24,1254.324,658.6)));
+  return noiseIQ(p + 2. * q);
+}
 
 vec3 rotateY(vec3 v, float t)
 {

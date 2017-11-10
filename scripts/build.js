@@ -7,7 +7,7 @@ const copyFile = require('quickly-copy-file');
 const rimraf = require('rimraf-promise');
 
 const rootPath = resolve(__dirname, '..');
-const buildPath = resolve(rootPath, 'dist', 'and-the-crowd-gathered-at-cookie-by-ponk-koltes-fergus');
+const buildPath = resolve(rootPath, 'dist', 'la-chimie-du-cookie');
 
 console.log('Cleaning build directories');
 Promise.all([
@@ -19,7 +19,7 @@ Promise.all([
 	})
 	.then(() => {
 		console.log('Copying music');
-		return copyFile(join(rootPath, 'browser', 'asset', 'music', 'cookie-invitro-2017.ogg'), join(buildPath, 'files', 'music.ogg'));
+		return copyFile(join(rootPath, 'browser', 'asset', 'music', 'b4.wav'), join(buildPath, 'files', 'music.wav'));
 	})
 	.then(() => {
 		console.log('Copying static files');

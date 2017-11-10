@@ -1,16 +1,8 @@
 {
+	"animations": "animation/scene.json",
 	"fonts": {
 	},
 	"geometries": {
-		"tree": {
-			"file": "point/tree.obj"
-		},
-		"root": {
-			"file": "point/root.obj"
-		},
-		"cyl": {
-			"file": "point/cyl.obj"
-		}
 	},
 	"shaderMaterials": {
 		"simple": {

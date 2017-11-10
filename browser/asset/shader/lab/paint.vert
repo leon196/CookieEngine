@@ -35,9 +35,9 @@ void main()	{
 	float a = seed*PI2*5.;
 	// float ratio = mod(pos.x*.2+time*.1, 1.);
 	float ratio = smoothstep(0., 1., pos.x + (blendPaintIn*2.-1.)*2.);
-	float disp = smoothstep(0., 1., pos.x + (blendPaintOut*2.-1.)*2.);
+	float disp = smoothstep(0., 1., rand(pos.xy) + (blendPaintOut*2.-1.)*2.);
 	// float disp = clamp(sin(ratio*TAU), 0., 1.);
-	float r = .3 * disp;
+	float r = .5 * disp;
 	vec2 offset = vec2(cos(a),sin(a))*r;
 	offset.y += sin(disp*PI)*.25;
 	offset.y -= disp*.25;
@@ -52,16 +52,16 @@ void main()	{
 	pos.xy += .5 * normalize(pos.xy) * should * ratio * (1.-disp);// * clamp(pivot.y, 0., 1.);
 	// pos.xy += clamp(pivot.x-pivot.y,0.,1.)*.1;// * clamp(pivot.y, 0., 1.);
 	size *= 1.+2.*disp+2.*waveB*should;
-	size *= ratio;
+	// size *= ratio;
 	vSeed = seed;
 	vRatio = ratio;
 	vDisp = disp;
 	vDepth = pos.z;
-	pos.y += .02 * sin(pos.x*10.+time*2.);
+	pos.y += .05 * sin(pos.x*5.+time*2.);
 	// gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
 	pos.x *= aspect.x;
-	gl_Position = vec4(pos, .7);
+	gl_Position = vec4(pos, .6*ratio);
 	gl_Position.x += pivot.x * aspect.x * size.x;
 	gl_Position.y += pivot.y * aspect.y * size.y;
 }

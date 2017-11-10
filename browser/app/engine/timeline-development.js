@@ -6,10 +6,6 @@ const clock = new THREE.Clock();
 let time = 0;
 let connected = false;
 
-blenderWS.addListener('refresh', function() {
-	location.reload();
-});
-
 blenderWS.addListener('time', function(newTime) {
 	time = newTime;
 	connected = true;

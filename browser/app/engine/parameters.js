@@ -9,5 +9,6 @@ export default {
 		blendPaintOut: 0.,
 		blendFeather: 0.,
 		blendGlitch: 0.,
+		blendBlack: 0.,
 	},
 };

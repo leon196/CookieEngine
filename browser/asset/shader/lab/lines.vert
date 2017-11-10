@@ -35,8 +35,8 @@ void main()  {
 float a = indexMap.y * PI2;
 pos.xy = vec2(cos(a),sin(a));
 pos.z = (indexMap.x*2.-1.);
-pos *= 1.;
-vec2 size = vec2(.4)*blendLines;
+// pos *= 1.;
+vec2 size = vec2(.2)*blendLines;
 // float scale = 10.+10.*waveFast;
 float ratio = mod(rand(pos.xz) + anchor.y/2., 1.);
 float delta = .001;

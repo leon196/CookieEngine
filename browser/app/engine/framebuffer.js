@@ -28,6 +28,12 @@ export default class {
 		this.current = (this.current + 1) % this.count;
 	}
 
+	resize(width, height) {
+		for (var i = 0; i < this.renderTextures.length; ++i) {
+			this.renderTextures[i].setSize(width, height);
+		}
+	}
+
 	// if (type == THREE.UnsignedByteType) {
 	// 	var self = this;
 	// 	renderer.resizeCallbacks.push(function (width, height) {

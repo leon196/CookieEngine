@@ -11,6 +11,7 @@ varying float vSeed;
 varying vec3 vView;
 varying vec2 vAnchor;
 varying float vDepth;
+varying float vShould;
 
 
 void main()	{
@@ -23,7 +24,10 @@ void main()	{
 	pos.xy = vec2(cos(a),sin(a));
 	pos.z = (indexMap.x*2.-1.)*10.;//(.5+.5*sin(time)));
 	// pos.yz *= rot(pos.x*.02*waveB);
+		// a = pos.z* .5  + time;
+		// pos.xy += vec2(cos(a),sin(a)) * .5;
 	pos.z += atan(pos.x,pos.y)*.5;
+
 	// pos.z *= 10.;
 	float seed = noiseIQ(pos*2.);
 	float dist = length(pos);
@@ -40,7 +44,8 @@ void main()	{
 	float fade = smoothstep(0., 10., pos.z + (blendPaper*2.-1.) * 10.);
 	pos.xy *= rot(pos.z * waveGrow + time);
 	vec2 size = vec2(.25) * fade;
-	size *= 1. + 1. * seed + 20. * waveB * smoothstep(.6,1.,seed);
+	vShould = waveB * smoothstep(.6,1.,seed);
+	size *= 2. + 1. * seed + 20. * vShould;
 	pos.xy *= .8+.2*cos(abs(pos.z));
 	pos *= 20.;
 	vDepth = length(cameraPosition - pos);

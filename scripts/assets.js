@@ -19,12 +19,15 @@ function register(url) {
 	return importName;
 }
 
+var animationsImportName = register(descriptors.animations);
+
 const exportLines = [
 	'const plyLoader = new PLYLoader();',
 	'const objLoader = new OBJLoader();',
 	'const fontLoader = new THREE.FontLoader();',
 
 	'export default {',
+	'animations: makeAnimations(JSON.parse(' + animationsImportName + ')),',
 	'geometries: {',
 ];
 
@@ -91,6 +94,7 @@ const lines = [
 	'/* eslint-disable */',
 	'/* This file is generated with "npm run assets", do not edit by hand. */',
 	'import descriptors from "../../asset/descriptors.json!";',
+	'import makeAnimations from "./make-animations";',
 	'import uniforms from "./uniforms";',
 	'import { OBJLoader } from "../libs/OBJLoader";',
 	'import { PLYLoader } from "../libs/PLYLoader";',

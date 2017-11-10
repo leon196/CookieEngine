@@ -1,5 +1,4 @@
 import assets from './engine/assets';
-import animations from './engine/animations';
 import renderer from './engine/renderer';
 import FrameBuffer from './engine/framebuffer';
 import uniforms from './engine/uniforms';
@@ -9,76 +8,57 @@ import BufferScene from './scene/BufferScene';
 import RaymarchingScene from './scene/RaymarchingScene';
 import PaintScene from './scene/PaintScene';
 import PaperScene from './scene/PaperScene';
+import { clamp } from './libs/misc';
 import * as THREE from 'three.js';
 import * as timeline from './engine/timeline';
 import * as FX from "postprocessing"
 
 export default function() {
 	let frame, frameRay, framePaint;
+	let frameArray, cameraArray;
 	let filterScene, paperScene, bufferScene, rayScene, paintScene;
 	let composer, pass, clock, composerPaint;
 	let ready = false;
+	let delayFPS = 1., lodRaymarch = 4., startToLag = 0.;
+	let htmlText;
 
 	requestAnimationFrame(animate);
 
 	assets.load(function() {
 
-		frame = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
-		frameRay = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
-		framePaint = new FrameBuffer(window.innerWidth, window.innerHeight, THREE.RGBAFormat, THREE.FloatType);
-		bufferScene = new BufferScene();
-		filterScene = new FilterScene();
-		rayScene = new RaymarchingScene();
-		paintScene = new PaintScene();
-		paperScene = new PaperScene();
-		composer = new FX.EffectComposer(renderer);
-		composerPaint = new FX.EffectComposer(renderer);
+		htmlText = document.getElementById('htmlText');
+		var start = document.getElementById('start');
+		start.innerHTML = 'start';
+		start.addEventListener('click', function(e){
+			ready = true;
+		  start.innerHTML = '';
 
-		composer.addPass(new FX.RenderPass(filterScene.scene, filterScene.camera));
-		composerPaint.addPass(new FX.RenderPass(paintScene.scene, paintScene.camera));
+			Object.keys(parameters.show).forEach(key => {
+				uniforms[key] = { value: parameters.show[key] };
+			});
 
-		let bloom = new FX.BloomPass();
-		bloom.renderToScreen = true;
-		composer.addPass(bloom);
+			var w = window.innerWidth;
+			var h = window.innerHeight;
+			frame = new FrameBuffer(w, h, THREE.RGBAFormat, THREE.FloatType);
+			frameRay = new FrameBuffer(w/lodRaymarch, h/lodRaymarch, THREE.RGBAFormat, THREE.FloatType);
+			framePaint = new FrameBuffer(w, h, THREE.RGBAFormat, THREE.FloatType);
+			bufferScene = new BufferScene();
+			filterScene = new FilterScene();
+			rayScene = new RaymarchingScene();
+			paintScene = new PaintScene();
+			paperScene = new PaperScene();
+			composer = new FX.EffectComposer(renderer);
+			composer.addPass(new FX.RenderPass(filterScene.scene, filterScene.camera));
+			cameraArray = [paintScene.camera, paperScene.camera];
+			let bloom = new FX.BloomPass();
+			bloom.renderToScreen = true;
+			composer.addPass(bloom);
+			clock = new THREE.Clock();
+			onWindowResize();
+			window.addEventListener('resize', onWindowResize, false);
 
-		// let savepass = new FX.SavePass();
-		// composer.addPass(savepass);
-
-		// let blur = new FX.BlurPass();
-		// blur.renderToScreen = true;
-		// composerPaint.addPass(blur);
-
-		// console.log((composerPaint));
-		// uniforms.framePaintBlur = { value: blur.renderTarget.texture };
-
-		// let pass = new FX.ShaderPass(new FX.CombineMaterial(), "texture1");
-		// pass.material.uniforms.texture2.value = savepass.renderTarget.texture;
-		// pass.material.uniforms.opacity1.value = 1.;
-		// pass.material.uniforms.opacity2.value = 1.;
-		// pass.renderToScreen = true;
-		// composer.addPass(pass);
-
-		// let imageSearch = new Image();
-		// let imageArea = new Image();
-		// imageSearch.src = FX.SMAAPass.searchImageDataUrl;
-		// imageArea.src = FX.SMAAPass.areaImageDataUrl;
-		// let smaapass = new FX.SMAAPass(imageSearch, imageArea);
-		// smaapass.renderToScreen = true;
-		// composer.addPass(smaapass);
-		// let texturepass = new FX.TexturePass(smaapass.renderTargetColorEdges.texture);
-		// texturepass.renderToScreen = true;
-		// texturepass.enabled = false;
-		// composer.addPass(texturepass);
-
-		clock = new THREE.Clock();
-
-		onWindowResize();
-		window.addEventListener('resize', onWindowResize, false);
-
-		timeline.start();
-		ready = true;
-
-		console.log('ready');
+			timeline.start();
+		})
 	});
 
 	function animate(elapsed) {
@@ -87,6 +67,29 @@ export default function() {
 		if (ready) {
 			const time = timeline.getTime();
 			// var time = elapsed / 1000.;
+			var fps = 1./clock.getDelta();
+			// htmlText.innerHTML = Math.floor(fps);
+			if (fps < 30. && lodRaymarch < 8) {
+				if (startToLag > time) {
+					startToLag = time;
+				}
+				if (clamp((time-startToLag)/delayFPS, 0., 1.) >= 1.) {
+					lodRaymarch *= 2.;
+					startToLag += time + 10.;
+					frameRay.resize(window.innerWidth/lodRaymarch,window.innerHeight/lodRaymarch);
+				}
+			} else if (fps > 60. && lodRaymarch > 1) {
+				if (startToLag > time) {
+					startToLag = time;
+				}
+				if (clamp((time-startToLag)/delayFPS, 0., 1.) >= 1.) {
+					lodRaymarch /= 2.;
+					startToLag += time + 10.;
+					frameRay.resize(window.innerWidth/lodRaymarch,window.innerHeight/lodRaymarch);
+				}
+			} else {
+				startToLag = time + 10.;
+			}
 
 			paperScene.update(time);
 			rayScene.update(time);
@@ -94,10 +97,11 @@ export default function() {
 			uniforms.time.value = time;
 
 			Object.keys(parameters.show).forEach(key => {
+				// console.log(assets.animations);
 				// gui parameters
 				// uniforms[key].value = parameters.show[key];
 				// blender animation parameters
-				uniforms[key].value = animations.getValue(key, time);
+				uniforms[key].value = assets.animations.getValue(key, time);
 			});
 
 			renderer.render(paperScene.scene, paperScene.camera, frame.getTarget(), true);
@@ -112,13 +116,22 @@ export default function() {
 			renderer.render(filterScene.scene, filterScene.camera);
 
 			composer.render(clock.getDelta());
-			// composerPaint.render(clock.getDelta());
 		}
 	}
 
 	function onWindowResize () {
-		paperScene.camera.aspect = window.innerWidth / window.innerHeight;
-		paperScene.camera.updateProjectionMatrix();
-		renderer.setSize(window.innerWidth, window.innerHeight);
+		var w = window.innerWidth;
+		var h = window.innerHeight;
+		for (var i = 0; i < cameraArray.length; ++i) {
+			cameraArray[i].aspect = w / h;
+			cameraArray[i].updateProjectionMatrix();
+		}
+		frame.resize(w,h);
+		frameRay.resize(w/lodRaymarch,h/lodRaymarch);
+		framePaint.resize(w,h);
+		composer.readBuffer.setSize(w, h);
+		composer.writeBuffer.setSize(w, h);
+		uniforms.resolution.value = [w, h];
+		renderer.setSize(w, h);
 	}
 }
