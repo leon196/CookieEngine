@@ -28,12 +28,12 @@ export default class {
 		this.controls.rotateSpeed = 0.5;
 
 		uniforms.jonathanTexture = { value: assets.materials.Jonathan2.map };
-		this.generate(10);
+		this.generate(20);
 
-		var meshes = Geometry.createQuadFromPoints(Geometry.getRandomPoints(5, 3), assets.shaderMaterials.paper, [1,40]);
-		for (var i = 0; i < meshes.length; ++i) {
-			this.scene.add(meshes[i]);
-		}
+		// var meshes = Geometry.createQuadFromPoints(Geometry.getRandomPoints(5, 3), assets.shaderMaterials.paper, [1,40]);
+		// for (var i = 0; i < meshes.length; ++i) {
+		// 	this.scene.add(meshes[i]);
+		// }
 	}
 
 	generate(count) {

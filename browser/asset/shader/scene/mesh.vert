@@ -32,14 +32,21 @@ void main()	{
 	vUv = uv;
 
 	vec3 pos = (modelMatrix * vec4(position, 1.)).xyz;
+	vec3 p = pos;
 	float twist = .5;
-	pos.xz *= rot(pos.y * twist + time);
-	float should = step(3., number);
+	p.xz *= rot(p.y * twist + time);
+	float should = step(number, 10.);
+	p.y += number * 6.;
+	vec3 curved = getCurve(p, p.y+time-10., p.x, p.z, .5, .01);
 
-	pos.y += number * 12. * should;
+	p = pos;
+	p.z += number * 6.;
+	p.xy *= rot(p.z*.1 + time);
+	vec3 curved2 = getCurve(p, -p.z+time, p.x, p.y, .5, .01);
 
-	vec3 curved = getCurve(pos, pos.y+time, pos.x, pos.z, .5, .01);
-	pos = mix(pos, curved, should);
+
+	vec3 curved3 = getCurve(curved2, -curved2.y+time, curved2.z, curved2.x, .5, .01);
+	p = mix(curved2, curved, should);
 	// pos.xz *= 1. + .5 * sin(pos.y + time);
-	gl_Position = projectionMatrix * viewMatrix * vec4(pos,1);
+	gl_Position = projectionMatrix * viewMatrix * vec4(p,1);
 }
