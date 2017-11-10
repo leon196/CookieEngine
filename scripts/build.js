@@ -19,7 +19,7 @@ Promise.all([
 	})
 	.then(() => {
 		console.log('Copying music');
-		return copyFile(join(rootPath, 'browser', 'asset', 'music', 'b4.wav'), join(buildPath, 'files', 'music.wav'));
+		return copyFile(join(rootPath, 'browser', 'asset', 'music', 'music.ogg'), join(buildPath, 'files', 'music.ogg'));
 	})
 	.then(() => {
 		console.log('Copying static files');

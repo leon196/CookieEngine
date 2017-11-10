@@ -5,78 +5,36 @@
 	"geometries": {
 	},
 	"shaderMaterials": {
-		"simple": {
-			"vertexShader": "shader/triangle/simple.vert",
-			"fragmentShader": "shader/triangle/simple.frag",
+		"bubble": {
+			"vertexShader": "shader/meshes/bubble.vert",
+			"fragmentShader": "shader/meshes/bubble.frag",
 			"side": 2
+		},
+		"raymarching": {
+			"vertexShader": "shader/filters/screen.vert",
+			"fragmentShader": "shader/filters/raymarching.frag"
 		},
 		"paper": {
-			"vertexShader": "shader/lab/paper.vert",
-			"fragmentShader": "shader/lab/paper.frag",
+			"vertexShader": "shader/meshes/paper.vert",
+			"fragmentShader": "shader/meshes/paper.frag",
 			"side": 2
 		},
-		"lines": {
-			"vertexShader": "shader/lab/lines.vert",
-			"fragmentShader": "shader/lab/lines.frag",
+		"line": {
+			"vertexShader": "shader/meshes/line.vert",
+			"fragmentShader": "shader/meshes/line.frag",
 			"side": 2
 		},
-		"feather": {
-			"vertexShader": "shader/lab/feather.vert",
-			"fragmentShader": "shader/lab/feather.frag",
-			"side": 2
-		},
-		"paint": {
-			"vertexShader": "shader/lab/paint.vert",
-			"fragmentShader": "shader/lab/paint.frag",
+		"text": {
+			"vertexShader": "shader/meshes/text.vert",
+			"fragmentShader": "shader/meshes/text.frag",
 			"side": 2,
 			"depthTest": false,
 			"opacity": 1,
 			"transparent": true
 		},
-		"sprite": {
-			"vertexShader": "shader/lab/sprite.vert",
-			"fragmentShader": "shader/lab/sprite.frag",
-			"side": 2
-		},
 		"filter": {
-			"vertexShader": "shader/filter/screen.vert",
-			"fragmentShader": "shader/filter/filter.frag"
-		},
-		"buffer": {
-			"vertexShader": "shader/filter/screen.vert",
-			"fragmentShader": "shader/filter/buffer.frag"
-		},
-		"raymarching": {
-			"vertexShader": "shader/filter/screen.vert",
-			"fragmentShader": "shader/filter/raymarching.frag"
-		},
-		"fire": {
-			"vertexShader": "shader/scene/fire.vert",
-			"fragmentShader": "shader/scene/fire.frag",
-			"side": 2
-		},
-		"leaf": {
-			"vertexShader": "shader/scene/leaf.vert",
-			"fragmentShader": "shader/scene/leaf.frag",
-			"side": 2
-		},
-		"position": {
-			"vertexShader": "shader/filter/screen.vert",
-			"fragmentShader": "shader/pass/position.frag"
-		},
-		"snow": {
-			"vertexShader": "shader/scene/snow.vert",
-			"fragmentShader": "shader/scene/snow.frag",
-			"side": 2
-		},
-		"tree": {
-			"vertexShader": "shader/scene/tree.vert",
-			"fragmentShader": "shader/scene/tree.frag",
-			"side": 2
-		},
-		"velocity": {
-			"vertexShader": "shader/filter/screen.vert",
-			"fragmentShader": "shader/pass/velocity.frag"
+			"vertexShader": "shader/filters/screen.vert",
+			"fragmentShader": "shader/filters/filter.frag"
 		}
 	}
 }

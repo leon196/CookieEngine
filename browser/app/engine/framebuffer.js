@@ -33,13 +33,4 @@ export default class {
 			this.renderTextures[i].setSize(width, height);
 		}
 	}
-
-	// if (type == THREE.UnsignedByteType) {
-	// 	var self = this;
-	// 	renderer.resizeCallbacks.push(function (width, height) {
-	// 		for (var i = 0; i < self.count; ++i) {
-	// 			self.renderTextures[i].setSize(width, height);
-	// 		}
-	// 	});
-	// }
 }
