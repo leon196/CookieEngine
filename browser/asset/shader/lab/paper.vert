@@ -25,7 +25,7 @@ void main()	{
 	// pos.yz *= rot(pos.x*.02*waveB);
 	pos.z += atan(pos.x,pos.y)*.5;
 	// pos.z *= 10.;
-	float seed = noiseIQ(pos*10.);
+	float seed = noiseIQ(pos*2.);
 	float dist = length(pos);
 	vec3 offset = vec3(seed);
 	a = noiseIQ(pos*5.)*PI2;
@@ -40,7 +40,7 @@ void main()	{
 	float fade = smoothstep(0., 10., pos.z + (blendPaper*2.-1.) * 10.);
 	pos.xy *= rot(pos.z * waveGrow + time);
 	vec2 size = vec2(.25) * fade;
-	size *= 1. + 1. * seed;// + 2. * waveB * seed;
+	size *= 1. + 1. * seed + 20. * waveB * smoothstep(.6,1.,seed);
 	pos.xy *= .8+.2*cos(abs(pos.z));
 	pos *= 20.;
 	vDepth = length(cameraPosition - pos);
