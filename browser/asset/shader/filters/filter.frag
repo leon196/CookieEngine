@@ -1,6 +1,6 @@
 
 uniform sampler2D frameScene, frameRaymarch, frameText;
-uniform float blendTextIn, blendTextOut, blendGlitch;
+uniform float blendTextIn, blendTextOut, blendGlitch, blendBlack;
 uniform float time;
 uniform vec2 resolution;
 varying vec2 vUv;

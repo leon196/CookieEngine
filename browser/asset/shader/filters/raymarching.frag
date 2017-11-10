@@ -57,7 +57,7 @@ float map (vec3 pos) {
 	pos.xy += vec2(cos(a),sin(a)) * 10.;
 
 	// appearing animation
-	float fade = smoothstep(0., 200., -pos.z - 300. * (blendRaymarch*2.-1.));
+	float fade = smoothstep(0., 200., -pos.z - 410. * (blendRaymarch*2.-1.));
 
 	// create a negative sphere around camera
 	float shell = sdSphere(pos-cameraPosition, 10.);
