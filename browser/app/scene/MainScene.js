@@ -27,21 +27,28 @@ export default class {
 		this.controls.rotateSpeed = 0.5;
 
 		uniforms.jonathanTexture = { value: assets.materials.Jonathan2.map };
-		this.generate(5);
+		this.generate(10);
 	}
 
 	generate(count) {
 		var jo = assets.geometries.Jonathan2.children[0].geometry;
+		var min = -1000;
+		var max = 1000;
+		jo.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
+		jo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
 		for (var c = 0; c < count; ++c) {
+			var geometry = new THREE.BufferGeometry()
 			var numbers = [];
+			var attributes = Object.keys(jo.attributes);
+			attributes.forEach(name => {
+				geometry.addAttribute(name, new THREE.BufferAttribute(new Float32Array(jo.attributes[name].array), jo.attributes[name].itemSize));
+			});
 			for (var i = 0; i < jo.attributes.position.array.length / 3; ++i) {
 				numbers.push(c);
 			}
-			jo.addAttribute( 'number', new THREE.BufferAttribute( new Float32Array(numbers), 1 ) );
-			var mesh = new THREE.Mesh(jo, assets.shaderMaterials.mesh);
-			mesh.position.x += c*4.;
+			geometry.addAttribute( 'number', new THREE.BufferAttribute( new Uint16Array(numbers), 1 ) );
+			var mesh = new THREE.Mesh(geometry, assets.shaderMaterials.mesh);
 			this.scene.add(mesh);
-			
 		}
 	}
 
