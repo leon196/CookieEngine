@@ -28,32 +28,33 @@ export default class {
 		this.controls.rotateSpeed = 0.5;
 
 		uniforms.jonathanTexture = { value: assets.materials.Jonathan2.map };
-		this.generate(20);
-
-		// var meshes = Geometry.createQuadFromPoints(Geometry.getRandomPoints(5, 3), assets.shaderMaterials.paper, [1,40]);
-		// for (var i = 0; i < meshes.length; ++i) {
-		// 	this.scene.add(meshes[i]);
-		// }
+		// uniforms.jonathanTexture = { value: assets.materials.Mario.map };
+		// uniforms.jonathanTexture = { value: assets.materials.Chouchen.map };
+		var geometry = assets.geometries.Jonathan1k.children[0].geometry;
+		this.generate(50, geometry, assets.shaderMaterials.mesh);
+		geometry = assets.geometries.Jonathan10k.children[0].geometry;
+		this.generate(1, geometry, assets.shaderMaterials.head);
+		geometry =  assets.geometries.question.children[0].geometry;
+		this.generate(32*32, geometry, assets.shaderMaterials.question);
 	}
 
-	generate(count) {
-		var jo = assets.geometries.Jonathan2.children[0].geometry;
+	generate(count, geo, shader) {
 		var min = -1000;
 		var max = 1000;
-		jo.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
-		jo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
+		geo.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
+		geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
 		for (var c = 0; c < count; ++c) {
 			var geometry = new THREE.BufferGeometry()
 			var numbers = [];
-			var attributes = Object.keys(jo.attributes);
+			var attributes = Object.keys(geo.attributes);
 			attributes.forEach(name => {
-				geometry.addAttribute(name, new THREE.BufferAttribute(new Float32Array(jo.attributes[name].array), jo.attributes[name].itemSize));
+				geometry.addAttribute(name, new THREE.BufferAttribute(new Float32Array(geo.attributes[name].array), geo.attributes[name].itemSize));
 			});
-			for (var i = 0; i < jo.attributes.position.array.length / 3; ++i) {
+			for (var i = 0; i < geo.attributes.position.array.length / 3; ++i) {
 				numbers.push(c);
 			}
 			geometry.addAttribute( 'number', new THREE.BufferAttribute( new Uint16Array(numbers), 1 ) );
-			var mesh = new THREE.Mesh(geometry, assets.shaderMaterials.mesh);
+			var mesh = new THREE.Mesh(geometry, shader);
 			this.scene.add(mesh);
 		}
 	}

@@ -3,6 +3,9 @@
 	"fonts": {
 		"coffee": {
 			"file": "font/coffee.json"
+		},
+		"bebas": {
+			"file": "font/bebas.json"
 		}
 	},
 	"geometries": {
@@ -12,8 +15,20 @@
 		"flash": {
 			"file": "point/flash.obj"
 		},
-		"Jonathan2": {
+		"question": {
+			"file": "point/question.obj"
+		},
+		"Jonathan1k": {
 			"file": "point/Jonathan1k.obj"
+		},
+		"Jonathan10k": {
+			"file": "point/Jonathan10k.obj"
+		},
+		"Chouchen": {
+			"file": "point/Chouchen.obj"
+		},
+		"Mario": {
+			"file": "point/Mario.obj"
 		},
 		"tree": {
 			"file": "point/tree.obj"
@@ -25,6 +40,15 @@
 	"materials": {
 		"Jonathan2": {
 			"texture": "point/Jonathan2.jpg"
+		},
+		"Mario": {
+			"texture": "point/Mario.png"
+		},
+		"Chouchen": {
+			"texture": "point/Chouchen.jpg"
+		},
+		"JonathanSprite": {
+			"texture": "point/JonathanSprite.png"
 		}
 	},
 	"shaderMaterials": {
@@ -40,14 +64,27 @@
 			"vertexShader": "shader/filter/screen.vert",
 			"fragmentShader": "shader/filter/filter.frag"
 		},
+		"question": {
+			"vertexShader": "shader/scene/question.vert",
+			"fragmentShader": "shader/scene/question.frag"
+		},
 		"paper": {
 			"vertexShader": "shader/scene/paper.vert",
 			"fragmentShader": "shader/scene/paper.frag",
 			"side": 2
 		},
+		"stars": {
+			"vertexShader": "shader/scene/stars.vert",
+			"fragmentShader": "shader/scene/stars.frag",
+			"side": 2
+		},
 		"mesh": {
 			"vertexShader": "shader/scene/mesh.vert",
 			"fragmentShader": "shader/scene/mesh.frag"
+		},
+		"head": {
+			"vertexShader": "shader/scene/head.vert",
+			"fragmentShader": "shader/scene/head.frag"
 		},
 		"fire": {
 			"vertexShader": "shader/scene/fire.vert",
