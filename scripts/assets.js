@@ -22,13 +22,36 @@ function register(url) {
 var animationsImportName = register(descriptors.animations);
 
 const exportLines = [
-	'const plyLoader = new PLYLoader();',
 	'const objLoader = new OBJLoader();',
+	'const plyLoader = new PLYLoader();',
 	'const fontLoader = new THREE.FontLoader();',
+	'const textureLoader = new THREE.TextureLoader();',
 
+	'const baseUrl = "asset/";',
+	'const materialNames = Object.keys(descriptors.materials);',
+	'const materials = {};',
+	'function load(callback) {',
+	'let pending = materialNames.length;',
+	'if (!pending)',
+	'	return callback();',
+	'else',
+	'	materialNames.forEach(name => {',
+	'		const textureUrl = descriptors.materials[name].texture;',
+		'',
+	'		textureLoader.load(baseUrl + textureUrl, (texture) => {',
+	'			materials[name] = new THREE.MeshBasicMaterial({',
+	'				map: texture,',
+	'			});',
+			'',
+	'			--pending;',
+	'			if (!pending)',
+	'				return callback();',
+	'		});',
+	'	});',
+	'}',
 	'export default {',
 	'animations: makeAnimations(JSON.parse(' + animationsImportName + ')),',
-	'geometries: {',
+	'geometries: {'
 ];
 
 Object.keys(descriptors.geometries).forEach(name => {
@@ -66,6 +89,7 @@ Object.keys(descriptors.fonts).forEach(name => {
 
 exportLines.push(
 	'},',
+	'materials,',
 	'shaderMaterials: {'
 );
 
@@ -86,7 +110,7 @@ Object.keys(descriptors.shaderMaterials).forEach(name => {
 
 exportLines.push(
 	'},',
-	'load: function(callback) { return callback(); }',
+	'load',
 	'};'
 );
 
