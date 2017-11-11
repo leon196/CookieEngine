@@ -7,7 +7,7 @@ varying vec2 vUv;
 
 void main()	{
 	vec2 uv = vUv;
-	uv.x = uv.x+time*.1-4.;
+	uv.x = uv.x+time*.2-6.;
 	vec4 title = texture2D(titleText, uv);
 	vec4 credit = texture2D(creditText, uv);
 	vec4 color = mix(title, credit, step(mod(uv.x, 2.), 1.));
