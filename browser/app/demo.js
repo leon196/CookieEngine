@@ -4,19 +4,22 @@ import FrameBuffer from './engine/framebuffer';
 import uniforms from './engine/uniforms';
 import FilterScene from './scene/FilterScene';
 import MainScene from './scene/MainScene';
+import TunnelScene from './scene/TunnelScene';
 import * as timeline from './engine/timeline';
 
 export default function() {
-	let frame;
-	let filterScene, mainScene;
+	let frameScene, frameTunnel;
+	let filterScene, mainScene, tunnelScene;
 	let ready = false;
 
 	requestAnimationFrame(animate);
 
 	assets.load(function() {
-		frame = new FrameBuffer();
+		frameScene = new FrameBuffer();
+		frameTunnel = new FrameBuffer();
 		filterScene = new FilterScene();
 		mainScene = new MainScene();
+		tunnelScene = new TunnelScene();
 
 		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);
@@ -32,10 +35,13 @@ export default function() {
 			const time = timeline.getTime();
 
 			mainScene.update(time);
+			tunnelScene.update(time);
 			uniforms.time.value = time;
 
-			renderer.render(mainScene.scene, mainScene.camera, frame.getTarget(), true);
-			assets.shaderMaterials.filter.uniforms.frameBuffer.value = frame.getTexture();
+			renderer.render(mainScene.scene, mainScene.camera, frameScene.getTarget(), true);
+			renderer.render(tunnelScene.scene, tunnelScene.camera, frameTunnel.getTarget(), true);
+			assets.shaderMaterials.filter.uniforms.frameScene.value = frameScene.getTexture();
+			assets.shaderMaterials.filter.uniforms.frameTunnel.value = frameTunnel.getTexture();
 			renderer.render(filterScene.scene, filterScene.camera);
 		}
 	}

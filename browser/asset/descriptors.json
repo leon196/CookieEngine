@@ -68,6 +68,15 @@
 			"vertexShader": "shader/scene/question.vert",
 			"fragmentShader": "shader/scene/question.frag"
 		},
+		"meshTunnel": {
+			"vertexShader": "shader/scene/meshTunnel.vert",
+			"fragmentShader": "shader/scene/meshTunnel.frag"
+		},
+		"ribbonTunnel": {
+			"vertexShader": "shader/scene/ribbonTunnel.vert",
+			"fragmentShader": "shader/scene/ribbonTunnel.frag",
+			"side": 2
+		},
 		"paper": {
 			"vertexShader": "shader/scene/paper.vert",
 			"fragmentShader": "shader/scene/paper.frag",

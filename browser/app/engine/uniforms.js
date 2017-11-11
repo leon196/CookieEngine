@@ -1,6 +1,7 @@
 export default {
 	time: { value: 1.0 },
-	frameBuffer: { value: 0 },
+	frameScene: { value: 0 },
+	frameTunnel: { value: 0 },
 	resolution: { value: [window.innerWidth, window.innerHeight] },
 	blendLabelFire: { value: 0 },
 	blendLabelAlpha: { value: 0 },
