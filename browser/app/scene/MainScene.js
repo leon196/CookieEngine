@@ -44,11 +44,8 @@ export default class {
 		this.generate(32*32, geometry, assets.shaderMaterials.symbolFinal);
 
 		uniforms.ribbonText = { value: this.generateText('A', 'bebas', 72, 64, 64, true) };
-		uniforms.titleText = { value: this.generateText('TITLE', 'bebas', 72, 512, 64, true) };
+		uniforms.titleText = { value: this.generateText('Troubles in my heaaad', 'bebas', 72, 512, 64, true) };
 		uniforms.creditText = { value: this.generateText('koltes   ponk   zac', 'bebas', 72, 512, 64, true) };
-
-		Geometry.createRibbons(1, 128, assets.shaderMaterials.ribbonScreen)
-			.forEach(mesh => this.scene.add(mesh));
 
 		Geometry.createRibbons(5, 128, assets.shaderMaterials.ribbon)
 			.forEach(mesh => this.scene.add(mesh));

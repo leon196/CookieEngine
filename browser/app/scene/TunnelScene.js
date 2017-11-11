@@ -39,6 +39,9 @@ export default class {
 
 		Geometry.createRibbons(1, 100, assets.shaderMaterials.ribbonTunnel)
 			.forEach(mesh => this.scene.add(mesh));
+
+		Geometry.createRibbons(1, 128, assets.shaderMaterials.ribbonScreen)
+			.forEach(mesh => this.scene.add(mesh));
 	}
 
 	update(elapsed) {
