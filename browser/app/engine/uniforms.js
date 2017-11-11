@@ -11,4 +11,5 @@ export default {
 	introSymbol: { value: 0 },
 	joOffset: { value: 0 },
 	ribbon: { value: 0 },
+	flying: { value: 0 },
 };

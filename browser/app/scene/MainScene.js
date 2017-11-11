@@ -40,6 +40,9 @@ export default class {
 		geometry =  assets.geometries.question.children[0].geometry;
 		this.generate(8*8, geometry, assets.shaderMaterials.symbol);
 
+		geometry =  assets.geometries.question.children[0].geometry;
+		this.generate(32*32, geometry, assets.shaderMaterials.symbolFinal);
+
 		uniforms.ribbonText = { value: this.generateText('A', 'bebas', 72, 64, 64, true) };
 		uniforms.titleText = { value: this.generateText('TITLE', 'bebas', 72, 512, 64, true) };
 		uniforms.creditText = { value: this.generateText('koltes   ponk   zac', 'bebas', 72, 512, 64, true) };
@@ -99,6 +102,7 @@ export default class {
 			'introSymbol',
 			'joOffset',
 			'ribbon',
+			'flying',
 		].forEach(uniformName => {
 			uniforms[uniformName].value = assets.animations.getValue(uniformName, elapsed);
 		});

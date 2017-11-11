@@ -69,6 +69,11 @@
 			"fragmentShader": "shader/scene/symbol.frag",
 			"transparent": true
 		},
+		"symbolFinal": {
+			"vertexShader": "shader/scene/symbolFinal.vert",
+			"fragmentShader": "shader/scene/symbolFinal.frag",
+			"transparent": true
+		},
 		"meshTunnel": {
 			"vertexShader": "shader/scene/meshTunnel.vert",
 			"fragmentShader": "shader/scene/meshTunnel.frag"
