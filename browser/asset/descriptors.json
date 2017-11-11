@@ -64,9 +64,10 @@
 			"vertexShader": "shader/filter/screen.vert",
 			"fragmentShader": "shader/filter/filter.frag"
 		},
-		"question": {
-			"vertexShader": "shader/scene/question.vert",
-			"fragmentShader": "shader/scene/question.frag"
+		"symbol": {
+			"vertexShader": "shader/scene/symbol.vert",
+			"fragmentShader": "shader/scene/symbol.frag",
+			"transparent": true
 		},
 		"paper": {
 			"vertexShader": "shader/scene/paper.vert",
@@ -78,9 +79,10 @@
 			"fragmentShader": "shader/scene/stars.frag",
 			"side": 2
 		},
-		"mesh": {
-			"vertexShader": "shader/scene/mesh.vert",
-			"fragmentShader": "shader/scene/mesh.frag"
+		"flying": {
+			"vertexShader": "shader/scene/flying.vert",
+			"fragmentShader": "shader/scene/flying.frag",
+			"transparent": true
 		},
 		"head": {
 			"vertexShader": "shader/scene/head.vert",
