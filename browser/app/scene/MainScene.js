@@ -36,6 +36,9 @@ export default class {
 		this.generate(1, geometry, assets.shaderMaterials.head);
 		geometry =  assets.geometries.question.children[0].geometry;
 		this.generate(32*32, geometry, assets.shaderMaterials.question);
+
+		Geometry.createRibbons(5, 128, assets.shaderMaterials.ribbon)
+			.forEach(mesh => this.scene.add(mesh));
 	}
 
 	generate(count, geo, shader) {

@@ -39,7 +39,7 @@ export default class Geometry {
 			normal: Geometry.getRandomBuffer(count, 3),
 			color: Geometry.getRandomBuffer(count, 3),
 			uv: Geometry.getRandomBuffer(count, 2),
-		}
+		};
 	}
 
 	static createTriangleFromPoints (attributes)
@@ -106,18 +106,18 @@ export default class Geometry {
 
 		return geometry;
 	}
-	static createQuadFromPoints (points, material, slices)
-	{
+
+	static createQuadFromPoints(points, material, slices) {
 		// variables
-		var slices = slices || [1,1];
+		var slices = slices || [1, 1];
 		var count = points.length / 3;
 		var dimension = closestPowerOfTwo(Math.sqrt(count));
-		var faces = [slices[0]+1, slices[1]+1];
+		var faces = [slices[0] + 1, slices[1] + 1];
 		var vertexCount = faces[0] * faces[1];
 		var quadCount = slices[0] * slices[1];
 
 		var meshes = [];
-		var verticesMax = 65000-1;
+		var verticesMax = 65000 - 1;
 		var totalVertices = count * vertexCount;
 		var meshCount = 1 + Math.floor(totalVertices / verticesMax);
 		var pointIndex = 0;
@@ -152,15 +152,15 @@ export default class Geometry {
 
 				for (var vertex = 0; vertex < vertexCount; ++vertex) {
 					// attributeNames.forEach(name => {
-						var itemSize = 3;
-						for (var i = 0; i < itemSize; i++) {
-							positions.push(points[pointIndex*itemSize+i]);
-						}
+					var itemSize = 3;
+					for (var i = 0; i < itemSize; i++) {
+						positions.push(points[pointIndex * itemSize + i]);
+					}
 					// });
 					var x = (vertex % faces[0]) / faces[0];
 					var y = Math.floor(vertex / faces[0]) / faces[1];
-					anchors.push(x*2-1, y*2-1);
-					indexMap.push(u,v);
+					anchors.push(x * 2 - 1, y * 2 - 1);
+					indexMap.push(u, v);
 				}
 
 				// FIX ME
@@ -197,15 +197,15 @@ export default class Geometry {
 			// attributeNames.forEach(name => {
 			// 	geometry.addAttribute(name, new THREE.BufferAttribute(new Float32Array(arrays[name]), attributes[name].itemSize));
 			// });
-			geometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array(positions), 2 ) );
-			geometry.addAttribute( 'anchor', new THREE.BufferAttribute( new Float32Array(anchors), 2 ) );
-			geometry.addAttribute( 'indexMap', new THREE.BufferAttribute( new Float32Array(indexMap), 2 ) );
+			geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 2));
+			geometry.addAttribute('anchor', new THREE.BufferAttribute(new Float32Array(anchors), 2));
+			geometry.addAttribute('indexMap', new THREE.BufferAttribute(new Float32Array(indexMap), 2));
 			geometry.setIndex(new THREE.BufferAttribute(new Uint16Array(indices), 1));
 
 			var min = -100;
 			var max = 100;
-			geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
-			geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
+			geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min, min, min), new THREE.Vector3(max, max, max));
+			geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), max);
 
 			let mesh = new THREE.Mesh(geometry, material);
 			meshes.push(mesh);
@@ -214,66 +214,46 @@ export default class Geometry {
 		return meshes;
 	}
 
-	static createGeometryForParticles (positionArray)
+	static createRibbons(ribbonCount, segmentCount, material)
 	{
-		var geometry = new THREE.BufferGeometry();
+		const meshes = [];
 
-		// variables
-		var x, y, z, ia, ib, ic, u, v, nx, ny, nz;
-		var indexVertex = 0, indexUV = 0, indexAnchor = 0;
-		var dimension = closestPowerOfTwo(Math.sqrt(positionArray.length / 3));
-		var count = positionArray.length / 3;
-		var resolution = dimension*dimension;
+		const minBbox = -100;
+		const maxBbox = 100;
 
-		// attributes
-		var vertices = new Float32Array(count * 3 * 3);
-		var anchor = new Float32Array(count * 3 * 2);
-		var texcoord = new Float32Array(count * 3 * 2);
+		for (let ribbonIndex = 0; ribbonIndex < ribbonCount; ++ribbonIndex) {
+			// an atttribute named position is mandatory, so pack values within.
+			const positions = [];
+			const seeds = [];
 
-		// triangles
-		for (var triangleIndex = 0; triangleIndex - 1 < count; triangleIndex += 1) {
+			const seed = (Math.sin(ribbonIndex));
 
-			ia = triangleIndex*3;
-			ib = triangleIndex*3+1;
-			ic = triangleIndex*3+2;
+			for (let segmentIndex = 0; segmentIndex <= segmentCount; ++segmentIndex) {
+				// in [0, 1] along the ribbon length
+				const lengthRatio = segmentIndex / segmentCount;
 
-			// uv is used to map vertex index to bitmap data
-			u = (triangleIndex % dimension) / dimension;
-			v = Math.floor(triangleIndex / dimension) / dimension;
+				// side either -1 or +1, the direction of the point perpendicular to the length
+				positions.push(lengthRatio, -1);
+				positions.push(lengthRatio, +1);
 
-			// positions and normals are on the same for the 3 points
-			for (var tri = 0; tri < 3; ++tri)
-			{
-				vertices[indexVertex+0] =  positionArray[ia];
-				vertices[indexVertex+1] =  positionArray[ib];
-				vertices[indexVertex+2] =  positionArray[ic];
+				seeds.push(seed, seed);
+			}
 
-				texcoord[indexUV+0] = u;
-				texcoord[indexUV+1] = v;
+			const geometry = new THREE.BufferGeometry();
+			geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 2));
+			geometry.addAttribute('seed', new THREE.BufferAttribute(new Float32Array(seeds), 1));
 
-		    indexVertex += 3;
-		    indexUV += 2;
-		  }
+			geometry.boundingBox = new THREE.Box3(new THREE.Vector3(minBbox,minBbox,minBbox), new THREE.Vector3(maxBbox,maxBbox,maxBbox));
+			geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), maxBbox);
 
-		 	// offset used to scale triangle in shader
-			anchor[indexAnchor] = 0;
-			anchor[indexAnchor+1] = 1;
-			anchor[indexAnchor+2] = -1;
-			anchor[indexAnchor+3] = -1;
-			anchor[indexAnchor+4] = 1;
-			anchor[indexAnchor+5] = -1;
-			indexAnchor += 6;
+			const mesh = new THREE.Mesh(geometry, material);
+			mesh.position.x = randomRange(-1, 1);
+			mesh.position.y = randomRange(-1, 1);
+			mesh.position.z = randomRange(-1, 1);
+			mesh.drawMode = THREE.TriangleStripDrawMode;
+			meshes.push(mesh);
 		}
 
-		geometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-		geometry.addAttribute( 'anchor', new THREE.BufferAttribute( anchor, 2 ) );
-		geometry.addAttribute( 'texcoord', new THREE.BufferAttribute( texcoord, 2 ) );
-
-		var min = -1000;
-		var max = 1000;
-		geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
-		geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
-
-		return geometry;
+		return meshes;
 	}
 }

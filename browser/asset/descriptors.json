@@ -128,6 +128,11 @@
 			"fragmentShader": "shader/scene/rain.frag",
 			"side": 2
 		},
+		"ribbon": {
+			"vertexShader": "shader/scene/ribbon.vert",
+			"fragmentShader": "shader/scene/ribbon.frag",
+			"side": 2
+		},
 		"smoke": {
 			"vertexShader": "shader/scene/smoke.vert",
 			"fragmentShader": "shader/scene/smoke.frag",
