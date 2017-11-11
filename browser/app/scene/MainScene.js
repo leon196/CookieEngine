@@ -38,7 +38,7 @@ export default class {
 		this.generate(1, geometry, assets.shaderMaterials.head);
 
 		geometry =  assets.geometries.question.children[0].geometry;
-		this.generate(32*32, geometry, assets.shaderMaterials.symbol);
+		this.generate(8*8, geometry, assets.shaderMaterials.symbol);
 
 		uniforms.ribbonText = { value: this.generateText('A', 'bebas', 72, 64, 64, true) };
 		uniforms.titleText = { value: this.generateText('TITLE', 'bebas', 72, 512, 64, true) };
