@@ -27,7 +27,7 @@ vec3 displace (vec3 pos, float ratio) {
   p += offset * 5.;
 
   // expansion animation
-  float range = 40.;
+  float range = 60.;
   dist = mod(length(p.xyz)/range*10.+time*.5+ratio, 1.);
   dist *= range;
   p.xyz = normalize(p.xyz)*(dist);
@@ -39,7 +39,7 @@ void main()  {
   vAnchor = anchor;
   float a = indexMap.y * PI2;
   vec3 pos = vec3(cos(a),sin(a), indexMap.x*2.-1.);
-  vec2 size = vec2(.2) * blendLine;
+  vec2 size = vec2(.4) * blendLine;
   vec2 aspect = vec2(resolution.y / resolution.x, 1.);
   float ratio = mod(rand(pos.xz) + anchor.y/2., 1.);
 

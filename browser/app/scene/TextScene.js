@@ -30,6 +30,9 @@ export default class TextScene extends Scene {
 			{ text: '8, 9 December\nMontreuil',
 				font: 'trashhand',
 				size: 150, },
+			{ text: 'BISOUS',
+				font: 'trashhand',
+				size: 200, },
 		];
 		this.currentMessage = 0;
 		this.textures = [];

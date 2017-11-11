@@ -52,15 +52,15 @@ float map (vec3 pos) {
 	// shape parameter
 	float margin = 1.3 - .1 * waveB;
 
+	// create a negative sphere around camera
+	float shell = sdSphere(pos-cameraPosition, 10.);
+
 	// twist it
 	float a = pos.z* .05  + time;
 	pos.xy += vec2(cos(a),sin(a)) * 10.;
 
 	// appearing animation
 	float fade = smoothstep(0., 200., -pos.z - 410. * (blendRaymarch*2.-1.));
-
-	// create a negative sphere around camera
-	float shell = sdSphere(pos-cameraPosition, 10.);
 
 	// horizontal tube
   p = pos;
