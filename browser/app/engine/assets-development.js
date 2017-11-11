@@ -98,7 +98,7 @@ function load(callback) {
 			return callback();
 		}
 
-		const materialNames = Object.keys(descriptors.materials)
+		const materialNames = Object.keys(descriptors.materials);
 		let pending = materialNames.length;
 		if (!pending)
 			return loadOtherAssets();
