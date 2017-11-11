@@ -17,10 +17,12 @@ void main ()	{
 	vec2 uv = vUv*2.-1.;
 	uv.x *= resolution.x / resolution.y;
 
+	vec4 background = vec4(.2);
 	vec4 scene = texture2D(frameScene, vUv);
-	vec4 tunnel = texture2D(frameTunnel, vUv);
+	scene = mix(background, scene, scene.a);
 
-	vec4 frame = scene * sceneOpacity + tunnel * tunnelOpacity;
+
+	vec4 tunnel = texture2D(frameTunnel, vUv);
 
 	vec4 tunnelBack = vec4(1.);
 	vec2 p = uv;
@@ -33,12 +35,9 @@ void main ()	{
 	tunnelBack *= smoothstep(.6, 1., sin((angle)*scale.x));
 	tunnelBack *= smoothstep(-.1, .1, sin((radius+time*speed+seed)*scale.y));
 	tunnelBack *= length(p)*.5;
-	vec4 background = mix(background, tunnelBack, 1.);
+	tunnel = mix(tunnelBack, tunnel, tunnel.a);
 
-	// uv.x += sin(uv.y*3.+time)*.05;
-	// background *= 1.-smoothstep(.3, .4, length(mod(uv*20.,1.)-.5));
-	// background = vec4(1.)*luminance(background.rgb);
-	frame = mix(background, frame, frame.a);
+	vec4 frame = scene * sceneOpacity + tunnel * tunnelOpacity;
 
 	// vignette
 	float vignette = sin(vUv.x * PI);
