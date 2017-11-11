@@ -30,10 +30,8 @@ export default class {
 		uniforms.jonathanTexture = { value: assets.materials.Jonathan2.map };
 		this.generate(20);
 
-		// var meshes = Geometry.createQuadFromPoints(Geometry.getRandomPoints(5, 3), assets.shaderMaterials.paper, [1,40]);
-		// for (var i = 0; i < meshes.length; ++i) {
-		// 	this.scene.add(meshes[i]);
-		// }
+		Geometry.createRibbons(5, 128, assets.shaderMaterials.ribbon)
+			.forEach(mesh => this.scene.add(mesh));
 	}
 
 	generate(count) {
