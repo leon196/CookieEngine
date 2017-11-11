@@ -11,8 +11,8 @@ export function simpleText(message, font, fontSize, resolution, center)
 	ctx.fillStyle = 'white';
 	ctx.textAlign = 'center';
 	ctx.textBaseline = 'middle';
-	ctx.shadowColor = "rgba(0,0,0,.5)";
-	ctx.shadowBlur = 4;
+	// ctx.shadowColor = "rgba(0,0,0,.5)";
+	// ctx.shadowBlur = 4;
 
 	var words = message.split('\n');
 	var line = '';

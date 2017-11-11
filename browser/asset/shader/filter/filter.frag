@@ -1,6 +1,7 @@
 
 uniform sampler2D frameBuffer;
 uniform sampler2D uTexture;
+// uniform sampler2D ribbonText;
 uniform float fadeTransition;
 uniform float blendLight;
 uniform float blendLabelFire;
@@ -11,7 +12,7 @@ varying vec2 vUv;
 
 void main ()	{
 	vec4 color = texture2D(frameBuffer, vUv);
-	
+
 	// vignette
 	float vignette = sin(vUv.x * PI);
 	vignette *= sin(vUv.y * PI);
@@ -38,4 +39,5 @@ void main ()	{
 	color = mix(color, label, label.a);
 
 	gl_FragColor = color;
+	// gl_FragColor = texture2D(ribbonText, vUv);
 }

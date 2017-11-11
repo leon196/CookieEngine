@@ -7,6 +7,7 @@ uniform vec2 resolution;
 
 varying vec3 vPosition;
 varying vec3 vNormal;
+varying vec2 vUv;
 
 const float positionDerivativeEpsilon = .02;
 
@@ -20,12 +21,18 @@ vec3 computePosition(float lengthRatio) {
 }
 
 float computeHalfWidth(float lengthRatio) {
-	return .3 + sin(seed + lengthRatio * 50. + time) * .15;
+	return 1. + sin(seed + lengthRatio * 50. + time) * .15;
 }
 
 void main() {
 	float lengthRatio = position.x;
 	float side = position.y;
+
+	vUv = vec2(lengthRatio, side);
+	// vUv.x = fract(vUv.x*5.);
+	vUv.x *= 10.;
+	vUv.y *= .3;
+	vUv.y = vUv.y*.5+.5;
 
 	vec3 origin = modelMatrix[3].xyz,
 		position = computePosition(lengthRatio),
