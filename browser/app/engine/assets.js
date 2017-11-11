@@ -55,6 +55,8 @@ import shader_scene_snow_frag from "../../asset/shader/scene/snow.frag!text";
 import shader_scene_snow_vert from "../../asset/shader/scene/snow.vert!text";
 import shader_scene_stars_frag from "../../asset/shader/scene/stars.frag!text";
 import shader_scene_stars_vert from "../../asset/shader/scene/stars.vert!text";
+import shader_scene_symbolFinal_frag from "../../asset/shader/scene/symbolFinal.frag!text";
+import shader_scene_symbolFinal_vert from "../../asset/shader/scene/symbolFinal.vert!text";
 import shader_scene_symbol_frag from "../../asset/shader/scene/symbol.frag!text";
 import shader_scene_symbol_vert from "../../asset/shader/scene/symbol.vert!text";
 import shader_scene_tree_frag from "../../asset/shader/scene/tree.frag!text";
@@ -125,6 +127,11 @@ uniforms: uniforms,
 symbol: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials.symbol, {
 vertexShader: shaderHeader + shader_scene_symbol_vert,
 fragmentShader: shaderHeader + shader_scene_symbol_frag,
+uniforms: uniforms,
+})),
+symbolFinal: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials.symbolFinal, {
+vertexShader: shaderHeader + shader_scene_symbolFinal_vert,
+fragmentShader: shaderHeader + shader_scene_symbolFinal_frag,
 uniforms: uniforms,
 })),
 meshTunnel: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials.meshTunnel, {
