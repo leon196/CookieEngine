@@ -88,8 +88,8 @@ export default class {
 			'headRoundness',
 			'introSymbol',
 			'joOffset',
-			'scene1Opacity',
-			'scene2Opacity',
-		].forEach(uniformName => uniforms[uniformName] = { value: assets.animations.getValue(uniformName, elapsed) })
+		].forEach(uniformName => {
+			uniforms[uniformName].value = assets.animations.getValue(uniformName, elapsed);
+		});
 	}
 }

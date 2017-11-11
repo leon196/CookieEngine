@@ -3,7 +3,8 @@ uniform sampler2D frameScene;
 uniform sampler2D frameTunnel;
 uniform sampler2D uTexture;
 uniform sampler2D ribbonText;
-uniform float fadeTransition;
+uniform float sceneOpacity;
+uniform float tunnelOpacity;
 uniform float blendLight;
 uniform float blendLabelFire;
 uniform float blendLabelAlpha;
@@ -18,8 +19,8 @@ void main ()	{
 
 	vec4 scene = texture2D(frameScene, vUv);
 	vec4 tunnel = texture2D(frameTunnel, vUv);
-	// vec4 background = vec4(vPos*.5+.5, 1.);
-	vec4 background = vec4(.2);
+
+	vec4 frame = scene * sceneOpacity + tunnel * tunnelOpacity;
 
 	vec4 tunnelBack = vec4(1.);
 	vec2 p = uv;
@@ -32,9 +33,7 @@ void main ()	{
 	tunnelBack *= smoothstep(.6, 1., sin((angle)*scale.x));
 	tunnelBack *= smoothstep(-.1, .1, sin((radius+time*speed+seed)*scale.y));
 	tunnelBack *= length(p)*.5;
-
-	vec4 frame = mix(scene, tunnel, 1.);
-	background = mix(background, tunnelBack, 1.);
+	vec4 background = mix(background, tunnelBack, 1.);
 
 	// uv.x += sin(uv.y*3.+time)*.05;
 	// background *= 1.-smoothstep(.3, .4, length(mod(uv*20.,1.)-.5));
