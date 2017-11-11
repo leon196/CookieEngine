@@ -83,14 +83,13 @@ export default class {
 		// this.camera.lookAt(this.lookAt);
 		// this.camera.updateMatrixWorld(true);
 
-
-		const finalSymbol = assets.animations.getValue('finalSymbol', elapsed);
-		const headRoundness = assets.animations.getValue('headRoundness', elapsed);
-		const introSymbol = assets.animations.getValue('introSymbol', elapsed);
-		const joOffset = assets.animations.getValue('joOffset', elapsed);
-		const scene1Opacity = assets.animations.getValue('scene1Opacity', elapsed);
-		const scene2Opacity = assets.animations.getValue('scene2Opacity', elapsed);
-
-		uniforms.symbolOpacity = { value: introSymbol };
+		[
+			'finalSymbol',
+			'headRoundness',
+			'introSymbol',
+			'joOffset',
+			'scene1Opacity',
+			'scene2Opacity',
+		].forEach(uniformName => uniforms[uniformName] = { value: assets.animations.getValue(uniformName, elapsed) })
 	}
 }
