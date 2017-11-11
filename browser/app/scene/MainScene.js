@@ -30,12 +30,15 @@ export default class {
 		uniforms.jonathanTexture = { value: assets.materials.Jonathan2.map };
 		// uniforms.jonathanTexture = { value: assets.materials.Mario.map };
 		// uniforms.jonathanTexture = { value: assets.materials.Chouchen.map };
+
 		var geometry = assets.geometries.Jonathan1k.children[0].geometry;
-		this.generate(50, geometry, assets.shaderMaterials.mesh);
+		this.generate(50, geometry, assets.shaderMaterials.flying);
+
 		geometry = assets.geometries.Jonathan10k.children[0].geometry;
 		this.generate(1, geometry, assets.shaderMaterials.head);
+
 		geometry =  assets.geometries.question.children[0].geometry;
-		this.generate(32*32, geometry, assets.shaderMaterials.question);
+		this.generate(32*32, geometry, assets.shaderMaterials.symbol);
 
 		var text = new THREE.Texture(simpleText('coucou salut ca va hihi hello sayonara yo', 'bebas', 72, 1024, 64, true));
 		text.wrapS = THREE.RepeatWrapping;
@@ -79,5 +82,14 @@ export default class {
 		// this.lookAt.z = lerp(this.lookAt.z, lookAtPos[1], dt);
 		// this.camera.lookAt(this.lookAt);
 		// this.camera.updateMatrixWorld(true);
+
+		const finalSymbol = assets.animations.getValue('finalSymbol', elapsed);
+		const headRoundness = assets.animations.getValue('headRoundness', elapsed);
+		const introSymbol = assets.animations.getValue('introSymbol', elapsed);
+		const joOffset = assets.animations.getValue('joOffset', elapsed);
+		const scene1Opacity = assets.animations.getValue('scene1Opacity', elapsed);
+		const scene2Opacity = assets.animations.getValue('scene2Opacity', elapsed);
+
+		uniforms.symbolOpacity = { value: introSymbol };
 	}
 }
