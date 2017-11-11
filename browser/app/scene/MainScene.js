@@ -37,9 +37,8 @@ export default class {
 		geometry =  assets.geometries.question.children[0].geometry;
 		this.generate(32*32, geometry, assets.shaderMaterials.question);
 
-		var text = new THREE.Texture(simpleText('coucou', 'bebas', 72, 256, true));
+		var text = new THREE.Texture(simpleText('coucou salut ca va hihi hello sayonara yo', 'bebas', 72, 1024, 64, true));
 		text.wrapS = THREE.RepeatWrapping;
-		text.wrapT = THREE.RepeatWrapping;
 		text.needsUpdate = true;
 		uniforms.ribbonText = { value: text };
 

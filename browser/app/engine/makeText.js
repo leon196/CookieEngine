@@ -1,12 +1,12 @@
 
-export function simpleText(message, font, fontSize, resolution, center)
+export function simpleText(message, font, fontSize, width, height, center)
 {
 	font = font || 'arial';
 	font = fontSize + 'px ' + font;
 	var ctx = document.createElement('canvas').getContext('2d');
 	ctx.font = font;
-	ctx.canvas.width = resolution;
-	ctx.canvas.height = resolution;
+	ctx.canvas.width = width;
+	ctx.canvas.height = height;
 	ctx.font = font;
 	ctx.fillStyle = 'white';
 	ctx.textAlign = 'center';

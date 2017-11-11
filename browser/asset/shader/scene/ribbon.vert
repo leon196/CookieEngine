@@ -29,9 +29,9 @@ void main() {
 	float side = position.y;
 
 	vUv = vec2(lengthRatio, side);
-	// vUv.x = fract(vUv.x*5.);
-	vUv.x *= 10.;
-	vUv.y *= .3;
+	// vUv.x *= 2.;
+	// vUv.y *= .3;
+	vUv *= 2.;
 	vUv.y = vUv.y*.5+.5;
 
 	vec3 origin = modelMatrix[3].xyz,

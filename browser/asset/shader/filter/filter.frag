@@ -1,7 +1,7 @@
 
 uniform sampler2D frameBuffer;
 uniform sampler2D uTexture;
-// uniform sampler2D ribbonText;
+uniform sampler2D ribbonText;
 uniform float fadeTransition;
 uniform float blendLight;
 uniform float blendLabelFire;
