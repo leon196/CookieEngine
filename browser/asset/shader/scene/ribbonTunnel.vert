@@ -15,24 +15,26 @@ vec3 computePosition(float lengthRatio) {
 	vec3 p = vec3(lengthRatio, 0, 0);
 	// vec3 p = vec3(.8 + .2 * sin(seed * 10. + lengthRatio * 3.), 0, 0);
 	p.xy *= rot(seed * PI2 + lengthRatio * TAU + time);
-	p.xz *= rot(lengthRatio * PI2 + time);
+	p.xz *= rot(lengthRatio * PI2 + time * .7);
+	p.yz *= rot(lengthRatio * 10. + time * .5);
 	// p.xy *= rot(lengthRatio * PI2 + time);
 	// p.yz *= rot(lengthRatio + time + p.x*.2);
 	return p * 40.;
 }
 
 float computeHalfWidth(float lengthRatio) {
-	return 1.;// + sin(seed + lengthRatio * 50. + time) * .15;
+	return smoothstep(.0, .01, lengthRatio) * lengthRatio;// + sin(seed + lengthRatio * 50. + time) * .15;
 }
 
 void main() {
-	float lengthRatio = position.x;
-	float side = position.y * 5.;
+	vec2 scale = vec2(1.,5.);
+	float lengthRatio = position.x * scale.x;
+	float side = position.y * scale.y;
 
 	vUv = vec2(lengthRatio, side);
 	vUv.x *= 50.;
-	// vUv.y *= .3;
-	vUv *= 1.;
+	vUv.y *= 1./scale.y;
+	vUv *= 1.5;
 	vUv.y = vUv.y*.5+.5;
 
 	vec3 origin = modelMatrix[3].xyz,

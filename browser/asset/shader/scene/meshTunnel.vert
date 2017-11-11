@@ -35,7 +35,8 @@ void main()	{
 	float range = 1.;
 	float radius = .05;
 	float height = .01;
-	p.y -= 9.;
+	p.y -= 8.2;
+	p.z -= .7;
 	p.xz *= rot(p.y*.5+time*speed);
 	float dist = length(p) * .2;
 	p.xy *= rot(dist+time*.5);
