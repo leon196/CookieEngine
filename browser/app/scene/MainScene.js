@@ -98,6 +98,7 @@ export default class {
 			'headRoundness',
 			'introSymbol',
 			'joOffset',
+			'ribbon',
 		].forEach(uniformName => {
 			uniforms[uniformName].value = assets.animations.getValue(uniformName, elapsed);
 		});

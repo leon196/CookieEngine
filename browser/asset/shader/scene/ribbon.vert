@@ -2,7 +2,7 @@
 attribute float seed;
 
 uniform float time;
-uniform float blendPaper;
+uniform float ribbon;
 uniform vec2 resolution;
 
 varying vec3 vPosition;
@@ -18,7 +18,7 @@ vec3 computePosition(float lengthRatio) {
 	p.xz *= rot(lengthRatio * PI2 + time);
 	p.xy *= rot(lengthRatio * PI2 + time);
 	p.yz *= rot(lengthRatio + time + p.x*.2);
-	return p * 30.;
+	return p * 30. * ribbon;
 }
 
 float computeHalfWidth(float lengthRatio) {

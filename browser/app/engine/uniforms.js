@@ -10,4 +10,5 @@ export default {
 	headRoundness: { value: 0 },
 	introSymbol: { value: 0 },
 	joOffset: { value: 0 },
+	ribbon: { value: 0 },
 };
