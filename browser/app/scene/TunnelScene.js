@@ -32,7 +32,7 @@ export default class {
 		var geometry = assets.geometries.Jonathan10k.children[0].geometry;
 		this.scene.add(new THREE.Mesh(geometry, assets.shaderMaterials.meshTunnel));
 
-		var text = new THREE.Texture(simpleText('A', 'bebas', 144, 100, 128, true));
+		var text = new THREE.Texture(simpleText('A', 'bebas', 144, 128, 128, true));
 		text.wrapS = THREE.RepeatWrapping;
 		text.needsUpdate = true;
 		uniforms.ribbonText = { value: text };

@@ -32,7 +32,7 @@ export default class {
 		// uniforms.jonathanTexture = { value: assets.materials.Chouchen.map };
 
 		var geometry = assets.geometries.Jonathan1k.children[0].geometry;
-		this.generate(50, geometry, assets.shaderMaterials.flying);
+		this.generate(80, geometry, assets.shaderMaterials.flying);
 
 		geometry = assets.geometries.Jonathan10k.children[0].geometry;
 		this.generate(1, geometry, assets.shaderMaterials.head);
@@ -40,13 +40,22 @@ export default class {
 		geometry =  assets.geometries.question.children[0].geometry;
 		this.generate(32*32, geometry, assets.shaderMaterials.symbol);
 
-		var text = new THREE.Texture(simpleText('coucou salut ca va hihi hello sayonara yo', 'bebas', 72, 1024, 64, true));
-		text.wrapS = THREE.RepeatWrapping;
-		text.needsUpdate = true;
-		uniforms.ribbonText = { value: text };
+		uniforms.ribbonText = { value: this.generateText('A', 'bebas', 72, 64, 64, true) };
+		uniforms.titleText = { value: this.generateText('TITLE', 'bebas', 72, 512, 64, true) };
+		uniforms.creditText = { value: this.generateText('koltes   ponk   zac', 'bebas', 72, 512, 64, true) };
+
+		Geometry.createRibbons(1, 128, assets.shaderMaterials.ribbonScreen)
+			.forEach(mesh => this.scene.add(mesh));
 
 		Geometry.createRibbons(5, 128, assets.shaderMaterials.ribbon)
 			.forEach(mesh => this.scene.add(mesh));
+	}
+
+	generateText(message, font, fontSize, width, height, center) {
+		var text = new THREE.Texture(simpleText(message, font, fontSize, width, height, center));
+		text.wrapS = THREE.RepeatWrapping;
+		text.needsUpdate = true;
+		return text;
 	}
 
 	generate(count, geo, shader) {

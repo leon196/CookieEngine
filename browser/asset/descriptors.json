@@ -78,6 +78,14 @@
 			"fragmentShader": "shader/scene/ribbonTunnel.frag",
 			"side": 2
 		},
+		"ribbonScreen": {
+			"vertexShader": "shader/scene/ribbonScreen.vert",
+			"fragmentShader": "shader/scene/ribbonScreen.frag",
+			"side": 2,
+			"depthTest": false,
+			"opacity": 0.5,
+			"transparent": true
+		},
 		"paper": {
 			"vertexShader": "shader/scene/paper.vert",
 			"fragmentShader": "shader/scene/paper.frag",
