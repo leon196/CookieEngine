@@ -83,6 +83,7 @@ export default class {
 		// this.camera.lookAt(this.lookAt);
 		// this.camera.updateMatrixWorld(true);
 
+
 		const finalSymbol = assets.animations.getValue('finalSymbol', elapsed);
 		const headRoundness = assets.animations.getValue('headRoundness', elapsed);
 		const introSymbol = assets.animations.getValue('introSymbol', elapsed);
