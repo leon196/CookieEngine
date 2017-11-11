@@ -32,7 +32,7 @@ export default class {
 		// uniforms.jonathanTexture = { value: assets.materials.Chouchen.map };
 
 		var geometry = assets.geometries.Jonathan1k.children[0].geometry;
-		this.generate(50, geometry, assets.shaderMaterials.flying);
+		this.generate(80, geometry, assets.shaderMaterials.flying);
 
 		geometry = assets.geometries.Jonathan10k.children[0].geometry;
 		this.generate(1, geometry, assets.shaderMaterials.head);

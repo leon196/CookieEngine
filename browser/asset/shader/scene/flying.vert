@@ -1,6 +1,7 @@
 
 attribute float number;
 uniform float time;
+uniform float joOffset;
 varying vec2 vUv;
 varying vec3 vPos;
 
@@ -38,39 +39,41 @@ void main()	{
 	float speed = 2.;
 	float waveRange = 2. + sin(time);
 	p.xz *= rot(p.y * twist + time*speed);
-	float should1 = step(number, 0.);
-	float should2 = step(number, 10.);
-	float should3 = step(number, 20.);
-	float should4 = step(number, 30.);
-	p.y += number * 6.;
+	float should2 = step(number, 20.);
+	float should3 = step(number, 40.);
+	float should4 = step(number, 60.);
+
+	float offset = joOffset;
+
+	p.y += number * 6. * offset;
 	float radius, height, range;
 	radius = .5;
-	height = .01;
-	range = 8.+waveRange;
+	height = .008;
+	range = 10.+waveRange;
 	vec3 curved = getCurve(p, p.y+time*speed, p.x, p.z, radius, height, range);
 
 	p = pos;
-	p.z += number * 6.;
+	p.z += number * 6. * offset;
 	p.xy *= rot(p.z*.1 - time*speed);
 	vec3 curved2 = getCurve(p, p.z+time*speed, p.x, -p.y, radius, height, range);
 	p = mix(curved2, curved, should2);
 
 	// p = pos;
 	vec3 pp = pos;
-	pp.x += (number-30.) * 4.;
-	radius = .5;
-	height = .025;
-	range = 4.+waveRange;
+	pp.x += (number-30.) * 4. * offset;
+	radius = .5+sin(p.x)*.1;
+	height = .012;
+	range = 5.+waveRange;
 	vec3 curved3 = getCurve(pp, -pp.x-time*speed, -pp.z, pp.y, radius, height, range);
 	p = mix(curved3, p, should3);
 	// p = pos;
 
 	pp = pos;
-	pp.x += (number-40.) * 4. - 10.;
+	pp.x += ((number-60.) - 10.) * 4. * offset;
 	radius = .5;
 	height = .01;
 	range = 12.+waveRange;
-	vec3 curved4 = getCurve(pp, pp.y+time*speed*10.+p.z+number*10., -pp.z, pp.x, radius, height, range);
+	vec3 curved4 = getCurve(pp, pp.y+time*speed*10.+p.z+number*10. * offset, -pp.z, pp.x, radius, height, range);
 	p = mix(curved4, p, should4);
 	// pos.xz *= 1. + .5 * sin(pos.y + time);
 	vPos = p;

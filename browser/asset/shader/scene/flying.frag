@@ -11,6 +11,6 @@ void main()	{
 	// if (fract(length(vPos)*10.+time) > margin) discard;
 	// if (fract(atan(vPos.z,vPos.x)*PI*10.+time) > margin) discard;
 	vec4 color = texture2D(jonathanTexture, vUv);
-	color.a *= joOpacity;
+	// color.a *= joOpacity;
 	gl_FragColor = color;
 }
