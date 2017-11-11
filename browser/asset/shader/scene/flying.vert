@@ -2,6 +2,7 @@
 attribute float number;
 uniform float time;
 uniform float joOffset;
+uniform float flying;
 varying vec2 vUv;
 varying vec3 vPos;
 
@@ -34,6 +35,7 @@ void main()	{
 	vUv = uv;
 
 	vec3 pos = (modelMatrix * vec4(position, 1.)).xyz;
+	pos *= flying;
 	vec3 p = pos;
 	float twist = .5;
 	float speed = 2.;

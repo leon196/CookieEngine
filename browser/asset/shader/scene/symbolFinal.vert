@@ -1,6 +1,7 @@
 
 attribute float number;
 uniform float time;
+uniform float finalSymbol;
 varying vec2 vUv;
 varying vec3 vNormal;
 varying vec3 vView;
@@ -23,7 +24,7 @@ void main()	{
 	// p.xz += vec2(cos(a),sin(a));
 	// p.y += (seed * 2. - 1.);
 	// p = normalize(p);
-	p *= 20.;
+	p *= 40. * finalSymbol;
 	p.xy *= rot(rot2);
 	p.xz *= rot(rot2);
 	vView = normalize(cameraPosition - p);
