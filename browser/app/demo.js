@@ -42,6 +42,8 @@ export default function() {
 			renderer.render(tunnelScene.scene, tunnelScene.camera, frameTunnel.getTarget(), true);
 			assets.shaderMaterials.filter.uniforms.frameScene.value = frameScene.getTexture();
 			assets.shaderMaterials.filter.uniforms.frameTunnel.value = frameTunnel.getTexture();
+			assets.shaderMaterials.filter.uniforms.sceneOpacity.value = assets.animations.getValue('scene1Opacity', time);
+			assets.shaderMaterials.filter.uniforms.tunnelOpacity.value = assets.animations.getValue('scene2Opacity', time);
 			renderer.render(filterScene.scene, filterScene.camera);
 		}
 	}
