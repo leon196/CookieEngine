@@ -6,6 +6,7 @@ export default {
 	sceneOpacity: { value: 0 },
 	tunnelOpacity: { value: 0 },
 	finalSymbol: { value: 0 },
+	headRotationDelay: { value: 0 },
 	headRoundness: { value: 0 },
 	introSymbol: { value: 0 },
 	joOffset: { value: 0 },

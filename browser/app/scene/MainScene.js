@@ -80,20 +80,21 @@ export default class {
 	}
 
 	update(elapsed) {
-		// var dt = clamp(Math.abs(elapsed - this.lastElapsed), 0., 1.);
-		// var cameraPos = assets.animations.getPosition('camera', elapsed);
-		// this.camera.position.x = lerp(this.camera.position.x, -cameraPos[0], dt);
-		// this.camera.position.y = lerp(this.camera.position.y, cameraPos[2], dt);
-		// this.camera.position.z = lerp(this.camera.position.z, cameraPos[1], dt);
-		// var lookAtPos = assets.animations.getPosition('lookAt', elapsed);
-		// this.lookAt.x = lerp(this.lookAt.x, -lookAtPos[0], dt);
-		// this.lookAt.y = lerp(this.lookAt.y, lookAtPos[2], dt);
-		// this.lookAt.z = lerp(this.lookAt.z, lookAtPos[1], dt);
-		// this.camera.lookAt(this.lookAt);
-		// this.camera.updateMatrixWorld(true);
+		var dt = clamp(Math.abs(elapsed - this.lastElapsed), 0., 1.);
+		var cameraPos = assets.animations.getPosition('camera', elapsed);
+		this.camera.position.x = lerp(this.camera.position.x, -cameraPos[0], dt);
+		this.camera.position.y = lerp(this.camera.position.y, cameraPos[2], dt);
+		this.camera.position.z = lerp(this.camera.position.z, cameraPos[1], dt);
+		var lookAtPos = assets.animations.getPosition('lookAt', elapsed);
+		this.lookAt.x = lerp(this.lookAt.x, -lookAtPos[0], dt);
+		this.lookAt.y = lerp(this.lookAt.y, lookAtPos[2], dt);
+		this.lookAt.z = lerp(this.lookAt.z, lookAtPos[1], dt);
+		this.camera.lookAt(this.lookAt);
+		this.camera.updateMatrixWorld(true);
 
 		[
 			'finalSymbol',
+			'headRotationDelay',
 			'headRoundness',
 			'introSymbol',
 			'joOffset',
