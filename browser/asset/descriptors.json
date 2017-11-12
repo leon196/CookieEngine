@@ -32,6 +32,10 @@
 			"vertexShader": "shader/filter/screen.vert",
 			"fragmentShader": "shader/filter/filter.frag"
 		},
+		"simple": {
+			"vertexShader": "shader/triangle/simple.vert",
+			"fragmentShader": "shader/triangle/simple.frag"
+		},
 		"fire": {
 			"vertexShader": "shader/scene/fire.vert",
 			"fragmentShader": "shader/scene/fire.frag",

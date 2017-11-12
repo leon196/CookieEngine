@@ -7,15 +7,13 @@ import MainScene from './scene/MainScene';
 import * as timeline from './engine/timeline';
 
 export default function() {
-	let frame;
 	let filterScene, mainScene;
 	let ready = false;
 
 	requestAnimationFrame(animate);
 
 	assets.load(function() {
-		frame = new FrameBuffer();
-		filterScene = new FilterScene();
+		filterScene = new FilterScene(assets.shaderMaterials.filter);
 		mainScene = new MainScene();
 
 		onWindowResize();
@@ -30,12 +28,9 @@ export default function() {
 
 		if (ready) {
 			const time = timeline.getTime();
-
 			mainScene.update(time);
 			uniforms.time.value = time;
-
-			renderer.render(mainScene.scene, mainScene.camera, frame.getTarget(), true);
-			assets.shaderMaterials.filter.uniforms.frameBuffer.value = frame.getTexture();
+			uniforms.frameScene.value = mainScene.getFrame();
 			renderer.render(filterScene.scene, filterScene.camera);
 		}
 	}
