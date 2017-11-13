@@ -5,7 +5,7 @@ import assets from '../engine/assets';
 import uniforms from '../engine/uniforms';
 import Scene from '../engine/scene';
 import Geometry from '../engine/geometry';
-import { simpleText } from '../engine/makeText';
+import { simpleText } from '../engine/make-text';
 import { lerp, clamp } from '../libs/misc';
 
 export default class MainScene extends Scene {
@@ -15,8 +15,6 @@ export default class MainScene extends Scene {
 		this.camera.position.y = 0;
 		this.camera.position.z = 5;
 		this.timePreviousFrame = 0;
-
-		// this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.simple));
 
 		let count = 100;
 		let attributes = {
