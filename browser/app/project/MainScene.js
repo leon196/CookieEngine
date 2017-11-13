@@ -22,7 +22,7 @@ export default class MainScene {
 
 		this.camera.position.x = 0;
 		this.camera.position.y = 0;
-		this.camera.position.z = 5;
+		this.camera.position.z = 50;
 		this.timePreviousFrame = 0;
 
 		let count = 1000;

@@ -1,9 +1,9 @@
 
 import * as THREE from 'three.js';
-import { closestPowerOfTwo, lerp } from '../libs/misc';
 import assets from './assets';
-import ShaderPass from './shaderpass';
+import FrameBuffer from './framebuffer';
 import parameters from './parameters';
+import { closestPowerOfTwo, lerp } from '../libs/misc';
 
 export default class {
 	constructor(attributes, material, gpu) {
