@@ -3,11 +3,11 @@ import * as THREE from 'three.js';
 import parameters from '../engine/parameters';
 import assets from '../engine/assets';
 import uniforms from '../engine/uniforms';
-import Geometry from '../engine/geometry';
+import Particles from '../engine/particles';
 import renderer from '../engine/renderer';
 import { OrbitControls } from '../libs/OrbitControls';
 import { simpleText } from '../engine/make-text';
-import { lerp, clamp } from '../engine/misc';
+import { lerp, clamp, getRandomPoints } from '../engine/misc';
 
 export default class MainScene {
 	constructor() {
@@ -28,12 +28,12 @@ export default class MainScene {
 		let count = 1000;
 		let attributes = {
 			position: {
-				array: Geometry.getRandomPoints(count),
+				array: getRandomPoints(count),
 				itemSize: 3
 			}
 		};
-		Geometry.create(count, attributes, [8,8], assets.shaderMaterials.particle)
-			.forEach(mesh => { this.scene.add(mesh); });
+		this.particles = new Particles(count, attributes, [8,8], assets.shaderMaterials.particle);
+		this.particles.meshes.forEach(mesh => { this.scene.add(mesh); });
 	}
 
 	update(elapsed) {

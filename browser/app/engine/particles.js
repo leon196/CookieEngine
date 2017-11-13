@@ -1,17 +1,16 @@
 
-import * as THREE from 'three.js'
-import { randomRange, closestPowerOfTwo } from './misc'
+import * as THREE from 'three.js';
+import { closestPowerOfTwo, lerp } from './misc';
 
-export default class Geometry {
-	constructor() {}
-
-	static getRandomPoints(count) {
-		var points = [];
-		for (var i = 0; i < count * 3; ++i) points.push(randomRange(-1,1));
-		return points;
+export default class {
+	constructor(total, attributes, slices, material) {
+		this.meshes = this.createMeshes(total, attributes, slices, material);
 	}
 
-	static create (total, attributes, slices, material)
+	update(elapsed) {
+	}
+
+	createMeshes(total, attributes, slices, material)
 	{
 		var meshes = [];
 		var verticesMax = 65000;
@@ -83,5 +82,18 @@ export default class Geometry {
 		}
 
 		return meshes;
+	}
+
+	createDataTextureForParticles(dataArray, itemSize)	{
+		var dimension = closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
+		var array = [];
+		for (var t = 0; t < dataArray.length; t += itemSize)	{
+			for (var i = 0; i < itemSize; ++i) {
+				array.push(dataArray[t+i]);
+			}
+		}
+		var texture = new THREE.DataTexture(new Float32Array(array), dimension, dimension, THREE.RGBFormat, THREE.FloatType);
+		texture.needsUpdate = true;
+		return texture;
 	}
 }

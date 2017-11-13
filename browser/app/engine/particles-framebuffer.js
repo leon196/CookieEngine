@@ -6,9 +6,8 @@ import ShaderPass from './shaderpass';
 import parameters from './parameters';
 
 export default class {
-	constructor(attributes, mat, step, gpu) {
+	constructor(attributes, material, gpu) {
 		this.gpu = gpu | false;
-		step = step | 1;
 
 		this.uniforms = {
 			time: { value: 1.0 },
@@ -41,7 +40,7 @@ export default class {
 
 		this.geometry = createGeometryForParticles(positionArray, colorArray, normalArray, step);
 
-		this.mesh = new THREE.Mesh(this.geometry, mat);
+		this.mesh = new THREE.Mesh(this.geometry, material);
 
 		this.positionTexture = createDataTextureForParticles(positionArray, 3);
 		this.colorTexture = createDataTextureForParticles(colorArray, 3);
@@ -182,4 +181,3 @@ function createDataTextureForParticles (dataArray, itemSize)
 
 	return texture;
 }
-

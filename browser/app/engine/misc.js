@@ -1,5 +1,13 @@
 import { Vector3 } from 'three.js';
 
+
+export function getRandomPoints(count) {
+	var points = [];
+	for (var i = 0; i < count * 3; ++i) points.push(randomRange(-1,1));
+	return points;
+}
+
+
 export function randomRange(min, max) {
 	return min+Math.random()*(max-min);
 }

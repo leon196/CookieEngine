@@ -118,13 +118,12 @@ float noiseIQ( vec3 x )
 	 mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
 }
 
-float fbm (vec3 p, vec3 speed) {
+float fbm (vec3 p) {
     float value = 0.0;
     float amplitud = .5;
     for (float i = 1.; i <= 3.; i++) {
         value += amplitud * noiseIQ(p);
         p *= 2.;
-    	// p += speed;
         amplitud *= .5;
     }
     return value;
@@ -195,39 +194,8 @@ vec2 lightDirection (sampler2D bitmap, vec2 uv, vec2 dimension)
   force += l - luminance(c);
 
   return force;
-  // return normalize(force);
 }
 
-
-// vec4 displace (vec4 pos, float time)
-// {
-// 	float wave = sin(time + pos.x) * .5 + .5;
-// 	wave = noiseIQ(pos.xyz * .4 + time);
-// 	// pos.y += wave;
-// 	return pos;
-// }
-
-// vec4 layer (vec4 pos, vec2 resolution, float index)
-// {
-// 	vec2 aspect = vec2(resolution.y/resolution.x, 1.);
-// 	pos.x = pos.x * aspect.x;
-// 	pos.y = pos.y * aspect.y;
-// 	pos.z = index;
-// 	return pos;
-// }
-
-// vec3 displace (vec3 pos, float t)
-// {
-// 	float wave = sin(t + pos.x) * .5 + .5;
-// 	wave = noiseIQ(pos.xxx *.5 + t);
-// 	pos.y *= wave * 10.;
-// 	float a = -pos.x * .8;
-// 	float radius = 4. + sin(pos.y * .5 + t);
-// 	pos.x = cos(a + t) * radius;
-// 	pos.y += a * .5;
-// 	pos.z = sin(a + t) * radius;
-// 	return pos;
-// }
 vec3 displaceTree (vec3 p, float t, float blend)
 {
     float a = noiseIQ(p/3.)*PI2;

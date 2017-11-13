@@ -1,9 +1,9 @@
 import * as THREE from 'three.js';
 
 export default class {
-	constructor(width, height, format, type, count) {
+	constructor(width, height, format, type, count, material) {
 		this.renderTextures = [];
-		this.current = 0;
+		this.currentIndex = 0;
 		this.count = count || 1;
 		this.timePreviousFrame = 0;
 		this.timeLagStart = 0;
@@ -17,18 +17,33 @@ export default class {
 			this.renderTextures.push(new THREE.WebGLRenderTarget(width/this.levelOfDetail, height/this.levelOfDetail, {
 				minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter, format: format, type: type }));
 		}
+		this.material = material;
+		if (this.material !== undefined) {
+			this.scene = new THREE.Scene();
+			this.geometry = new THREE.PlaneBufferGeometry( 2, 2 );
+			this.camera = new THREE.Camera();
+			this.scene.add(new THREE.Mesh(this.geometry, this.material));
+		}
 	}
 
 	getRenderTarget() {
-		return this.renderTextures[this.current];
+		return this.renderTextures[this.currentIndex];
 	}
 
 	getTexture() {
-		return this.renderTextures[this.current].texture;
+		return this.renderTextures[this.currentIndex].texture;
 	}
 
 	swap() {
-		this.current = (this.current + 1) % this.count;
+		this.currentIndex = (this.currentIndex + 1) % this.count;
+	}
+
+	applyFilter() {
+		if (this.material !== undefined) {
+			this.material.uniforms.frameBuffer.value = this.getTexture();
+			this.swap();
+			renderer.render(this.scene, this.camera, this.getRenderTarget(), true);
+		}
 	}
 
 	autoResizeFromFPS (time) {
