@@ -1,6 +1,6 @@
 
 import * as THREE from 'three.js'
-import { randomRange, closestPowerOfTwo } from '../libs/misc'
+import { randomRange, closestPowerOfTwo } from './misc'
 
 export default class Geometry {
 	constructor() {}

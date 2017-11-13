@@ -15,9 +15,15 @@ void main() {
 	vIndexMap = indexMap;
 
 	vec3 pos = position;
-	pos.z += sin(anchor.x*3.+time) * .1;
-	pos *= 10.;
-	pos.xy += anchor.xy * size.xy;
+	float dist = length(pos);
+	pos.xz *= rot(dist + time);
+	pos.xy *= rot(dist + time*.5);
+	pos.zy *= rot(dist + time*.52);
+	pos *= 20.;
+	pos.x += sin(anchor.y*3.+time*10.) * .2;
+	pos.y += sin(anchor.x*3.+time*10.) * .5;
+	// pos.xy += anchor.xy * size.xy;
 
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
+	gl_Position.xy += anchor.xy * size.xy * aspect.xy;
 }

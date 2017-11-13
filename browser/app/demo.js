@@ -2,8 +2,8 @@ import assets from './engine/assets';
 import renderer from './engine/renderer';
 import FrameBuffer from './engine/framebuffer';
 import uniforms from './engine/uniforms';
-import MainScene from './scene/MainScene';
 import * as timeline from './engine/timeline';
+import MainScene from './project/MainScene';
 
 export default function() {
 	let mainScene;

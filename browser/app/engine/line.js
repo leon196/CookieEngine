@@ -1,6 +1,6 @@
 
 import * as THREE from 'three.js';
-import { closestPowerOfTwo } from '../libs/misc';
+import { closestPowerOfTwo } from './misc';
 import parameters from './parameters';
 
 export default class {
@@ -182,4 +182,3 @@ function createDataTextureForParticles (dataArray, itemSize)
 
 	return texture;
 }
-
