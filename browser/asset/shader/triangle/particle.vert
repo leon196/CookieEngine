@@ -9,13 +9,14 @@ varying vec2 vIndexMap;
 
 void main() {
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
-	vec2 size = vec2(.01);
+	vec2 size = vec2(.5);
 	vUv = uv;
 	vAnchor = anchor;
 	vIndexMap = indexMap;
 
 	vec3 pos = position;
 	pos.xy = indexMap.xy * 2. - 1.;
+	pos.y += sin(anchor.x*3.+time) * .1;
  	pos.z = 0.;
 	pos *= 2.;
 	float dist = length(pos);
