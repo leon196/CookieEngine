@@ -18,14 +18,14 @@ export default class MainScene extends Scene {
 
 		// this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.simple));
 
-		let count = 1;
+		let count = 100;
 		let attributes = {
 			position: {
 				array: Geometry.getRandomPoints(count),
 				itemSize: 3
 			}
 		};
-		this.addChildren(Geometry.create(count, attributes, [20,1], assets.shaderMaterials.particle));
+		this.addChildren(Geometry.create(count, attributes, [8,8], assets.shaderMaterials.particle));
 	}
 
 	update(elapsed) {

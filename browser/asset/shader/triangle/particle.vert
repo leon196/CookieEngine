@@ -9,20 +9,24 @@ varying vec2 vIndexMap;
 
 void main() {
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
-	vec2 size = vec2(.5);
+	vec2 size = vec2(2.5);
 	vUv = uv;
 	vAnchor = anchor;
 	vIndexMap = indexMap;
 
 	vec3 pos = position;
-	pos.xy = indexMap.xy * 2. - 1.;
-	pos.y += sin(anchor.x*3.+time) * .1;
- 	pos.z = 0.;
-	pos *= 2.;
-	float dist = length(pos);
+	// pos.xy = indexMap.xy * 2. - 1.;
+	// pos.y /= 4.;
+	pos.z += sin(anchor.x*3.+time) * .1;
+	// pos.y += sin(anchor.x*3.+time) * .1;
+ 	// pos.z = 0.;
+	pos *= 10.;
+	pos.xy += anchor.xy * size.xy;
+	// float dist = length(pos);
 	// pos.xz *= rot(time + dist);
 
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
-	gl_Position.x += anchor.x * size.x * aspect.x;
-	gl_Position.y += anchor.y * size.y * aspect.y;
+	// gl_Position = vec4(pos, 1.);
+	// gl_Position.x += anchor.x * size.x * aspect.x;
+	// gl_Position.y += anchor.y * size.y * aspect.y;
 }

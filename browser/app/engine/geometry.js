@@ -52,21 +52,17 @@ export default class Geometry {
 						var anchorY = y / slices[1];
 						anchors.push(anchorX*2.-1., anchorY*2.-1.);
 						indexMap.push(u,v);
-						// indices.push(vIndex);
-						// ++vIndex;
 					}
 				}
-				// indices.push(vIndex-1);
-				// indices.push(vIndex);
-				// indices.push(Math.min(vIndex, count));
-				// console.log(quadCount);
-				for (var face = 0; face < quadCount; ++face) {
-					indices.push(vIndex, vIndex+1, vIndex+1+slices[0]);
-					indices.push(vIndex+1, vIndex+1+slices[0], vIndex+2+slices[0]);
+				for (var y = 0; y < slices[1]; ++y) {
+					for (var x = 0; x < slices[0]; ++x) {
+						indices.push(vIndex, vIndex+1, vIndex+1+slices[0]);
+						indices.push(vIndex+1, vIndex+1+slices[0], vIndex+2+slices[0]);
+						vIndex += 1;
+					}
 					vIndex += 1;
-					// indices.push(vIndex, vIndex+1, vIndex+2, vIndex+1, vIndex+3, vIndex+2);
-					// vIndex += 4;
 				}
+				vIndex += faces[0];
 			}
 
 			var geometry = new THREE.BufferGeometry();
@@ -83,7 +79,6 @@ export default class Geometry {
 			geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
 			geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
 			let mesh = new THREE.Mesh(geometry, material);
-      // mesh.drawMode = THREE.TriangleStripDrawMode;
 			meshes.push(mesh);
 		}
 
