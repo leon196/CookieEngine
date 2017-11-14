@@ -24,7 +24,7 @@ export default function() {
 		const time = timeline.getTime();
 		scene.update(time);
 		uniforms.time.value = time;
-		renderer.render(scene.scene, scene.camera);
+		renderer.render(scene.filter.scene, scene.filter.camera);
 	}
 
 	function onWindowResize () {

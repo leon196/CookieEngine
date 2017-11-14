@@ -5,6 +5,8 @@ import assets from '../engine/assets';
 import uniforms from '../engine/uniforms';
 import Particles from '../engine/particles';
 import renderer from '../engine/renderer';
+import ShaderPass from '../engine/shaderpass';
+import FrameBuffer from '../engine/framebuffer';
 import { OrbitControls } from '../libs/OrbitControls';
 import { simpleText } from '../engine/make-text';
 import { lerp, clamp, arrayVec3Distance } from '../engine/misc';
@@ -16,25 +18,36 @@ export default class ExampleScene {
 		this.camera.position.x = 0;
 		this.camera.position.y = 0;
 		this.camera.position.z = 50;
-		this.timePreviousFrame = 0;
-
 		this.controls = new OrbitControls( this.camera, renderer.domElement );
 		this.controls.rotateSpeed = 0.1;
 		this.controls.zoomSpeed = 2.5;
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = .1;
+		this.timePreviousFrame = 0;
 
+		// Examples
 		this.addSprites();
 		this.addRainbowRibbons();
 		this.addSnow();
 		this.addPointCloud();
 		this.addCurvedMesh();
 		this.addLineMesh();
+
+		// Post FX
+		this.frameBuffer = new FrameBuffer();
+		this.filter = new ShaderPass(assets.shaderMaterials.filterExample, 'loopback');
+		uniforms.frameBuffer = { value: 0 };
 	}
 
 	update(elapsed) {
-		this.controls.update();
 		var dt = clamp(Math.abs(elapsed - this.timePreviousFrame), 0., 1.);
+
+		this.controls.update();
+		uniforms.frameBuffer.value = this.frameBuffer.getTexture();
+		this.frameBuffer.swap();
+		renderer.render(this.scene, this.camera, this.frameBuffer.getRenderTarget(), true);
+		this.filter.update();
+
 		this.timePreviousFrame = elapsed;
 	}
 
@@ -43,11 +56,10 @@ export default class ExampleScene {
 			Particles.createMeshes(attributes, assets.shaderMaterials.spritesheetExample)
 				.forEach(mesh => { this.scene.add(mesh); });
 
-			// spritesheet texture
-			assets.textures.spritesheet.wrapS = THREE.RepeatWrapping;
-			assets.textures.spritesheet.wrapT = THREE.RepeatWrapping;
-			uniforms.spritesheet = { value: assets.textures.spritesheet };
 			var image = assets.textures.spritesheet.image;
+			image.wrapS = THREE.RepeatWrapping;
+			image.wrapT = THREE.RepeatWrapping;
+			uniforms.spritesheet = { value: image };
 			uniforms.spritesheetFrame = { value: [image.width, image.height] };
 	}
 

@@ -16,5 +16,4 @@ void main()	{
 	vColor = vec4(1);
 
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
-	// gl_Position.xy += anchor * size * aspect;
 }
