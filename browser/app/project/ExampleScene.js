@@ -7,7 +7,7 @@ import Particles from '../engine/particles';
 import renderer from '../engine/renderer';
 import { OrbitControls } from '../libs/OrbitControls';
 import { simpleText } from '../engine/make-text';
-import { lerp, clamp } from '../engine/misc';
+import { lerp, clamp, arrayVec3Distance } from '../engine/misc';
 
 export default class ExampleScene {
 	constructor() {
@@ -29,6 +29,7 @@ export default class ExampleScene {
 		this.addSnow();
 		this.addPointCloud();
 		this.addCurvedMesh();
+		this.addLineMesh();
 	}
 
 	update(elapsed) {
@@ -65,6 +66,26 @@ export default class ExampleScene {
 	addPointCloud() {
 		let attributes = assets.geometries.plantPoints.attributes;
 		Particles.createMeshes(attributes, assets.shaderMaterials.pointCloudExample)
+			.forEach(mesh => { this.scene.add(mesh); });
+	}
+
+	addLineMesh() {
+		let geometry = assets.geometries.treeCurves.children[0].geometry;
+		var nexts = [];
+		var positions = geometry.attributes.position.array;
+		var count = positions.length / 3;
+		for (var i = 0; i+1 < count; ++i) {
+			var dist = arrayVec3Distance(positions, i*3, (i+1)*3);
+			for (var s = 0; s < 3; ++s) {
+				if (dist < .2) {
+					nexts.push(positions[(i+1)*3+s]);
+				} else {
+					nexts.push(positions[i*3+s]);
+				}
+			}
+		}
+		geometry.addAttribute('next', new THREE.BufferAttribute(new Float32Array(nexts), 3));
+		Particles.createMeshes(geometry.attributes, assets.shaderMaterials.lineMeshExample)
 			.forEach(mesh => { this.scene.add(mesh); });
 	}
 

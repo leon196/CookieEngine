@@ -52,6 +52,11 @@
 			"vertexShader": "shader/examples/curvedMesh.vert",
 			"fragmentShader": "shader/examples/curvedMesh.frag"
 		},
+		"lineMeshExample": {
+			"vertexShader": "shader/examples/lineMesh.vert",
+			"fragmentShader": "shader/examples/color.frag",
+			"side": 2
+		},
 		"spritesheetExample": {
 			"vertexShader": "shader/examples/sprite.vert",
 			"fragmentShader": "shader/examples/spritesheet.frag",

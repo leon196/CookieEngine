@@ -55,7 +55,7 @@ export default class {
 				}
 				for (var y = 0; y < subdivisions[1]; ++y) {
 					for (var x = 0; x < subdivisions[0]; ++x) {
-						indices.push(vIndex, vIndex+1, vIndex+1+subdivisions[0]);
+						indices.push(vIndex+1, vIndex, vIndex+1+subdivisions[0]);
 						indices.push(vIndex+1, vIndex+1+subdivisions[0], vIndex+2+subdivisions[0]);
 						vIndex += 1;
 					}

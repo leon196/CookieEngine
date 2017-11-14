@@ -1,5 +1,8 @@
 import { Vector3 } from 'three.js';
 
+export function arrayVec3Distance(array, index, nextIndex) {
+	return distance2(array[index],array[index+1],array[index+2], array[nextIndex],array[nextIndex+1],array[nextIndex+2]);
+}
 
 export function getRandomPoints(count) {
 	var points = [];
@@ -30,8 +33,13 @@ export function closestPowerOfTwo (num) {
 export const sqrt3 = Math.sqrt(3);
 
 //
-export function distanceBetween(a, b) {
+export function distance1(a, b) {
 	return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)+(a.z-b.z)*(a.z-b.z));
+}
+
+//
+export function distance2(x,y,z,xx,yy,zz) {
+	return Math.sqrt((x-xx)*(x-xx)+(y-yy)*(y-yy)+(z-zz)*(z-zz));
 }
 
 // Thank to Tomas Akenine-Möller
