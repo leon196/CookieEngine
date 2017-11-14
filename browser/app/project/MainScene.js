@@ -32,7 +32,7 @@ export default class MainScene {
 				itemSize: 3
 			}
 		};
-		this.particles = new Particles(count, attributes, [8,8], assets.shaderMaterials.particle);
+		this.particles = new Particles(count, attributes, [1,100], assets.shaderMaterials.ribbonExample);
 		this.particles.meshes.forEach(mesh => { this.scene.add(mesh); });
 	}
 
