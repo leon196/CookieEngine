@@ -1,17 +1,17 @@
 
 import * as THREE from 'three.js';
-import { closestPowerOfTwo, lerp } from './misc';
+import { closestPowerOfTwo, lerp, getRandomPoints } from './misc';
 
 export default class {
-	constructor(count, attributes, subdivisions, material) {
-		this.meshes = this.createMeshes(count, attributes, subdivisions, material);
+	constructor() {
 	}
 
 	update(elapsed) {
 	}
 
-	createMeshes(count, attributes, subdivisions, material)
+	static createMeshes(attributes, material, subdivisions)
 	{
+		var count = attributes.position.array.length / attributes.position.itemSize;
 		var meshes = [];
 		var verticesMax = 65000;
 		var dimension = closestPowerOfTwo(Math.sqrt(count));
@@ -82,6 +82,15 @@ export default class {
 		}
 
 		return meshes;
+	}
+
+	static randomPositionAttribute (count) {
+		return {
+			position: {
+				array: getRandomPoints(count),
+				itemSize: 3
+			}
+		};
 	}
 
 	createDataTextureForParticles(dataArray, itemSize)	{

@@ -7,7 +7,7 @@ import Particles from '../engine/particles';
 import renderer from '../engine/renderer';
 import { OrbitControls } from '../libs/OrbitControls';
 import { simpleText } from '../engine/make-text';
-import { lerp, clamp, getRandomPoints } from '../engine/misc';
+import { lerp, clamp } from '../engine/misc';
 
 export default class ExampleScene {
 	constructor() {
@@ -24,33 +24,39 @@ export default class ExampleScene {
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = .1;
 
-		// assets.textures.spritesheet.wrapS = THREE.RepeatWrapping;
-		// assets.textures.spritesheet.wrapT = THREE.RepeatWrapping;
-		// uniforms.spritesheet = { value: assets.textures.spritesheet };
-		// var image = assets.textures.spritesheet.image;
-		// uniforms.spritesheetFrame = { value: [image.width, image.height] };
-		// this.add(1000, assets.shaderMaterials.spritesheetExample);
+		let attributes;
 
-		this.add(3, assets.shaderMaterials.ribbonExample, [1,100]);
+		// sprites
+		attributes = Particles.randomPositionAttribute(32);
+		Particles.createMeshes(attributes, assets.shaderMaterials.spritesheetExample)
+			.forEach(mesh => { this.scene.add(mesh); });
 
-		this.add(1000, assets.shaderMaterials.snowExample, [1,1]);
+		// spritesheet texture
+		assets.textures.spritesheet.wrapS = THREE.RepeatWrapping;
+		assets.textures.spritesheet.wrapT = THREE.RepeatWrapping;
+		uniforms.spritesheet = { value: assets.textures.spritesheet };
+		var image = assets.textures.spritesheet.image;
+		uniforms.spritesheetFrame = { value: [image.width, image.height] };
+
+		// rainbow ribbons
+		attributes = Particles.randomPositionAttribute(100);
+		Particles.createMeshes(attributes, assets.shaderMaterials.ribbonExample, [1,100])
+			.forEach(mesh => { this.scene.add(mesh); });
+
+		// snow
+		attributes = Particles.randomPositionAttribute(1000);
+		Particles.createMeshes(attributes, assets.shaderMaterials.snowExample)
+			.forEach(mesh => { this.scene.add(mesh); });
+
+		// point cloud
+		attributes = assets.geometries.plantPoints.attributes;
+		Particles.createMeshes(attributes, assets.shaderMaterials.pointCloudExample)
+			.forEach(mesh => { this.scene.add(mesh); });
 	}
 
 	update(elapsed) {
 		this.controls.update();
 		var dt = clamp(Math.abs(elapsed - this.timePreviousFrame), 0., 1.);
 		this.timePreviousFrame = elapsed;
-	}
-
-	add(count, shader, slice) {
-		slice = slice || [1,1];
-		let attributes = {
-			position: {
-				array: getRandomPoints(count),
-				itemSize: 3
-			}
-		};
-		var particles = new Particles(count, attributes, slice, shader);
-		particles.meshes.forEach(mesh => { this.scene.add(mesh); });
 	}
 }

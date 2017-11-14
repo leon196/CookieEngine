@@ -37,6 +37,11 @@
 			"fragmentShader": "shader/examples/snow.frag",
 			"side": 2
 		},
+		"pointCloudExample": {
+			"vertexShader": "shader/examples/pointCloud.vert",
+			"fragmentShader": "shader/examples/pointCloud.frag",
+			"side": 2
+		},
 		"spritesheetExample": {
 			"vertexShader": "shader/examples/sprite.vert",
 			"fragmentShader": "shader/examples/spritesheet.frag",

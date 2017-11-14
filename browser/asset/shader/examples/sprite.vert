@@ -13,22 +13,19 @@ varying vec3 vView;
 
 void main() {
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
-	vec2 size = vec2(1.);
+	vec2 size = vec2(.05);
 	vUv = anchor*.5+.5;
 	vAnchor = anchor;
 	vIndexMap = indexMap;
 	vSeed = position;
 
 	vec3 pos = position;
-	float speed = 1.;
-	float range = 10.;
-	pos = normalize(pos) * mod(length(pos) + time*speed, 1.);
-	float dist = length(pos) + time*speed;
-	dist = length(pos);
-	size *= smoothstep(.0,.1,dist);
-	size *= 1.-smoothstep(.9,1.,dist);
-	pos *= range;
+	float angle = PI2 * (indexMap.x * 8. + indexMap.y * 8. * 8.) / 32.;
+	angle += time*.1;
+	float radius = .9;
+	pos.xy = vec2(cos(angle),sin(angle)) * radius;
+	pos.x *= aspect.x;
 
-	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
+	gl_Position = vec4(pos.xy, 0., 1.);
 	gl_Position.xy += anchor * size * aspect;
 }
