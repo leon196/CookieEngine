@@ -5,6 +5,11 @@
 			"file": "font/coffee.json"
 		}
 	},
+	"textures": {
+		"spritesheet": {
+			"file": "images/spritesheet.png"
+		}
+	},
 	"geometries": {
 		"branch": {
 			"file": "point/branch.obj"
@@ -30,8 +35,21 @@
 		},
 		"ribbonExample": {
 			"vertexShader": "shader/examples/ribbon.vert",
-			"fragmentShader": "shader/examples/normal.frag",
+			"fragmentShader": "shader/examples/color.frag",
 			"side": 2
+		},
+		"curtainExample": {
+			"vertexShader": "shader/examples/curtain.vert",
+			"fragmentShader": "shader/examples/color.frag",
+			"side": 2
+		},
+		"spritesheetExample": {
+			"vertexShader": "shader/examples/sprite.vert",
+			"fragmentShader": "shader/examples/spritesheet.frag",
+			"side": 2,
+			"depthTest": false,
+			"opacity": 0.5,
+			"transparent": true
 		}
 	}
 }

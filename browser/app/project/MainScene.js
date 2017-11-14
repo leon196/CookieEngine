@@ -13,6 +13,10 @@ export default class MainScene {
 	constructor() {
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
+		this.camera.position.x = 0;
+		this.camera.position.y = 0;
+		this.camera.position.z = 50;
+		this.timePreviousFrame = 0;
 
 		this.controls = new OrbitControls( this.camera, renderer.domElement );
 		this.controls.rotateSpeed = 0.1;
@@ -20,25 +24,33 @@ export default class MainScene {
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = .1;
 
-		this.camera.position.x = 0;
-		this.camera.position.y = 0;
-		this.camera.position.z = 50;
-		this.timePreviousFrame = 0;
+		assets.textures.spritesheet.wrapS = THREE.RepeatWrapping;
+		assets.textures.spritesheet.wrapT = THREE.RepeatWrapping;
+		uniforms.spritesheet = { value: assets.textures.spritesheet };
+		var image = assets.textures.spritesheet.image;
+		uniforms.spritesheetFrame = { value: [image.width, image.height] };
+		this.add(1000, assets.shaderMaterials.spritesheetExample);
 
-		let count = 1000;
-		let attributes = {
-			position: {
-				array: getRandomPoints(count),
-				itemSize: 3
-			}
-		};
-		this.particles = new Particles(count, attributes, [1,100], assets.shaderMaterials.ribbonExample);
-		this.particles.meshes.forEach(mesh => { this.scene.add(mesh); });
+		this.add(100, assets.shaderMaterials.ribbonExample, [1,100]);
+
+		this.add(1, assets.shaderMaterials.curtainExample, [100,100]);
 	}
 
 	update(elapsed) {
 		this.controls.update();
 		var dt = clamp(Math.abs(elapsed - this.timePreviousFrame), 0., 1.);
 		this.timePreviousFrame = elapsed;
+	}
+
+	add(count, shader, slice) {
+		slice = slice || [1,1];
+		let attributes = {
+			position: {
+				array: getRandomPoints(count),
+				itemSize: 3
+			}
+		};
+		var particles = new Particles(count, attributes, slice, shader);
+		particles.meshes.forEach(mesh => { this.scene.add(mesh); });
 	}
 }

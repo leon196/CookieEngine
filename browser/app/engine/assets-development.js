@@ -22,6 +22,7 @@ const assets = {
 	animations: null,
 	geometries: {},
 	fonts: {},
+	textures: {},
 	shaderMaterials: {},
 	load,
 };
@@ -38,6 +39,7 @@ function load(callback) {
 
 		const plyLoader = new PLYLoader();
 		const objLoader = new OBJLoader();
+		const textureLoader = new THREE.TextureLoader();
 
 		Object.keys(descriptors.geometries).forEach(name => {
 			const url = descriptors.geometries[name].file;
@@ -95,17 +97,35 @@ function load(callback) {
 			urls.forEach(url => urlCallbacks[url]());
 			return callback();
 		}
+		const textureNames = Object.keys(descriptors.textures);
+		let pending = textureNames.length;
+		if (!pending)
+			return loadOtherAssets();
+		else
+			textureNames.forEach(name => {
+				const textureUrl = descriptors.textures[name].file;
 
-		let pending = urls.length;
-		urls.forEach(url => {
-			loader.load(baseUrl + url, data => {
-				files[url] = data;
+				textureLoader.load(baseUrl + textureUrl, (texture) => {
+					assets.textures[name] = texture;
 
-				--pending;
-				if (!pending)
-					return parse();
+					--pending;
+					if (!pending)
+						return loadOtherAssets();
+				});
 			});
-		});
+
+		function loadOtherAssets() {
+			let pending = urls.length;
+			urls.forEach(url => {
+				loader.load(baseUrl + url, data => {
+					files[url] = data;
+
+					--pending;
+					if (!pending)
+						return parse();
+				});
+			});
+		}
 
 		let socket;
 

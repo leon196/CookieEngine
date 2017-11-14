@@ -9,27 +9,25 @@ varying vec2 vIndexMap;
 varying vec3 vDir;
 varying vec3 vNormal;
 varying vec3 vView;
+varying vec4 vColor;
 
 #define wave smoothstep(.0,1.,sin(4.*time*3.14159))
 
 vec3 displace (vec3 pos, float ratio) {
-	float dist = length(pos) + ratio;
+	float dist = length(pos) + ratio + time * 5.;
 	pos.xz *= rot(dist);
-	pos.y += sin((ratio + time) * 10.) * .02;
-	// pos.xy *= rot(dist + time*.5);
-	// pos.zy *= rot(dist + time*.52);
+	pos.xy *= rot(dist*.5);
+	pos.zy *= rot(dist*.3);
 	pos *= 20.;
-	// pos *= 20. + sin((ratio*.5+time)*10.);
 	return pos;
 }
 
 void main() {
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
-	vec2 size = vec2(2., .1);
-	vUv = uv;
+	vec2 size = vec2(.2,1.);
+	vUv = anchor*.5+.5;
 	vAnchor = anchor;
 	vIndexMap = indexMap;
-
 	float ratio = anchor.y * size.y;
 	float delta = .1;
 	vec3 next = displace(position, ratio+delta);
@@ -38,11 +36,9 @@ void main() {
 	vec3 up = vec3(0,1,0);
 	vec3 tangent = cross(dir, up);
 	vec3 pos = displace(position, ratio);
-	// vec3 normal = normalize( normalize(next - pos) - normalize(pos - prev));
-	vNormal = dir;
+	vNormal = normalize(normalize(next - pos) - normalize(prev - pos));
+	vColor = vec4(dir*.5+.5, 1.);
 	pos += dir + tangent * anchor.x * size.x;
-
 	vView = normalize(cameraPosition - pos);
-
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
 }
