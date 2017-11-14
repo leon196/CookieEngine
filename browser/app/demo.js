@@ -1,15 +1,21 @@
 import assets from './engine/assets';
 import renderer from './engine/renderer';
+import ShaderPass from './engine/shaderpass';
 import FrameBuffer from './engine/framebuffer';
 import uniforms from './engine/uniforms';
 import * as timeline from './engine/timeline';
 import ExampleScene from './project/ExampleScene';
 
 export default function() {
-	let scene;
+	let scene, frameBuffer, filter;
 
 	assets.load(function() {
 		scene = new ExampleScene();
+
+		// Post FX
+		frameBuffer = new FrameBuffer();
+		filter = new ShaderPass(assets.shaderMaterials.filterExample, 'loopback');
+		uniforms.frameBuffer = { value: 0 };
 
 		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);
@@ -20,11 +26,18 @@ export default function() {
 
 	function animate() {
 		requestAnimationFrame(animate);
-
 		const time = timeline.getTime();
-		scene.update(time);
 		uniforms.time.value = time;
-		renderer.render(scene.filter.scene, scene.filter.camera);
+		scene.update(time);
+
+			// Post FX
+		uniforms.frameBuffer.value = frameBuffer.getTexture();
+		frameBuffer.swap();
+		renderer.render(scene.scene, scene.camera, frameBuffer.getRenderTarget(), true);
+		filter.update();
+
+		// Render scene with FX
+		renderer.render(filter.scene, filter.camera);
 	}
 
 	function onWindowResize () {

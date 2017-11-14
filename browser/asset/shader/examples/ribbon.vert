@@ -14,10 +14,11 @@ varying vec4 vColor;
 #define wave smoothstep(.0,1.,sin(4.*time*3.14159))
 
 vec3 displace (vec3 pos, float ratio) {
-	float dist = length(pos) + ratio + time * 5.;
+	float dist = length(pos) + ratio + time*5.;
 	pos.xz *= rot(dist);
-	pos.xy *= rot(dist*.5);
-	pos.zy *= rot(dist*.3);
+	pos.xy *= rot(dist*.7);
+	pos.zy *= rot(dist*.4);
+	pos = normalize(pos)*mod(length(pos)+time*.2,1.);
 	pos *= 20.;
 	return pos;
 }

@@ -5,8 +5,6 @@ import assets from '../engine/assets';
 import uniforms from '../engine/uniforms';
 import Particles from '../engine/particles';
 import renderer from '../engine/renderer';
-import ShaderPass from '../engine/shaderpass';
-import FrameBuffer from '../engine/framebuffer';
 import { OrbitControls } from '../libs/OrbitControls';
 import { simpleText } from '../engine/make-text';
 import { lerp, clamp, arrayVec3Distance } from '../engine/misc';
@@ -32,41 +30,36 @@ export default class ExampleScene {
 		this.addPointCloud();
 		this.addCurvedMesh();
 		this.addLineMesh();
-
-		// Post FX
-		this.frameBuffer = new FrameBuffer();
-		this.filter = new ShaderPass(assets.shaderMaterials.filterExample, 'loopback');
-		uniforms.frameBuffer = { value: 0 };
+		// this.addLineMesh();
 	}
 
 	update(elapsed) {
 		var dt = clamp(Math.abs(elapsed - this.timePreviousFrame), 0., 1.);
 
 		this.controls.update();
-		uniforms.frameBuffer.value = this.frameBuffer.getTexture();
-		this.frameBuffer.swap();
-		renderer.render(this.scene, this.camera, this.frameBuffer.getRenderTarget(), true);
-		this.filter.update();
 
 		this.timePreviousFrame = elapsed;
 	}
 
 	addSprites() {
+			assets.textures.spritesheet.wrapS = THREE.RepeatWrapping;
+			assets.textures.spritesheet.wrapT = THREE.RepeatWrapping;
+			uniforms.spritesheet = { value: assets.textures.spritesheet };
+			var image = assets.textures.spritesheet.image;
+			uniforms.spritesheetFrame = { value: [image.width, image.height] };
+
 			let attributes = Particles.randomPositionAttribute(32);
 			Particles.createMeshes(attributes, assets.shaderMaterials.spritesheetExample)
 				.forEach(mesh => { this.scene.add(mesh); });
-
-			var image = assets.textures.spritesheet.image;
-			image.wrapS = THREE.RepeatWrapping;
-			image.wrapT = THREE.RepeatWrapping;
-			uniforms.spritesheet = { value: image };
-			uniforms.spritesheetFrame = { value: [image.width, image.height] };
 	}
 
 	addRainbowRibbons() {
-		let attributes = Particles.randomPositionAttribute(200);
+		let attributes = Particles.randomPositionAttribute(100);
 		Particles.createMeshes(attributes, assets.shaderMaterials.ribbonExample, [1,100])
-			.forEach(mesh => { this.scene.add(mesh); });
+			.forEach(mesh => {
+				mesh.position.y = 20.;
+				this.scene.add(mesh);
+			});
 	}
 
 	addSnow() {
@@ -78,7 +71,11 @@ export default class ExampleScene {
 	addPointCloud() {
 		let attributes = assets.geometries.plantPoints.attributes;
 		Particles.createMeshes(attributes, assets.shaderMaterials.pointCloudExample)
-			.forEach(mesh => { this.scene.add(mesh); });
+			.forEach(mesh => {
+				mesh.position.x = -5.;
+				mesh.position.y = 10.;
+				this.scene.add(mesh);
+			});
 	}
 
 	addLineMesh() {
@@ -98,7 +95,10 @@ export default class ExampleScene {
 		}
 		geometry.addAttribute('next', new THREE.BufferAttribute(new Float32Array(nexts), 3));
 		Particles.createMeshes(geometry.attributes, assets.shaderMaterials.lineMeshExample)
-			.forEach(mesh => { this.scene.add(mesh); });
+			.forEach(mesh => {
+				mesh.position.z = 10.;
+				this.scene.add(mesh);
+			});
 	}
 
 	addCurvedMesh() {
