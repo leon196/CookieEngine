@@ -29,6 +29,10 @@
 			"vertexShader": "shader/examples/filter.vert",
 			"fragmentShader": "shader/examples/filter.frag"
 		},
+		"feedbackExample": {
+			"vertexShader": "shader/examples/filter.vert",
+			"fragmentShader": "shader/examples/feedback.frag"
+		},
 		"simpleExample": {
 			"vertexShader": "shader/examples/simple.vert",
 			"fragmentShader": "shader/examples/simple.frag"

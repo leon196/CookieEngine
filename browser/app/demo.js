@@ -7,14 +7,15 @@ import * as timeline from './engine/timeline';
 import ExampleScene from './project/ExampleScene';
 
 export default function() {
-	let scene, frameBuffer, filter;
+	let scene, frameBuffer, filter, feedback;
 
 	assets.load(function() {
 		scene = new ExampleScene();
 
 		// Post FX
 		frameBuffer = new FrameBuffer();
-		filter = new ShaderPass(assets.shaderMaterials.filterExample, 'loopback');
+		feedback = new ShaderPass(assets.shaderMaterials.feedbackExample, 'loopback');
+		filter = new ShaderPass(assets.shaderMaterials.filterExample, 'filter');
 		uniforms.frameBuffer = { value: 0 };
 
 		onWindowResize();
@@ -34,7 +35,7 @@ export default function() {
 		uniforms.frameBuffer.value = frameBuffer.getTexture();
 		frameBuffer.swap();
 		renderer.render(scene.scene, scene.camera, frameBuffer.getRenderTarget(), true);
-		filter.update();
+		feedback.update();
 
 		// Render scene with FX
 		renderer.render(filter.scene, filter.camera);

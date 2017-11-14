@@ -1,6 +1,12 @@
 
 attribute float number;
 uniform float time;
+uniform float CurvedMeshTwist;
+uniform float CurvedMeshSpeed;
+uniform float CurvedMeshRadius;
+uniform float CurvedMeshHeight;
+uniform float CurvedMeshRange;
+uniform float CurvedMeshOffset;
 varying vec2 vUv;
 
 vec3 pointAt (float ratio, float range) {
@@ -9,7 +15,7 @@ vec3 pointAt (float ratio, float range) {
 }
 
 vec3 getCurve (vec3 pos, float forward, float right, float up, float radius, float height, float range) {
-	float ratio = mod(forward * height, 1.);
+	float ratio = mod(forward * height/100., 1.);
 	float angle = atan(up, right);
 	float r = length(vec2(right, up)) * radius;
 
@@ -28,17 +34,11 @@ vec3 getCurve (vec3 pos, float forward, float right, float up, float radius, flo
 
 void main()	{
 	vUv = uv;
-	float twist = .5;
-	float speed = 2.;
-	float radius = 2.;
-	float height = .015;
-	float range = 25.;
-  float offset = 8.3;
 
 	vec3 pos = (modelMatrix * vec4(position, 1.)).xyz;
-  pos.y += number*offset;
-	pos.xz *= rot(pos.y * twist + time*speed);
-	pos = getCurve(pos, pos.y+time*speed, pos.x, pos.z, radius, height, range);
+	pos.xz *= rot(pos.y * CurvedMeshTwist + time*CurvedMeshSpeed);
+  pos.y += number*CurvedMeshOffset;
+	pos = getCurve(pos, pos.y+time*CurvedMeshSpeed, pos.x, pos.z, CurvedMeshRadius, CurvedMeshHeight, CurvedMeshRange);
 
 	gl_Position = projectionMatrix * viewMatrix * vec4(pos,1);
 }

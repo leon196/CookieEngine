@@ -23,6 +23,14 @@ export default class ExampleScene {
 		this.controls.dampingFactor = .1;
 		this.timePreviousFrame = 0;
 
+		this.parameters = [];
+		Object.keys(parameters).forEach(keyRoot => {
+			Object.keys(parameters[keyRoot]).forEach(keyChild => {
+				uniforms[keyRoot+keyChild] = { value: parameters[keyRoot][keyChild] };
+				this.parameters.push({ root:keyRoot, child:keyChild });
+			});
+		});
+
 		// Examples
 		this.addSprites();
 		this.addRainbowRibbons();
@@ -37,6 +45,9 @@ export default class ExampleScene {
 		var dt = clamp(Math.abs(elapsed - this.timePreviousFrame), 0., 1.);
 
 		this.controls.update();
+		this.parameters.forEach(parameter => {
+			uniforms[parameter.root+parameter.child].value = parameters[parameter.root][parameter.child];
+		})
 
 		this.timePreviousFrame = elapsed;
 	}

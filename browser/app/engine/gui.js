@@ -17,6 +17,6 @@ Object.keys(parameters).forEach(keyRoot => {
 			item.min(0).max(1).step(0.01);
 		}
 	});
-
-	gui.close();
+	folder.open();
 });
+// gui.close();

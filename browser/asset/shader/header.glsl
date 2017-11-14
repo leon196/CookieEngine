@@ -150,6 +150,11 @@ float fbm (vec3 p) {
     return value;
 }
 
+float pattern (vec3 p) {
+  vec3 q = vec3(fbm(p), fbm(p+vec3(10.5,51.5,7.5423)), fbm(p+vec3(1501.24,1254.324,658.6)));
+	// q.xz *= rot(iGlobalTime*.2);
+  return fbm(p + 8. * q);
+}
 
 vec3 rotateY(vec3 v, float t)
 {
