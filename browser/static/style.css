@@ -1,54 +1,8 @@
-@font-face {
-	font-family: 'coffee';
-	src: url('coffee-webfont.woff2') format('woff2'), url('coffee-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'sunrise';
-	src: url('sunrise_international_demo-webfont.woff2') format('woff2'),
-	url('sunrise_international_demo-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'lemon';
-	src: url('dk_lemon_yellow_sun-webfont.woff2') format('woff2'),
-	url('dk_lemon_yellow_sun-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
 
 @font-face {
 	font-family: 'trashhand';
 	src: url('trashhand-webfont.woff2') format('woff2'),
 	url('trashhand-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'better_togethercaps';
-	src: url('better_together_caps-webfont.woff2') format('woff2'),
-	url('better_together_caps-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'edo_szregular';
-	src: url('edosz-webfont.woff2') format('woff2'),
-	url('edosz-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'rhinos_rocksregular';
-	src: url('rhinos_rocks_1-webfont.woff2') format('woff2'),
-	url('rhinos_rocks_1-webfont.woff') format('woff');
 	font-weight: normal;
 	font-style: normal;
 }

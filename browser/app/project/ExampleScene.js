@@ -9,10 +9,10 @@ import { OrbitControls } from '../libs/OrbitControls';
 import { simpleText } from '../engine/make-text';
 import { lerp, clamp, getRandomPoints } from '../engine/misc';
 
-export default class MainScene {
+export default class ExampleScene {
 	constructor() {
 		this.scene = new THREE.Scene();
-		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
+		this.camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.01, 1000 );
 		this.camera.position.x = 0;
 		this.camera.position.y = 0;
 		this.camera.position.z = 50;
@@ -24,16 +24,16 @@ export default class MainScene {
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = .1;
 
-		assets.textures.spritesheet.wrapS = THREE.RepeatWrapping;
-		assets.textures.spritesheet.wrapT = THREE.RepeatWrapping;
-		uniforms.spritesheet = { value: assets.textures.spritesheet };
-		var image = assets.textures.spritesheet.image;
-		uniforms.spritesheetFrame = { value: [image.width, image.height] };
-		this.add(1000, assets.shaderMaterials.spritesheetExample);
+		// assets.textures.spritesheet.wrapS = THREE.RepeatWrapping;
+		// assets.textures.spritesheet.wrapT = THREE.RepeatWrapping;
+		// uniforms.spritesheet = { value: assets.textures.spritesheet };
+		// var image = assets.textures.spritesheet.image;
+		// uniforms.spritesheetFrame = { value: [image.width, image.height] };
+		// this.add(1000, assets.shaderMaterials.spritesheetExample);
 
-		this.add(100, assets.shaderMaterials.ribbonExample, [1,100]);
+		this.add(3, assets.shaderMaterials.ribbonExample, [1,100]);
 
-		this.add(1, assets.shaderMaterials.curtainExample, [100,100]);
+		this.add(1000, assets.shaderMaterials.snowExample, [1,1]);
 	}
 
 	update(elapsed) {

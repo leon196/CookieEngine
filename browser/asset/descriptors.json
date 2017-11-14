@@ -7,21 +7,15 @@
 	},
 	"textures": {
 		"spritesheet": {
-			"file": "images/spritesheet.png"
+			"file": "image/spritesheet.png"
 		}
 	},
 	"geometries": {
-		"branch": {
-			"file": "point/branch.obj"
+		"treeCurves": {
+			"file": "mesh/treeCurves.obj"
 		},
-		"flash": {
-			"file": "point/flash.obj"
-		},
-		"tree": {
-			"file": "point/tree.obj"
-		},
-		"root": {
-			"file": "point/root.obj"
+		"plantPoints": {
+			"file": "mesh/plantPoints.ply"
 		}
 	},
 	"shaderMaterials": {
@@ -38,9 +32,9 @@
 			"fragmentShader": "shader/examples/color.frag",
 			"side": 2
 		},
-		"curtainExample": {
-			"vertexShader": "shader/examples/curtain.vert",
-			"fragmentShader": "shader/examples/color.frag",
+		"snowExample": {
+			"vertexShader": "shader/examples/snow.vert",
+			"fragmentShader": "shader/examples/snow.frag",
 			"side": 2
 		},
 		"spritesheetExample": {
