@@ -11,8 +11,9 @@ Object.keys(parameters).forEach(keyRoot => {
 	if (keys.length > 0) {
 		keys.forEach(key => {
 			const item = folder.add(parameters[keyRoot], key);
-			const name = key.toLowerCase();
-			item.step(0.01);
+			if (typeof(item) == 'number') {
+				item.step(0.01);
+			}
 		});
 	} else {
 	}

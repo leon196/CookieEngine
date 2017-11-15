@@ -1,8 +1,8 @@
 
 import * as THREE from 'three.js';
-import assets from '../engine/assets';
-import uniforms from '../engine/uniforms';
-import Particles from '../engine/particles';
+import assets from '../../engine/assets';
+import uniforms from '../../engine/uniforms';
+import Particles from '../../engine/particles';
 
 export default class SpriteScene extends THREE.Scene {
 

@@ -1,8 +1,8 @@
 
 import * as THREE from 'three.js';
-import assets from '../engine/assets';
-import Particles from '../engine/particles';
-import { arrayVec3Distance } from '../engine/misc';
+import assets from '../../engine/assets';
+import Particles from '../../engine/particles';
+import { arrayVec3Distance } from '../../engine/misc';
 
 export default class LineMeshScene extends THREE.Scene {
 	constructor() {
