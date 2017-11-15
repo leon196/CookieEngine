@@ -1,5 +1,5 @@
 
-uniform sampler2D frameBuffer;
+uniform sampler2D ParticlesScene;
 uniform sampler2D loopback;
 uniform vec2 resolution;
 uniform float time;
@@ -9,7 +9,7 @@ varying vec2 vUv;
 #define wave smoothstep(-.5,1.,sin(2.*time*PI2))
 
 void main ()	{
-	vec4 color = texture2D(frameBuffer, vUv);
+	vec4 color = texture2D(ParticlesScene, vUv);
 	vec4 loop = texture2D(loopback, vUv);
 	vec2 pixel = 1./resolution;
 	vec2 uv = vUv;

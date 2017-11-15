@@ -1,49 +1,64 @@
 import assets from './engine/assets';
 import renderer from './engine/renderer';
+import camera from './engine/camera';
 import ShaderPass from './engine/shaderpass';
 import FrameBuffer from './engine/framebuffer';
 import uniforms from './engine/uniforms';
+import parameters from './engine/parameters';
 import * as timeline from './engine/timeline';
-import ExampleScene from './project/ExampleScene';
+import MeshesScene from './project/MeshesScene';
+import ParticlesScene from './project/ParticlesScene';
+import GridScreenScene from './project/GridScreenScene';
 
 export default function() {
-	let scene, frameBuffer, filter, feedback;
+	let scenes, passes, uniformMaps;
 
 	assets.load(function() {
-		scene = new ExampleScene();
 
-		// Post FX
-		frameBuffer = new FrameBuffer();
-		feedback = new ShaderPass(assets.shaderMaterials.feedbackExample, 'loopback');
-		filter = new ShaderPass(assets.shaderMaterials.filterExample, 'filter');
-		uniforms.frameBuffer = { value: 0 };
+		scenes = [
+			new MeshesScene(),
+			new ParticlesScene(),
+			new GridScreenScene()
+		];
+
+		passes = [
+			new ShaderPass(assets.shaderMaterials.feedbackExample, 'loopback', 2),
+			new ShaderPass(assets.shaderMaterials.filterExample, 'filter')
+		];
+
+		uniformMaps = [];
+		Object.keys(parameters).forEach(keyRoot => {
+			Object.keys(parameters[keyRoot]).forEach(keyChild => {
+				uniforms[keyRoot+keyChild] = { value: parameters[keyRoot][keyChild] };
+				uniformMaps.push({ root:keyRoot, child:keyChild });
+			});
+		});
 
 		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);
-
-		timeline.start();
 		requestAnimationFrame(animate);
+		timeline.start();
 	});
 
 	function animate() {
 		requestAnimationFrame(animate);
 		const time = timeline.getTime();
+		camera.update(time);
 		uniforms.time.value = time;
-		scene.update(time);
 
-			// Post FX
-		uniforms.frameBuffer.value = frameBuffer.getTexture();
-		frameBuffer.swap();
-		renderer.render(scene.scene, scene.camera, frameBuffer.getRenderTarget(), true);
-		feedback.update();
+		uniformMaps.forEach(parameter => {
+			uniforms[parameter.root+parameter.child].value = parameters[parameter.root][parameter.child];
+		})
 
-		// Render scene with FX
-		renderer.render(filter.scene, filter.camera);
+		scenes.forEach(scene => scene.update(time));
+		passes.forEach(pass => pass.update(time));
+		renderer.render(passes[passes.length-1].scene, camera);
 	}
 
 	function onWindowResize () {
-		scene.camera.aspect = window.innerWidth / window.innerHeight;
-		scene.camera.updateProjectionMatrix();
-		renderer.setSize(window.innerWidth, window.innerHeight);
+		var w = window.innerWidth, h = window.innerHeight;
+		scenes.forEach(scene => scene.resize(w,h));
+		passes.forEach(pass => pass.resize(w,h));
+		renderer.setSize(w, h);
 	}
 }

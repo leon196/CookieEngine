@@ -29,6 +29,14 @@
 			"vertexShader": "shader/examples/filter.vert",
 			"fragmentShader": "shader/examples/filter.frag"
 		},
+		"gridScreenExample": {
+			"vertexShader": "shader/examples/gridScreen.vert",
+			"fragmentShader": "shader/examples/color.frag"
+		},
+		"opticalFlowExample": {
+			"vertexShader": "shader/examples/filter.vert",
+			"fragmentShader": "shader/examples/opticalFlow.frag"
+		},
 		"feedbackExample": {
 			"vertexShader": "shader/examples/filter.vert",
 			"fragmentShader": "shader/examples/feedback.frag"

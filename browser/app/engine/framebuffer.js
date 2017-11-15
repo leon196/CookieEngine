@@ -1,10 +1,10 @@
 import * as THREE from 'three.js';
 
 export default class {
-	constructor(width, height, format, type, count) {
+	constructor(count, width, height, format, type, mig, mag) {
 		this.renderTextures = [];
 		this.currentIndex = 0;
-		this.count = count || 2;
+		this.count = count || 1;
 		this.timePreviousFrame = 0;
 		this.timeLagStart = 0;
 		this.timeLagDelay = 1;
@@ -13,9 +13,10 @@ export default class {
 		height = height || window.innerHeight;
 		format = format || THREE.RGBAFormat;
 		type = type || THREE.UnsignedByteType;
+		mig = mig || THREE.NearestFilter;
+		mag = mag || THREE.NearestFilter;
 		for (var i = 0; i < this.count; ++i) {
-			this.renderTextures.push(new THREE.WebGLRenderTarget(width/this.levelOfDetail, height/this.levelOfDetail, {
-				minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter, format: format, type: type }));
+			this.renderTextures.push(new THREE.WebGLRenderTarget(width/this.levelOfDetail, height/this.levelOfDetail, { minFilter: mig, magFilter: mag, format: format, type: type }));
 		}
 	}
 
