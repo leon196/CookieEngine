@@ -5,7 +5,7 @@ import assets from './engine/assets';
 import renderer from './engine/renderer';
 import camera from './engine/camera';
 import uniforms from './engine/uniforms';
-import parameters from './engine/parameters';
+import parameters from './project/parameters';
 import composer from './project/composer';
 
 export default function() {

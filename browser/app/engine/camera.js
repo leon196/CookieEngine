@@ -1,6 +1,6 @@
 
 import * as THREE from 'three.js';
-import parameters from './parameters';
+import parameters from '../project/parameters';
 import uniforms from './uniforms';
 import renderer from './renderer';
 import { OrbitControls } from '../libs/OrbitControls';

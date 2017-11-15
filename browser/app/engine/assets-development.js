@@ -1,6 +1,6 @@
 import descriptors from '../../asset/descriptors.json!';
 import makeAnimations from './make-animations';
-import parameters from './parameters';
+import parameters from '../project/parameters';
 import uniforms from './uniforms';
 import { OBJLoader } from '../libs/OBJLoader';
 import { PLYLoader } from '../libs/PLYLoader';
