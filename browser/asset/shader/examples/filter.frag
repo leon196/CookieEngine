@@ -1,5 +1,5 @@
 
-uniform sampler2D ExamplesScene;
+uniform sampler2D sceneTexture;
 uniform sampler2D GridScreenScene;
 uniform sampler2D opticalFlow;
 uniform sampler2D loopback;
@@ -18,12 +18,12 @@ void main ()	{
 	uv.x += glitch * FilterGlitch;
 
 	// layers
-	vec4 color = texture2D(ExamplesScene, uv);
-	vec4 loop = texture2D(loopback, uv);
-	vec4 grid = texture2D(GridScreenScene, uv);
-	vec4 flow = texture2D(opticalFlow, uv);
-	color = mix(loop, color, color.a);
-	color = mix(color, grid, grid.a);
+	vec4 color = texture2D(sceneTexture, uv);
+	// vec4 loop = texture2D(loopback, uv);
+	// vec4 grid = texture2D(GridScreenScene, uv);
+	// vec4 flow = texture2D(opticalFlow, uv);
+	// color = mix(loop, color, color.a);
+	// color = mix(color, grid, grid.a);
 
 	// vignette
 	float vignette = sin(vUv.x * PI);

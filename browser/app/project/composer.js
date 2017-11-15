@@ -4,6 +4,7 @@ import assets from '../engine/assets';
 import renderer from '../engine/renderer';
 import camera from '../engine/camera';
 import parameters from './parameters';
+import uniforms from '../engine/uniforms';
 import * as FX from 'vanruesc/postprocessing';
 import * as Scene from './scenes/AllScenes';
 
@@ -27,13 +28,23 @@ composer.setup = function () {
   		var pass = new FX.RenderPass(scene, camera, {
   			clear: false,
   		});
-  		pass.renderToScreen = parameters.Scene[keys[index]];
+  		pass.enabled = parameters.Scene[keys[index]];
   		composer.addPass(pass);
       ++index;
   });
 
+  var save = new FX.SavePass();
+  var clear = new FX.ClearPass();
+  uniforms.sceneTexture = { value: save.renderTarget.texture };
+  composer.addPass(save);
+  composer.addPass(clear);
+
+  var pass = new FX.ShaderPass(assets.shaderMaterials.filterExample);
+  pass.renderToScreen = true;
+  composer.addPass(pass);
+
   composer.toggle = function (index, value) {
-    composer.passes[index].renderToScreen = value;
+    composer.passes[index].enabled = value;
   }
 }
 
