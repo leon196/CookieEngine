@@ -1,7 +1,7 @@
 import * as THREE from 'three.js';
 
 export default class {
-	constructor(count, width, height, format, type, mig, mag) {
+	constructor(count, width, height, format, type, mig, mag, stencil, depth) {
 		this.renderTextures = [];
 		this.currentIndex = 0;
 		this.count = count || 1;
@@ -15,8 +15,17 @@ export default class {
 		type = type || THREE.UnsignedByteType;
 		mig = mig || THREE.NearestFilter;
 		mag = mag || THREE.NearestFilter;
+		stencil = stencil || true;
+		depth = depth || true;
 		for (var i = 0; i < this.count; ++i) {
-			this.renderTextures.push(new THREE.WebGLRenderTarget(width/this.levelOfDetail, height/this.levelOfDetail, { minFilter: mig, magFilter: mag, format: format, type: type }));
+			this.renderTextures.push(new THREE.WebGLRenderTarget(width/this.levelOfDetail, height/this.levelOfDetail, {
+				minFilter: mig,
+				magFilter: mag,
+				format: format,
+				type: type,
+				stencilBuffer: stencil,
+				depthBuffer: depth
+			}));
 		}
 	}
 

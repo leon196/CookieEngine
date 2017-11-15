@@ -7,12 +7,15 @@ gui.remember(parameters);
 
 Object.keys(parameters).forEach(keyRoot => {
 	var folder = gui.addFolder(keyRoot);
-
-	Object.keys(parameters[keyRoot]).forEach(key => {
-		const item = folder.add(parameters[keyRoot], key);
-		const name = key.toLowerCase();
-		item.step(0.01);
-	});
-	folder.open();
+	var keys = Object.keys(parameters[keyRoot]);
+	if (keys.length > 0) {
+		keys.forEach(key => {
+			const item = folder.add(parameters[keyRoot], key);
+			const name = key.toLowerCase();
+			item.step(0.01);
+		});
+	} else {
+	}
+	// folder.open();
 });
 // gui.close();

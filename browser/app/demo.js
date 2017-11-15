@@ -3,28 +3,40 @@ import * as THREE from 'three.js';
 import assets from './engine/assets';
 import renderer from './engine/renderer';
 import camera from './engine/camera';
-import ShaderPass from './engine/shaderpass';
-import FrameBuffer from './engine/framebuffer';
 import uniforms from './engine/uniforms';
 import parameters from './engine/parameters';
 import * as timeline from './engine/timeline';
-import ExamplesScene from './project/ExamplesScene';
-import GridScreenScene from './project/GridScreenScene';
+import * as FX from 'vanruesc/postprocessing';
+import * as Scene from './project/AllScenes';
 
 export default function() {
-	let scenes, passes, uniformMaps;
+	let scenes, selectedScene, uniformMaps;
+	let composer, passes, clock;
 
 	assets.load(function() {
 
+		selectedScene = 0;
 		scenes = [
-			new ExamplesScene(),
-			new GridScreenScene()
+			new Scene.CurvedMesh(),
+		  new Scene.LineMesh(),
+		  // new Scene.GridMesh(),
+		  new Scene.PointCloud(),
+		  new Scene.Ribbon(),
+		  new Scene.Sprite(),
+		  new Scene.Snow(),
 		];
 
-		passes = [
-			new ShaderPass(assets.shaderMaterials.feedbackExample, 'loopback', 2),
-			new ShaderPass(assets.shaderMaterials.filterExample, 'filter'),
-		];
+		composer = new FX.EffectComposer(renderer);
+		passes = [];
+		scenes.forEach(scene => {
+				var render = new FX.RenderPass(scene, camera, {
+					clear: false,
+				});
+				render.renderToScreen = true;
+				composer.addPass(render);
+		});
+
+		clock = new THREE.Clock();
 
 		uniformMaps = [];
 		Object.keys(parameters).forEach(keyRoot => {
@@ -46,21 +58,13 @@ export default function() {
 		camera.update(time);
 		uniforms.time.value = time;
 
-		uniformMaps.forEach(parameter => {
-			uniforms[parameter.root+parameter.child].value = parameters[parameter.root][parameter.child];
-		})
-
-		scenes.forEach(scene => scene.update(time));
-		passes.forEach(pass => pass.update(time));
-		renderer.render(passes[passes.length-1].scene, camera);
+		composer.render(clock.getDelta());
 	}
 
 	function onWindowResize () {
 		var w = window.innerWidth, h = window.innerHeight;
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
-		scenes.forEach(scene => scene.resize(w,h));
-		passes.forEach(pass => pass.resize(w,h));
 		renderer.setSize(w, h);
 	}
 }
