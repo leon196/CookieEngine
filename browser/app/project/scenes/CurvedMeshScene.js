@@ -21,7 +21,7 @@ export default class CurvedMeshScene extends THREE.Scene {
 					numbers.push(c);
 				}
 	      geometry.addAttribute('number', new THREE.BufferAttribute(new Float32Array(numbers), 1));
-				var mesh = new THREE.Mesh(geometry, assets.shaderMaterials.curvedMeshExample);
+				var mesh = new THREE.Mesh(geometry, assets.shaderMaterials.curvedMesh);
 				this.add(mesh);
 			});
 		}

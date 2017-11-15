@@ -8,7 +8,7 @@ export default class GridMeshScene extends THREE.Scene {
 		super();
 
 		let attributes = Particles.randomPositionAttribute(64*64);
-		Particles.createMeshes(attributes, assets.shaderMaterials.gridScreenExample)
+		Particles.createMeshes(attributes, assets.shaderMaterials.gridScreen)
 			.forEach(mesh => { this.add(mesh); });
 	}
 }

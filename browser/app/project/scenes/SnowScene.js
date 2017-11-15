@@ -8,7 +8,7 @@ export default class SnowScene extends THREE.Scene {
 		super();
 
 		let attributes = Particles.randomPositionAttribute(1000);
-		Particles.createMeshes(attributes, assets.shaderMaterials.snowExample)
+		Particles.createMeshes(attributes, assets.shaderMaterials.snow)
 			.forEach(mesh => { this.add(mesh); });
 	}
 }

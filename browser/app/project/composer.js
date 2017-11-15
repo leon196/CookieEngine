@@ -24,7 +24,6 @@ function savePass (uniformName, type, format, min, mag) {
   save.renderTarget.texture.format = format;
   save.renderTarget.texture.minFilter = min;
   save.renderTarget.texture.magFilter = mag;
-  console.log(save.renderTarget.texture);
   uniforms[uniformName] = { value: save.renderTarget.texture };
   composer.addPass(save);
   composer.addPass(clear);
@@ -35,33 +34,41 @@ composer.setup = function () {
   var scenes = [
   	new Scene.CurvedMesh(),
     new Scene.LineMesh(),
-    new Scene.GridMesh(),
     new Scene.PointCloud(),
     new Scene.Ribbon(),
     new Scene.Sprite(),
     new Scene.Snow(),
   ];
 
+  var opticalFrame = new FX.ShaderPass(assets.shaderMaterials.opticalFrame);
+  composer.addPass(opticalFrame);
+  savePass('lastFrame');
+
   var keys = Object.keys(parameters.Scene);
   var index = 0;
   scenes.forEach(scene => {
-  		var pass = new FX.RenderPass(scene, camera, {
-  			clear: false,
-  		});
+  		var pass = new FX.RenderPass(scene, camera, { clear: false });
   		pass.enabled = parameters.Scene[keys[index]];
   		composer.addPass(pass);
       ++index;
   });
   savePass('sceneTexture');
 
-  var feedback = new FX.ShaderPass(assets.shaderMaterials.feedbackExample);
-  feedback.needsSwap = true;
+	var pass = new FX.RenderPass(new Scene.GridMesh(), camera, { clear: false });
+	composer.addPass(pass);
+  savePass('gridTexture');
+
+  var feedback = new FX.ShaderPass(assets.shaderMaterials.feedback);
   composer.addPass(feedback);
   savePass('feedbackTexture', THREE.UnsignedByteType, THREE.RGBAFormat, THREE.NearestFilter, THREE.NearestFilter);
 
-  var pass = new FX.ShaderPass(assets.shaderMaterials.filterExample);
-  pass.renderToScreen = true;
-  composer.addPass(pass);
+  var opticalFlow = new FX.ShaderPass(assets.shaderMaterials.opticalFlow);
+  composer.addPass(opticalFlow);
+  savePass('opticalFlowTexture', THREE.FloatType);
+
+  var filter = new FX.ShaderPass(assets.shaderMaterials.filter);
+  filter.renderToScreen = true;
+  composer.addPass(filter);
 
   composer.toggle = function (index, value) {
     composer.passes[index].enabled = value;

@@ -25,55 +25,55 @@
 		}
 	},
 	"shaderMaterials": {
-		"filterExample": {
+		"filter": {
 			"vertexShader": "shader/examples/filter.vert",
 			"fragmentShader": "shader/examples/filter.frag"
 		},
-		"gridScreenExample": {
+		"gridScreen": {
 			"vertexShader": "shader/examples/gridScreen.vert",
-			"fragmentShader": "shader/examples/colorClip.frag"
+			"fragmentShader": "shader/examples/color.frag"
 		},
-		"opticalFlowExample": {
+		"opticalFlow": {
 			"vertexShader": "shader/examples/filter.vert",
 			"fragmentShader": "shader/examples/opticalFlow.frag"
 		},
-		"opticalFrameExample": {
+		"opticalFrame": {
 			"vertexShader": "shader/examples/filter.vert",
 			"fragmentShader": "shader/examples/opticalFrame.frag"
 		},
-		"feedbackExample": {
+		"feedback": {
 			"vertexShader": "shader/examples/filter.vert",
 			"fragmentShader": "shader/examples/feedback.frag"
 		},
-		"simpleExample": {
+		"simple": {
 			"vertexShader": "shader/examples/simple.vert",
 			"fragmentShader": "shader/examples/simple.frag"
 		},
-		"ribbonExample": {
+		"ribbon": {
 			"vertexShader": "shader/examples/ribbon.vert",
 			"fragmentShader": "shader/examples/color.frag",
 			"side": 2
 		},
-		"snowExample": {
+		"snow": {
 			"vertexShader": "shader/examples/snow.vert",
 			"fragmentShader": "shader/examples/snow.frag",
 			"side": 2
 		},
-		"pointCloudExample": {
+		"pointCloud": {
 			"vertexShader": "shader/examples/pointCloud.vert",
 			"fragmentShader": "shader/examples/pointCloud.frag",
 			"side": 2
 		},
-		"curvedMeshExample": {
+		"curvedMesh": {
 			"vertexShader": "shader/examples/curvedMesh.vert",
 			"fragmentShader": "shader/examples/curvedMesh.frag"
 		},
-		"lineMeshExample": {
+		"lineMesh": {
 			"vertexShader": "shader/examples/lineMesh.vert",
 			"fragmentShader": "shader/examples/color.frag",
 			"side": 2
 		},
-		"spritesheetExample": {
+		"spritesheet": {
 			"vertexShader": "shader/examples/sprite.vert",
 			"fragmentShader": "shader/examples/spritesheet.frag",
 			"side": 2,

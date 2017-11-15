@@ -1,8 +1,9 @@
 
 uniform vec2 resolution;
-uniform sampler2D newFrame;
+uniform sampler2D sceneTexture;
+#define newFrame sceneTexture
 uniform sampler2D lastFrame;
-uniform sampler2D opticalFlow;
+uniform sampler2D opticalFlowTexture;
 uniform float OpticalFlowLambda;
 uniform float OpticalFlowThreshold;
 uniform float OpticalFlowForce;
@@ -48,6 +49,6 @@ void main ()
 
 	flow *= OpticalFlowForce;
 	// flow.xy = mix(flow.xy, texture2D(opticalFlow, uv).xy, OpticalFlowBlend);
-	flow.xy += texture2D(opticalFlow, uv).xy * OpticalFlowBlend;
+	flow.xy += texture2D(opticalFlowTexture, uv).xy * OpticalFlowBlend;
 	gl_FragColor = vec4(flow, 0, 1);
 }

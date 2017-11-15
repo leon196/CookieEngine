@@ -8,7 +8,7 @@ export default class PointCloudScene extends THREE.Scene {
 		super();
 
 		let attributes = assets.geometries.plantPoints.attributes;
-		Particles.createMeshes(attributes, assets.shaderMaterials.pointCloudExample)
+		Particles.createMeshes(attributes, assets.shaderMaterials.pointCloud)
 			.forEach(mesh => {
 				mesh.position.x = -5.;
 				mesh.position.y = 10.;

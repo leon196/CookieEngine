@@ -2,7 +2,6 @@ export default {
 	Scene: {
 		CurvedMesh: false,
 		LineMesh: false,
-		GridMesh: false,
 		PointCloud: true,
 		Ribbon: false,
 		Sprite: false,

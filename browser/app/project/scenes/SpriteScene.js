@@ -15,7 +15,7 @@ export default class SpriteScene extends THREE.Scene {
 		var image = assets.textures.spritesheet.image;
 		uniforms.spritesheetFrame = { value: [image.width, image.height] };
 		let attributes = Particles.randomPositionAttribute(32);
-		Particles.createMeshes(attributes, assets.shaderMaterials.spritesheetExample)
+		Particles.createMeshes(attributes, assets.shaderMaterials.spritesheet)
 			.forEach(mesh => { this.add(mesh); });
 	}
 }
