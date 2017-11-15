@@ -1,3 +1,5 @@
+
+import * as THREE from 'three.js';
 import assets from './engine/assets';
 import renderer from './engine/renderer';
 import camera from './engine/camera';
@@ -6,8 +8,7 @@ import FrameBuffer from './engine/framebuffer';
 import uniforms from './engine/uniforms';
 import parameters from './engine/parameters';
 import * as timeline from './engine/timeline';
-import MeshesScene from './project/MeshesScene';
-import ParticlesScene from './project/ParticlesScene';
+import ExamplesScene from './project/ExamplesScene';
 import GridScreenScene from './project/GridScreenScene';
 
 export default function() {
@@ -16,14 +17,13 @@ export default function() {
 	assets.load(function() {
 
 		scenes = [
-			new MeshesScene(),
-			new ParticlesScene(),
+			new ExamplesScene(),
 			new GridScreenScene()
 		];
 
 		passes = [
 			new ShaderPass(assets.shaderMaterials.feedbackExample, 'loopback', 2),
-			new ShaderPass(assets.shaderMaterials.filterExample, 'filter')
+			new ShaderPass(assets.shaderMaterials.filterExample, 'filter'),
 		];
 
 		uniformMaps = [];

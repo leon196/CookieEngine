@@ -8,10 +8,6 @@ uniform float time;
 varying vec2 vUv;
 
 void main ()	{
-	vec4 color = texture2D(ExamplesScene, vUv);
-	vec4 loop = texture2D(loopback, vUv);
-	vec4 grid = texture2D(GridScreenScene, vUv);
-	color = mix(loop, color, color.a);
-	color = mix(color, grid, grid.a);
+	vec4 color = texture2D(loopback, vUv);
 	gl_FragColor = color;
 }

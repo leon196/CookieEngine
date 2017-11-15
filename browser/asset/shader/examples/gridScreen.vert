@@ -2,6 +2,7 @@
 uniform float time;
 uniform vec2 resolution;
 uniform sampler2D MeshesScene;
+uniform sampler2D opticalFlow;
 attribute vec2 anchor;
 attribute vec2 indexMap;
 varying vec2 vUv;
@@ -14,7 +15,6 @@ varying vec4 vColor;
 
 void main() {
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
-	vec2 size = 2./resolution;
 	vUv = anchor*.5+.5;
 	vAnchor = anchor;
 	vIndexMap = indexMap;
@@ -23,9 +23,17 @@ void main() {
 	vec3 pos = position;
 	pos.xy = indexMap*2.-1.;
 
-	size *= 2.*luminance(texture2D(MeshesScene, indexMap).rgb);
+	vec2 flow = texture2D(opticalFlow, indexMap).xy;
+	// vec2 size = (0. + 10. * length(flow)) / resolution;
 	vColor = vec4(1);
-
+	// pos.xy -= flow;
 	gl_Position = vec4(pos.xy, 0., 1.);
-	gl_Position.xy += anchor * size * aspect;
+	// gl_Position.xy += anchor * aspect * size;
+
+	vec2 size = vec2(.01,.1*length(flow));
+	vColor = vec4(hsv2rgb(vec3(atan(flow.y,flow.x)/PI2,.8,.8)), 1);
+	vec2 front = -normalize(flow) * size.y;
+	vec2 right = vec2(front.y, -front.x) * size.x;
+	gl_Position.xy += front * (anchor.y-1.) * aspect;
+	gl_Position.xy += right * anchor.x * aspect;
 }

@@ -5,7 +5,7 @@ import uniforms from './uniforms';
 
 export default class {
 	constructor(material, uniformName, count, width, height, format, type, mig, mag) {
-		this.frameBuffer = new FrameBuffer(count, width, height, format, type, mig, mag);
+		this.frame = new FrameBuffer(count, width, height, format, type, mig, mag);
 		this.scene = new THREE.Scene();
 		this.geometry = new THREE.PlaneBufferGeometry( 2, 2 );
 		this.camera = new THREE.Camera();
@@ -19,21 +19,21 @@ export default class {
 	}
 
 	update() {
-		uniforms[this.uniformName].value = this.frameBuffer.getTexture();
-		this.frameBuffer.swap();
-		renderer.render(this.scene, this.camera, this.frameBuffer.getRenderTarget(), true);
+		uniforms[this.uniformName].value = this.frame.getTexture();
+		this.frame.swap();
+		renderer.render(this.scene, this.camera, this.frame.getRenderTarget(), true);
 	}
 
 	getTexture() {
-		return this.frameBuffer.getTexture();
+		return this.frame.getTexture();
 	}
 
 	render(scene, camera) {
-		renderer.render(scene, camera, this.frameBuffer.getRenderTarget(), true);
-		uniforms[this.uniformName].value = this.frameBuffer.getTexture();
+		renderer.render(scene, camera, this.frame.getRenderTarget(), true);
+		uniforms[this.uniformName].value = this.frame.getTexture();
 	}
 
 	resize(width, height) {
-		this.frameBuffer.resize(width, height);
+		this.frame.resize(width, height);
 	}
 }

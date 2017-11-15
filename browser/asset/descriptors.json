@@ -37,6 +37,10 @@
 			"vertexShader": "shader/examples/filter.vert",
 			"fragmentShader": "shader/examples/opticalFlow.frag"
 		},
+		"opticalFrameExample": {
+			"vertexShader": "shader/examples/filter.vert",
+			"fragmentShader": "shader/examples/opticalFrame.frag"
+		},
 		"feedbackExample": {
 			"vertexShader": "shader/examples/filter.vert",
 			"fragmentShader": "shader/examples/feedback.frag"
