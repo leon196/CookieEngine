@@ -23,7 +23,7 @@ export default class GridScreenScene extends Scene {
 			this.opticalFramePass,
 		];
 
-		let attributes = Particles.randomPositionAttribute(256*256);
+		let attributes = Particles.randomPositionAttribute(64*64);
 		Particles.createMeshes(attributes, assets.shaderMaterials.gridScreenExample)
 			.forEach(mesh => { this.scene.add(mesh); });
 	}

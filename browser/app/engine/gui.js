@@ -11,6 +11,7 @@ Object.keys(parameters).forEach(keyRoot => {
 	Object.keys(parameters[keyRoot]).forEach(key => {
 		const item = folder.add(parameters[keyRoot], key);
 		const name = key.toLowerCase();
+		item.step(0.01);
 	});
 	folder.open();
 });

@@ -1,4 +1,8 @@
 export default {
+	Filter: {
+		Glitch: 0.,
+		Pixel: 1.,
+	},
 	Feedback: {
 		Fade: .9,
 	},

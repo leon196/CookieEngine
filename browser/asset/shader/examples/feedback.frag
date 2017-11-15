@@ -18,18 +18,12 @@ void main ()	{
 	float noisy = noiseIQ(uv.xyy*10.);
 	float a = noisy*PI2;
 	uv += vec2(cos(a),sin(a))*pixel;
-	// uv.x += sin(uv.y*1000.)*smoothstep(.5,1.,noiseIQ(uv.yyy*10.+time*2.));
 	loop = texture2D(loopback, uv);
 	float dist = colorDistance(color,loop);
 	float update = smoothstep(.2,.3,dist);
 	update *= step(.01,luminance(color.rgb));
 	update = clamp(update,0.,1.);
 	color = mix(loop*FeedbackFade, color, update);
-
-	// vignette
-	float vignette = sin(vUv.x * PI);
-	vignette *= sin(vUv.y * PI);
-	color.rgb *= smoothstep(-.3,.3,vignette);
 
 	gl_FragColor = color;
 }
