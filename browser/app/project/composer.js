@@ -8,7 +8,27 @@ import uniforms from '../engine/uniforms';
 import * as FX from 'vanruesc/postprocessing';
 import * as Scene from './scenes/AllScenes';
 
-var composer = new FX.EffectComposer(renderer);
+var composer = new FX.EffectComposer(renderer, {
+  depthBuffer: true,
+  stencilBuffer: true,
+});
+
+function savePass (uniformName, type, format, min, mag) {
+  var save = new FX.SavePass();
+  var clear = new FX.ClearPass();
+  type = type || THREE.UnsignedByteType;
+  format = format || THREE.RGBAFormat;
+  min = min || THREE.LinearFilter;
+  mag = mag || THREE.LinearFilter;
+  save.renderTarget.texture.type = type;
+  save.renderTarget.texture.format = format;
+  save.renderTarget.texture.minFilter = min;
+  save.renderTarget.texture.magFilter = mag;
+  console.log(save.renderTarget.texture);
+  uniforms[uniformName] = { value: save.renderTarget.texture };
+  composer.addPass(save);
+  composer.addPass(clear);
+}
 
 composer.setup = function () {
 
@@ -32,12 +52,12 @@ composer.setup = function () {
   		composer.addPass(pass);
       ++index;
   });
+  savePass('sceneTexture');
 
-  var save = new FX.SavePass();
-  var clear = new FX.ClearPass();
-  uniforms.sceneTexture = { value: save.renderTarget.texture };
-  composer.addPass(save);
-  composer.addPass(clear);
+  var feedback = new FX.ShaderPass(assets.shaderMaterials.feedbackExample);
+  feedback.needsSwap = true;
+  composer.addPass(feedback);
+  savePass('feedbackTexture', THREE.UnsignedByteType, THREE.RGBAFormat, THREE.NearestFilter, THREE.NearestFilter);
 
   var pass = new FX.ShaderPass(assets.shaderMaterials.filterExample);
   pass.renderToScreen = true;

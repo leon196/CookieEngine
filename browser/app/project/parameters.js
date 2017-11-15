@@ -1,12 +1,12 @@
 export default {
 	Scene: {
-		CurvedMesh: true,
-		LineMesh: true,
+		CurvedMesh: false,
+		LineMesh: false,
 		GridMesh: false,
 		PointCloud: true,
-		Ribbon: true,
-		Sprite: true,
-		Snow: true,
+		Ribbon: false,
+		Sprite: false,
+		Snow: false,
 	},
 	Filter: {
 		Glitch: 0.,

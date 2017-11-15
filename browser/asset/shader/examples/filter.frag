@@ -2,7 +2,7 @@
 uniform sampler2D sceneTexture;
 uniform sampler2D GridScreenScene;
 uniform sampler2D opticalFlow;
-uniform sampler2D loopback;
+uniform sampler2D feedbackTexture;
 uniform vec2 resolution;
 uniform float time;
 uniform float FilterGlitch, FilterPixel;
@@ -19,10 +19,10 @@ void main ()	{
 
 	// layers
 	vec4 color = texture2D(sceneTexture, uv);
-	// vec4 loop = texture2D(loopback, uv);
+	vec4 loop = texture2D(feedbackTexture, uv);
 	// vec4 grid = texture2D(GridScreenScene, uv);
 	// vec4 flow = texture2D(opticalFlow, uv);
-	// color = mix(loop, color, color.a);
+	color = mix(loop, color, color.a);
 	// color = mix(color, grid, grid.a);
 
 	// vignette
