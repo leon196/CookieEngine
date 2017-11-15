@@ -57,6 +57,8 @@ export default function() {
 
 	function onWindowResize () {
 		var w = window.innerWidth, h = window.innerHeight;
+		camera.aspect = w/h;
+		camera.updateProjectionMatrix();
 		scenes.forEach(scene => scene.resize(w,h));
 		passes.forEach(pass => pass.resize(w,h));
 		renderer.setSize(w, h);

@@ -32,6 +32,12 @@ export default class {
 		this.currentIndex = (this.currentIndex + 1) % this.count;
 	}
 
+	resize(width, height) {
+		for (var i = 0; i < this.count; ++i) {
+			this.renderTextures[i].setSize(width, height);
+		}
+	}
+
 	autoResizeFromFPS (time) {
 		var fps = 1. / (time - this.timePreviousFrame);
 		if (fps < 30. && this.levelOfDetail < 8) {
@@ -42,7 +48,7 @@ export default class {
 				this.levelOfDetail *= 2.;
 				this.timeLagStart += time + 10.;
 				for (var i = 0; i < this.count; ++i) {
-					this.renderTextures[i].resize(window.innerWidth/this.levelOfDetail, window.innerHeight/this.levelOfDetail);
+					this.resize(window.innerWidth/this.levelOfDetail,window.innerHeight/this.levelOfDetail);
 				}
 			}
 		} else if (fps > 60. && this.levelOfDetail > 1) {
@@ -52,9 +58,7 @@ export default class {
 			if (clamp((time-this.timeLagStart)/this.timeLagDelay, 0., 1.) >= 1.) {
 				this.levelOfDetail /= 2.;
 				this.timeLagStart += time + 10.;
-				for (var i = 0; i < this.count; ++i) {
-					this.renderTextures[i].resize(window.innerWidth/this.levelOfDetail,window.innerHeight/this.levelOfDetail);
-				}
+				this.resize(window.innerWidth/this.levelOfDetail,window.innerHeight/this.levelOfDetail);
 			}
 		} else {
 			this.timeLagStart = time + 10.;

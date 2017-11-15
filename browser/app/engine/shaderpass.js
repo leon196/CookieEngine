@@ -34,6 +34,6 @@ export default class {
 	}
 
 	resize(width, height) {
-		
+		this.frameBuffer.resize(width, height);
 	}
 }

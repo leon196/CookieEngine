@@ -19,5 +19,6 @@ export default class {
   }
 
   resize(width, height) {
+		this.pass.resize(width, height);
   }
 }
