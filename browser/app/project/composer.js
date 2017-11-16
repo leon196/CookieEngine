@@ -13,6 +13,8 @@ var composer = new FX.EffectComposer(renderer, {
   stencilBuffer: true,
 });
 
+var opticalFlow;
+
 function savePass (uniformName, min, mag, type, format) {
   var save = new FX.SavePass();
   var clear = new FX.ClearPass();
@@ -42,9 +44,10 @@ composer.setup = function () {
   var scenesIndex = [];
   var gridIndex, opticalFlowIndex, feedbackIndex;
 
+  composer.opticalFlow = new Scene.OpticalFlow();
   var opticalFrame = new FX.ShaderPass(assets.shaderMaterials.opticalFrame);
   composer.addPass(opticalFrame);
-  savePass('lastFrame');
+  savePass('lastFrameTexture');
 
   var keys = Object.keys(parameters.Scene);
   var index = 0;
@@ -66,6 +69,11 @@ composer.setup = function () {
   gridIndex = composer.passes.length;
 	composer.addPass(pass);
   savePass('gridTexture');
+
+	var pass = new FX.RenderPass(composer.opticalFlow, camera, { clear: false });
+  opticalFlowIndex = composer.passes.length;
+	composer.addPass(pass);
+  savePass('arrowTexture');
 
   var filter = new FX.ShaderPass(assets.shaderMaterials.filter);
   composer.addPass(filter);

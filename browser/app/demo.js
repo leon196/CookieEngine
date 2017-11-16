@@ -9,10 +9,11 @@ import parameters from './project/parameters';
 import composer from './project/composer';
 
 export default function() {
-	let scenes, selectedScene, uniformMaps, clock;
+	let uniformMaps, clock;
+	let opticalFlow;
 
 	assets.load(function() {
-
+		uniforms.time.value = 0;
 		uniformMaps = [];
 		Object.keys(parameters).forEach(keyRoot => {
 			Object.keys(parameters[keyRoot]).forEach(keyChild => {
@@ -20,27 +21,28 @@ export default function() {
 				uniformMaps.push({ root:keyRoot, child:keyChild });
 			});
 		});
-		uniforms.time.value = 0;
 
-		clock = new THREE.Clock();
 		composer.setup();
+		timeline.start();
 
-		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);
 		requestAnimationFrame(animate);
-		timeline.start();
+		onWindowResize();
+		clock = new THREE.Clock();
 	});
 
 	function animate() {
 		requestAnimationFrame(animate);
 		const time = timeline.getTime();
-		camera.update(time);
-		uniforms.time.value = time;
 
+		uniforms.time.value = time;
 		uniformMaps.forEach(parameter => {
 			uniforms[parameter.root+parameter.child].value = parameters[parameter.root][parameter.child];
 		})
 
+		camera.update(time);
+		if (parameters.OpticalFlow.Enabled)
+			composer.opticalFlow.update();
 		composer.render(clock.getDelta());
 	}
 
@@ -49,5 +51,8 @@ export default function() {
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
 		renderer.setSize(w, h);
+		composer.setSize(w, h);
+		composer.opticalFlow.setSize(w, h);
+		uniforms.resolution.value = [window.innerWidth, window.innerHeight];
 	}
 }

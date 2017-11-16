@@ -33,6 +33,10 @@
 			"vertexShader": "shader/project/gridScreen.vert",
 			"fragmentShader": "shader/generic/color.frag"
 		},
+		"gridArrow": {
+			"vertexShader": "shader/project/gridArrow.vert",
+			"fragmentShader": "shader/generic/color.frag"
+		},
 		"opticalFlow": {
 			"vertexShader": "shader/generic/screen.vert",
 			"fragmentShader": "shader/filter/opticalFlow.frag"

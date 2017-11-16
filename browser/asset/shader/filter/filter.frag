@@ -3,10 +3,11 @@ uniform sampler2D sceneTexture;
 uniform sampler2D gridTexture;
 uniform sampler2D opticalFlowTexture;
 uniform sampler2D feedbackTexture;
-uniform sampler2D lastFrame;
+uniform sampler2D lastFrameTexture;
+uniform sampler2D arrowTexture;
 uniform vec2 resolution;
 uniform float time;
-uniform float FilterGlitch, FilterPixel;
+uniform float FilterGlitch, FilterPixel, OpticalFlowEnabled;
 varying vec2 vUv;
 
 void main ()	{
@@ -19,19 +20,23 @@ void main ()	{
 	uv.x += glitch * FilterGlitch;
 
 	// layers
-	vec4 color = texture2D(sceneTexture, uv);
+	vec4 color = vec4(0);
+	vec4 scene = texture2D(sceneTexture, uv);
 	vec4 loop = texture2D(feedbackTexture, uv);
 	vec4 grid = texture2D(gridTexture, uv);
+	vec4 arrow = texture2D(arrowTexture, uv);
 	// vec4 flow = texture2D(opticalFlowTexture, uv);
-	color = mix(loop, color, color.a);
+	color = mix(color, loop, loop.a);
+	color = mix(color, scene, scene.a);
 	color = mix(color, grid, grid.a);
+	color = mix(color, arrow, arrow.a * OpticalFlowEnabled);
 
 	// vignette
 	float vignette = sin(vUv.x * PI);
 	vignette *= sin(vUv.y * PI);
 	color.rgb *= smoothstep(-.3,.3,vignette);
 
-	// color = vec4(1) * abs(colorDistance(texture2D(lastFrame, uv), texture2D(sceneTexture, uv)));
+	// color = vec4(1) * abs(colorDistance(texture2D(lastFrameTexture, uv), texture2D(sceneTexture, uv)));
 
 	gl_FragColor = color;
 }

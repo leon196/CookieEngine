@@ -6,6 +6,7 @@ import PointCloud from './PointCloud';
 import Ribbon from './Ribbon';
 import Sprite from './Sprite';
 import Snow from './Snow';
+import OpticalFlow from './OpticalFlow';
 
 export {
   CurvedMesh,
@@ -14,5 +15,6 @@ export {
   PointCloud,
   Ribbon,
   Sprite,
-  Snow
+  Snow,
+  OpticalFlow
 };
