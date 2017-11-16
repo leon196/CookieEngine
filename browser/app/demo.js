@@ -13,9 +13,6 @@ export default function() {
 
 	assets.load(function() {
 
-		clock = new THREE.Clock();
-		composer.setup();
-
 		uniformMaps = [];
 		Object.keys(parameters).forEach(keyRoot => {
 			Object.keys(parameters[keyRoot]).forEach(keyChild => {
@@ -23,6 +20,10 @@ export default function() {
 				uniformMaps.push({ root:keyRoot, child:keyChild });
 			});
 		});
+		uniforms.time.value = 0;
+
+		clock = new THREE.Clock();
+		composer.setup();
 
 		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);
@@ -38,7 +39,7 @@ export default function() {
 
 		uniformMaps.forEach(parameter => {
 			uniforms[parameter.root+parameter.child].value = parameters[parameter.root][parameter.child];
-	})
+		})
 
 		composer.render(clock.getDelta());
 	}

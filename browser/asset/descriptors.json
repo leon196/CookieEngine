@@ -26,56 +26,56 @@
 	},
 	"shaderMaterials": {
 		"filter": {
-			"vertexShader": "shader/examples/filter.vert",
-			"fragmentShader": "shader/examples/filter.frag"
+			"vertexShader": "shader/generic/screen.vert",
+			"fragmentShader": "shader/filter/filter.frag"
 		},
 		"gridScreen": {
-			"vertexShader": "shader/examples/gridScreen.vert",
-			"fragmentShader": "shader/examples/color.frag"
+			"vertexShader": "shader/project/gridScreen.vert",
+			"fragmentShader": "shader/generic/color.frag"
 		},
 		"opticalFlow": {
-			"vertexShader": "shader/examples/filter.vert",
-			"fragmentShader": "shader/examples/opticalFlow.frag"
+			"vertexShader": "shader/generic/screen.vert",
+			"fragmentShader": "shader/filter/opticalFlow.frag"
 		},
 		"opticalFrame": {
-			"vertexShader": "shader/examples/filter.vert",
-			"fragmentShader": "shader/examples/opticalFrame.frag"
+			"vertexShader": "shader/generic/screen.vert",
+			"fragmentShader": "shader/filter/opticalFrame.frag"
 		},
 		"feedback": {
-			"vertexShader": "shader/examples/filter.vert",
-			"fragmentShader": "shader/examples/feedback.frag"
+			"vertexShader": "shader/generic/screen.vert",
+			"fragmentShader": "shader/filter/feedback.frag"
 		},
 		"simple": {
-			"vertexShader": "shader/examples/simple.vert",
-			"fragmentShader": "shader/examples/simple.frag"
+			"vertexShader": "shader/generic/simple.vert",
+			"fragmentShader": "shader/generic/simple.frag"
 		},
 		"ribbon": {
-			"vertexShader": "shader/examples/ribbon.vert",
-			"fragmentShader": "shader/examples/color.frag",
+			"vertexShader": "shader/project/ribbon.vert",
+			"fragmentShader": "shader/generic/color.frag",
 			"side": 2
 		},
 		"snow": {
-			"vertexShader": "shader/examples/snow.vert",
-			"fragmentShader": "shader/examples/snow.frag",
+			"vertexShader": "shader/project/snow.vert",
+			"fragmentShader": "shader/generic/circle.frag",
 			"side": 2
 		},
 		"pointCloud": {
-			"vertexShader": "shader/examples/pointCloud.vert",
-			"fragmentShader": "shader/examples/pointCloud.frag",
+			"vertexShader": "shader/project/pointCloud.vert",
+			"fragmentShader": "shader/generic/circle.frag",
 			"side": 2
 		},
 		"curvedMesh": {
-			"vertexShader": "shader/examples/curvedMesh.vert",
-			"fragmentShader": "shader/examples/curvedMesh.frag"
+			"vertexShader": "shader/project/curvedMesh.vert",
+			"fragmentShader": "shader/generic/texture.frag"
 		},
 		"lineMesh": {
-			"vertexShader": "shader/examples/lineMesh.vert",
-			"fragmentShader": "shader/examples/color.frag",
+			"vertexShader": "shader/project/lineMesh.vert",
+			"fragmentShader": "shader/generic/color.frag",
 			"side": 2
 		},
 		"spritesheet": {
-			"vertexShader": "shader/examples/sprite.vert",
-			"fragmentShader": "shader/examples/spritesheet.frag",
+			"vertexShader": "shader/project/sprite.vert",
+			"fragmentShader": "shader/project/spritesheet.frag",
 			"side": 2,
 			"depthTest": false,
 			"opacity": 0.5,

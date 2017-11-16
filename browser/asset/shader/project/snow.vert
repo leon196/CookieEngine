@@ -4,11 +4,11 @@ attribute vec2 indexMap;
 uniform vec2 resolution;
 uniform float time;
 varying vec2 vUv;
-varying vec2 vAnchor;
+varying vec4 vColor;
 
 void main()	{
-	vUv = uv;
-	vAnchor = anchor;
+	vUv = anchor;
+	vColor = vec4(1);
 	float size = .4;
 	float speed = .1;
 	float range = 50.;

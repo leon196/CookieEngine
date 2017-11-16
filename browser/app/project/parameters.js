@@ -6,6 +6,8 @@ export default {
 		Ribbon: false,
 		Sprite: false,
 		Snow: false,
+		Feedback: false,
+		OpticalFlow: true,
 	},
 	Filter: {
 		Glitch: 0.,

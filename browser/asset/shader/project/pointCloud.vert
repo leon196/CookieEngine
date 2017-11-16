@@ -6,14 +6,12 @@ uniform vec2 resolution;
 uniform float time;
 varying vec2 vUv;
 varying vec2 vAnchor;
-varying vec3 vColor;
+varying vec4 vColor;
 varying vec3 vNormal;
-varying vec3 vView;
 
 void main()	{
-	vUv = uv;
-	vAnchor = anchor;
-	vColor = color;
+	vUv = anchor;
+	vColor = vec4(color,1.);
 	float size = .2;
 	float range = 5.;
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
@@ -26,7 +24,6 @@ void main()	{
 	vec3 pos = position;
 	pos *= range;
 	pos += (vNormal * anchor.y + tangent * anchor.x) * size;
-	vView = normalize(pos-cameraPosition);
 
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos,1);
 }

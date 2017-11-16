@@ -23,15 +23,15 @@ void main() {
 	pos.xy = indexMap*2.-1.;
 
 	vec2 flow = texture2D(opticalFlowTexture, indexMap).xy;
-	vColor = vec4(1);
-	vec2 size = vec2(.05*length(flow));
+	// vColor = vec4(1);
+	// vec2 size = vec2(.05*length(flow));
 	gl_Position = vec4(pos.xy, 0., 1.);
-	gl_Position.xy += anchor * aspect * size;
+	// gl_Position.xy += anchor * aspect * size;
 
-	// vec2 size = vec2(.01,.05*length(flow));
+	vec2 size = vec2(.1,.05*length(flow));
 	vColor = vec4(hsv2rgb(vec3(atan(flow.y,flow.x),.8,.8)), 1);
-	// vec2 front = -normalize(flow) * size.y;
-	// vec2 right = vec2(front.y, -front.x) * size.x;
-	// gl_Position.xy += front * (anchor.y-1.) * aspect;
-	// gl_Position.xy += right * anchor.x * aspect;
+	vec2 front = -normalize(flow) * size.y;
+	vec2 right = vec2(front.y, -front.x) * size.x;
+	gl_Position.xy += front * (anchor.y-1.) * aspect;
+	gl_Position.xy += right * anchor.x * aspect;
 }
