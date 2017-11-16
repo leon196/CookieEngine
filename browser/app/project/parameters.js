@@ -6,15 +6,12 @@ export default {
 		Ribbon: false,
 		Sprite: false,
 		Snow: false,
-		Feedback: false,
-		OpticalFlow: true,
+		Grid: false,
 	},
 	Filter: {
 		Glitch: 0.,
 		Pixel: 1.,
-	},
-	Feedback: {
-		Fade: .9,
+		Feedback: .9,
 	},
 	OpticalFlow: {
 		Lambda: 0.1,

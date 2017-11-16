@@ -13,7 +13,7 @@ var composer = new FX.EffectComposer(renderer, {
   stencilBuffer: true,
 });
 
-function savePass (uniformName, type, format, min, mag) {
+function savePass (uniformName, min, mag, type, format) {
   var save = new FX.SavePass();
   var clear = new FX.ClearPass();
   type = type || THREE.UnsignedByteType;
@@ -60,12 +60,7 @@ composer.setup = function () {
   var feedback = new FX.ShaderPass(assets.shaderMaterials.feedback);
   feedbackIndex = composer.passes.length;
   composer.addPass(feedback);
-  savePass('feedbackTexture', THREE.UnsignedByteType, THREE.RGBAFormat, THREE.NearestFilter, THREE.NearestFilter);
-
-  var opticalFlow = new FX.ShaderPass(assets.shaderMaterials.opticalFlow);
-  opticalFlowIndex = composer.passes.length;
-  composer.addPass(opticalFlow);
-  savePass('opticalFlowTexture', THREE.FloatType, THREE.RGBAFormat);
+  savePass('feedbackTexture', THREE.NearestFilter, THREE.NearestFilter);
 
 	var pass = new FX.RenderPass(new Scene.GridMesh(), camera, { clear: false });
   gridIndex = composer.passes.length;
@@ -87,11 +82,7 @@ composer.setup = function () {
     if (index >= 0 && index <  scenesIndex.length) {
       composer.passes[scenesIndex[index]].enabled = value;
     }
-    if (index == 6) composer.passes[feedbackIndex].enabled = value;
-    if (index == 7) {
-      composer.passes[opticalFlowIndex].enabled = value;
-      composer.passes[gridIndex].enabled = value;
-    }
+    if (index == 6) composer.passes[gridIndex].enabled = value;
   }
 
   var keys = Object.keys(parameters.Scene);

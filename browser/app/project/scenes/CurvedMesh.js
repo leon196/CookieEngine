@@ -3,7 +3,7 @@ import * as THREE from 'three.js';
 import assets from '../../engine/assets';
 import uniforms from '../../engine/uniforms';
 
-export default class CurvedMeshScene extends THREE.Scene {
+export default class CurvedMesh extends THREE.Scene {
 	constructor() {
 		super();
 

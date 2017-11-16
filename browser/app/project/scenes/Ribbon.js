@@ -3,7 +3,7 @@ import * as THREE from 'three.js';
 import assets from '../../engine/assets';
 import Particles from '../../engine/particles';
 
-export default class RibbonScene extends THREE.Scene {
+export default class Ribbon extends THREE.Scene {
 
 	constructor() {
 		super();

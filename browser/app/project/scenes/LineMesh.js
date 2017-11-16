@@ -4,7 +4,7 @@ import assets from '../../engine/assets';
 import Particles from '../../engine/particles';
 import { arrayVec3Distance } from '../../engine/misc';
 
-export default class LineMeshScene extends THREE.Scene {
+export default class LineMesh extends THREE.Scene {
 	constructor() {
 		super();
 

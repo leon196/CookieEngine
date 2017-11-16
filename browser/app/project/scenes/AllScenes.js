@@ -1,11 +1,11 @@
 
-import CurvedMesh from './CurvedMeshScene';
-import LineMesh from './LineMeshScene';
-import GridMesh from './GridMeshScene';
-import PointCloud from './PointCloudScene';
-import Ribbon from './RibbonScene';
-import Sprite from './SpriteScene';
-import Snow from './SnowScene';
+import CurvedMesh from './CurvedMesh';
+import LineMesh from './LineMesh';
+import GridMesh from './GridMesh';
+import PointCloud from './PointCloud';
+import Ribbon from './Ribbon';
+import Sprite from './Sprite';
+import Snow from './Snow';
 
 export {
   CurvedMesh,
