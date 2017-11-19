@@ -1,31 +1,42 @@
 import * as THREE from 'three.js';
+import renderer from './renderer';
+import uniforms from './uniforms';
+import camera from './camera';
 
 export default class {
-	constructor(count, width, height, format, type, mig, mag, stencil, depth) {
+	constructor(options) {
+		options = options || {};
 		this.renderTextures = [];
 		this.currentIndex = 0;
-		this.count = count || 1;
+		this.count = options.count || 1;
 		this.timePreviousFrame = 0;
 		this.timeLagStart = 0;
 		this.timeLagDelay = 1;
 		this.levelOfDetail = 1;
-		width = width || window.innerWidth;
-		height = height || window.innerHeight;
-		format = format || THREE.RGBAFormat;
-		type = type || THREE.UnsignedByteType;
-		mig = mig || THREE.NearestFilter;
-		mag = mag || THREE.NearestFilter;
-		stencil = stencil || true;
-		depth = depth || true;
 		for (var i = 0; i < this.count; ++i) {
-			this.renderTextures.push(new THREE.WebGLRenderTarget(width/this.levelOfDetail, height/this.levelOfDetail, {
-				minFilter: mig,
-				magFilter: mag,
-				format: format,
-				type: type,
-				stencilBuffer: stencil,
-				depthBuffer: depth
+			this.renderTextures.push(new THREE.WebGLRenderTarget(
+				(options.width || window.innerWidth)/this.levelOfDetail,
+				(options.height || window.innerHeight)/this.levelOfDetail, {
+				format: options.format || THREE.RGBAFormat,
+				type: options.type || THREE.UnsignedByteType,
+				minFilter: options.min || THREE.LinearFilter,
+				magFilter: options.mag || THREE.LinearFilter,
+				stencilBuffer: options.stencil || true,
+				depthBuffer: options.depth || true
 			}));
+		}
+		if (options.uniformName != undefined && options.material != undefined) {
+			this.scene = new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), options.material);
+			this.uniformName = options.uniformName;
+			uniforms[this.uniformName] = { value: 0 };
+		}
+	}
+
+	update() {
+		if (this.scene != undefined) {
+			uniforms[this.uniformName].value = this.getTexture();
+			this.swap();
+			renderer.render(this.scene, camera, this.getRenderTarget(), true);
 		}
 	}
 

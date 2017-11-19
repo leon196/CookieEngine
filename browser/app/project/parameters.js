@@ -1,8 +1,8 @@
 export default {
 	Scene: {
-		CurvedMesh: false,
+		CurvedMesh: true,
 		LineMesh: false,
-		PointCloud: true,
+		PointCloud: false,
 		Ribbon: false,
 		Sprite: false,
 		Snow: false,
@@ -14,7 +14,7 @@ export default {
 		Feedback: .9,
 	},
 	OpticalFlow: {
-		Enabled: false,
+		Enabled: true,
 		Lambda: 0.1,
 		Threshold: 0.01,
 		Force: 1.,

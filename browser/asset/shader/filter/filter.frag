@@ -25,11 +25,12 @@ void main ()	{
 	vec4 loop = texture2D(feedbackTexture, uv);
 	vec4 grid = texture2D(gridTexture, uv);
 	vec4 arrow = texture2D(arrowTexture, uv);
-	// vec4 flow = texture2D(opticalFlowTexture, uv);
+	vec4 flow = texture2D(opticalFlowTexture, uv);
 	color = mix(color, loop, loop.a);
 	color = mix(color, scene, scene.a);
 	color = mix(color, grid, grid.a);
 	color = mix(color, arrow, arrow.a * OpticalFlowEnabled);
+	color = flow;
 
 	// vignette
 	float vignette = sin(vUv.x * PI);

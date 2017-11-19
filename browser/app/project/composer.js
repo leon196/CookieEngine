@@ -35,11 +35,11 @@ composer.setup = function () {
 
   var scenes = [
   	new Scene.CurvedMesh(),
-    new Scene.LineMesh(),
-    new Scene.PointCloud(),
-    new Scene.Ribbon(),
-    new Scene.Sprite(),
-    new Scene.Snow(),
+    // new Scene.LineMesh(),
+    // new Scene.PointCloud(),
+    // new Scene.Ribbon(),
+    // new Scene.Sprite(),
+    // new Scene.Snow(),
   ];
   var scenesIndex = [];
   var gridIndex, opticalFlowIndex, feedbackIndex;
@@ -90,7 +90,7 @@ composer.setup = function () {
     if (index >= 0 && index <  scenesIndex.length) {
       composer.passes[scenesIndex[index]].enabled = value;
     }
-    if (index == 6) composer.passes[gridIndex].enabled = value;
+    // if (index == 6) composer.passes[gridIndex].enabled = value;
   }
 
   var keys = Object.keys(parameters.Scene);

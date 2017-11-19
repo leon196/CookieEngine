@@ -1,25 +1,27 @@
 
 import * as THREE from 'three.js';
 import assets from '../../engine/assets';
-import renderer from '../../engine/renderer';
 import FrameBuffer from '../../engine/FrameBuffer';
 import Particles from '../../engine/particles';
-import uniforms from '../../engine/uniforms';
-import camera from '../../engine/camera';
 
 export default class OpticalFlow extends THREE.Scene {
 
 	constructor() {
 		super();
 
-		this.frame = new FrameBuffer(2, window.innerWidth, window.innerHeight,
-			THREE.RGBAFormat, THREE.FloatType,
-			THREE.LinearFilter, THREE.LinearFilter,
-			false, false);
-		this.scenePass = new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.opticalFlow);
-		this.camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 1000);
-		camera.position.z = -1;
-		uniforms.opticalFlowTexture = { value: this.frame.getTexture() };
+		this.frame = new FrameBuffer({
+			count: 2,
+			uniformName: 'opticalFlowTexture',
+			material: assets.shaderMaterials.opticalFlow,
+			width: window.innerWidth,
+			height: window.innerHeight,
+			format: THREE.RGBAFormat,
+			type: THREE.FloatType,
+			min: THREE.LinearFilter,
+			mag: THREE.LinearFilter,
+			depth: false,
+			stencil: false,
+		});
 
 		let attributes = Particles.randomPositionAttribute(256*256);
 		Particles.createMeshes(attributes, assets.shaderMaterials.gridArrow)
@@ -27,9 +29,7 @@ export default class OpticalFlow extends THREE.Scene {
 	}
 
 	update() {
-		uniforms.opticalFlowTexture.value = this.frame.getTexture();
-		this.frame.swap();
-		renderer.render(this.scenePass, this.camera, this.frame.getRenderTarget(), true);
+		this.frame.update();
 	}
 
 	setSize(w,h) {

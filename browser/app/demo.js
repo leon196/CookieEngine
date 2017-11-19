@@ -41,9 +41,8 @@ export default function() {
 		})
 
 		camera.update(time);
-		if (parameters.OpticalFlow.Enabled)
-			composer.opticalFlow.update();
 		composer.render(clock.getDelta());
+		if (parameters.OpticalFlow.Enabled) composer.opticalFlow.update();
 	}
 
 	function onWindowResize () {
