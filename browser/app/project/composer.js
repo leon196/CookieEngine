@@ -3,10 +3,8 @@ import * as THREE from 'three.js';
 import assets from '../engine/assets';
 import renderer from '../engine/renderer';
 import camera from '../engine/camera';
-import parameters from './parameters';
 import uniforms from '../engine/uniforms';
 import * as FX from 'vanruesc/postprocessing';
-import * as Scene from './scenes/AllScenes';
 
 var composer = new FX.EffectComposer(renderer, {
   depthBuffer: true,
@@ -31,13 +29,9 @@ function savePass (uniformName, min, mag, type, format) {
 
 composer.setup = function (scenes) {
 
-  var keys = Object.keys(parameters.Scene);
-  var index = 0;
   scenes.forEach(scene => {
 		var pass = new FX.RenderPass(scene, camera, { clear: false });
-		pass.enabled = parameters.Scene[keys[index]];
 		composer.addPass(pass);
-    ++index;
   });
   savePass('sceneTexture');
 

@@ -1,13 +1,4 @@
 export default {
-	Scene: {
-		CurvedMesh: true,
-		LineMesh: false,
-		PointCloud: false,
-		Ribbon: false,
-		Sprite: false,
-		Snow: false,
-		Grid: false,
-	},
 	Filter: {
 		Glitch: 0.,
 		Pixel: 1.,
@@ -28,17 +19,19 @@ export default {
 		Range: 25.,
   	Offset: 8.3,
 	},
-	ParticleSystem: {
-		velocitySpeed: .1,
-		velocityTargetBlend: .1,
-		velocityOriginBlend: .1,
-		velocityNoiseBlend: .1,
-		velocityTornadoBlend: .1,
-		velocityDirectionBlend: .1,
-		velocityFrictionBlend: .1,
-		velocityDamping: .1,
-		spriteVelocityStretch: .1,
-		turbulenceRangeMin: .1,
-		turbulenceRangeMax: .8,
+	Fire: {
+		SpriteSize: 1.15,
+		VelocitySpeed: .51,
+		VelocityTargetBlend: -.26,
+		VelocityOriginBlend: .1,
+		VelocityNoiseBlend: .5,
+		VelocityTornadoBlend: .35,
+		VelocityDirectionBlend: .1,
+		VelocityDamping: .1,
+		SpriteVelocityStretch: .1,
+		TurbulenceRangeMin: .1,
+		TurbulenceRangeMax: .8,
+		NoiseScale: .08,
+		NoiseSpeed: 1.,
 	}
 };

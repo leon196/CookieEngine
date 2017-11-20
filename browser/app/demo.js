@@ -7,11 +7,10 @@ import camera from './engine/camera';
 import uniforms from './engine/uniforms';
 import parameters from './project/parameters';
 import composer from './project/composer';
-import * as Scene from './project/scenes/AllScenes';
+import Fire from './project/scenes/Fire';
 
 export default function() {
-	let uniformMaps, clock;
-	let particleSystem;
+	let scenes, uniformMaps, clock;
 
 	assets.load(function() {
 		uniforms.time.value = 0;
@@ -23,9 +22,8 @@ export default function() {
 			});
 		});
 
-		particleSystem = new Scene.ParticleSystem();
-	  var scenes = [
-	  	particleSystem
+	  scenes = [
+	  	new Fire()
 	  ];
 
 		composer.setup(scenes);
@@ -47,7 +45,11 @@ export default function() {
 		})
 
 		camera.update(time);
-		particleSystem.update(time);
+		scenes.forEach(scene => {
+			if (scene.update !== undefined) {
+				scene.update();
+			}
+		})
 		composer.render(clock.getDelta());
 	}
 

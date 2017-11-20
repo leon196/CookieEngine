@@ -1,18 +1,36 @@
 
 import * as THREE from 'three.js';
+import * as makeText from '../../engine/make-text';
 import assets from '../../engine/assets';
 import renderer from '../../engine/renderer';
 import uniforms from '../../engine/uniforms';
 import FrameBuffer from '../../engine/FrameBuffer';
 import Paricles from '../../engine/particles';
 
-export default class ParticleSystem extends THREE.Scene {
+export default class Fire extends THREE.Scene {
 
 	constructor() {
 		super();
-		var options;
 
-    let attributes = Paricles.randomPositionAttribute(64*64);
+		// text
+		this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.text));
+		var words = [
+			{
+				text: 'Cookie\nDemoparty',
+				font: 'rhinos_rocksregular',
+				textAlign: 'center',
+				fontSize: 196,
+				width: 1024,
+				height: 1024,
+			},
+		];
+		var texture = new THREE.Texture(makeText.createCanvas(words[0]));
+		texture.needsUpdate = true;
+		uniforms.textTexture = { value: texture };
+
+		// particle system
+		var options;
+		let attributes = Paricles.randomPositionAttribute(256*256);
 		Paricles.createMeshes(attributes, assets.shaderMaterials.fire)
 			.forEach(mesh => { this.add(mesh); });
 

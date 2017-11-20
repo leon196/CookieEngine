@@ -60,7 +60,7 @@
 		},
 		"fire": {
 			"vertexShader": "shader/project/fire.vert",
-			"fragmentShader": "shader/generic/color.frag",
+			"fragmentShader": "shader/generic/circle.frag",
 			"side": 2
 		},
 		"firePosition": {
@@ -72,6 +72,13 @@
 			"vertexShader": "shader/generic/screen.vert",
 			"fragmentShader": "shader/project/fireVelocity.frag",
 			"side": 2
+		},
+		"text": {
+			"vertexShader": "shader/project/text.vert",
+			"fragmentShader": "shader/project/text.frag",
+			"depthTest": false,
+			"opacity": 0.5,
+			"transparent": true
 		},
 		"snow": {
 			"vertexShader": "shader/project/snow.vert",
