@@ -16,17 +16,26 @@ export default class Fire extends THREE.Scene {
 		this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.text));
 		var words = [
 			{
-				text: 'Cookie\nDemoparty',
+				text: 'Cookie',
 				font: 'rhinos_rocksregular',
 				textAlign: 'center',
 				fontSize: 196,
-				width: 1024,
-				height: 1024,
+				fillStyle: 'white',
+				textAlign: 'center',
+				textBaseline: 'middle',
+				width: 512,
+				height: 512,
+				shadowColor: 'rgba(0,0,0,.5)',
+				shadowBlur: 4,
+				offsetY: -50,
+			},
+			{
+				text: 'Demoparty',
+				fontSize: 106,
+				offsetY: 100,
 			},
 		];
-		var texture = new THREE.Texture(makeText.createCanvas(words[0]));
-		texture.needsUpdate = true;
-		uniforms.textTexture = { value: texture };
+		uniforms.textTexture = { value: makeText.createTexture(words) };
 
 		// particle system
 		var options;
