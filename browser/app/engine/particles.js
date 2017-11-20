@@ -1,19 +1,11 @@
 
 import * as THREE from 'three.js';
+import assets from './assets';
+import uniforms from './uniforms';
+import FrameBuffer from './FrameBuffer';
 import { closestPowerOfTwo, lerp, getRandomPoints } from './misc';
 
-export default class {
-
-	constructor() {
-		var dimension = closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
-		let attributes = this.randomPositionAttribute(64*64);
-		this.positionTexture = this.createDataTexture(attributes.position.array, attributes.position.itemSize);
-		this.positionPass = new ShaderPass(assets.shaderMaterials.position, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
-		this.velocityPass = new ShaderPass(assets.shaderMaterials.velocity, dimension, dimension, THREE.RGBAFormat, THREE.FloatType);
-	}
-
-	update(elapsed) {
-	}
+export default class Particles {
 
 	static createMeshes(attributes, material, subdivisions)
 	{
@@ -99,7 +91,8 @@ export default class {
 		};
 	}
 
-	createDataTexture(dimension, dataArray, itemSize)	{
+	static createDataTexture(dataArray, itemSize)	{
+		var dimension = closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
 		var array = [];
 		for (var t = 0; t < dataArray.length; t += itemSize)
 			for (var i = 0; i < itemSize; ++i)
@@ -109,7 +102,7 @@ export default class {
 		return texture;
 	}
 
-	parsePointCloud (data, step)
+	static parsePointCloud (data, step)
 	{
 		var cloud = {};
 		cloud.points = [];

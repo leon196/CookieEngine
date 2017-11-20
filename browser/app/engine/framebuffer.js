@@ -58,6 +58,17 @@ export default class {
 		}
 	}
 
+	static optionsForFloatBuffer() {
+		return {
+			count: 2,
+			type: THREE.FloatType,
+			min: THREE.NearestFilter,
+			mag: THREE.NearestFilter,
+			depth: false,
+			stencil: false,
+		}
+	}
+
 	autoResizeFromFPS (time) {
 		var fps = 1. / (time - this.timePreviousFrame);
 		if (fps < 30. && this.levelOfDetail < 8) {

@@ -58,6 +58,21 @@
 			"fragmentShader": "shader/generic/color.frag",
 			"side": 2
 		},
+		"fire": {
+			"vertexShader": "shader/project/fire.vert",
+			"fragmentShader": "shader/generic/color.frag",
+			"side": 2
+		},
+		"firePosition": {
+			"vertexShader": "shader/generic/screen.vert",
+			"fragmentShader": "shader/project/firePosition.frag",
+			"side": 2
+		},
+		"fireVelocity": {
+			"vertexShader": "shader/generic/screen.vert",
+			"fragmentShader": "shader/project/fireVelocity.frag",
+			"side": 2
+		},
 		"snow": {
 			"vertexShader": "shader/project/snow.vert",
 			"fragmentShader": "shader/generic/circle.frag",

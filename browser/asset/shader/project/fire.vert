@@ -1,24 +1,12 @@
 
-attribute vec3 color;
 attribute vec2 anchor;
-attribute vec2 texcoord;
-varying vec2 vTexcoord;
-varying vec2 vUVMesh;
-varying vec2 vAnchor;
-varying vec2 vScreenUV;
-varying vec3 vColor;
-varying float vFade;
-varying vec3 vNormal;
-varying vec3 vVelocity;
-varying vec3 vViewDir;
-uniform sampler2D spawnTexture;
-uniform sampler2D colorTexture;
-uniform sampler2D positionTexture;
-uniform sampler2D velocityTexture;
+attribute vec2 indexMap;
+
+uniform sampler2D firePositionTexture;
 uniform float time;
 uniform vec2 resolution;
-uniform float spriteVelocityStretch;
-uniform float blendFire;
+
+varying vec4 vColor;
 
 vec3 displace (vec3 p)
 {
@@ -28,14 +16,14 @@ vec3 displace (vec3 p)
 }
 
 void main() {
-	vTexcoord = texcoord;
-	vAnchor = anchor;
-	vColor = color;
+	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
 
-	vec3 pos = texture2D(positionTexture, vTexcoord).xyz;
-	// vec3 col = texture2D(colorTexture, vTexcoord).xyz;
+	vec3 pos = texture2D(firePositionTexture, indexMap).xyz;
 	vec4 posWorld = modelMatrix * vec4( displace(pos), 1.0 );
-	
+	vColor = vec4(1);
+	/*
+	// vec3 col = texture2D(colorTexture, vTexcoord).xyz;
+
 	vec3 viewDir = normalize(posWorld.xyz - cameraPosition.xyz);
 	vec4 velocity = texture2D(velocityTexture, vTexcoord);
 	float magnitude = length(velocity.xyz);
@@ -79,13 +67,14 @@ void main() {
 
 	forward = mix(vec2(0,1), forward * stretch, moving);
 	right = mix(vec2(1,0), right * stretch, moving);
-
 	// screen space
-	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
 	size *= blendFire * vFade;
 	gl_Position.y += size.y;
 	gl_Position.xy += right * anchor.x * size.x * aspect.x;
 	gl_Position.xy += forward * anchor.y * size.y * aspect.y;
 
 	vScreenUV = (gl_Position.xy/gl_Position.w) * 0.5 + 0.5;
+	*/
+	gl_Position = projectionMatrix * viewMatrix * posWorld;
+	gl_Position.xy += anchor * aspect;
 }

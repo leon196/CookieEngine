@@ -1,14 +1,10 @@
 
 varying vec2 vUv;
 uniform vec2 resolution;
-uniform vec3 pivot;
 uniform float time;
-uniform sampler2D frameBuffer;
-uniform sampler2D spawnTexture;
-uniform sampler2D positionTexture;
-uniform sampler2D colorTexture;
-uniform sampler2D normalTexture;
-uniform mat4 matrix;
+uniform sampler2D fireVelocityTexture;
+uniform sampler2D fireSpawnTexture;
+uniform sampler2D firePositionTexture;
 uniform float velocitySpeed;
 uniform float velocityTargetBlend;
 uniform float velocityOriginBlend;
@@ -22,16 +18,14 @@ uniform float turbulenceRangeMin;
 uniform float turbulenceRangeMax;
 
 void main()	{
-	vec3 spawn = texture2D(spawnTexture, vUv).xyz;
-	vec4 buffer = texture2D(frameBuffer, vUv);
-	vec3 position = texture2D(positionTexture, vUv).xyz;
-	vec3 normal = texture2D(normalTexture, vUv).xyz;
-	vec3 color = texture2D(colorTexture, vUv).rgb;
+	vec3 spawn = texture2D(fireSpawnTexture, vUv).xyz;
+	vec4 velocity = texture2D(fireVelocityTexture, vUv);
+	vec3 position = texture2D(firePositionTexture, vUv).xyz;
 
 	float spawnOffset = rand(vUv) * 0.01 + 0.01;
-	// buffer.w = spawnOffset+time;
-	// gl_FragColor.w = mix(mod(buffer.w, 1.0), -1.0, step(1.0, mod(buffer.w,1.)));
-	gl_FragColor.w = mix(mod(buffer.w + spawnOffset, 1.0), -1.0, step(1.0, buffer.w + spawnOffset));
+	// velocity.w = spawnOffset+time;
+	// gl_FragColor.w = mix(mod(velocity.w, 1.0), -1.0, step(1.0, mod(velocity.w,1.)));
+	gl_FragColor.w = mix(mod(velocity.w + spawnOffset, 1.0), -1.0, step(1.0, velocity.w + spawnOffset));
 
 	vec3 epsilon = vec3(1)*0.00001;
 
@@ -40,7 +34,7 @@ void main()	{
 
 	// noisey
 	vec3 noisey = vec3(0.);
-	vec3 seed = position+spawn+buffer.xyz;
+	vec3 seed = position+spawn+velocity.xyz;
 	seed /= 5.;
 	// seed = rotateX(rotateY(seed, time*0.03), time*0.06);
 	noisey.x += (noiseIQ(seed.xyz*2.5)*2.-1.);
@@ -65,7 +59,5 @@ void main()	{
 	// offset = attractor * .1;
 
 
-	gl_FragColor.xyz = mix(buffer.xyz * velocityFrictionBlend, offset * velocitySpeed, velocityDamping);
-
-	// spawning
+	gl_FragColor.xyz = mix(velocity.xyz * velocityFrictionBlend, offset * velocitySpeed, velocityDamping);
 }

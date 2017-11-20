@@ -7,6 +7,7 @@ import Ribbon from './Ribbon';
 import Sprite from './Sprite';
 import Snow from './Snow';
 import OpticalFlow from './OpticalFlow';
+import ParticleSystem from './ParticleSystem';
 
 export {
   CurvedMesh,
@@ -16,5 +17,6 @@ export {
   Ribbon,
   Sprite,
   Snow,
-  OpticalFlow
+  OpticalFlow,
+  ParticleSystem,
 };

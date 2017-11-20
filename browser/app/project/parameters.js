@@ -28,4 +28,17 @@ export default {
 		Range: 25.,
   	Offset: 8.3,
 	},
+	ParticleSystem: {
+		velocitySpeed: .1,
+		velocityTargetBlend: .1,
+		velocityOriginBlend: .1,
+		velocityNoiseBlend: .1,
+		velocityTornadoBlend: .1,
+		velocityDirectionBlend: .1,
+		velocityFrictionBlend: .1,
+		velocityDamping: .1,
+		spriteVelocityStretch: .1,
+		turbulenceRangeMin: .1,
+		turbulenceRangeMax: .8,
+	}
 };

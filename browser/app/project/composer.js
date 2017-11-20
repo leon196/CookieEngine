@@ -13,8 +13,6 @@ var composer = new FX.EffectComposer(renderer, {
   stencilBuffer: true,
 });
 
-var opticalFlow;
-
 function savePass (uniformName, min, mag, type, format) {
   var save = new FX.SavePass();
   var clear = new FX.ClearPass();
@@ -31,49 +29,17 @@ function savePass (uniformName, min, mag, type, format) {
   composer.addPass(clear);
 }
 
-composer.setup = function () {
-
-  var scenes = [
-  	new Scene.CurvedMesh(),
-    // new Scene.LineMesh(),
-    // new Scene.PointCloud(),
-    // new Scene.Ribbon(),
-    // new Scene.Sprite(),
-    // new Scene.Snow(),
-  ];
-  var scenesIndex = [];
-  var gridIndex, opticalFlowIndex, feedbackIndex;
-
-  composer.opticalFlow = new Scene.OpticalFlow();
-  var opticalFrame = new FX.ShaderPass(assets.shaderMaterials.opticalFrame);
-  composer.addPass(opticalFrame);
-  savePass('lastFrameTexture');
+composer.setup = function (scenes) {
 
   var keys = Object.keys(parameters.Scene);
   var index = 0;
   scenes.forEach(scene => {
 		var pass = new FX.RenderPass(scene, camera, { clear: false });
 		pass.enabled = parameters.Scene[keys[index]];
-    scenesIndex.push(composer.passes.length);
 		composer.addPass(pass);
     ++index;
   });
   savePass('sceneTexture');
-
-  var feedback = new FX.ShaderPass(assets.shaderMaterials.feedback);
-  feedbackIndex = composer.passes.length;
-  composer.addPass(feedback);
-  savePass('feedbackTexture', THREE.NearestFilter, THREE.NearestFilter);
-
-	var pass = new FX.RenderPass(new Scene.GridMesh(), camera, { clear: false });
-  gridIndex = composer.passes.length;
-	composer.addPass(pass);
-  savePass('gridTexture');
-
-	var pass = new FX.RenderPass(composer.opticalFlow, camera, { clear: false });
-  opticalFlowIndex = composer.passes.length;
-	composer.addPass(pass);
-  savePass('arrowTexture');
 
   var filter = new FX.ShaderPass(assets.shaderMaterials.filter);
   composer.addPass(filter);
@@ -85,20 +51,6 @@ composer.setup = function () {
   });
   bloom.renderToScreen = true;
   composer.addPass(bloom);
-
-  composer.toggle = function (index, value) {
-    if (index >= 0 && index <  scenesIndex.length) {
-      composer.passes[scenesIndex[index]].enabled = value;
-    }
-    // if (index == 6) composer.passes[gridIndex].enabled = value;
-  }
-
-  var keys = Object.keys(parameters.Scene);
-  var i = 0;
-  keys.forEach(key => {
-    composer.toggle(i, parameters.Scene[key]);
-    ++i;
-  });
 }
 
 export default composer;

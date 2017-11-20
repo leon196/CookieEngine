@@ -7,10 +7,11 @@ import camera from './engine/camera';
 import uniforms from './engine/uniforms';
 import parameters from './project/parameters';
 import composer from './project/composer';
+import * as Scene from './project/scenes/AllScenes';
 
 export default function() {
 	let uniformMaps, clock;
-	let opticalFlow;
+	let particleSystem;
 
 	assets.load(function() {
 		uniforms.time.value = 0;
@@ -22,7 +23,12 @@ export default function() {
 			});
 		});
 
-		composer.setup();
+		particleSystem = new Scene.ParticleSystem();
+	  var scenes = [
+	  	particleSystem
+	  ];
+
+		composer.setup(scenes);
 		timeline.start();
 
 		window.addEventListener('resize', onWindowResize, false);
@@ -41,8 +47,8 @@ export default function() {
 		})
 
 		camera.update(time);
+		particleSystem.update(time);
 		composer.render(clock.getDelta());
-		if (parameters.OpticalFlow.Enabled) composer.opticalFlow.update();
 	}
 
 	function onWindowResize () {
@@ -51,7 +57,6 @@ export default function() {
 		camera.updateProjectionMatrix();
 		renderer.setSize(w, h);
 		composer.setSize(w, h);
-		composer.opticalFlow.setSize(w, h);
 		uniforms.resolution.value = [window.innerWidth, window.innerHeight];
 	}
 }

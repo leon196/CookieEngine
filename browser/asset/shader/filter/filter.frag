@@ -4,6 +4,7 @@ uniform sampler2D gridTexture;
 uniform sampler2D opticalFlowTexture;
 uniform sampler2D feedbackTexture;
 uniform sampler2D lastFrameTexture;
+uniform sampler2D fireVelocityTexture;
 uniform sampler2D arrowTexture;
 uniform vec2 resolution;
 uniform float time;
@@ -30,7 +31,7 @@ void main ()	{
 	color = mix(color, scene, scene.a);
 	color = mix(color, grid, grid.a);
 	color = mix(color, arrow, arrow.a * OpticalFlowEnabled);
-	color = flow;
+	color = texture2D(fireVelocityTexture, uv);
 
 	// vignette
 	float vignette = sin(vUv.x * PI);
