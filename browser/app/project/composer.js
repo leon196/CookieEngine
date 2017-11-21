@@ -36,15 +36,16 @@ composer.setup = function (scenes) {
   savePass('sceneTexture');
 
   var filter = new FX.ShaderPass(assets.shaderMaterials.filter);
+  filter.renderToScreen = true;
   composer.addPass(filter);
 
-  var bloom = new FX.BloomPass({
-  	resolutionScale: 1.,
-  	intensity: 1.0,
-  	distinction: 1.0
-  });
-  bloom.renderToScreen = true;
-  composer.addPass(bloom);
+  // var bloom = new FX.BloomPass({
+  // 	resolutionScale: 1.,
+  // 	intensity: 1.0,
+  // 	distinction: 1.0
+  // });
+  // bloom.renderToScreen = true;
+  // composer.addPass(bloom);
 }
 
 export default composer;

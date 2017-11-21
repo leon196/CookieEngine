@@ -5,7 +5,8 @@ import composer from '../project/composer';
 export const gui = new dat.gui.GUI();
 
 gui.remember(parameters);
-
+console.log(gui);
+console.log(parameters);
 Object.keys(parameters).forEach(keyRoot => {
 	var folder = gui.addFolder(keyRoot);
 	var keys = Object.keys(parameters[keyRoot]);
@@ -16,11 +17,6 @@ Object.keys(parameters).forEach(keyRoot => {
 			const type = typeof(param);
 			if (type == 'number') {
 				item.step(0.01);
-			} else if (type == 'boolean' && keyRoot == 'Scene') {
-				var index = keys.indexOf(item.property);
-				item.onChange(function(value) {
-					composer.toggle(index, value);
-				});
 			}
 		});
 	} else {

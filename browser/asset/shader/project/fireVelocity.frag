@@ -39,8 +39,8 @@ void main()	{
 	vec3 noisey = vec3(0.);
 	vec4 seed = position+spawn+velocity;
 	seed *= FireNoiseScale;
-	seed.xyz = rotateY(seed.xyz, time*0.06*FireNoiseSpeed);
-	// seed.xyz = rotateX(rotateY(seed.xyz, time*0.06*FireNoiseSpeed), time*0.06*FireNoiseSpeed);
+	// seed.xyz = rotateY(seed.xyz, time*0.06*FireNoiseSpeed);
+	seed.xyz = rotateX(rotateY(seed.xyz, time*0.06*FireNoiseSpeed), time*0.06*FireNoiseSpeed);
 	noisey.x += (noiseIQ(seed.xyz*2.5)*2.-1.);
 	noisey.y += (noiseIQ(seed.xyz*1.4)*2.-1.);
 	noisey.z += (noiseIQ(seed.xyz*3.3)*2.-1.);

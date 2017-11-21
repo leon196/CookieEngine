@@ -16,7 +16,7 @@ export default class Fire extends THREE.Scene {
 		this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.text));
 		var words = [
 			{
-				text: 'Cookie',
+				text: 'CooKie',
 				font: 'rhinos_rocksregular',
 				textAlign: 'center',
 				fontSize: 196,

@@ -41,7 +41,9 @@ export default function() {
 
 		uniforms.time.value = time;
 		uniformMaps.forEach(parameter => {
-			uniforms[parameter.root+parameter.child].value = parameters[parameter.root][parameter.child];
+			var name = parameter.root+parameter.child;
+			// uniforms[name].value = assets.animations.getValue(name, time);
+			uniforms[name].value = parameters[parameter.root][parameter.child];
 		})
 
 		camera.update(time);
