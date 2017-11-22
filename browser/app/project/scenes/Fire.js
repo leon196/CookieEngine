@@ -46,9 +46,9 @@ export default class Fire extends THREE.Scene {
 		// particle system
 		var options;
 		// let attributes = Paricles.randomPositionAttribute(256*256);
-		var titleGeometry = assets.geometries.title.children[0].geometry;
-		this.add(new THREE.Mesh(titleGeometry, assets.shaderMaterials.simple));
-		let attributes = decimateAttributes(titleGeometry.attributes, 1);
+		var geometry = assets.geometries.cookie.children[0].geometry;
+		this.add(new THREE.Mesh(geometry, assets.shaderMaterials.cookie));
+		let attributes = decimateAttributes(geometry.attributes, 1);
 		Paricles.createMeshes(attributes, assets.shaderMaterials.fire)
 			.forEach(mesh => { this.add(mesh); });
 

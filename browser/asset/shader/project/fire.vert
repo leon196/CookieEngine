@@ -57,7 +57,7 @@ void main() {
 	// pos.xyz += anchor.x * tangent * size.x + anchor.y * up * size.y;
 	// pos.xyz -= up * size / 2.5;
 
-	float ratio = dot(normalize(viewDir), normalize(velocity.xyz));
+	float ratio = dot(normalize(viewDir), normalize(velocity.xyz))*.5+.5;
 	vColor.rgb = mix(vec3(01, 0.898, 0.478), vec3(0.733, 0.160, 0.105), smoothstep(.1,.9,ratio));
 
 	// vColor *= dot(normalize(vViewDir), normal)*.5+.5;
@@ -70,6 +70,6 @@ void main() {
 	forward = mix(vec2(0,1), forward, moving);
 	right = mix(vec2(1,0), right, moving);
 	// screen space
-	gl_Position.xy += right * anchor.x * size.x * aspect.x;
-	gl_Position.xy += forward * anchor.y * size.y * aspect.y * stretch;
+	gl_Position.xy += right * anchor.x * size.x;
+	gl_Position.xy += forward * anchor.y * size.y * stretch;
 }
