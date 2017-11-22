@@ -5,8 +5,10 @@ uniform sampler2D opticalFlowTexture;
 uniform sampler2D feedbackTexture;
 uniform sampler2D lastFrameTexture;
 uniform sampler2D fireVelocityTexture;
+uniform sampler2D fireSpawnTexture;
 uniform sampler2D firePositionTexture;
 uniform sampler2D arrowTexture;
+uniform sampler2D uvTexture;
 uniform vec2 resolution;
 uniform float time;
 uniform float FilterGlitch, FilterPixel, OpticalFlowEnabled;
@@ -34,6 +36,8 @@ void main ()	{
 	color = mix(color, arrow, arrow.a * OpticalFlowEnabled);
 	// color = texture2D(firePositionTexture, uv);
 	// color = texture2D(fireVelocityTexture, uv);
+	// color = texture2D(fireSpawnTexture, uv);
+	// color = texture2D(uvTexture, uv);
 
 	// vignette
 	float vignette = sin(vUv.x * PI);

@@ -1,4 +1,4 @@
-import { Vector3 } from 'three.js';
+import { BufferAttribute, Vector3 } from 'three.js';
 
 export function arrayVec3Distance(array, index, nextIndex) {
 	return distance2(array[index],array[index+1],array[index+2], array[nextIndex],array[nextIndex+1],array[nextIndex+2]);
@@ -10,6 +10,22 @@ export function getRandomPoints(count) {
 	return points;
 }
 
+export function decimateAttributes(attributes, step) {
+	step = step || 1;
+	var att = {};
+	var keys = Object.keys(attributes);
+	keys.forEach(name => {
+		var size = attributes[name].itemSize;
+		att[name] = { array: [], itemSize: size};
+		for (var i = 0; i < attributes[name].array.length / size; i += step) {
+			for (var x = 0; x < size; ++x) {
+				var item = attributes[name].array[i*size+x];
+				att[name].array.push(item);
+			}
+		}
+	});
+	return att;
+}
 
 export function randomRange(min, max) {
 	return min+Math.random()*(max-min);

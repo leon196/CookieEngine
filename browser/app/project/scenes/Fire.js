@@ -6,14 +6,19 @@ import renderer from '../../engine/renderer';
 import uniforms from '../../engine/uniforms';
 import FrameBuffer from '../../engine/FrameBuffer';
 import Paricles from '../../engine/particles';
+import { decimateAttributes } from '../../engine/misc';
 
 export default class Fire extends THREE.Scene {
 
 	constructor() {
 		super();
 
+		var cookieGeometry = assets.geometries.cookie.children[0].geometry;
+		// this.add(new THREE.Mesh(cookieGeometry, assets.shaderMaterials.cookie));
+		uniforms.cookieTexture = { value: assets.textures.cookie };
+
 		// text
-		this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.text));
+		// this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.text));
 		var words = [
 			{
 				text: 'CooKie',
@@ -37,9 +42,13 @@ export default class Fire extends THREE.Scene {
 		];
 		uniforms.textTexture = { value: makeText.createTexture(words) };
 
+
 		// particle system
 		var options;
-		let attributes = Paricles.randomPositionAttribute(256*256);
+		// let attributes = Paricles.randomPositionAttribute(256*256);
+		var titleGeometry = assets.geometries.title.children[0].geometry;
+		this.add(new THREE.Mesh(titleGeometry, assets.shaderMaterials.simple));
+		let attributes = decimateAttributes(titleGeometry.attributes, 1);
 		Paricles.createMeshes(attributes, assets.shaderMaterials.fire)
 			.forEach(mesh => { this.add(mesh); });
 
@@ -53,6 +62,7 @@ export default class Fire extends THREE.Scene {
 		options.material = assets.shaderMaterials.firePosition;
 		this.positionBuffer = new FrameBuffer(options);
 
+		// console.log(attributes.position.array);
 		uniforms['fireSpawnTexture'] = {
 			value: Paricles.createDataTexture(attributes.position.array, attributes.position.itemSize)
 		};

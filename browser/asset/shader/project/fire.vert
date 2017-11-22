@@ -25,6 +25,8 @@ void main() {
 	vec4 pos = modelMatrix * vec4(texture2D(firePositionTexture, indexMap).xyz, 1.0 );
 	vColor = vec4(1);
 	vUv = anchor;
+	// vUv = uv;
+	// vUv = vec2(0.);
 
 	vec3 viewDir = normalize(pos.xyz - cameraPosition.xyz);
 	vec4 velocity = texture2D(fireVelocityTexture, indexMap);
@@ -50,12 +52,12 @@ void main() {
 	// up = mix(up, velocity.xyz*stretch, moving);
 
 
-	vec2 size = FireSpriteSize * vec2(0.4, 1.) * (.1+.9*rand(indexMap*10.));
+	vec2 size = vec2(FireSpriteSize) * (.1+.9*rand(indexMap*10.));
 	size *= fade;
 	// pos.xyz += anchor.x * tangent * size.x + anchor.y * up * size.y;
 	// pos.xyz -= up * size / 2.5;
 
-	float ratio = dot(normalize(viewDir), normalize(velocity.xyz))*.5+.5;
+	float ratio = dot(normalize(viewDir), normalize(velocity.xyz));
 	vColor.rgb = mix(vec3(01, 0.898, 0.478), vec3(0.733, 0.160, 0.105), smoothstep(.1,.9,ratio));
 
 	// vColor *= dot(normalize(vViewDir), normal)*.5+.5;
@@ -65,10 +67,9 @@ void main() {
 	vec2 forward = normalize(velocityScreen - positionScreen).xy;
 	vec2 right = vec2(forward.y, -forward.x);
 
-	forward = mix(vec2(0,1), forward * stretch, moving);
-	right = mix(vec2(1,0), right * stretch, moving);
+	forward = mix(vec2(0,1), forward, moving);
+	right = mix(vec2(1,0), right, moving);
 	// screen space
-	gl_Position.y += size.y;
 	gl_Position.xy += right * anchor.x * size.x * aspect.x;
-	gl_Position.xy += forward * anchor.y * size.y * aspect.y;
+	gl_Position.xy += forward * anchor.y * size.y * aspect.y * stretch;
 }

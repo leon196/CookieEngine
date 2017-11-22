@@ -10,6 +10,7 @@ export default class Particles {
 	static createMeshes(attributes, material, subdivisions)
 	{
 		var count = attributes.position.array.length / attributes.position.itemSize;
+		console.log(count);
 		var meshes = [];
 		var verticesMax = 65000;
 		var dimension = closestPowerOfTwo(Math.sqrt(count));
@@ -94,9 +95,20 @@ export default class Particles {
 	static createDataTexture(dataArray, itemSize)	{
 		var dimension = closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
 		var array = [];
-		for (var t = 0; t < dataArray.length; t += itemSize)
-			for (var i = 0; i < itemSize; ++i)
-				array.push(dataArray[t+i]);
+		var count = dimension * dimension;
+		for (var t = 0; t < count; ++t) {
+			if (t*itemSize+itemSize-1 < dataArray.length) {
+				for (var i = 0; i < 3; ++i) {
+					if (i < itemSize) {
+						array.push(dataArray[t*itemSize+i]);
+					} else {
+						array.push(0);
+					}
+				}
+			} else {
+				array.push(0,0,0);
+			}
+		}
 		var texture = new THREE.DataTexture(new Float32Array(array), dimension, dimension, THREE.RGBFormat, THREE.FloatType);
 		texture.needsUpdate = true;
 		return texture;

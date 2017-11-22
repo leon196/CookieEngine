@@ -11,6 +11,9 @@
 		},
 		"jonathan": {
 			"file": "image/jonathan.jpg"
+		},
+		"cookie": {
+			"file": "image/Cookie.png"
 		}
 	},
 	"geometries": {
@@ -22,9 +25,19 @@
 		},
 		"plantPoints": {
 			"file": "mesh/plantPoints.ply"
+		},
+		"cookie": {
+			"file": "mesh/Cookie.obj"
+		},
+		"title": {
+			"file": "mesh/title.obj"
 		}
 	},
 	"shaderMaterials": {
+		"cookie": {
+			"vertexShader": "shader/project/cookie.vert",
+			"fragmentShader": "shader/project/cookie.frag"
+		},
 		"filter": {
 			"vertexShader": "shader/generic/screen.vert",
 			"fragmentShader": "shader/filter/filter.frag"

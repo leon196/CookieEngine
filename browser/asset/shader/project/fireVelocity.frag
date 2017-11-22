@@ -5,6 +5,8 @@ uniform float time;
 uniform sampler2D fireVelocityTexture;
 uniform sampler2D fireSpawnTexture;
 uniform sampler2D firePositionTexture;
+uniform sampler2D cookieTexture;
+uniform sampler2D uvTexture;
 uniform float FireVelocitySpeed;
 uniform float FireVelocityTargetBlend;
 uniform float FireVelocityOriginBlend;
@@ -23,6 +25,8 @@ void main()	{
 	vec4 spawn = texture2D(fireSpawnTexture, vUv);
 	vec4 velocity = texture2D(fireVelocityTexture, vUv);
 	vec4 position = texture2D(firePositionTexture, vUv);
+	vec4 uv = texture2D(uvTexture, vUv);
+	vec4 color = texture2D(cookieTexture, uv.xy);
 
 	float spawnOffset = rand(vUv) * 0.01 + 0.01;
 	// velocity.w = spawnOffset+time;
@@ -37,10 +41,10 @@ void main()	{
 
 	// noisey
 	vec3 noisey = vec3(0.);
-	vec4 seed = position+spawn+velocity;
+	vec4 seed = color+position+spawn+velocity;
 	seed *= FireNoiseScale;
-	// seed.xyz = rotateY(seed.xyz, time*0.06*FireNoiseSpeed);
-	seed.xyz = rotateX(rotateY(seed.xyz, time*0.06*FireNoiseSpeed), time*0.06*FireNoiseSpeed);
+	seed.xyz = rotateY(seed.xyz, time*0.06*FireNoiseSpeed);
+	// seed.xyz = rotateX(rotateY(seed.xyz, time*0.03*FireNoiseSpeed), time*0.06*FireNoiseSpeed);
 	noisey.x += (noiseIQ(seed.xyz*2.5)*2.-1.);
 	noisey.y += (noiseIQ(seed.xyz*1.4)*2.-1.);
 	noisey.z += (noiseIQ(seed.xyz*3.3)*2.-1.);
@@ -50,7 +54,7 @@ void main()	{
 	vec3 tornado = normalize(epsilon + position.xyz - (target + rotateY(position.xyz - target, abs(position.y )))) * FireVelocityTornadoBlend;
 
 	// dir
-	vec3 dir = vec3(0,1,0) * FireVelocityDirectionBlend;
+	vec3 dir = vec3(0,0,-1.) * FireVelocityDirectionBlend;
 
 	// origin
 	vec3 origin = normalize(spawn.xyz - position.xyz + epsilon) * FireVelocityOriginBlend;
