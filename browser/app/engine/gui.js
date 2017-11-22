@@ -5,8 +5,6 @@ import composer from '../project/composer';
 export const gui = new dat.gui.GUI();
 
 gui.remember(parameters);
-console.log(gui);
-console.log(parameters);
 Object.keys(parameters).forEach(keyRoot => {
 	var folder = gui.addFolder(keyRoot);
 	var keys = Object.keys(parameters[keyRoot]);

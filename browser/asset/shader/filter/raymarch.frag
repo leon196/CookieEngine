@@ -2,6 +2,7 @@
 uniform sampler2D sceneTexture;
 uniform sampler2D feedbackTexture;
 uniform vec2 resolution;
+uniform vec3 cameraPos;
 uniform vec3 cameraForward;
 uniform vec3 cameraTarget;
 uniform float time;
@@ -160,7 +161,7 @@ float map (vec3 pos) {
 void main ()	{
 	vec2 uv = vUv * 2. - 1.;
 	uv.x *= resolution.x/resolution.y;
-  vec3 eye = cameraPosition+cameraTarget/20.;
+  vec3 eye = cameraPos;
 	vec3 forward = normalize(cameraForward);
 	vec3 right = -normalize(cross(vec3(0,1,0), forward));
 	vec3 up = -normalize(cross(forward, right));

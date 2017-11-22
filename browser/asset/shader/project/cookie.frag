@@ -1,5 +1,6 @@
 uniform sampler2D cookieTexture;
 uniform float time;
+uniform vec3 cameraPos;
 varying vec2 vUv;
 varying vec3 vPos;
 
@@ -15,6 +16,6 @@ void burn (inout vec4 color, vec3 seed) {
 void main()	{
 	vec4 color = texture2D(cookieTexture, vUv);
 	burn(color, vPos*.2);
-	color.a = .5;//length(cameraPosition-vPos);
+	color.a = vPos.x *10.;//length(cameraPos-vPos);
 	gl_FragColor = color;
 }

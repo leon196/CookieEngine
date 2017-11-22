@@ -8,6 +8,7 @@ uniform float time;
 uniform float FireSpriteSize;
 uniform float FireSpriteVelocityStretch;
 uniform vec2 resolution;
+uniform vec3 cameraPos;
 
 varying vec4 vColor;
 varying vec2 vUv;
@@ -62,7 +63,7 @@ void main() {
 
 	// vColor *= dot(normalize(vViewDir), normal)*.5+.5;
 
-	// vColor.a = length(cameraPosition-pos.xyz);
+	vColor.a = length(cameraPos-pos.xyz);
 	gl_Position = projectionMatrix * viewMatrix * pos;
 
 	vec2 forward = normalize(velocityScreen - positionScreen).xy;

@@ -30,7 +30,7 @@ composer.setup = function (scenes) {
 		var pass = new FX.RenderPass(scene, camera, { clear: false });
 		composer.addPass(pass);
   });
-  savePass('sceneTexture', { type: THREE.FloatType });
+  savePass('sceneTexture');
 
   var raymarch = new FX.ShaderPass(assets.shaderMaterials.raymarch);
   composer.addPass(raymarch);

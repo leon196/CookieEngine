@@ -3,6 +3,7 @@ import * as THREE from 'three.js';
 import * as makeText from '../../engine/make-text';
 import assets from '../../engine/assets';
 import renderer from '../../engine/renderer';
+import camera from '../../engine/camera';
 import uniforms from '../../engine/uniforms';
 import FrameBuffer from '../../engine/FrameBuffer';
 import Paricles from '../../engine/particles';
@@ -12,13 +13,25 @@ export default class Fire extends THREE.Scene {
 
 	constructor() {
 		super();
+		var options;
+
+		this.sceneFrame = new THREE.Scene();
+
+		this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.sceneFire));
+
+		options = {
+			count: 2,
+			type: THREE.FloatType,
+		}
+		this.frame = new FrameBuffer(options);
+		uniforms.fireSceneTexture = { value: 0 };
 
 		var geometry = assets.geometries.cookie.children[0].geometry;
-		// this.add(new THREE.Mesh(geometry, assets.shaderMaterials.cookie));
+		this.sceneFrame.add(new THREE.Mesh(geometry, assets.shaderMaterials.cookie));
 		uniforms.cookieTexture = { value: assets.textures.cookie };
 
 		// text
-		// this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.text));
+		// this.sceneFrame.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.text));
 		var words = [
 			{
 				text: 'CooKie',
@@ -42,14 +55,10 @@ export default class Fire extends THREE.Scene {
 		];
 		uniforms.textTexture = { value: makeText.createTexture(words) };
 
-
 		// particle system
-		var options;
-		// let attributes = Paricles.randomPositionAttribute(256*256);
-		this.add(new THREE.Mesh(geometry, assets.shaderMaterials.cookie));
 		let attributes = decimateAttributes(geometry.attributes, 1);
 		Paricles.createMeshes(attributes, assets.shaderMaterials.fire)
-			.forEach(mesh => { this.add(mesh); });
+			.forEach(mesh => { this.sceneFrame.add(mesh); });
 
 		options = FrameBuffer.optionsForFloatBuffer();
 		options.uniformName = 'fireVelocityTexture';
@@ -61,7 +70,6 @@ export default class Fire extends THREE.Scene {
 		options.material = assets.shaderMaterials.firePosition;
 		this.positionBuffer = new FrameBuffer(options);
 
-		// console.log(attributes.position.array);
 		uniforms['fireSpawnTexture'] = {
 			value: Paricles.createDataTexture(attributes.position.array, attributes.position.itemSize)
 		};
@@ -70,5 +78,9 @@ export default class Fire extends THREE.Scene {
 	update() {
 		this.velocityBuffer.update();
 		this.positionBuffer.update();
+
+		uniforms.fireSceneTexture.value = this.frame.getTexture();
+		this.frame.swap();
+		renderer.render(this.sceneFrame, camera, this.frame.getRenderTarget(), true);
 	}
 }
