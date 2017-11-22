@@ -15,8 +15,13 @@ camera.controls.zoomSpeed = .5;
 camera.controls.enableDamping = true;
 camera.controls.dampingFactor = .09;
 
+uniforms.cameraTarget = { value: [0,0,0] };
+uniforms.cameraForward = { value: [0,0,0] };
+
 camera.update = function(time) {
   camera.controls.update();
+  uniforms.cameraTarget.value = camera.controls.target;
+  uniforms.cameraForward.value = camera.getWorldDirection();
 }
 
 export default camera;

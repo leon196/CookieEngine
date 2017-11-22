@@ -11,17 +11,14 @@ var composer = new FX.EffectComposer(renderer, {
   stencilBuffer: true,
 });
 
-function savePass (uniformName, min, mag, type, format) {
+function savePass (uniformName, options) {
   var save = new FX.SavePass();
   var clear = new FX.ClearPass();
-  type = type || THREE.UnsignedByteType;
-  format = format || THREE.RGBAFormat;
-  min = min || THREE.LinearFilter;
-  mag = mag || THREE.LinearFilter;
-  save.renderTarget.texture.type = type;
-  save.renderTarget.texture.format = format;
-  save.renderTarget.texture.minFilter = min;
-  save.renderTarget.texture.magFilter = mag;
+  options = options || {};
+  save.renderTarget.texture.type = options.type || THREE.UnsignedByteType;
+  save.renderTarget.texture.format = options.format || THREE.RGBAFormat;
+  save.renderTarget.texture.minFilter = options.min || THREE.LinearFilter;
+  save.renderTarget.texture.magFilter = options.mag || THREE.LinearFilter;
   uniforms[uniformName] = { value: save.renderTarget.texture };
   composer.addPass(save);
   composer.addPass(clear);
@@ -33,7 +30,11 @@ composer.setup = function (scenes) {
 		var pass = new FX.RenderPass(scene, camera, { clear: false });
 		composer.addPass(pass);
   });
-  savePass('sceneTexture');
+  savePass('sceneTexture', { type: THREE.FloatType });
+
+  var raymarch = new FX.ShaderPass(assets.shaderMaterials.raymarch);
+  composer.addPass(raymarch);
+  savePass('raymarchTexture', { type: THREE.FloatType });
 
   var filter = new FX.ShaderPass(assets.shaderMaterials.filter);
   filter.renderToScreen = true;

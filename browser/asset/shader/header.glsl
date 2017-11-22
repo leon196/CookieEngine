@@ -1,6 +1,7 @@
 
 #define PI 3.1415926535897932384626433832795
 #define PI2 6.283185307179586476925286766559
+#define TAU (2.*PI)
 #define HALFPI 1.5707963267948966192313216916398
 #define HALF3PI 4.7123889803846898576939650749194
 
@@ -15,7 +16,7 @@ float sdBox( vec3 p, vec3 b ) { vec3 d = abs(p) - b; return min(max(d.x,max(d.y,
 float sdTorus( vec3 p, vec2 t ) { vec2 q = vec2(length(p.xz)-t.x,p.y); return length(q)-t.y; }
 float amod (inout vec2 p, float count) { float an = PI2/count; float a = atan(p.y,p.x)+an/2.; float c = floor(a/an); c = mix(c,abs(c),step(count*.5,abs(c))); a = mod(a,an)-an/2.; p.xy = vec2(cos(a),sin(a))*length(p); return c; }
 float repeat (float v, float c) { return mod(v,c)-c/2.; }
-vec2 repeat (vec2 v, float c) { return mod(v,c)-c/2.; }
+vec2 repeat (vec2 v, vec2 c) { return mod(v,c)-c/2.; }
 vec3 repeat (vec3 v, float c) { return mod(v,c)-c/2.; }
 float smoo (float a, float b, float r) { return clamp(.5+.5*(b-a)/r, 0., 1.); }
 float smin (float a, float b, float r) { float h = smoo(a,b,r); return mix(b,a,h)-r*h*(1.-h); }

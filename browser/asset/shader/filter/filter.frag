@@ -7,6 +7,7 @@ uniform sampler2D lastFrameTexture;
 uniform sampler2D fireVelocityTexture;
 uniform sampler2D fireSpawnTexture;
 uniform sampler2D firePositionTexture;
+uniform sampler2D raymarchTexture;
 uniform sampler2D arrowTexture;
 uniform sampler2D uvTexture;
 uniform vec2 resolution;
@@ -30,14 +31,18 @@ void main ()	{
 	vec4 grid = texture2D(gridTexture, uv);
 	vec4 arrow = texture2D(arrowTexture, uv);
 	vec4 flow = texture2D(opticalFlowTexture, uv);
+	vec4 raymarch = texture2D(raymarchTexture, uv);
 	color = mix(color, loop, loop.a);
 	color = mix(color, scene, scene.a);
 	color = mix(color, grid, grid.a);
 	color = mix(color, arrow, arrow.a * OpticalFlowEnabled);
+
+	float depthScene = scene.a;
+	depthScene += 1000. * (1.-depthScene) * step(depthScene, .01);
+	color = mix(color, raymarch, step(raymarch.a, depthScene));
 	// color = texture2D(firePositionTexture, uv);
 	// color = texture2D(fireVelocityTexture, uv);
 	// color = texture2D(fireSpawnTexture, uv);
-	// color = texture2D(uvTexture, uv);
 
 	// vignette
 	float vignette = sin(vUv.x * PI);

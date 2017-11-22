@@ -13,8 +13,8 @@ export default class Fire extends THREE.Scene {
 	constructor() {
 		super();
 
-		var cookieGeometry = assets.geometries.cookie.children[0].geometry;
-		// this.add(new THREE.Mesh(cookieGeometry, assets.shaderMaterials.cookie));
+		var geometry = assets.geometries.cookie.children[0].geometry;
+		// this.add(new THREE.Mesh(geometry, assets.shaderMaterials.cookie));
 		uniforms.cookieTexture = { value: assets.textures.cookie };
 
 		// text
@@ -46,7 +46,6 @@ export default class Fire extends THREE.Scene {
 		// particle system
 		var options;
 		// let attributes = Paricles.randomPositionAttribute(256*256);
-		var geometry = assets.geometries.cookie.children[0].geometry;
 		this.add(new THREE.Mesh(geometry, assets.shaderMaterials.cookie));
 		let attributes = decimateAttributes(geometry.attributes, 1);
 		Paricles.createMeshes(attributes, assets.shaderMaterials.fire)

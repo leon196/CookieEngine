@@ -8,6 +8,7 @@ import uniforms from './engine/uniforms';
 import parameters from './project/parameters';
 import composer from './project/composer';
 import Fire from './project/scenes/Fire';
+import Raymarch from './project/scenes/Raymarch';
 
 export default function() {
 	let scenes, uniformMaps, clock;
@@ -23,7 +24,8 @@ export default function() {
 		});
 
 	  scenes = [
-	  	new Fire()
+	  	new Fire(),
+	  	new Raymarch(),
 	  ];
 
 		composer.setup(scenes);

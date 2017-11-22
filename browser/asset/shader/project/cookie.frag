@@ -15,5 +15,6 @@ void burn (inout vec4 color, vec3 seed) {
 void main()	{
 	vec4 color = texture2D(cookieTexture, vUv);
 	burn(color, vPos*.2);
+	color.a = .5;//length(cameraPosition-vPos);
 	gl_FragColor = color;
 }

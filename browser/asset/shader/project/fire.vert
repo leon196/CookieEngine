@@ -23,7 +23,7 @@ void main() {
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
 
 	vec4 pos = modelMatrix * vec4(texture2D(firePositionTexture, indexMap).xyz, 1.0 );
-	vColor = vec4(1);
+	vColor = vec4(.5);
 	vUv = anchor;
 	// vUv = uv;
 	// vUv = vec2(0.);
@@ -62,6 +62,7 @@ void main() {
 
 	// vColor *= dot(normalize(vViewDir), normal)*.5+.5;
 
+	// vColor.a = length(cameraPosition-pos.xyz);
 	gl_Position = projectionMatrix * viewMatrix * pos;
 
 	vec2 forward = normalize(velocityScreen - positionScreen).xy;
