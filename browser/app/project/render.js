@@ -7,7 +7,7 @@ export default class Render extends Scene {
 
 	constructor() {
 		super('renderTexture');
-    this.add(new Mesh(new PlaneGeometry(1,1,1), assets.shaderMaterials.filter));
+    this.add(new Mesh(new PlaneGeometry(1,1,1), assets.shaders.render));
   }
 
 }

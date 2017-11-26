@@ -23,7 +23,7 @@ const assets = {
 	geometries: {},
 	fonts: {},
 	textures: {},
-	shaderMaterials: {},
+	shaders: {},
 	load,
 };
 
@@ -73,20 +73,20 @@ function load(callback) {
 			});
 		});
 
-		Object.keys(descriptors.shaderMaterials).forEach(name => {
-			const vertexShaderUrl = descriptors.shaderMaterials[name].vertexShader;
-			const fragmentShaderUrl = descriptors.shaderMaterials[name].fragmentShader;
+		Object.keys(descriptors.shaders).forEach(name => {
+			const vertexShaderUrl = descriptors.shaders[name].vertexShader;
+			const fragmentShaderUrl = descriptors.shaders[name].fragmentShader;
 			register([vertexShaderUrl, fragmentShaderUrl], () => {
-				if (assets.shaderMaterials[name] === undefined) {
-					assets.shaderMaterials[name] = new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials[name], {
+				if (assets.shaders[name] === undefined) {
+					assets.shaders[name] = new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders[name], {
 						vertexShader: shaderHeader + files[vertexShaderUrl],
 						fragmentShader: shaderHeader + files[fragmentShaderUrl],
 						uniforms: uniforms,
 					}));
 				} else {
-					assets.shaderMaterials[name].vertexShader = shaderHeader + files[vertexShaderUrl];
-					assets.shaderMaterials[name].fragmentShader = shaderHeader + files[fragmentShaderUrl];
-					assets.shaderMaterials[name].needsUpdate = true;
+					assets.shaders[name].vertexShader = shaderHeader + files[vertexShaderUrl];
+					assets.shaders[name].fragmentShader = shaderHeader + files[fragmentShaderUrl];
+					assets.shaders[name].needsUpdate = true;
 				}
 			});
 		});

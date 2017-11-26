@@ -33,97 +33,42 @@
 			"file": "mesh/title.obj"
 		}
 	},
-	"shaderMaterials": {
-		"sceneFire": {
+	"shaders": {
+		"raymarchRooms": {
 			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/filter/sceneFire.frag"
-		},
-		"raymarch": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/filter/raymarch.frag"
+			"fragmentShader": "shader/project/raymarch/rooms.frag"
 		},
 		"cookie": {
-			"vertexShader": "shader/project/cookie.vert",
-			"fragmentShader": "shader/project/cookie.frag"
+			"vertexShader": "shader/project/meshes/cookie.vert",
+			"fragmentShader": "shader/project/meshes/cookie.frag"
 		},
-		"filter": {
+		"render": {
 			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/filter/filter.frag"
+			"fragmentShader": "shader/project/filters/render.frag"
 		},
-		"gridScreen": {
-			"vertexShader": "shader/project/gridScreen.vert",
-			"fragmentShader": "shader/generic/color.frag"
-		},
-		"gridArrow": {
-			"vertexShader": "shader/project/gridArrow.vert",
-			"fragmentShader": "shader/generic/color.frag"
-		},
-		"opticalFlow": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/filter/opticalFlow.frag"
-		},
-		"opticalFrame": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/filter/opticalFrame.frag"
-		},
-		"feedback": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/filter/feedback.frag"
-		},
-		"simple": {
-			"vertexShader": "shader/generic/simple.vert",
-			"fragmentShader": "shader/generic/simple.frag"
-		},
-		"ribbon": {
-			"vertexShader": "shader/project/ribbon.vert",
-			"fragmentShader": "shader/generic/color.frag",
+		"lines": {
+			"vertexShader": "shader/project/particles/fire.vert",
+			"fragmentShader": "shader/generic/circle.frag",
 			"side": 2
 		},
 		"fire": {
-			"vertexShader": "shader/project/fire.vert",
+			"vertexShader": "shader/project/particles/fire.vert",
 			"fragmentShader": "shader/generic/circle.frag",
 			"side": 2
 		},
 		"firePosition": {
 			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/project/firePosition.frag",
+			"fragmentShader": "shader/project/datas/firePosition.frag",
 			"side": 2
 		},
 		"fireVelocity": {
 			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/project/fireVelocity.frag",
+			"fragmentShader": "shader/project/datas/fireVelocity.frag",
 			"side": 2
 		},
 		"text": {
-			"vertexShader": "shader/project/text.vert",
-			"fragmentShader": "shader/project/text.frag",
-			"depthTest": false,
-			"opacity": 0.5,
-			"transparent": true
-		},
-		"snow": {
-			"vertexShader": "shader/project/snow.vert",
-			"fragmentShader": "shader/generic/circle.frag",
-			"side": 2
-		},
-		"pointCloud": {
-			"vertexShader": "shader/project/pointCloud.vert",
-			"fragmentShader": "shader/generic/circle.frag",
-			"side": 2
-		},
-		"curvedMesh": {
-			"vertexShader": "shader/project/curvedMesh.vert",
-			"fragmentShader": "shader/generic/texture.frag"
-		},
-		"lineMesh": {
-			"vertexShader": "shader/project/lineMesh.vert",
-			"fragmentShader": "shader/generic/color.frag",
-			"side": 2
-		},
-		"spritesheet": {
-			"vertexShader": "shader/project/sprite.vert",
-			"fragmentShader": "shader/project/spritesheet.frag",
-			"side": 2,
+			"vertexShader": "shader/project/meshes/text.vert",
+			"fragmentShader": "shader/project/meshes/text.frag",
 			"depthTest": false,
 			"opacity": 0.5,
 			"transparent": true

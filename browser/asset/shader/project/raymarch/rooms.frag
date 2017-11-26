@@ -18,7 +18,7 @@ varying vec2 vUv;
 #define height 2.
 #define thin .04
 #define radius 15.
-#define speed 1.
+#define speed 0.
 
 float amodIndex (vec2 p, float count) { float an = TAU/count; float a = atan(p.y,p.x)+an/2.; float c = floor(a/an); c = mix(c,abs(c),step(count*.5,abs(c))); return c; }
 
@@ -27,17 +27,17 @@ float getShadow (vec3 pos, vec3 at, float k) {
     vec3 dir = normalize(at - pos);
     float maxt = length(at - pos);
     float f = 01.;
-    float t = VOLUME*50.;
-    for (float i = 0.; i <= 1.; i += 1./15.) {
+    float t = .01;
+    for (float i = 0.; i <= 1.; i += 1./40.) {
         float dist = map(pos + dir * t);
-        if (dist < VOLUME) return 0.;
+        if (dist < .0001) return 0.;
         f = min(f, k * dist / t);
         t += dist;
         if (t >= maxt) break;
     }
     return f;
 }
-vec3 getNormal (vec3 p) { vec2 e = vec2(.01,0); return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx))); }
+vec3 getNormal (vec3 p) { vec2 e = vec2(.001,0); return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx))); }
 
 void camera (inout vec3 p) {
     p.xz *= rot(PI/8.);
@@ -179,9 +179,11 @@ void main ()	{
       pos += ray * dist;
   }
   vec3 light = vec3(40.,100.,-10.);
-  float shadow = getShadow(pos, light, 4.);
+  // vec3 normal = getNormal(pos);
+  float shadow = getShadow(pos, light, 32.);
   vec4 color = vec4(1);
-  color *= shade;
+  // color.rgb = normal*.5+.5;
+  color *= step(.01, shade);
   color *= shadow;
   color = smoothstep(.0, .5, color);
   color.rgb = pow(color.rgb, vec3(1./2.));

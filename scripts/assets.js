@@ -66,17 +66,17 @@ Object.keys(descriptors.fonts).forEach(name => {
 
 exportLines.push(
 	'},',
-	'shaderMaterials: {'
+	'shaders: {'
 );
 
-Object.keys(descriptors.shaderMaterials).forEach(name => {
-	const vertexShaderUrl = descriptors.shaderMaterials[name].vertexShader;
-	const fragmentShaderUrl = descriptors.shaderMaterials[name].fragmentShader;
+Object.keys(descriptors.shaders).forEach(name => {
+	const vertexShaderUrl = descriptors.shaders[name].vertexShader;
+	const fragmentShaderUrl = descriptors.shaders[name].fragmentShader;
 
 	const vertexShaderImportName = register(vertexShaderUrl);
 	const fragmentShaderImportName = register(fragmentShaderUrl);
 	exportLines.push(
-		name + ': new THREE.ShaderMaterial(Object.assign({}, descriptors.shaderMaterials.' + name + ', {',
+		name + ': new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.' + name + ', {',
 		'vertexShader: shaderHeader + ' + vertexShaderImportName + ',',
 		'fragmentShader: shaderHeader + ' + fragmentShaderImportName + ',',
 		'uniforms: uniforms,',

@@ -10,7 +10,7 @@ export default class Text extends Scene {
 	constructor() {
 		super('Text');
 
-		this.sceneFrame.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaderMaterials.text));
+		this.sceneFrame.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaders.text));
 		var words = [
 			{
 				text: 'CooKie',

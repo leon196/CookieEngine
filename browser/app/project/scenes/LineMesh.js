@@ -23,7 +23,7 @@ export default class LineMesh extends THREE.Scene {
 			}
 		}
 		geometry.addAttribute('next', new THREE.BufferAttribute(new Float32Array(nexts), 3));
-		Particles.createMeshes(geometry.attributes, assets.shaderMaterials.lineMesh)
+		Particles.createMeshes(geometry.attributes, assets.shaders.lines)
 			.forEach(mesh => {
 				mesh.position.z = 10.;
 				this.add(mesh);

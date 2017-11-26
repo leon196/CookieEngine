@@ -17,22 +17,22 @@ export default class Fire extends Scene {
 		var options;
 
 		var geometry = assets.geometries.cookie.children[0].geometry;
-		this.add(new THREE.Mesh(geometry, assets.shaderMaterials.cookie));
+		this.add(new THREE.Mesh(geometry, assets.shaders.cookie));
 		uniforms.cookieTexture = { value: assets.textures.cookie };
 
 		// particle system
 		let attributes = decimateAttributes(geometry.attributes, 1);
-		Paricles.createMeshes(attributes, assets.shaderMaterials.fire)
+		Paricles.createMeshes(attributes, assets.shaders.fire)
 			.forEach(mesh => { this.add(mesh); });
 
 		options = FrameBuffer.optionsForFloatBuffer();
 		options.uniformName = 'fireVelocityTexture';
-		options.material = assets.shaderMaterials.fireVelocity;
+		options.material = assets.shaders.fireVelocity;
 		this.velocityBuffer = new FrameBuffer(options);
 
 		options = FrameBuffer.optionsForFloatBuffer();
 		options.uniformName = 'firePositionTexture';
-		options.material = assets.shaderMaterials.firePosition;
+		options.material = assets.shaders.firePosition;
 		this.positionBuffer = new FrameBuffer(options);
 
 		uniforms['fireSpawnTexture'] = {
