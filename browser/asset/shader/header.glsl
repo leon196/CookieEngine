@@ -5,6 +5,9 @@
 #define HALFPI 1.5707963267948966192313216916398
 #define HALF3PI 4.7123889803846898576939650749194
 
+#define repeat(v,s) (mod(v,s)-s/2.)
+#define sdist(p,r) (length(p)-r)
+
 // raymarch toolbox
 float rng (vec2 seed) { return fract(sin(dot(seed*.1684,vec2(54.649,321.547)))*450315.); }
 mat2 rot (float a) { float c=cos(a),s=sin(a); return mat2(c,-s,s,c); }
@@ -15,13 +18,11 @@ float sdIso(vec3 p, float r) { return max(0.,dot(p,normalize(sign(p))))-r; }
 float sdBox( vec3 p, vec3 b ) { vec3 d = abs(p) - b; return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0)); }
 float sdTorus( vec3 p, vec2 t ) { vec2 q = vec2(length(p.xz)-t.x,p.y); return length(q)-t.y; }
 float amod (inout vec2 p, float count) { float an = PI2/count; float a = atan(p.y,p.x)+an/2.; float c = floor(a/an); c = mix(c,abs(c),step(count*.5,abs(c))); a = mod(a,an)-an/2.; p.xy = vec2(cos(a),sin(a))*length(p); return c; }
-float repeat (float v, float c) { return mod(v,c)-c/2.; }
-vec2 repeat (vec2 v, vec2 c) { return mod(v,c)-c/2.; }
-vec3 repeat (vec3 v, float c) { return mod(v,c)-c/2.; }
+float amodIndex (vec2 p, float count) { float an = TAU/count; float a = atan(p.y,p.x)+an/2.; float c = floor(a/an); c = mix(c,abs(c),step(count*.5,abs(c))); return c; }
 float smoo (float a, float b, float r) { return clamp(.5+.5*(b-a)/r, 0., 1.); }
 float smin (float a, float b, float r) { float h = smoo(a,b,r); return mix(b,a,h)-r*h*(1.-h); }
 float smax (float a, float b, float r) { float h = smoo(a,b,r); return mix(a,b,h)+r*h*(1.-h); }
-vec2 displaceLoop (vec2 p, float r) { return vec2(length(p.xy)-r, atan(p.y,p.x)); }
+vec2 toroidal (vec2 p, float r) { return vec2(length(p.xy)-r, atan(p.y,p.x)); }
 float fOpUnionStairs(float a, float b, float r, float n) {
 	float s = r/n, u = b-r;
   return min(min(a,b), 0.5 * (u + a + abs ((mod (u - a + s, 2. * s)) - s)));

@@ -38,6 +38,10 @@
 			"vertexShader": "shader/generic/screen.vert",
 			"fragmentShader": "shader/project/raymarch/rooms.frag"
 		},
+		"raymarchStairs": {
+			"vertexShader": "shader/generic/screen.vert",
+			"fragmentShader": "shader/project/raymarch/stairs.frag"
+		},
 		"cookie": {
 			"vertexShader": "shader/project/meshes/cookie.vert",
 			"fragmentShader": "shader/project/meshes/cookie.frag"

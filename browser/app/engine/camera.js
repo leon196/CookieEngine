@@ -18,7 +18,6 @@ camera.controls.enableDamping = true;
 camera.controls.dampingFactor = .09;
 
 uniforms.cameraTarget = { value: [0,0,0] };
-uniforms.cameraForward = { value: [0,0,0] };
 uniforms.cameraPos = { value: [0,0,0] };
 
 let cameraPosition = [0,0,0];
@@ -32,7 +31,6 @@ camera.update = function(time) {
   camera.controls.target.set(targetPosition[0], targetPosition[1], targetPosition[2]);
   uniforms.cameraPos.value = camera.position;
   uniforms.cameraTarget.value = camera.controls.target;
-  uniforms.cameraForward.value = camera.getWorldDirection();
 }
 
 export default camera;

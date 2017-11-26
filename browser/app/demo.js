@@ -51,9 +51,7 @@ export default function() {
 
 		camera.update(time);
 		scenes.forEach(scene => {
-			if (scene.update !== undefined) {
-				scene.update(time);
-			}
+			scene.update(time);
 		})
 
 		renderer.render(render, camera);
@@ -64,6 +62,9 @@ export default function() {
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
 		renderer.setSize(w, h);
+		scenes.forEach(scene => {
+			scene.setSize(w, h);
+		})
 		uniforms.resolution.value = [window.innerWidth, window.innerHeight];
 	}
 }

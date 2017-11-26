@@ -17,7 +17,8 @@ export function start() {
 
 export function getTime() {
 	if (connected)
-		return time;
+		return clock.getElapsedTime();
+		// return time;
 	else
 		return clock.getElapsedTime();
 }
