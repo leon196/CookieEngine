@@ -6,14 +6,15 @@ import renderer from './engine/renderer';
 import camera from './engine/camera';
 import uniforms from './engine/uniforms';
 import parameters from './project/parameters';
-import composer from './project/composer';
+import Render from './project/render';
 import Fire from './project/scenes/Fire';
 import Raymarch from './project/scenes/Raymarch';
 
 export default function() {
-	let scenes, uniformMaps, clock;
+	let scenes, uniformMaps, render;
 
 	assets.load(function() {
+
 		uniforms.time.value = 0;
 		uniformMaps = [];
 		Object.keys(parameters).forEach(keyRoot => {
@@ -28,13 +29,13 @@ export default function() {
 	  	new Raymarch(),
 	  ];
 
-		composer.setup(scenes);
+		render = new Render();
+
 		timeline.start();
 
 		window.addEventListener('resize', onWindowResize, false);
 		requestAnimationFrame(animate);
 		onWindowResize();
-		clock = new THREE.Clock();
 	});
 
 	function animate() {
@@ -51,10 +52,11 @@ export default function() {
 		camera.update(time);
 		scenes.forEach(scene => {
 			if (scene.update !== undefined) {
-				scene.update();
+				scene.update(time);
 			}
 		})
-		composer.render(clock.getDelta());
+
+		renderer.render(render, camera);
 	}
 
 	function onWindowResize () {
@@ -62,7 +64,6 @@ export default function() {
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
 		renderer.setSize(w, h);
-		composer.setSize(w, h);
 		uniforms.resolution.value = [window.innerWidth, window.innerHeight];
 	}
 }

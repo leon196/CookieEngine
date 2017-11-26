@@ -42,8 +42,8 @@ void main ()	{
 	// color *= abs(fract(depthScene*1.));
 	// depthScene += 1000. * (1.-depthScene) * step(depthScene, .01);
 	// color = mix(color, raymarch, step(raymarch.a, depthScene));
-	color = raymarch;
-	color.rgb *= 1.-sin(raymarch.a*10.);
+	color = scene;
+	// color.rgb *= smoothstep(.0,.1,sin(scene.a));
 	// color = texture2D(firePositionTexture, uv);
 	// color = texture2D(fireVelocityTexture, uv);
 	// color = texture2D(fireSpawnTexture, uv);
