@@ -8,7 +8,9 @@ export default function (actionDescriptors) {
 	}
 
 	function getPosition(actionName, time) {
-		return actions[actionName].paths['location'].evaluate(time, blenderHTML5Animations.FCurveArray.DefaultValues.LOCATION);
+		let position = actions[actionName].paths['location'].evaluate(time, blenderHTML5Animations.FCurveArray.DefaultValues.LOCATION);
+		position = [-position[0], position[2], position[1]];
+		return position;
 	}
 
 	function getRotation(actionName, time) {

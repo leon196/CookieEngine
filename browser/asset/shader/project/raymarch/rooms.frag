@@ -90,8 +90,6 @@ float map (vec3 pos) {
 
     // donut distortion
     vec3 pDonut = p;
-    pDonut.x += donut;
-    pDonut.y += radius*.7;
     pDonut.xz = displaceLoop(pDonut.xz, donut);
     pDonut.z *= donut;
     pDonut.xzy = pDonut.xyz;

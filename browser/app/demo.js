@@ -25,7 +25,7 @@ export default function() {
 		});
 
 	  scenes = [
-	  	new Fire(),
+	  	// new Fire(),
 	  	new Raymarch(),
 	  ];
 

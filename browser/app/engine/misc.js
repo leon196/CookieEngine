@@ -40,6 +40,13 @@ export function lerp(v0, v1, t) {
 	return v0*(1-t)+v1*t;
 }
 
+export function lerpArray(a0, a1, t) {
+	for (var i = 0; i < a0.length; ++i) {
+		a0[i] = lerp(a0[i], a1[i], t);
+	}
+	return a0;
+}
+
 // Find the closest power of 2
 export function closestPowerOfTwo (num) {
 	return Math.pow(2, Math.ceil(Math.log(num) / Math.log(2)));
