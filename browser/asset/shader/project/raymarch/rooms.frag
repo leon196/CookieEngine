@@ -46,7 +46,7 @@ float map (vec3 pos) {
 
     float toroidalRadius = 30.;
     float innerRadius = 15.;
-    float speed = 0.01;
+    float speed = 0.0;
 
     vec2 roomCount = vec2(58., 90.);
     float roomHeight = 1.;
@@ -60,7 +60,7 @@ float map (vec3 pos) {
     pTorus.y += innerRadius - roomHeight / 2.;
     pTorus.x += toroidalRadius;
     pTorus.xz = toroidal(pTorus.xz, toroidalRadius);
-    // pTorus.z += time*speed;
+    pTorus.z += time*speed;
     pTorus.z *= toroidalRadius;
     pTorus.xzy = pTorus.xyz;
     // pTorus.xz *= rot(time*.05*speed);
@@ -88,10 +88,15 @@ float map (vec3 pos) {
     float chairSide = step(0., p.y);
 
     float lod = 100.;
-    seed += floor(fract(time*.01)*lod)/lod;
+    // float changeSeed = floor(fract(time*.1)*lod)/lod;
+    float changeSeed = 0.;//fract(time*.1);
+    seed += changeSeed;
     float salt = rng(seed);
     float pepper = rng(seed+vec2(.132,0.9023));
     float spice = rng(seed+vec2(.672,0.1973));
+    // salt = .5+.5*sin((salt+time)*10.);
+    // pepper = .5+.5*sin((pepper+time)*10.);
+    // spice = .5+.5*sin((spice+time)*10.);
 
     // ground
     scene = min(scene, p.x+roomHeight*.5);
@@ -213,29 +218,73 @@ float map (vec3 pos) {
     paint = min(paint, sdBox(p, vec3(paintHeight, paintDepth, paintWidth)));
 
     float door = 1000.;
-    float doorWidth = .3;
-    float doorHeight = .4;
-    p = pRoom;
-    p.x += roomHeight*.5-doorHeight;
-    wall.x = max(wall.x, -sdBox(p, vec3(doorHeight, 2., doorWidth)));
+    p = pTorus;
+    seed.y = floor(p.y/repeaty);
+    p.y = repeat(p.y, repeaty);
+    p.xz *= rot(PI/roomCount.x);
+    seed.x = amodIndex(p.xz, roomCount.x);
+    seed += changeSeed;
+    salt = rng(seed);
+    pepper = rng(seed+vec2(.132,0.9023));
+    spice = rng(seed+vec2(.672,0.1973));
+    float doorWidth = .15+.05*pepper;
+    float doorHeight = .3+.15*spice;
+    float doorThin = .01;
+    float doorPadding = .05+.1*salt;
+    float doorLockWidth = .02;
+    float doorLockThin = .002;
+    float doorLockHeight = .002;
+    amod(p.xz, roomCount.x);
+    pp = p;
+    p.z -= doorWidth;
+    vec3 lod2 = 1./vec3(1.,roomCount.y, roomCount.x);
+    float openRatio = sin(time*.2+salt*TAU);
+    p.yz *= rot(-PI/2.+.2*openRatio);
+    p.z += doorWidth;
+    p.x -= innerRadius-roomHeight+doorHeight;
+    door = min(door, sdBox(p, vec3(doorHeight, doorThin, doorWidth)));
+    door = max(door, -sdBox(p, vec3(doorHeight-doorPadding, 1., doorWidth-doorPadding)));
+    p.z += doorWidth-doorPadding/2.;
+    p.y = abs(p.y) - doorLockWidth - doorThin - doorLockHeight;
+    door = min(door, sdist(p, doorLockWidth));
+    p.y += doorLockWidth;
+    p.x *= 1.-clamp(.02/abs(p.x),0.,1.);
+    door = min(door, max(sdist(p.xz, doorLockWidth), abs(p.y)-doorLockHeight));
+    p = pp;
+    p.x -= innerRadius-roomHeight+doorHeight;
+    wall.x = max(wall.x, -sdBox(p, vec3(doorHeight, .1, doorWidth)));
 
     float window = 1000.;
     float windowHeight = .4;
     float windowWidth = .8;
-    float windowThin = .03;
+    float windowThin = .02;
     float windowPadding = .02;
-    float windowRepeatThin = .01;
-    float windowRepeatWidth = .2;
+    float windowRepeatThin = .004;
+    float windowSmooth = .01;
     p = pTorus;
+    seed.x = amodIndex(p.xz, roomCount.x);
+    seed.y = floor((p.y+repeaty/2.)/repeaty);
+    seed += changeSeed;
+    salt = rng(seed);
+    pepper = rng(seed+vec2(.132,0.9023));
+    spice = rng(seed+vec2(.672,0.1973));
+    vec2 windowRepeatWidth = vec2(.02+.4*salt, .1+.3*pepper);
     p.y = repeat(p.y+repeaty/2., repeaty);
     amod(p.xz, roomCount.x);
     p.x -= innerRadius-roomHeight/2.;
     wall.y = max(wall.y, -sdBox(p, vec3(windowHeight, windowWidth, 1.)));
     window = min(window, sdBox(p, vec3(windowHeight, windowWidth, windowThin)));
     window = max(window, -sdBox(p, vec3(windowHeight-windowPadding, windowWidth-windowPadding, 1.)));
-    p.y = repeat(p.y, windowRepeatWidth);
-    p.yz *= rot(p.x*10.);
-    window = min(window, sdBox(p, vec3(windowHeight, windowRepeatThin, windowRepeatThin)));
+    pp = p;
+    p.xy = repeat(p.xy, windowRepeatWidth);
+    ppp = p;
+    // p.xz *= rot(PI/4.);
+    window = min(window, sdBox(p, vec3(windowRepeatThin, windowHeight, windowRepeatThin)));
+    p = ppp;
+    p.yz *= rot(PI/4.);
+    window = smin(window, sdBox(p, vec3(windowHeight, windowRepeatThin, windowRepeatThin)), windowSmooth);
+    p = pp;
+    window = max(window, sdBox(p, vec3(windowHeight, windowWidth, 2.)));
 
     scene = min(scene, min(wall.x, wall.y));
     scene = min(scene, window);
@@ -259,7 +308,7 @@ vec3 getCamera (vec3 eye, vec3 lookAt, vec2 uv) {
 }
 
 float getLight (vec3 pos, vec3 eye) {
-  vec3 light = normalize(vec3(-1,2.,-1));
+  vec3 light = normalize(vec3(1,2.,-1));
   vec3 normal = getNormal(pos);
   vec3 view = normalize(eye-pos);
   float shade = dot(normal, view);
