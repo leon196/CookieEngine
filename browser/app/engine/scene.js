@@ -9,6 +9,7 @@ export default class Scene extends THREE.Scene {
 
 	constructor(uniformName) {
 		super();
+		this.frustumCulled = false;
     let options = {
 			type: THREE.FloatType,
 		};
@@ -18,7 +19,7 @@ export default class Scene extends THREE.Scene {
   }
 
   update(time) {
-		renderer.render(this, camera, this.frame.getRenderTarget(), true);
+		renderer.render(this, camera.ortho, this.frame.getRenderTarget(), true);
   }
 
 	setSize(w,h) {

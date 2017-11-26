@@ -35,47 +35,12 @@ float hardShadow (vec3 pos, vec3 dir) {
 }
 vec3 getNormal (vec3 p) { vec2 e = vec2(.001,0); return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx))); }
 
-// float windowCross (vec3 pos, vec4 size, float salt) {
-//     vec3 p = pos;
-//     float sx = size.x * (.6+salt*.4);
-//     float sy = size.y * (.3+salt*.7);
-//     vec2 sxy = vec2(sx,sy);
-//     p.xy = repeat(p.xy+sxy/2., sxy);
-//     float scene = sdBox(p, size.zyw*2.);
-//     scene = min(scene, sdBox(p, size.xzw*2.));
-//     scene = max(scene, sdBox(pos, size.xyw));
-//     return scene;
-// }
-//
-// float window (vec3 pos, vec2 dimension, float salt) {
-//     float roomThinn = .008;
-//     float depth = .04;
-//     float depthCadre = .06;
-//     float padding = .08;
-//     float scene = windowCross(pos, vec4(dimension,roomThinn,depth), salt);
-//     float cadre = sdBox(pos, vec3(dimension, depthCadre));
-//     cadre = max(cadre, -sdBox(pos, vec3(dimension.x-padding, dimension.y-padding, depthCadre*2.)));
-//     scene = min(scene, cadre);
-//     return scene;
-// }
-//
-// float boxes (vec3 pos, float salt) {
-//     vec3 p = pos;
-//     float ry = roomCount * .43*(.3+salt);
-//     float rz = roomCount * .2*(.5+salt);
-//     float salty = rng(vec2(floor(pos.y/ry), floor(pos.z/rz)));
-//     pos.y = repeat(pos.y, ry);
-//     pos.z = repeat(pos.z, rz);
-//     float scene = sdBox(pos, vec3(.1+.8*salt+salty,.1+.2*salt,.1+.2*salty));
-//     scene = max(scene, sdBox(p, vec3(roomCount*.2)));
-//     return scene;
-// }
-
 float map (vec3 pos) {
 
     float scene = 1000.;
     vec3 p = pos;
     vec3 pp = pos;
+    vec3 ppp = pos;
     vec3 pRoom = pos;
     vec3 pWall = pos;
 
@@ -100,7 +65,7 @@ float map (vec3 pos) {
     pTorus.xzy = pTorus.xyz;
     // pTorus.xz *= rot(time*.05*speed);
 
-    // rooms
+    // walls
     p = pTorus;
     p.y = repeat(p.y, repeaty);
     vec2 wall = vec2(1000.);
@@ -110,7 +75,7 @@ float map (vec3 pos) {
     wall.y = max(abs(p.z)-roomThin, p.x);
     pWall = p;
 
-    // // horizontal window
+    // room cell
     p = pTorus;
     p.xz *= rot(PI/roomCount.x);
     float py = p.y+repeaty/2.;
@@ -118,16 +83,12 @@ float map (vec3 pos) {
     p.y = repeat(py, repeaty);
     seed.x = amod(p.xz, roomCount.x);
     p.x -= innerRadius-roomHeight/2.;
-    vec2 size = vec2(.25,roomHeight*.5);
-    wall.x = max(wall.x, -max(abs(p.x+.2)-size.y, abs(p.z)-size.x));
-    size = vec2(.65,roomHeight*.35);
-    wall.y = max(wall.y, -max(abs(p.x)-size.y, abs(p.y)-size.x));
-    // scene = min(scene, window(p.xzy, dimension, salt));
 
     pRoom = p;
+    float chairSide = step(0., p.y);
 
-    // float lod = 100.;
-    // seed += floor(fract(time*.1)*lod)/lod;
+    float lod = 100.;
+    seed += floor(fract(time*.01)*lod)/lod;
     float salt = rng(seed);
     float pepper = rng(seed+vec2(.132,0.9023));
     float spice = rng(seed+vec2(.672,0.1973));
@@ -168,16 +129,67 @@ float map (vec3 pos) {
     p.y -= lampFootHeight;
     lamp = smin(lamp, sdist(p, lampFootThin*2.), smoothFactor);
 
+    float table = 1000.;
+    float tableHeight = .1+.2*salt;
+    float tableThin = .01+.03*pepper;
+    float tableWidth = .1+.2*spice;
+    float tableDepth = .1+.1*salt;
+    float tableLegThin = .005+.01*pepper;
+    p = pRoom;
+    p.x += roomHeight/2.-tableHeight;
+    p.z += .5-tableDepth;
+    pp = p;
+    p.yz *= rot((salt*2.-1.)*.2);
+    table = min(table, sdBox(p, vec3(tableThin, tableWidth, tableDepth)));
+    p.yz = abs(p.yz)-vec2(tableWidth, tableDepth)+tableLegThin;
+    p.x += tableHeight*.5;
+    table = min(table, sdBox(p, vec3(tableHeight*.5, tableLegThin, tableLegThin)));
+
+    float plate = 1000.;
+    float plateRadius = .45 * min(tableDepth, tableWidth);
+    float plateThin = .002;
+    float plateCurveHeight = .01;
+    float plateForkThin = .001;
+    float plateForkHeight = .03+.03*salt;
+    float plateForkWidth = .001+.003*salt;
+    // plate
+    p = pp;
+    p.y = abs(p.y) - tableWidth * .5;
+    p.x -= tableThin;
+    pp = p;
+    p.x -= plateThin+plateCurveHeight;
+    p.x += cos(length(p.yz)*20.)*plateCurveHeight;
+    plate = min(plate, max(sdist(p.yz, plateRadius), abs(p.x)-plateThin));
+    // food
+    float food = 1000.;
+    float foodRadiusRatio = .3+.6*mix(pepper, spice, chairSide);
+    float foodRepeat = .01;
+    float foodEatenRatio = .1+.9*mix(salt, pepper, chairSide);
+    ppp = p;
+    p.yz = repeat(p.yz, foodRepeat);
+    food = min(food, sdist(p, foodRepeat));
+    p = ppp;
+    food = max(food, sdist(p, plateRadius*foodRadiusRatio));
+    food = max(food, step(foodEatenRatio, dot(normalize(p.yz), vec2(1,0))));
+    // forks
+    p = pp;
+    p.x -= plateForkThin*2.;
+    p.z = abs(p.z)-plateRadius*1.2;
+    p.yz *= rot((spice*.5+.5)*.2);
+    p.x -= (sin(p.y*50.)*.5+.5)*.01;
+    plateForkWidth *= 1.+.5*sin(p.y*100.);
+    plate = min(plate, sdBox(p, vec3(plateForkThin, plateForkHeight, plateForkWidth)));
+
     float chair = 1000.;
-    float chairHeight = .2+.1*salt;
-    float chairWidth = .05+.1*pepper;
-    float chairLegThin = .002+.005*spice;
+    p = pRoom;
+    float chairHeight = .2+.1*mix(salt, pepper, chairSide);
+    float chairWidth = .05+.1*mix(pepper, spice, chairSide);
+    float chairLegThin = .002+.005*mix(spice, salt, chairSide);
     float chairSitThin = .01;
     float chairBackHeight = .05;
-    p = pRoom;
-    p.y -= .75;
-    p.z += .5;
-    p.yz *= rot(salt*TAU);
+    p.z += .5-tableDepth;
+    p.y = abs(p.y) - tableWidth - chairWidth*2.;
+    p.yz *= rot(mix(salt, pepper, chairSide)*TAU);
     p.x -= chairHeight;
     p.x += roomHeight/2.;
     // sit
@@ -185,7 +197,7 @@ float map (vec3 pos) {
     // back
     chair = min(chair, sdBox(p+vec3(-chairHeight+chairBackHeight,chairWidth-chairLegThin,0), vec3(chairBackHeight, chairLegThin, chairWidth)));
     // legs and arm
-    float chairArm = step(0.,sign(p.y));
+    float chairArm = step(0.,p.y);
     p.yz = abs(p.yz)-chairWidth+chairLegThin;
     p.x += chairArm * chairHeight * .5;
     chair = min(chair, sdBox(p, vec3(chairHeight*mix(1.,.5,chairArm), chairLegThin, chairLegThin)));
@@ -197,42 +209,43 @@ float map (vec3 pos) {
     p = pRoom;
     p.y -= 1.03;
     p.z += .5;
+    p.xz *= rot((salt*2.-1.)*.1);
     paint = min(paint, sdBox(p, vec3(paintHeight, paintDepth, paintWidth)));
 
-    float table = 1000.;
+    float door = 1000.;
+    float doorWidth = .3;
+    float doorHeight = .4;
+    p = pRoom;
+    p.x += roomHeight*.5-doorHeight;
+    wall.x = max(wall.x, -sdBox(p, vec3(doorHeight, 2., doorWidth)));
 
+    float window = 1000.;
+    float windowHeight = .4;
+    float windowWidth = .8;
+    float windowThin = .03;
+    float windowPadding = .02;
+    float windowRepeatThin = .01;
+    float windowRepeatWidth = .2;
+    p = pTorus;
+    p.y = repeat(p.y+repeaty/2., repeaty);
+    amod(p.xz, roomCount.x);
+    p.x -= innerRadius-roomHeight/2.;
+    wall.y = max(wall.y, -sdBox(p, vec3(windowHeight, windowWidth, 1.)));
+    window = min(window, sdBox(p, vec3(windowHeight, windowWidth, windowThin)));
+    window = max(window, -sdBox(p, vec3(windowHeight-windowPadding, windowWidth-windowPadding, 1.)));
+    p.y = repeat(p.y, windowRepeatWidth);
+    p.yz *= rot(p.x*10.);
+    window = min(window, sdBox(p, vec3(windowHeight, windowRepeatThin, windowRepeatThin)));
 
     scene = min(scene, min(wall.x, wall.y));
+    scene = min(scene, window);
+    scene = min(scene, door);
     scene = min(scene, lamp);
     scene = min(scene, chair);
     scene = min(scene, paint);
-    // // vertical window
-    // p = pTorus;
-    // py = p.y + roomCount/2. + time * speed;
-    // indexY = floor(py / (roomCount+roomThin));
-    // p.y = repeat(py, roomCount+roomThin);
-    // indexX = amodIndex(p.xz, roomCount);
-    // amod(p.xz, roomCount);
-    // seed = vec2(indexX, indexY);
-    // salt = rng(seed);
-    // p.x -= radius;
-    // dimension.y = 1.5;
-    // p.x +=  dimension.x * 1.25;
-    // scene = max(scene, -sdBox(p, vec3(dimension, .1)));
-    // scene = min(scene, window(p, dimension, salt));
-    //
-    // // elements
-    // p = pTorus;
-    // p.xz *= rot(PI/roomCount);
-    // py = p.y + roomCount/2. + time * speed;
-    // indexY = floor(py / (roomCount+roomThin));
-    // p.y = repeat(py, roomCount+roomThin);
-    // indexX = amodIndex(p.xz, roomCount);
-    // amod(p.xz, segments);
-    // seed = vec2(indexX, indexY);
-    // salt = rng(seed);
-    // p.x -= radius - roomHeight;
-    // scene = min(scene, boxes(p, salt));
+    scene = min(scene, table);
+    scene = min(scene, plate);
+    scene = min(scene, food);
 
     return scene;
 }

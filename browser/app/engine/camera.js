@@ -23,14 +23,25 @@ uniforms.cameraPos = { value: [0,0,0] };
 let cameraPosition = [0,0,0];
 let targetPosition = [0,0,0];
 
-camera.update = function(time) {
-  camera.controls.update();
-  cameraPosition = lerpArray(cameraPosition, assets.animations.getPosition('Camera', time), .1);
-  targetPosition = lerpArray(targetPosition, assets.animations.getPosition('LookAt', time), .1);
+camera.setup = function() {
+  cameraPosition = assets.animations.getPosition('Camera', 0);
+  targetPosition = assets.animations.getPosition('LookAt', 0);
   camera.position.set(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
   camera.controls.target.set(targetPosition[0], targetPosition[1], targetPosition[2]);
+}
+
+camera.update = function(time) {
+  // cameraPosition = lerpArray(cameraPosition, assets.animations.getPosition('Camera', time), .1);
+  // targetPosition = lerpArray(targetPosition, assets.animations.getPosition('LookAt', time), .1);
+  // camera.position.set(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+  // camera.controls.target.set(targetPosition[0], targetPosition[1], targetPosition[2]);
+
+  camera.controls.update();
   uniforms.cameraPos.value = camera.position;
   uniforms.cameraTarget.value = camera.controls.target;
 }
+
+camera.ortho = new THREE.OrthographicCamera( -1, 1, -1, 1, -1, 1000 );
+
 
 export default camera;

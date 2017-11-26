@@ -15,6 +15,15 @@ export default function() {
 
 	assets.load(function() {
 
+	  scenes = [
+	  	// new Fire(),
+	  	new Raymarch(),
+	  ];
+
+		render = new Render();
+		camera.setup();
+		timeline.start();
+
 		uniforms.time.value = 0;
 		uniformMaps = [];
 		Object.keys(parameters).forEach(keyRoot => {
@@ -23,15 +32,6 @@ export default function() {
 				uniformMaps.push({ root:keyRoot, child:keyChild });
 			});
 		});
-
-	  scenes = [
-	  	// new Fire(),
-	  	new Raymarch(),
-	  ];
-
-		render = new Render();
-
-		timeline.start();
 
 		window.addEventListener('resize', onWindowResize, false);
 		requestAnimationFrame(animate);

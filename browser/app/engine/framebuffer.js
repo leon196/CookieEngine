@@ -27,6 +27,7 @@ export default class {
 		}
 		if (options.uniformName != undefined && options.material != undefined) {
 			this.scene = new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), options.material);
+			this.scene.frustumCulled = false;
 			this.uniformName = options.uniformName;
 			uniforms[this.uniformName] = { value: 0 };
 		}
@@ -36,7 +37,7 @@ export default class {
 		if (this.scene != undefined) {
 			uniforms[this.uniformName].value = this.getTexture();
 			this.swap();
-			renderer.render(this.scene, camera, this.getRenderTarget(), true);
+			renderer.render(this.scene, camera.ortho, this.getRenderTarget(), true);
 		}
 	}
 
