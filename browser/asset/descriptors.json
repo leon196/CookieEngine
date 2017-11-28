@@ -55,6 +55,11 @@
 			"fragmentShader": "shader/generic/circle.frag",
 			"side": 2
 		},
+		"paper": {
+			"vertexShader": "shader/project/particles/paper.vert",
+			"fragmentShader": "shader/project/particles/paper.frag",
+			"side": 2
+		},
 		"fire": {
 			"vertexShader": "shader/project/particles/fire.vert",
 			"fragmentShader": "shader/generic/circle.frag",

@@ -140,11 +140,13 @@ function load(callback) {
 				const url = data.path.substr(baseUrl.length);
 				const callback = urlCallbacks[url];
 				if (callback) {
-					console.log('Reloading asset', url);
-					return loader.load(baseUrl + url, data => {
-						files[url] = data;
-						return callback();
-					});
+					console.log('Reloading asset in 0.5 second', url);
+					setTimeout(function(){
+						return loader.load(baseUrl + url, data => {
+							files[url] = data;
+							return callback();
+						});
+					}, 500);
 				}
 			}
 		}

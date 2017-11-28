@@ -3,6 +3,7 @@ uniform vec2 resolution;
 uniform vec3 cameraPos;
 uniform vec3 cameraTarget;
 uniform float time;
+uniform float RoomMovement;
 varying vec2 vUv;
 
 #define STEPS 100.
@@ -46,7 +47,8 @@ float map (vec3 pos) {
 
     float toroidalRadius = 30.;
     float innerRadius = 15.;
-    float speed = 0.0;
+
+    float speed = 0.;
 
     vec2 roomCount = vec2(58., 90.);
     float roomHeight = 1.;
@@ -60,7 +62,7 @@ float map (vec3 pos) {
     pTorus.y += innerRadius - roomHeight / 2.;
     pTorus.x += toroidalRadius;
     pTorus.xz = toroidal(pTorus.xz, toroidalRadius);
-    pTorus.z += time*speed;
+    pTorus.z += RoomMovement;
     pTorus.z *= toroidalRadius;
     pTorus.xzy = pTorus.xyz;
     // pTorus.xz *= rot(time*.05*speed);
@@ -268,7 +270,7 @@ float map (vec3 pos) {
     salt = rng(seed);
     pepper = rng(seed+vec2(.132,0.9023));
     spice = rng(seed+vec2(.672,0.1973));
-    vec2 windowRepeatWidth = vec2(.02+.4*salt, .1+.3*pepper);
+    vec2 windowRepeatWidth = vec2(.1+.4*salt, .1+.3*pepper);
     p.y = repeat(p.y+repeaty/2., repeaty);
     amod(p.xz, roomCount.x);
     p.x -= innerRadius-roomHeight/2.;
@@ -309,10 +311,12 @@ vec3 getCamera (vec3 eye, vec3 lookAt, vec2 uv) {
 
 float getLight (vec3 pos, vec3 eye) {
   vec3 light = normalize(vec3(1,2.,-1));
+  // vec3 light = normalize(vec3(1,2.,-1)*20.-pos);
   vec3 normal = getNormal(pos);
   vec3 view = normalize(eye-pos);
-  float shade = dot(normal, view);
-  shade *= hardShadow(pos, light);
+  float shade = clamp(dot(normal, view),0.,1.);
+  // shade *= hardShadow(pos, light);
+  shade *= mix(0., hardShadow(pos, light), step(.0,dot(light, normal)));
   return shade;
 }
 

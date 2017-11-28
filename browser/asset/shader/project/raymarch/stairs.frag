@@ -10,8 +10,6 @@ uniform vec3 cameraTarget;
 #define STEPS 50.
 #define VOLUME 0.01
 #define TAU (2.*PI)
-#define repeat(v,c) (mod(v,c)-c/2.)
-#define sDist(v,r) (length(v)-r)
 
 float map (vec3);
 vec3 getNormal (vec3 p) { vec2 e = vec2(.001,0); return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx))); }
@@ -57,21 +55,21 @@ float map (vec3 pos) {
   // pos.xz += normalize(pos.xz) * sin(pos.y*.5+time);
 
   // holes
-  float holeWall = sDist(pos.xz, wallRadius);
-  float holeStair = sDist(pos.xz, stairRadius);
+  float holeWall = sdist(pos.xz, wallRadius);
+  float holeStair = sdist(pos.xz, stairRadius);
 
   // walls
   p = pos;
   amod(p.xz, wallCount);
   p.x -= wallRadius;
   scene = min(scene, max(-p.x, abs(p.z)-wallThin));
-  scene = max(scene, -sDist(pos.xz, wallRadius-wallOffset));
+  scene = max(scene, -sdist(pos.xz, wallRadius-wallOffset));
 
   // floors
   p = pos;
   p.y = repeat(p.y, cell.y);
-  float disk = max(sDist(p.xz, 1000.), abs(p.y)-floorThin);
-  disk = max(disk, -sDist(pos.xz, wallRadius));
+  float disk = max(sdist(p.xz, 1000.), abs(p.y)-floorThin);
+  disk = max(disk, -sdist(pos.xz, wallRadius));
   scene = min(scene, disk);
 
   // stairs
@@ -92,7 +90,7 @@ float map (vec3 pos) {
   p.y += stairHeight*.5;
   p.y -= stairHeight*stairCount*atan(p.z,p.x)/TAU;
   p.y = repeat(p.y, stairCount*stairHeight);
-  scene = min(scene, max(max(sDist(p.xz, wallRadius), abs(p.y)-stairHeight), -holeStair));
+  scene = min(scene, max(max(sdist(p.xz, wallRadius), abs(p.y)-stairHeight), -holeStair));
 
   // books
   p = pos;
@@ -130,8 +128,8 @@ float map (vec3 pos) {
 vec3 getCamera (vec3 eye, vec3 lookAt, vec2 uv) {
   float fov = .65;
   vec3 forward = normalize(lookAt - eye);
-  vec3 right = normalize(cross(vec3(0,1,0), forward));
-  vec3 up = normalize(cross(forward, right));
+  vec3 right = normalize(cross(forward, vec3(0,1,0)));
+  vec3 up = normalize(cross(right, forward));
   return normalize(fov * forward + uv.x * right + uv.y * up);
 }
 
@@ -165,6 +163,7 @@ vec4 raymarch () {
   color *= getLight(pos, eye);
   color = smoothstep(.0, .5, color);
   color = sqrt(color);
+  color.a = length(cameraPos - pos);
   return color;
 }
 

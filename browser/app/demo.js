@@ -8,6 +8,7 @@ import uniforms from './engine/uniforms';
 import parameters from './project/parameters';
 import Render from './project/render';
 import Fire from './project/scenes/Fire';
+import Paper from './project/scenes/Paper';
 import Raymarch from './project/scenes/Raymarch';
 
 export default function() {
@@ -17,8 +18,10 @@ export default function() {
 
 	  scenes = [
 	  	// new Fire(),
+	  	new Paper(),
 	  	new Raymarch(),
 	  ];
+
 
 		render = new Render();
 		camera.setup();
@@ -53,7 +56,7 @@ export default function() {
 		scenes.forEach(scene => {
 			scene.update(time);
 		})
-
+		render.update(time);
 		renderer.render(render, camera);
 	}
 

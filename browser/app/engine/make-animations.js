@@ -18,11 +18,11 @@ export default function (actionDescriptors) {
 	}
 
 	function getValue(actionName, time) {
-		if (actions.actionName !== undefined) {
+		if (actions[actionName] !== undefined) {
 			var pos = actions[actionName].paths['location'].evaluate(time, blenderHTML5Animations.FCurveArray.DefaultValues.LOCATION);
 			return pos[2];
 		} else {
-			// console.log(actionName + ' not foud');
+			console.log(actionName + ' not foud');
 			return 0.;
 		}
 	}
