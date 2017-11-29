@@ -17,7 +17,7 @@ export default class Raymarch extends Scene {
 		this.mesh.frustumCulled = false;
     this.add(this.mesh);
 
-		this.uniformNames = [ 'RoomMovement' ];
+		this.uniformNames = [ 'RoomMovement', 'StairMovement' ];
 		this.valueBlend = {};
 		this.blendRatio = .1;
 		this.uniformNames.forEach(name => {

@@ -12,6 +12,7 @@ camera.position.y = 15;
 camera.position.z = 30;
 
 camera.target = new THREE.Vector3();
+camera.lookAt(camera.target);
 // camera.controls = new OrbitControls( camera, renderer.domElement );
 // camera.controls.rotateSpeed = 0.1;
 // camera.controls.zoomSpeed = .5;
@@ -37,6 +38,7 @@ camera.update = function(time) {
   camera.position.set(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
   camera.target.set(targetPosition[0], targetPosition[1], targetPosition[2]);
 
+  camera.lookAt(camera.target);
   // camera.controls.update();
 
   uniforms.cameraPos.value = camera.position;

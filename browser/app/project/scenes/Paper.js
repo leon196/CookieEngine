@@ -17,7 +17,10 @@ export default class Paper extends Scene {
 
 		let attributes = Particles.randomPositionAttribute(1000);
 		Particles.createMeshes(attributes, assets.shaders.paper, [8,8])
-			.forEach(mesh => { this.add(mesh); });
+			.forEach(mesh => {
+				mesh.frustumCulled = false;
+				this.add(mesh);
+			});
 
 		this.uniformNames = [ 'Paper' ];
 		this.valueBlend = {};

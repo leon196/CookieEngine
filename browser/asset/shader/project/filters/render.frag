@@ -26,8 +26,7 @@ void main ()	{
 	vec4 raymarch = texture2D(raymarchTexture, uv);
 
 	// layers
-	vec4 color = vec4(0);
-	color = scene;
+	vec4 color = scene;
 	float depthScene = scene.a;
 	depthScene += 1000. * (1.-depthScene) * (1.-smoothstep(0.0,.5,depthScene));
 	color = mix(color, raymarch, step(raymarch.a, depthScene));

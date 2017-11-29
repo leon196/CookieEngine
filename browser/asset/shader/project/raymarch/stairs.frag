@@ -6,6 +6,7 @@ uniform float time;
 uniform vec2 resolution;
 uniform vec3 cameraPos;
 uniform vec3 cameraTarget;
+uniform float StairMovement;
 
 #define STEPS 50.
 #define VOLUME 0.01
@@ -48,7 +49,7 @@ float map (vec3 pos) {
   vec3 p;
 
   // move it
-  // pos.y += time;
+  pos.y += StairMovement;
 
   // twist it
   // pos.xz *= rot(pos.y*.05+time*.1);
