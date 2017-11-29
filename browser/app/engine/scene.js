@@ -9,7 +9,9 @@ export default class Scene extends THREE.Scene {
 
 	constructor(uniformName) {
 		super();
-    let options = FrameBuffer.optionsForFloatBuffer();
+    let options = {
+			type: THREE.FloatType,
+		};
     this.frame = new FrameBuffer(options);
     this.uniformName = uniformName;
     uniforms[this.uniformName] = { value: 0 };

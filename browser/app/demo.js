@@ -6,14 +6,18 @@ import renderer from './engine/renderer';
 import camera from './engine/camera';
 import uniforms from './engine/uniforms';
 import parameters from './project/parameters';
+import Keyboard from './engine/keyboard';
 import Render from './project/render';
 import Fire from './project/scenes/Fire';
+import Text from './project/scenes/Text';
 import Raymarch from './project/scenes/Raymarch';
 
 export default function() {
 	let scenes, uniformMaps, render;
 
 	assets.load(function() {
+
+		Keyboard.setup();
 
 		uniforms.time.value = 0;
 		uniformMaps = [];
@@ -25,8 +29,9 @@ export default function() {
 		});
 
 	  scenes = [
-	  	// new Fire(),
-	  	new Raymarch(),
+	  	new Fire(),
+	  	new Text(),
+	  	// new Raymarch(),
 	  ];
 
 		render = new Render();
@@ -55,7 +60,7 @@ export default function() {
 				scene.update(time);
 			}
 		})
-
+		render.update(time);
 		renderer.render(render, camera);
 	}
 

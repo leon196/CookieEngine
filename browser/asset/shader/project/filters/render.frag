@@ -1,5 +1,6 @@
 
 uniform sampler2D fireSceneTexture;
+uniform sampler2D textSceneTexture;
 uniform sampler2D raymarchTexture;
 uniform vec2 resolution;
 uniform float time;
@@ -16,14 +17,17 @@ void main ()	{
 	uv.x += glitch * FilterGlitch;
 
 	vec4 scene = texture2D(fireSceneTexture, uv);
+	vec4 text = texture2D(textSceneTexture, uv);
 	vec4 raymarch = texture2D(raymarchTexture, uv);
 
+	vec4 color = mix(scene, text, text.a);
+
 	// layers
-	vec4 color = vec4(0);
-	color = scene;
-	float depthScene = scene.a;
-	depthScene += 1000. * (1.-depthScene) * step(depthScene, .01);
-	color = mix(color, raymarch, step(raymarch.a, depthScene));
+	// vec4 color = vec4(0);
+	// color = scene;
+	// float depthScene = scene.a;
+	// depthScene += 1000. * (1.-depthScene) * step(depthScene, .01);
+	// color = mix(color, raymarch, step(raymarch.a, depthScene));
 
 	// vignette
 	float vignette = sin(vUv.x * PI);

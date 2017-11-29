@@ -8,9 +8,9 @@ import uniforms from '../../engine/uniforms';
 export default class Text extends Scene {
 
 	constructor() {
-		super('Text');
+		super('textSceneTexture');
 
-		this.sceneFrame.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaders.text));
+		this.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1,1), assets.shaders.text));
 		var words = [
 			{
 				text: 'CooKie',
@@ -35,6 +35,7 @@ export default class Text extends Scene {
 		uniforms.textTexture = { value: makeText.createTexture(words) };
 	}
 
-	update() {
+	update(time) {
+		super.update(time);
 	}
 }
