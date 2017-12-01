@@ -15,7 +15,7 @@ export default class Paper extends Scene {
 	constructor() {
 		super('paperSceneTexture');
 
-		let attributes = Particles.randomPositionAttribute(1000);
+		let attributes = Particles.randomPositionAttribute(100);
 		Particles.createMeshes(attributes, assets.shaders.paper, [8,8])
 			.forEach(mesh => {
 				mesh.frustumCulled = false;
