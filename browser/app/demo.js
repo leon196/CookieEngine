@@ -1,12 +1,14 @@
 
 import * as THREE from 'three.js';
 import * as timeline from './engine/timeline';
+import { lerp } from './engine/misc';
 import assets from './engine/assets';
 import renderer from './engine/renderer';
 import camera from './engine/camera';
 import uniforms from './engine/uniforms';
 import parameters from './project/parameters';
 import Render from './project/render';
+import Mouse from './engine/mouse';
 import Fire from './project/scenes/Fire';
 import Paper from './project/scenes/Paper';
 import Raymarch from './project/scenes/Raymarch';
@@ -39,6 +41,9 @@ export default function() {
 		window.addEventListener('resize', onWindowResize, false);
 		requestAnimationFrame(animate);
 		onWindowResize();
+
+    document.addEventListener('mousemove', Mouse.onMove);
+		uniforms.mouse = { value: [0,0] };
 	});
 
 	function animate() {
@@ -51,6 +56,9 @@ export default function() {
 			// uniforms[name].value = assets.animations.getValue(name, time);
 			uniforms[name].value = parameters[parameter.root][parameter.child];
 		})
+
+		uniforms.mouse.value[0] = lerp(uniforms.mouse.value[0], Mouse.x/window.innerWidth, .1);
+		uniforms.mouse.value[1] = lerp(uniforms.mouse.value[1], Mouse.y/window.innerHeight, .1);
 
 		camera.update(time);
 		scenes.forEach(scene => {

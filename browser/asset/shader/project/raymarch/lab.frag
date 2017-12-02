@@ -1,5 +1,8 @@
 
+// http://lgdv.cs.fau.de/publications/publication/Pub.2015.tech.IMMD.IMMD9.spheri/
+
 uniform vec2 resolution;
+uniform vec2 mouse;
 uniform vec3 cameraPos;
 uniform vec3 cameraTarget;
 uniform float time;
@@ -53,6 +56,10 @@ float pattern2 (vec3 p) {
   return fbm(p + 8. * q);
 }
 
+vec3 spheroidal (vec2 p) {
+  return vec3(cos(p.x)*cos(p.y),sin(p.x)*cos(p.y),sin(p.y));
+}
+
 float map (vec3 pos) {
 
     float scene = 1000.;
@@ -61,26 +68,51 @@ float map (vec3 pos) {
     p = pos;
     // float n = pattern2(p*2.);
     // p.xz *= rot(n);
-    float count = 12.;
-    float index = amod(p.xz, count);
+    p.xz = toroidal(p.xz, 2.);
+    p.xy *= rot(p.z*4.+time);
+    p.z /= PI;
+    p.z *= 5.;
+    float count = 6.;
+    float index = amod(p.xy, count);
     float offset = PI*index/count;
-    float size = .1;
+    float size = .05;
     float bevel = .01;
     float thin = .01;
-    float r = .5;
-    p.x -= 1.;
-    float d = length(p)*.5+time*.5;
+    vec3 boxSize = vec3(thin, 1./0., thin);
+    float r = 2.;
+    float d = time*.5;
+    float t = time;
+    p.x -= .5;
+    // p.z += -time*.5;
+    p.z = repeat(p.z, r);
+    // thin = mix(thin, -1.,clamp(length(p)/150.,0.,1.));
     p = abs(p);
-    p.xz *= rot(d+PI/2.);//+time*.94695
-    p.xy *= rot(d+PI/4.);//+time*.654374
-    p.zy *= rot(d+PI/4.);//+time*.35474
-    p = repeat(p, r);
-    scene = sdBox(p, vec3(size));
-    scene = max(scene, sdIso(p, size-bevel));
+    p.xz *= rot(mouse.x*TAU);
+    p.xy *= rot(mouse.y*TAU);
+    p.zy *= rot(mouse.x*TAU);
+    // p.xz *= rot(PI/2.+t*.94695);
+    // p.xy *= rot(PI/2.+t*.654374);
+    // p.zy *= rot(PI/4.+t*.35474);
+    // scene = sdBox(p, vec3(size));
+    // scene = min(scene, sdIso(p, size));
     // scene = min(scene, sdist(p, size));
-    // scene = min(scene, sdist(p.xz, thin));
-    // scene = min(scene, sdist(p.xy, thin));
-    // scene = min(scene, sdist(p.zy, thin));
+    scene = min(scene, sdist(p.xz, thin));
+    scene = min(scene, sdist(p.xy, thin));
+    scene = min(scene, sdist(p.zx, thin));
+    pp = p;
+    p.xz *= rot(PI/4.);
+    scene = min(scene, sdist(p.yz, thin));
+    scene = min(scene, sdist(p.zx, thin));
+    p = pp;
+    p.yz *= rot(PI/4.);
+    scene = min(scene, sdist(p.xy, thin));
+    scene = min(scene, sdist(p.yz, thin));
+    p = pp;
+    p.yx *= rot(PI/4.);
+    scene = min(scene, sdist(p.xy, thin));
+    scene = min(scene, sdist(p.yx, thin));
+
+    scene = smin(scene, sdist(p, size), .05);
 
     return scene;
 }
@@ -115,16 +147,17 @@ vec4 raymarch () {
 			shade = 1.-i;
 			break;
 		}
-    dist *= .5 + .1 * dither;
+    dist *= .4 + .1 * dither;
     pos += ray * dist;
   }
 
   vec4 color = vec4(shade);
-  vec3 normal = getNormal(pos);
+  color = step(.1,color);
+  // vec3 normal = getNormal(pos);
   // color.rgb = normal*.5+.5;
-  color *= getLight(pos, eye);
+  // color *= getLight(pos, eye);
   // color = smoothstep(.0, .5, color);
-  color = sqrt(color);
+  // color = sqrt(color);
   return color;
 }
 
