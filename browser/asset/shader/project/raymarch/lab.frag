@@ -9,7 +9,7 @@ uniform float time;
 uniform float RoomMovement;
 varying vec2 vUv;
 
-#define STEPS 100.
+#define STEPS 50.
 #define VOLUME 0.001
 
 float map (vec3);
@@ -68,10 +68,10 @@ float map (vec3 pos) {
     p = pos;
     // float n = pattern2(p*2.);
     // p.xz *= rot(n);
-    p.xz = toroidal(p.xz, 2.);
-    p.xy *= rot(p.z*4.+time);
-    p.z /= PI;
-    p.z *= 5.;
+    // p.xz = toroidal(p.xz, 2.);
+    // p.xy *= rot(p.z*4.+time);
+    // p.z /= PI;
+    // p.z *= 5.;
     float count = 6.;
     float index = amod(p.xy, count);
     float offset = PI*index/count;
@@ -82,17 +82,17 @@ float map (vec3 pos) {
     float r = 2.;
     float d = time*.5;
     float t = time;
-    p.x -= .5;
+    // p.x -= .5;
     // p.z += -time*.5;
-    p.z = repeat(p.z, r);
-    // thin = mix(thin, -1.,clamp(length(p)/150.,0.,1.));
+    p = repeat(p, r);
     p = abs(p);
-    p.xz *= rot(mouse.x*TAU);
-    p.xy *= rot(mouse.y*TAU);
-    p.zy *= rot(mouse.x*TAU);
-    // p.xz *= rot(PI/2.+t*.94695);
-    // p.xy *= rot(PI/2.+t*.654374);
-    // p.zy *= rot(PI/4.+t*.35474);
+    // thin = mix(thin, -1.,clamp(length(p)/150.,0.,1.));
+    // p.xz *= rot(mouse.x*TAU);
+    // p.xy *= rot(mouse.y*TAU);
+    // p.zy *= rot(mouse.x*TAU);
+    p.xz *= rot(PI/2.+t*.94695);
+    p.xy *= rot(PI/2.+t*.654374);
+    p.zy *= rot(PI/2.+t*.35474);
     // scene = sdBox(p, vec3(size));
     // scene = min(scene, sdIso(p, size));
     // scene = min(scene, sdist(p, size));

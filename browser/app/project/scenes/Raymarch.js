@@ -10,7 +10,7 @@ export default class Raymarch extends Scene {
 	constructor() {
 		super('raymarchTexture');
 
-		this.raymarchSketches = [ 'raymarchLab', 'raymarchRooms', 'raymarchStairs' ];
+		this.raymarchSketches = [ 'raymarchRooms', 'raymarchStairs' ];
 		this.currentSketch = 0;
 		let shader = assets.shaders[this.raymarchSketches[this.currentSketch]];
 		this.mesh = new Mesh(new PlaneGeometry(1,1,1), shader);
@@ -34,10 +34,10 @@ export default class Raymarch extends Scene {
 			uniforms[name].value = this.valueBlend[name];
 		});
 
-		// let sketch = assets.animations.getValue('RaymarchSketch', time);
-		// if (sketch !== this.currentSketch) {
-		// 	this.currentSketch = sketch;
-		// 	this.mesh.material = assets.shaders[this.raymarchSketches[this.currentSketch]];
-		// }
+		let sketch = assets.animations.getValue('RaymarchSketch', time);
+		if (sketch !== this.currentSketch) {
+			this.currentSketch = sketch;
+			this.mesh.material = assets.shaders[this.raymarchSketches[this.currentSketch]];
+		}
 	}
 }
