@@ -144,7 +144,7 @@ float noiseIQ( vec3 x )
 float fbm (vec3 p) {
     float value = 0.0;
     float amplitud = .5;
-    for (float i = 1.; i <= 3.; i++) {
+    for (float i = 1.; i <= 4.; i++) {
         value += amplitud * noiseIQ(p);
         p *= 2.;
         amplitud *= .5;

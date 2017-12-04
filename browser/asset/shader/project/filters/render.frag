@@ -1,6 +1,7 @@
 
 uniform sampler2D fireSceneTexture;
 uniform sampler2D paperSceneTexture;
+uniform sampler2D buildingSceneTexture;
 uniform sampler2D raymarchTexture;
 uniform vec2 resolution;
 uniform float time;
@@ -22,14 +23,14 @@ void main ()	{
 	// uv.x = mix(uv.x,1.-uv.x,step(1.,mod(uv.x, 2.)));
 	// uv = abs(fract(uv));
 
-	vec4 scene = texture2D(paperSceneTexture, uv);
+	vec4 scene = texture2D(buildingSceneTexture, uv);
 	vec4 raymarch = texture2D(raymarchTexture, uv);
 
 	// layers
 	vec4 color = scene;
-	float depthScene = scene.a;
-	depthScene += 1000. * (1.-depthScene) * (1.-smoothstep(0.0,.5,depthScene));
-	color = mix(color, raymarch, step(raymarch.a, depthScene));
+	// float depthScene = scene.a;
+	// depthScene += 1000. * (1.-depthScene) * (1.-smoothstep(0.0,.5,depthScene));
+	// color = mix(color, raymarch, step(raymarch.a, depthScene));
 
 	// vignette
 	float vignette = sin(vUv.x * PI);

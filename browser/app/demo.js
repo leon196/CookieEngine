@@ -12,6 +12,7 @@ import Mouse from './engine/mouse';
 import Fire from './project/scenes/Fire';
 import Paper from './project/scenes/Paper';
 import Raymarch from './project/scenes/Raymarch';
+import Building from './project/scenes/Building';
 
 export default function() {
 	let scenes, uniformMaps, render;
@@ -20,8 +21,8 @@ export default function() {
 
 	  scenes = [
 	  	// new Fire(),
-	  	new Paper(),
-	  	new Raymarch(),
+	  	new Building(),
+	  	// new Raymarch(),
 	  ];
 
 

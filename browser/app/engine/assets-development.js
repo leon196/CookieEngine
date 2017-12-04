@@ -4,6 +4,7 @@ import parameters from '../project/parameters';
 import uniforms from './uniforms';
 import { OBJLoader } from '../libs/OBJLoader';
 import { PLYLoader } from '../libs/PLYLoader';
+import { FBXLoader } from '../libs/FBXLoader';
 import io from 'socket.io-client/dist/socket.io';
 import * as THREE from 'three.js';
 
@@ -39,6 +40,7 @@ function load(callback) {
 
 		const plyLoader = new PLYLoader();
 		const objLoader = new OBJLoader();
+		const fbxLoader = new FBXLoader();
 		const textureLoader = new THREE.TextureLoader();
 
 		Object.keys(descriptors.geometries).forEach(name => {
@@ -55,6 +57,11 @@ function load(callback) {
 			case 'ply':
 				register([url], () => {
 					assets.geometries[name] = plyLoader.parse(files[url]);
+				});
+				break;
+			case 'fbx':
+				register([url], () => {
+					assets.geometries[name] = fbxLoader.parse(files[url]);
 				});
 				break;
 			default:

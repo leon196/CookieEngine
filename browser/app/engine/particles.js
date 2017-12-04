@@ -10,7 +10,6 @@ export default class Particles {
 	static createMeshes(attributes, material, subdivisions)
 	{
 		var count = attributes.position.array.length / attributes.position.itemSize;
-		console.log(count);
 		var meshes = [];
 		var verticesMax = 65000;
 		var dimension = closestPowerOfTwo(Math.sqrt(count));

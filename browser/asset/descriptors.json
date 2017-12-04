@@ -34,6 +34,10 @@
 		}
 	},
 	"shaders": {
+		"building": {
+			"vertexShader": "shader/project/meshes/building.vert",
+			"fragmentShader": "shader/project/meshes/building.frag"
+		},
 		"raymarchLab": {
 			"vertexShader": "shader/generic/screen.vert",
 			"fragmentShader": "shader/project/raymarch/lab.frag"
