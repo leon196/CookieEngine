@@ -3,6 +3,7 @@ uniform sampler2D fireSceneTexture;
 uniform sampler2D paperSceneTexture;
 uniform sampler2D buildingSceneTexture;
 uniform sampler2D raymarchTexture;
+uniform sampler2D fftTexture;
 uniform vec2 resolution;
 uniform float time;
 uniform float fadeBlack;
@@ -36,17 +37,19 @@ void main ()	{
 	center.x *= resolution.x/resolution.y;
 	float fadeCenter = clamp(length(center), 0., 1.);
 
-	color = mix(color, rgbOffset(buildingSceneTexture, uv, resolution, 10.*fadeCenter), fadeCenter);
-	color = mix(color, blur(buildingSceneTexture, uv, resolution), fadeCenter);
+	color = mix(color, rgbOffset(buildingSceneTexture, uv, resolution, 5.*fadeCenter), fadeCenter);
+	// color = mix(color, blur(buildingSceneTexture, uv, resolution), fadeCenter);
 
 	// color = godRays(buildingSceneTexture, uv, .9);
 
 	// vignette
 	float vignette = sin(vUv.x * PI);
 	vignette *= sin(vUv.y * PI);
-	color *= vignette*.5+.5;
+	color *= vignette;
 
 	// color *= fadeBlack;
+
+	color = texture2D(fftTexture, uv);
 
 	gl_FragColor = color;
 }

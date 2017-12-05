@@ -88,7 +88,7 @@ float normpdf(in float x, in float sigma)
 vec4 blur (sampler2D bitmap, vec2 uv, vec2 dimension)
 {
 	//declare stuff
-	const int mSize = 11;
+	const int mSize = 5;
 	const int kSize = (mSize-1)/2;
 	float kernel[mSize];
 	vec4 final_colour = vec4(0.0);

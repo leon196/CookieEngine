@@ -13,9 +13,10 @@ import Fire from './project/scenes/Fire';
 import Paper from './project/scenes/Paper';
 import Raymarch from './project/scenes/Raymarch';
 import Building from './project/scenes/Building';
+import WebAudioAnalyser from './libs/web-audio-analyser'
 
 export default function() {
-	let scenes, uniformMaps, render;
+	let scenes, uniformMaps, render, audio, analyser, fft;
 
 	assets.load(function() {
 
@@ -25,6 +26,15 @@ export default function() {
 	  	// new Raymarch(),
 	  ];
 
+	  audio = new Audio();
+	  audio.src = 'asset/music/music.ogg';
+	  audio.play();
+	  analyser = new WebAudioAnalyser(audio);
+
+		fft = new THREE.DataTexture(analyser.frequencies(), 1024, 1, THREE.RGBFormat, THREE.FloatType);
+		fft.needsUpdate = true;
+
+		uniforms.fftTexture = { value: fft };
 
 		render = new Render();
 		camera.setup();
@@ -57,6 +67,8 @@ export default function() {
 			// uniforms[name].value = assets.animations.getValue(name, time);
 			uniforms[name].value = parameters[parameter.root][parameter.child];
 		})
+
+		// fft.image.data = analyser.frequencies();
 
 		uniforms.mouse.value[0] = lerp(uniforms.mouse.value[0], Mouse.x/window.innerWidth, .1);
 		uniforms.mouse.value[1] = lerp(uniforms.mouse.value[1], Mouse.y/window.innerHeight, .1);
