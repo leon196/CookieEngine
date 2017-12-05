@@ -78,6 +78,48 @@ vec3 hsv2rgb(vec3 c)
 	return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
+// mrharicot
+// https://www.shadertoy.com/view/XdfGDH
+float normpdf(in float x, in float sigma)
+{
+	return 0.39894*exp(-0.5*x*x/(sigma*sigma))/sigma;
+}
+
+vec4 blur (sampler2D bitmap, vec2 uv, vec2 dimension)
+{
+	//declare stuff
+	const int mSize = 11;
+	const int kSize = (mSize-1)/2;
+	float kernel[mSize];
+	vec4 final_colour = vec4(0.0);
+	
+	//create the 1-D kernel
+	float sigma = 7.0;
+	float Z = 0.0;
+	for (int j = 0; j <= kSize; ++j)
+	{
+		kernel[kSize+j] = kernel[kSize-j] = normpdf(float(j), sigma);
+	}
+	
+	//get the normalization factor (as the gaussian has been clamped)
+	for (int j = 0; j < mSize; ++j)
+	{
+		Z += kernel[j];
+	}
+	
+	//read out the texels
+	for (int i=-kSize; i <= kSize; ++i)
+	{
+		for (int j=-kSize; j <= kSize; ++j)
+		{
+			final_colour += kernel[kSize+j]*kernel[kSize+i]*texture2D(bitmap, uv.xy+vec2(float(i),float(j)) / dimension.xy);
+
+		}
+	}
+	
+	return final_colour/(Z*Z);
+}
+
 vec4 edge (sampler2D bitmap, vec2 uv, vec2 dimension)
 {
 	vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
@@ -225,4 +267,34 @@ vec3 displaceTree (vec3 p, float t, float blend)
     p.x += (-intensity + .2*cos(t * speed)) * intensity;
     p.y += .2*sin(-t * speed + length(p.xz)) * intensity;
     return p;
+}
+
+
+vec4 rgbOffset (sampler2D bitmap, vec2 uv, vec2 dimension, float scale)
+{
+	vec4 rgb = vec4(1.);
+	float angle = 0.;
+	float radius = scale/dimension.y;
+	vec2 offset = vec2(cos(angle), sin(angle))*radius;
+	rgb.r = texture2D(bitmap, uv-offset).r;
+	angle += PI2/3.;
+	offset = vec2(cos(angle), sin(angle))*radius;
+	rgb.g = texture2D(bitmap, uv-offset).g;
+	angle += PI2/3.;
+	offset = vec2(cos(angle), sin(angle))*radius;
+	rgb.b = texture2D(bitmap, uv-offset).b;
+	return rgb;
+}
+
+vec4 godRays (sampler2D bitmap, vec2 uv, float scale)
+{
+	vec4 color = texture2D(bitmap, uv);
+	const int count = 5;
+	for (int i = 0; i < count; ++i) {
+		uv -= .5;
+		uv *= scale;
+		uv += .5;
+		color += texture2D(bitmap, uv);
+	}
+	return color;
 }

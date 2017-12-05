@@ -20,6 +20,9 @@
 		"treeCurves": {
 			"file": "mesh/treeCurves.obj"
 		},
+		"stairs": {
+			"file": "mesh/stairs.obj"
+		},
 		"jonathan": {
 			"file": "mesh/jonathan.obj"
 		},

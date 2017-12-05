@@ -32,9 +32,19 @@ void main ()	{
 	// depthScene += 1000. * (1.-depthScene) * (1.-smoothstep(0.0,.5,depthScene));
 	// color = mix(color, raymarch, step(raymarch.a, depthScene));
 
+	vec2 center = uv*2.-1.;
+	center.x *= resolution.x/resolution.y;
+	float fadeCenter = clamp(length(center), 0., 1.);
+
+	color = mix(color, rgbOffset(buildingSceneTexture, uv, resolution, 10.*fadeCenter), fadeCenter);
+	color = mix(color, blur(buildingSceneTexture, uv, resolution), fadeCenter);
+
+	// color = godRays(buildingSceneTexture, uv, .9);
+
 	// vignette
 	float vignette = sin(vUv.x * PI);
 	vignette *= sin(vUv.y * PI);
+	color *= vignette*.5+.5;
 
 	// color *= fadeBlack;
 

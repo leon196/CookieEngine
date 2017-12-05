@@ -1,5 +1,7 @@
 
 attribute float number;
+attribute float type;
+attribute float count;
 uniform float time;
 uniform vec3 cameraPos;
 
@@ -11,18 +13,18 @@ void main()	{
 	vUv = uv;
 	vec3 pos = position;
 	// pos.x += number;
-	float range = 10.;
-	float speed = 1. / range;
+	float range = 100.;
+	float speed = 10. / range;
 	float height = .1;
 	float width = .2;
 	float offset = number * width;
 
-	float ratio = mod(number / 100. + time * speed, 1.);
+	float ratio = mod(number / count + time * speed, 1.);
 	pos.z += range * (ratio * 2. - 1.);
 
-	pos.z += number*width;
-	pos.y += number;
-	pos.y *= height;
+	// pos.z += number*width;
+	// pos.y += number;
+	// pos.y *= height;
 
 	vPos = pos;
 

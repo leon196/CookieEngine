@@ -1,0 +1,12 @@
+# Blender MTL File: 'Station pour escalier.blend'
+# Material Count: 1
+
+newmtl _3
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.600000 0.600000 0.298039
+Ks 0.330000 0.330000 0.330000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
