@@ -7,35 +7,27 @@ import renderer from './engine/renderer';
 import camera from './engine/camera';
 import uniforms from './engine/uniforms';
 import parameters from './project/parameters';
+import MainScene from './project/scenes/MainScene';
 import Render from './project/render';
 import Mouse from './engine/mouse';
-import Fire from './project/scenes/Fire';
-import Paper from './project/scenes/Paper';
-import Raymarch from './project/scenes/Raymarch';
-import Building from './project/scenes/Building';
 import WebAudioAnalyser from './libs/web-audio-analyser'
 
 export default function() {
-	let scenes, uniformMaps, render, audio, analyser, fft;
+	let scene, uniformMaps, render, audio, analyser, fft;
+	let lastFrameTime, travelingSpeed;
 
 	assets.load(function() {
 
-	  scenes = [
-	  	// new Fire(),
-	  	new Building(),
-	  	// new Raymarch(),
-	  ];
+	  // audio = new Audio();
+	  // audio.src = 'asset/music/music.ogg';
+	  // audio.play();
+	  // analyser = new WebAudioAnalyser(audio);
 
-	  audio = new Audio();
-	  audio.src = 'asset/music/music.ogg';
-	  audio.play();
-	  analyser = new WebAudioAnalyser(audio);
+		// fft = new THREE.DataTexture(analyser.frequencies(), 1024, 1, THREE.RGBFormat, THREE.FloatType);
+		// fft.needsUpdate = true;
+		// uniforms.fftTexture = { value: fft };
 
-		fft = new THREE.DataTexture(analyser.frequencies(), 1024, 1, THREE.RGBFormat, THREE.FloatType);
-		fft.needsUpdate = true;
-
-		uniforms.fftTexture = { value: fft };
-
+		scene = new MainScene();
 		render = new Render();
 		camera.setup();
 		timeline.start();
@@ -55,11 +47,16 @@ export default function() {
 
     document.addEventListener('mousemove', Mouse.onMove);
 		uniforms.mouse = { value: [0,0] };
+
+		uniforms.timeScaled = { value: 0 };
+		lastFrameTime = 0;
+		travelingSpeed = 0;
 	});
 
 	function animate() {
 		requestAnimationFrame(animate);
 		const time = timeline.getTime();
+		let dt = time - lastFrameTime;
 
 		uniforms.time.value = time;
 		uniformMaps.forEach(parameter => {
@@ -70,15 +67,18 @@ export default function() {
 
 		// fft.image.data = analyser.frequencies();
 
+		travelingSpeed += dt * assets.animations.getValue('TravelingSpeed', time)
+		uniforms.timeScaled.value = lerp(uniforms.timeScaled.value, travelingSpeed, .1);
+
 		uniforms.mouse.value[0] = lerp(uniforms.mouse.value[0], Mouse.x/window.innerWidth, .1);
 		uniforms.mouse.value[1] = lerp(uniforms.mouse.value[1], Mouse.y/window.innerHeight, .1);
 
 		camera.update(time);
-		scenes.forEach(scene => {
-			scene.update(time);
-		})
+		scene.update(time);
 		render.update(time);
 		renderer.render(render, camera);
+
+		lastFrameTime = time;
 	}
 
 	function onWindowResize () {
@@ -86,9 +86,7 @@ export default function() {
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
 		renderer.setSize(w, h);
-		scenes.forEach(scene => {
-			scene.setSize(w, h);
-		})
+		scene.setSize(w, h);
 		uniforms.resolution.value = [window.innerWidth, window.innerHeight];
 	}
 }

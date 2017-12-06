@@ -4,6 +4,7 @@ attribute vec2 indexMap;
 
 uniform sampler2D firePositionTexture;
 uniform sampler2D fireVelocityTexture;
+uniform sampler2D fireSpawnTexture;
 uniform float time;
 uniform float FireSpriteSize;
 uniform float FireSpriteVelocityStretch;
@@ -20,6 +21,12 @@ vec3 displace (vec3 p)
 	return p;
 }
 
+float burn (vec3 seed) {
+	float noisy = fbm(seed*3.);
+	float ratio = .5+.5*sin(time+noisy*TAU);
+	return smoothstep(.6,.9,ratio);
+}
+
 void main() {
 	vec2 aspect = vec2(resolution.y / resolution.x, 1.);
 
@@ -29,6 +36,7 @@ void main() {
 	// vUv = uv;
 	// vUv = vec2(0.);
 
+	vec4 spawn = texture2D(fireSpawnTexture, vUv);
 	vec3 viewDir = normalize(pos.xyz - cameraPosition.xyz);
 	vec4 velocity = texture2D(fireVelocityTexture, indexMap);
 	float magnitude = length(velocity.xyz);
@@ -36,6 +44,7 @@ void main() {
 
 	float fade = smoothstep(0.0, 0.2, velocity.w) * (1. - smoothstep(0.8, 1.0, velocity.w));
 	fade = mix(fade, 1., step(1., velocity.w));
+	fade *= burn(pos.xyz);
 
 	float stretch = (1.+magnitude*FireSpriteVelocityStretch);
 
@@ -48,7 +57,7 @@ void main() {
 	// velocity space
 	vec3 e = vec3(0.00001);
 	velocity.xyz = normalize(velocity.xyz + e);
-	float moving = smoothstep(0.0, 0.1, magnitude);
+	float moving = smoothstep(0.0, 0.0001, magnitude);
 	// tangent = mix(tangent, normalize(cross(velocity.xyz, normal))*stretch*.2, moving);
 	// up = mix(up, velocity.xyz*stretch, moving);
 
@@ -58,7 +67,8 @@ void main() {
 	// pos.xyz += anchor.x * tangent * size.x + anchor.y * up * size.y;
 	// pos.xyz -= up * size / 2.5;
 
-	float ratio = dot(normalize(viewDir), normalize(velocity.xyz))*.5+.5;
+	// float ratio = dot(normalize(viewDir), normalize(velocity.xyz))*.5+.5;
+	float ratio = velocity.w;
 	vColor.rgb = mix(vec3(01, 0.898, 0.478), vec3(0.733, 0.160, 0.105), smoothstep(.1,.9,ratio));
 
 	// vColor *= dot(normalize(vViewDir), normal)*.5+.5;

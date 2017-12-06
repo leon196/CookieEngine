@@ -1,14 +1,19 @@
 
-uniform sampler2D fireSceneTexture;
+uniform sampler2D sceneTexture;
 uniform sampler2D paperSceneTexture;
+uniform sampler2D skullSceneTexture;
 uniform sampler2D buildingSceneTexture;
 uniform sampler2D raymarchTexture;
 uniform sampler2D fftTexture;
 uniform vec2 resolution;
 uniform float time;
-uniform float fadeBlack;
+uniform float fadeBlack, Lock;
 uniform float FilterGlitch, FilterPixel, OpticalFlowEnabled;
 varying vec2 vUv;
+
+float getDepth (float depth) {
+	return depth += 1000. * (1.-depth) * (1.-smoothstep(0.0,.1,depth));
+}
 
 void main ()	{
 	vec2 uv = vUv;
@@ -24,32 +29,31 @@ void main ()	{
 	// uv.x = mix(uv.x,1.-uv.x,step(1.,mod(uv.x, 2.)));
 	// uv = abs(fract(uv));
 
-	vec4 scene = texture2D(buildingSceneTexture, uv);
-	vec4 raymarch = texture2D(raymarchTexture, uv);
+	// vec4 color = texture2D(sceneTexture, uv);
 
-	// layers
-	vec4 color = scene;
-	// float depthScene = scene.a;
-	// depthScene += 1000. * (1.-depthScene) * (1.-smoothstep(0.0,.5,depthScene));
-	// color = mix(color, raymarch, step(raymarch.a, depthScene));
+
 
 	vec2 center = uv*2.-1.;
 	center.x *= resolution.x/resolution.y;
-	float fadeCenter = clamp(length(center), 0., 1.);
+	float fadeCenter = smoothstep(.5,1.,length(center));
 
-	color = mix(color, rgbOffset(buildingSceneTexture, uv, resolution, 5.*fadeCenter), fadeCenter);
-	// color = mix(color, blur(buildingSceneTexture, uv, resolution), fadeCenter);
+	vec4 color = rgbOffset(sceneTexture, uv, resolution, 5.*fadeCenter);
+	// color = mix(color, blur(sceneTexture, uv, resolution), fadeCenter);
 
-	// color = godRays(buildingSceneTexture, uv, .9);
+	float lockRadius = .5;
+	float lockSlope = .5;
+	float lockSlopeHeight = 1.;
+	// center.y -= lockRadius;
+	float lock = step(length(center), lockRadius);
+	lock += step(abs(center.x)+center.y*lockSlope, .1) * step(0., center.y+lockSlopeHeight) * step(center.y, 0.);
+	lock = clamp(lock, 0., 1.);
+	color = mix(color, 1.-color, lock * Lock);
 
-	// vignette
-	float vignette = sin(vUv.x * PI);
-	vignette *= sin(vUv.y * PI);
-	color *= vignette;
 
-	// color *= fadeBlack;
+  // stole iq's vingette code
+  color *= pow( 16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y), 0.1 );   
 
-	color = texture2D(fftTexture, uv);
+	color *= fadeBlack;
 
 	gl_FragColor = color;
 }

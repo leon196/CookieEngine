@@ -16,9 +16,10 @@ export default class Fire extends Scene {
 		super('fireSceneTexture');
 		var options;
 
-		var geometry = assets.geometries.cookie.children[0].geometry;
-		this.add(new THREE.Mesh(geometry, assets.shaders.cookie));
-		uniforms.cookieTexture = { value: assets.textures.cookie };
+		var geometry = assets.geometries.paper.children[0].geometry;
+		this.add(new THREE.Mesh(geometry, assets.shaders.paperSimple));
+		
+		uniforms.bloodTexture = { value: assets.textures.blood };
 
 		// particle system
 		let attributes = decimateAttributes(geometry.attributes, 1);

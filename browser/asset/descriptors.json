@@ -14,6 +14,9 @@
 		},
 		"cookie": {
 			"file": "image/Cookie.png"
+		},
+		"blood": {
+			"file": "image/blood.jpg"
 		}
 	},
 	"geometries": {
@@ -22,6 +25,12 @@
 		},
 		"stairs": {
 			"file": "mesh/stairs.obj"
+		},
+		"skull": {
+			"file": "mesh/skullFlat.ply"
+		},
+		"paper": {
+			"file": "mesh/paper.obj"
 		},
 		"jonathan": {
 			"file": "mesh/jonathan.obj"
@@ -37,9 +46,23 @@
 		}
 	},
 	"shaders": {
+		"skull": {
+			"vertexShader": "shader/project/meshes/skull.vert",
+			"fragmentShader": "shader/project/meshes/skull.frag",
+    	"wireframe": true,
+			"depthTest": false,
+			"opacity": 0.5,
+			"transparent": true
+		},
+		"paperSimple": {
+			"vertexShader": "shader/project/meshes/paperSimple.vert",
+			"fragmentShader": "shader/project/meshes/paperSimple.frag",
+			"side": 2
+		},
 		"building": {
 			"vertexShader": "shader/project/meshes/building.vert",
-			"fragmentShader": "shader/project/meshes/building.frag"
+			"fragmentShader": "shader/project/meshes/building.frag",
+			"side": 2
 		},
 		"raymarchLab": {
 			"vertexShader": "shader/generic/screen.vert",

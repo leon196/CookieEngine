@@ -20,10 +20,16 @@ uniform float FireTurbulenceRangeMax;
 uniform float FireNoiseScale;
 uniform float FireNoiseSpeed;
 
+// float burn (vec3 seed) {
+// 	float noisy = noiseIQ(seed)*fbm(seed*3.);
+// 	float ratio = .5+.5*sin(time+noisy*10.);
+// 	return smoothstep(.5,.9,ratio);
+// }
+
 float burn (vec3 seed) {
-	float noisy = noiseIQ(seed)*fbm(seed*3.);
-	float ratio = .5+.5*sin(time+noisy*10.);
-	return smoothstep(.5,.9,ratio);
+	float noisy = fbm(seed*3.);
+	float ratio = .5+.5*sin(time+noisy*TAU);
+	return smoothstep(.6,.9,ratio);
 }
 
 void main()	{
@@ -33,11 +39,12 @@ void main()	{
 	vec4 uv = texture2D(uvTexture, vUv);
 	vec4 color = texture2D(cookieTexture, uv.xy);
 
+	float burnt = burn(spawn.xyz);
+
 	float spawnOffset = rand(vUv) * 0.01 + 0.01;
 	// velocity.w = spawnOffset+time;
 	// gl_FragColor.w = mix(mod(velocity.w, 1.0), -1.0, step(1.0, mod(velocity.w,1.)));
 	gl_FragColor.w = mix(mod(velocity.w + spawnOffset, 1.0), -1.0, step(1.0, velocity.w + spawnOffset));
-	// gl_FragColor.w = .5;
 
 	vec3 epsilon = vec3(1)*0.00001;
 
@@ -67,7 +74,7 @@ void main()	{
 	// apply
 	// spawn.xyz = rotateX(rotateY(spawn.xyz, time*0.2),time*0.1);
 	// vec3 offset = (tornado + dir + noisey + target) + origin;
-	vec3 offset = (tornado + dir + noisey + target) * burn(position.xyz*.2);
+	vec3 offset = (tornado + dir + noisey + target) * burnt;
 
 	// offset = attractor * .1;
 

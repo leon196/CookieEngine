@@ -3,6 +3,7 @@ attribute float number;
 attribute float type;
 attribute float count;
 uniform float time;
+uniform float timeScaled;
 uniform vec3 cameraPos;
 
 varying vec2 vUv;
@@ -14,22 +15,24 @@ void main()	{
 	vec3 pos = position;
 	// pos.x += number;
 	float range = 100.;
-	float speed = 10. / range;
-	float height = .1;
-	float width = .2;
-	float offset = number * width;
+	float speed = 5. / range;
 
-	float ratio = mod(number / count + time * speed, 1.);
+	float isCable = step(abs(type-4.), .1);
+	pos.yz *= rot(mix(0., PI/2., isCable));
+	pos.y -= cos(pos.z*PI)*isCable;
+	pos.y += 6. * isCable;
+	pos.z *= mix(1., 2. * range / count, isCable);
+	pos.z += isCable * range / count;
+
+	float ratio = mod(number / count - timeScaled * speed, 1.);
 	pos.z += range * (ratio * 2. - 1.);
 
-	// pos.z += number*width;
-	// pos.y += number;
-	// pos.y *= height;
+	// pos.x += cos(pos.z*.1+time);
 
 	vPos = pos;
 
 	vec3 view = normalize(cameraPos-pos);
 	vColor = vec4(1.);
-	vColor *= dot(normalize(normal), view)*.5+.5;
+	// vColor *= dot(normalize(normal), view)*.5+.5;
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1.);
 }

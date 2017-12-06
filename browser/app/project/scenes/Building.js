@@ -14,6 +14,8 @@ let GeometryType = {
 	Box: 0,
 	Stick: 1,
 	Stairs: 2,
+	Road: 3,
+	Cable: 4,
 };
 
 export default class Building extends Scene {
@@ -25,54 +27,49 @@ export default class Building extends Scene {
 		this.geometries = [];
 		this.types = [];
 		this.counts = [];
+		var geometry;
 
-		this.addBox(100, .1,5.,.1, GeometryType.Stick, 5,2.5,0);
-		this.addBox(100, .1,5.,.1, GeometryType.Stick, -5,2.5,0);
-		this.addBox(10, 1,1,1, GeometryType.Box, 2,0,0);
-		this.addBox(10, 1,1,1, GeometryType.Box, -2,0,0);
+		// this.addBox(100, .1,5.,.1, GeometryType.Stick, 5,2.5,0);
+		// this.addBox(100, .1,5.,.1, GeometryType.Stick, -5,2.5,0);
 
-		let geometry = assets.geometries.stairs.children[0].geometry;
-		this.addGeometry(10, geometry.clone(), GeometryType.Stairs, 5,0,0);
-		this.addGeometry(10, geometry.clone(), GeometryType.Stairs, -5,0,0, -1,1,1);
+		geometry = new THREE.BoxBufferGeometry(.2,.01,1);
+		this.addGeometry(50, geometry.clone(), GeometryType.Road);
+
+		var count = 10;
+		var radius = .1;
+		var height = 6;
+		var range = 5;
+		geometry = new THREE.BoxBufferGeometry(radius, height, radius);
+		// geometry = new THREE.CylinderBufferGeometry(radius, radius, height, 8);
+		this.addGeometry(count, geometry.clone(), GeometryType.Box, [range,height/2,0]);
+		this.addGeometry(count, geometry.clone(), GeometryType.Box, [-range,height/2,0]);
+		geometry = new THREE.BoxBufferGeometry(2,radius,radius);
+		this.addGeometry(count, geometry.clone(), GeometryType.Box, [range,height,0]);
+		this.addGeometry(count, geometry.clone(), GeometryType.Box, [-range,height,0]);
+
+		geometry = new THREE.PlaneBufferGeometry(.1,1,1,60);
+		this.addGeometry(count, geometry.clone(), GeometryType.Cable, [range-.7,0,0]);
+		this.addGeometry(count, geometry.clone(), GeometryType.Cable, [range+.7,0,0]);
+		this.addGeometry(count, geometry.clone(), GeometryType.Cable, [-range-.7,0,0]);
+		this.addGeometry(count, geometry.clone(), GeometryType.Cable, [-range+.7,0,0]);
+		// let geometry = assets.geometries.stairs.children[0].geometry;
+		// this.addGeometry(10, geometry.clone(), GeometryType.Stairs, 5,0,0);
+		// this.addGeometry(10, geometry.clone(), GeometryType.Stairs, -5,0,0, -1,1,1);
 
 		this.buildBufferGeometry();
 	}
 
-	addBox(count, x, y, z, type, xx, yy, zz, sx, sy, sz) {
-		let boxGeometry = new THREE.BoxBufferGeometry(x,y,z);
-		let array = boxGeometry.attributes.position.array;
-		xx = xx || 0; yy = yy || 0; zz = zz || 0;
-		sx = sx || 1; sy = sy || 1; sz = sz || 1;
-		for (var p = 0; p+2 < array.length; p += 3) {
-			array[p] *= sx;
-			array[p+1] *= sy;
-			array[p+2] *= sz;
-			array[p] += xx;
-			array[p+1] += yy;
-			array[p+2] += zz;
-		}
-		for (var i = 0; i < count; ++i) {
-			this.geometries.push(boxGeometry);
-
-			var len = boxGeometry.attributes.position.array.length / 3;
-			for (var j = 0; j < len; ++j) {
-				this.types.push(type);
-				this.counts.push(count);
-			}
-		}
-	}
-
-	addGeometry(count, geometry, type, xx, yy, zz, sx, sy, sz) {
+	addGeometry(count, geometry, type, offset, scale) {
 		let array = geometry.attributes.position.array;
-		xx = xx || 0; yy = yy || 0; zz = zz || 0;
-		sx = sx || 1; sy = sy || 1; sz = sz || 1;
+		let normals = geometry.attributes.normal.array;
+		offset = offset || [0,0,0];
+		scale = scale || [1,1,1];
 		for (var p = 0; p+2 < array.length; p += 3) {
-			array[p] *= sx;
-			array[p+1] *= sy;
-			array[p+2] *= sz;
-			array[p] += xx;
-			array[p+1] += yy;
-			array[p+2] += zz;
+			for (var o = 0; o < 3; ++o) {
+				array[p+o] *= scale[o];
+				array[p+o] += offset[o];
+				normals[p+o] *= scale[o];
+			}
 		}
 		for (var i = 0; i < count; ++i) {
 			this.geometries.push(geometry);
