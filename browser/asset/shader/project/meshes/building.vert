@@ -14,7 +14,7 @@ void main()	{
 	vUv = uv;
 	vec3 pos = position;
 	// pos.x += number;
-	float range = 100.;
+	float range = 200.;
 	float speed = 5. / range;
 
 	float isCable = step(abs(type-4.), .1);

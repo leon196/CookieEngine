@@ -1,48 +1,21 @@
 {
 	"animations": "animation/scene.json",
 	"fonts": {
-		"coffee": {
-			"file": "font/coffee.json"
+		"barlow": {
+			"file": "font/Barlow.json"
 		}
 	},
 	"textures": {
-		"spritesheet": {
-			"file": "image/spritesheet.png"
-		},
-		"jonathan": {
-			"file": "image/jonathan.jpg"
-		},
-		"cookie": {
-			"file": "image/Cookie.png"
-		},
 		"blood": {
 			"file": "image/blood.jpg"
 		}
 	},
 	"geometries": {
-		"treeCurves": {
-			"file": "mesh/treeCurves.obj"
-		},
-		"stairs": {
-			"file": "mesh/stairs.obj"
-		},
 		"skull": {
 			"file": "mesh/skullFlat.ply"
 		},
 		"paper": {
 			"file": "mesh/paper.obj"
-		},
-		"jonathan": {
-			"file": "mesh/jonathan.obj"
-		},
-		"plantPoints": {
-			"file": "mesh/plantPoints.ply"
-		},
-		"cookie": {
-			"file": "mesh/Cookie.obj"
-		},
-		"title": {
-			"file": "mesh/title.obj"
 		}
 	},
 	"shaders": {

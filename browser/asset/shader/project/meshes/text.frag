@@ -1,7 +1,10 @@
 
 uniform sampler2D textTexture;
 uniform float time;
+uniform float TextIN, TextOUT;
 varying vec2 vUv;
+
+const vec4 red = vec4(0.607, 0.011, 0.011, 1);
 
 void burn (inout vec4 color, vec2 uv) {
 	vec3 seed = vec3(uv.xyy)*10.;
@@ -15,9 +18,23 @@ void burn (inout vec4 color, vec2 uv) {
 
 void main()	{
 	vec2 uv = vUv;
-	vec4 color = texture2D(textTexture, uv);
+	vec4 color = vec4(0);
+
+	vec4 white = texture2D(textTexture, uv);
+
+	color = mix(color, red, white.a);
 
 	// burn(color, uv);
+
+	// uv -= .5;
+	// uv *= .99;
+	// uv += .5;
+	// vec4 black = texture2D(textTexture, uv);
+	// black.rgb = 1.-black.rgb;
+	// color = mix(black, white, white.a);
+
+	color.a *= TextIN;
+	color.a *= 1.-TextOUT;
 
 	gl_FragColor = color;
 }

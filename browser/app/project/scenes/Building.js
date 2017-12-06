@@ -35,7 +35,7 @@ export default class Building extends Scene {
 		geometry = new THREE.BoxBufferGeometry(.2,.01,1);
 		this.addGeometry(50, geometry.clone(), GeometryType.Road);
 
-		var count = 10;
+		var count = 50;
 		var radius = .1;
 		var height = 6;
 		var range = 5;

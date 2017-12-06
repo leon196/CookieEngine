@@ -15,6 +15,16 @@
 	font-style: normal;
 }
 
+
+@font-face {
+    font-family: 'barlow';
+    src: url('barlowcondensed-regular-webfont.woff2') format('woff2'),
+         url('barlowcondensed-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body {
 	background: #000;
 	margin: 0;

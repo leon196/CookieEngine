@@ -7,6 +7,7 @@ import Scene from '../../engine/scene';
 import Fire from './Fire';
 import Skull from './Skull';
 import Paper from './Paper';
+import Text from './Text';
 import Raymarch from './Raymarch';
 import Building from './Building';
 
@@ -15,6 +16,7 @@ export default class MainScene extends Scene {
 		super('sceneTexture');
 		this.paperFire = new Fire();
 		this.skull = new Skull();
+		this.text = new Text();
 		this.scenes = [
 			this.paperFire,
 			this.skull,
@@ -24,7 +26,7 @@ export default class MainScene extends Scene {
 			this.add(scene);
 		});
 		this.uniforms = [
-			'Skull', 'Lock', 'Electrify', 'Disolve'
+			'Skull', 'Lock', 'Electrify', 'Disolve', 'TextIN', 'TextOUT', 'TextVisible'
 		];
 		this.uniformsVec3 = [
 			'SkullPosition'
@@ -38,6 +40,7 @@ export default class MainScene extends Scene {
 	}
 	update(time) {
 		super.update(time);
+		this.text.update(time);
 		this.scenes.forEach(scene => {
 			scene.update(time);
 		});
@@ -51,6 +54,8 @@ export default class MainScene extends Scene {
 		this.skull.visible = 0 !== assets.animations.getValue('Skull', time);
 	}
 	setSize(w,h) {
+		super.setSize(w,h);
+		this.text.setSize(w,h);
 		this.scenes.forEach(scene => {
 			scene.setSize(w, h);
 		})

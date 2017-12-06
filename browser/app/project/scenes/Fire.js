@@ -19,8 +19,6 @@ export default class Fire extends Scene {
 		var geometry = assets.geometries.paper.children[0].geometry;
 		this.add(new THREE.Mesh(geometry, assets.shaders.paperSimple));
 		
-		uniforms.bloodTexture = { value: assets.textures.blood };
-
 		// particle system
 		let attributes = decimateAttributes(geometry.attributes, 1);
 		Paricles.createMeshes(attributes, assets.shaders.fire)

@@ -4,10 +4,11 @@ uniform sampler2D paperSceneTexture;
 uniform sampler2D skullSceneTexture;
 uniform sampler2D buildingSceneTexture;
 uniform sampler2D raymarchTexture;
+uniform sampler2D textSceneTexture;
 uniform sampler2D fftTexture;
 uniform vec2 resolution;
 uniform float time;
-uniform float fadeBlack, Lock;
+uniform float fadeBlack, Lock, TextVisible;
 uniform float FilterGlitch, FilterPixel, OpticalFlowEnabled;
 varying vec2 vUv;
 
@@ -30,8 +31,7 @@ void main ()	{
 	// uv = abs(fract(uv));
 
 	// vec4 color = texture2D(sceneTexture, uv);
-
-
+	vec4 text = texture2D(textSceneTexture, uv);
 
 	vec2 center = uv*2.-1.;
 	center.x *= resolution.x/resolution.y;
@@ -49,6 +49,7 @@ void main ()	{
 	lock = clamp(lock, 0., 1.);
 	color = mix(color, 1.-color, lock * Lock);
 
+	color = mix(color, text, text.a * TextVisible);
 
   // stole iq's vingette code
   color *= pow( 16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y), 0.1 );   
