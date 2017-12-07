@@ -16,8 +16,8 @@ function createCanvas(segments)
 		ctx.fillStyle = options.fillStyle || 'white';
 		ctx.textAlign = options.textAlign || 'center';
 		ctx.textBaseline = options.textBaseline || 'middle';
-		ctx.shadowColor = options.shadowColor || 'rgba(0,0,0,.5)';
-		ctx.shadowBlur = options.shadowBlur || 4;
+		// ctx.shadowColor = options.shadowColor || 'rgba(0,0,0,.5)';
+		ctx.shadowBlur = 0;//options.shadowBlur || 4;
 
 		var words = options.text.split('\n');
 		var line = '';

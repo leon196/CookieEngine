@@ -27,7 +27,7 @@ void main()	{
 	float ratio = mod(number / count - timeScaled * speed, 1.);
 	pos.z += range * (ratio * 2. - 1.);
 
-	// pos.x += cos(pos.z*.1+time);
+	pos.x += cos(pos.z*.05-timeScaled)*4.;
 
 	vPos = pos;
 

@@ -22,7 +22,8 @@ void main()	{
 
 	vec4 white = texture2D(textTexture, uv);
 
-	color = mix(color, red, white.a);
+	color = white;
+	// color = mix(color, red, white.a);
 
 	// burn(color, uv);
 

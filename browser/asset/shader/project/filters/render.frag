@@ -39,6 +39,7 @@ void main ()	{
 
 	vec4 color = rgbOffset(sceneTexture, uv, resolution, 5.*fadeCenter);
 	// color = mix(color, blur(sceneTexture, uv, resolution), fadeCenter);
+	color = mix(color, text, text.a * TextVisible);
 
 	float lockRadius = .5;
 	float lockSlope = .5;
@@ -49,7 +50,6 @@ void main ()	{
 	lock = clamp(lock, 0., 1.);
 	color = mix(color, 1.-color, lock * Lock);
 
-	color = mix(color, text, text.a * TextVisible);
 
   // stole iq's vingette code
   color *= pow( 16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y), 0.1 );   

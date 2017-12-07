@@ -34,7 +34,7 @@ export default class Text extends Scene {
 				fontSize: 66,
 				offsetY: 100,
 			},{
-				text: 'Benjamin Demotié\nDamien D. Richard',
+				text: 'BENJAMIN DEMOTIE\nDAMIEN D. RICHARD',
 				font: 'barlow',
 				fontSize: 36,
 				offsetY: 210,
