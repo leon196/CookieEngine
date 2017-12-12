@@ -16,6 +16,7 @@ let GeometryType = {
 	Stairs: 2,
 	Road: 3,
 	Cable: 4,
+	Door: 5,
 };
 
 export default class Building extends Scene {
@@ -55,6 +56,9 @@ export default class Building extends Scene {
 		// let geometry = assets.geometries.stairs.children[0].geometry;
 		// this.addGeometry(10, geometry.clone(), GeometryType.Stairs, 5,0,0);
 		// this.addGeometry(10, geometry.clone(), GeometryType.Stairs, -5,0,0, -1,1,1);
+
+		geometry = assets.geometries.door.children[0].geometry;
+		this.addGeometry(count, geometry.clone(), GeometryType.Door, [0,0,0]);
 
 		this.buildBufferGeometry();
 	}

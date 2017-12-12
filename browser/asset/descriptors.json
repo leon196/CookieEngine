@@ -16,6 +16,9 @@
 		},
 		"paper": {
 			"file": "mesh/paper.obj"
+		},
+		"door": {
+			"file": "mesh/door.obj"
 		}
 	},
 	"shaders": {

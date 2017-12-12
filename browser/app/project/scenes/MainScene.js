@@ -26,7 +26,7 @@ export default class MainScene extends Scene {
 			this.add(scene);
 		});
 		this.uniforms = [
-			'Skull', 'Lock', 'Electrify', 'Disolve', 'TextIN', 'TextOUT', 'TextVisible'
+			'Skull', 'Lock', 'Electrify', 'Disolve', 'TextIN', 'TextOUT', 'TextVisible', 'OpenDoor', 'Skull2'
 		];
 		this.uniformsVec3 = [
 			'SkullPosition'

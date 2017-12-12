@@ -56,7 +56,27 @@ export default class Text extends Scene {
 				height: 512,
 				shadowColor: 'rgba(0,0,0,.5)',
 				shadowBlur: 4,
-				offsetY: -190,
+				offsetY: -200,
+			},{
+				text:"PONK",
+				fontSize: 100,
+				offsetY: -120,
+			},{
+				text:"(LEON DENISE)",
+				fontSize: 36,
+				offsetY: -70,
+			},{
+				text:"TOOLCHAIN",
+				fontSize: 56,
+				offsetY: 80,
+			},{
+				text:"KOLTES",
+				fontSize: 100,
+				offsetY: 160,
+			},{
+				text:"(JONATHAN GIROUX)",
+				fontSize: 36,
+				offsetY: 220,
 			}])
 		];
 		uniforms.textTexture = { value: this.slides[this.currentSlide] };

@@ -41,6 +41,9 @@ camera.update = function(time) {
   camera.lookAt(camera.target);
   // camera.controls.update();
 
+  camera.fov = assets.animations.getValue('FOV', time);
+  camera.updateProjectionMatrix();
+
   uniforms.cameraPos.value = camera.position;
   uniforms.cameraTarget.value = camera.target;
   // uniforms.cameraTarget.value = camera.controls.target;

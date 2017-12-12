@@ -3,7 +3,7 @@ attribute float number;
 attribute float type;
 attribute float count;
 uniform float time;
-uniform float timeScaled;
+uniform float timeScaled, OpenDoor;
 uniform vec3 cameraPos;
 
 varying vec2 vUv;
@@ -18,6 +18,7 @@ void main()	{
 	float speed = 5. / range;
 
 	float isCable = step(abs(type-4.), .1);
+	float isDoor = step(abs(type-5.), .1);
 	pos.yz *= rot(mix(0., PI/2., isCable));
 	pos.y -= cos(pos.z*PI)*isCable;
 	pos.y += 6. * isCable;
@@ -25,14 +26,16 @@ void main()	{
 	pos.z += isCable * range / count;
 
 	float ratio = mod(number / count - timeScaled * speed, 1.);
-	pos.z += range * (ratio * 2. - 1.);
+	pos.z += range * (ratio * 2. - 1.) * (1.-isDoor);
 
-	pos.x += cos(pos.z*.05-timeScaled)*4.;
+	pos.z += range * isDoor * .5;
+	// pos.x += cos(pos.z*.05-timeScaled)*4.;
 
 	vPos = pos;
 
 	vec3 view = normalize(cameraPos-pos);
-	vColor = vec4(1.);
-	// vColor *= dot(normalize(normal), view)*.5+.5;
+	float shade = mix(1., step(.9,abs(dot(normalize(normal), view))), isDoor);
+	vColor = vec4(shade);
+	// vColor = mix(vColor, vec4(normal*.5+.5, 1.), isDoor);
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1.);
 }
