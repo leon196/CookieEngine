@@ -1,27 +1,25 @@
 
 import * as THREE from 'three.js';
 import assets from './assets';
-import uniforms from './uniforms';
 import FrameBuffer from './FrameBuffer';
 import { closestPowerOfTwo, lerp, getRandomPoints } from './misc';
 
 export default class Particles {
 
-	static createMeshes(attributes, material, subdivisions)
-	{
+	static createGeometry (attributes, subdivisions) {
+		subdivisions = subdivisions || [1,1];
 		var count = attributes.position.array.length / attributes.position.itemSize;
-		var meshes = [];
+		var geometries = [];
 		var verticesMax = 65000;
 		var dimension = closestPowerOfTwo(Math.sqrt(count));
-		var meshCount = 1 + Math.floor(count / verticesMax);
-		subdivisions = subdivisions || [1,1];
+		var geometryCount = 1 + Math.floor(count / verticesMax);
 		var faces = [subdivisions[0]+1, subdivisions[1]+1];
 		var quadCount = subdivisions[0] * subdivisions[1];
-		for (var m = 0; m < meshCount; ++m) {
+		for (var m = 0; m < geometryCount; ++m) {
 
 			var vertexCount = count;
-			if (meshCount > 1) {
-				if (m == meshCount - 1) count = count % verticesMax;
+			if (geometryCount > 1) {
+				if (m == geometryCount - 1) count = count % verticesMax;
 				else vertexCount = verticesMax;
 			}
 
@@ -40,8 +38,8 @@ export default class Particles {
 					for (var x = 0; x < faces[0]; ++x) {
 						attributeNames.forEach(name => {
 							var itemSize = attributes[name].itemSize;
-	            var array = attributes[name].array;
-	            for (var i = 0; i < itemSize; i++) {
+							var array = attributes[name].array;
+							for (var i = 0; i < itemSize; i++) {
 								arrays[name].push(array[index*itemSize+i]);
 							}
 						});
@@ -64,57 +62,45 @@ export default class Particles {
 
 			var geometry = new THREE.BufferGeometry();
 			attributeNames.forEach(name => {
-        var array = new Float32Array(arrays[name]);
+				var array = new Float32Array(arrays[name]);
 				geometry.addAttribute(name, new THREE.BufferAttribute(array, attributes[name].itemSize));
 			});
 			geometry.addAttribute( 'anchor', new THREE.BufferAttribute( new Float32Array(anchors), 2 ) );
 			geometry.addAttribute( 'indexMap', new THREE.BufferAttribute( new Float32Array(indexMap), 2 ) );
-      geometry.setIndex(new THREE.BufferAttribute(new Uint32Array(indices), 1));
-
-			var min = -100;
-			var max = 100;
-			geometry.boundingBox = new THREE.Box3(new THREE.Vector3(min,min,min), new THREE.Vector3(max,max,max));
-			geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), max);
-			let mesh = new THREE.Mesh(geometry, material);
-			meshes.push(mesh);
+			geometry.setIndex(new THREE.BufferAttribute(new Uint32Array(indices), 1));
+			geometries.push(geometry);
 		}
+		return geometries;
+	}
 
-		return meshes;
+	static getPoints (count) {
+	    var points = [];
+	    for (var i = 0; i < count * 3; ++i) points.push(0);
+	    return points;
+	}
+
+	static getValues (count) {
+	    var values = [];
+	    for (var i = 0; i < count; ++i) values.push(0);
+	    return values;
+	}
+
+	static getRandomPoints (count) {
+	    var points = [];
+	    for (var i = 0; i < count * 3; ++i) points.push(randomRange(-1,1));
+	    return points;
 	}
 
 	static randomPositionAttribute (count) {
-		return {
-			position: {
-				array: getRandomPoints(count),
-				itemSize: 3
-			}
-		};
+	    return {
+	        position: {
+	            array: getRandomPoints(count),
+	            itemSize: 3
+	        }
+	    };
 	}
 
-	static createDataTexture(dataArray, itemSize)	{
-		var dimension = closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
-		var array = [];
-		var count = dimension * dimension;
-		for (var t = 0; t < count; ++t) {
-			if (t*itemSize+itemSize-1 < dataArray.length) {
-				for (var i = 0; i < 3; ++i) {
-					if (i < itemSize) {
-						array.push(dataArray[t*itemSize+i]);
-					} else {
-						array.push(0);
-					}
-				}
-			} else {
-				array.push(0,0,0);
-			}
-		}
-		var texture = new THREE.DataTexture(new Float32Array(array), dimension, dimension, THREE.RGBFormat, THREE.FloatType);
-		texture.needsUpdate = true;
-		return texture;
-	}
-
-	static parsePointCloud (data, step)
-	{
+	static parsePointCloud (data, step) {
 		var cloud = {};
 		cloud.points = [];
 

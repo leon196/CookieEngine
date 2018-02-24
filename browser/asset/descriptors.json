@@ -1,96 +1,11 @@
 {
 	"animations": "animation/scene.json",
 	"fonts": {
-		"barlow": {
-			"file": "font/Barlow.json"
-		}
 	},
 	"textures": {
-		"blood": {
-			"file": "image/blood.jpg"
-		}
 	},
 	"geometries": {
-		"skull": {
-			"file": "mesh/skullFlat.ply"
-		},
-		"paper": {
-			"file": "mesh/paper.obj"
-		},
-		"door": {
-			"file": "mesh/door.obj"
-		}
 	},
 	"shaders": {
-		"skull": {
-			"vertexShader": "shader/project/meshes/skull.vert",
-			"fragmentShader": "shader/project/meshes/skull.frag",
-    	"wireframe": true,
-			"depthTest": false,
-			"opacity": 0.5,
-			"transparent": true
-		},
-		"paperSimple": {
-			"vertexShader": "shader/project/meshes/paperSimple.vert",
-			"fragmentShader": "shader/project/meshes/paperSimple.frag",
-			"side": 2
-		},
-		"building": {
-			"vertexShader": "shader/project/meshes/building.vert",
-			"fragmentShader": "shader/project/meshes/building.frag",
-			"side": 2
-		},
-		"raymarchLab": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/project/raymarch/lab.frag"
-		},
-		"raymarchRooms": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/project/raymarch/rooms.frag"
-		},
-		"raymarchStairs": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/project/raymarch/stairs.frag"
-		},
-		"cookie": {
-			"vertexShader": "shader/project/meshes/cookie.vert",
-			"fragmentShader": "shader/project/meshes/cookie.frag"
-		},
-		"render": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/project/filters/render.frag"
-		},
-		"lines": {
-			"vertexShader": "shader/project/particles/fire.vert",
-			"fragmentShader": "shader/generic/circle.frag",
-			"side": 2
-		},
-		"paper": {
-			"vertexShader": "shader/project/particles/paper.vert",
-			"fragmentShader": "shader/project/particles/paper.frag",
-			"side": 2
-		},
-		"fire": {
-			"vertexShader": "shader/project/particles/fire.vert",
-			"fragmentShader": "shader/generic/circle.frag",
-			"side": 2
-		},
-		"firePosition": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/project/datas/firePosition.frag",
-			"side": 2
-		},
-		"fireVelocity": {
-			"vertexShader": "shader/generic/screen.vert",
-			"fragmentShader": "shader/project/datas/fireVelocity.frag",
-			"side": 2
-		},
-		"text": {
-			"vertexShader": "shader/project/meshes/text.vert",
-			"fragmentShader": "shader/project/meshes/text.frag",
-			"depthTest": false,
-			"opacity": 0.5,
-			"transparent": true
-		}
 	}
 }
