@@ -9,7 +9,8 @@ void main () {
 
 	float i = floor(indexMap.x * count) + floor(indexMap.y * count*count);
 	float y = anchor.y * .5 + .5;
-	i = mod(i*segments.y + y*(segments.y-1.), dimension*dimension);
+	float indexStem = (y*(segments.y-1.));
+	i = mod(i*segments.y + indexStem, dimension*dimension);
 	vec2 index = vec2(mod(i, dimension)/dimension, floor(i/dimension)/dimension);
 
 	vec3 pos = texture2D(dataTexture, index).xyz;
@@ -21,31 +22,26 @@ void main () {
 	vec3 next = texture2D(dataTexture, indexNext).xyz;
 	vec3 prev = texture2D(dataTexture, indexPrev).xyz;
 
-	vec3 forward = normalize(next - pos);
-	vec3 up = normalize(cross(normalize(next), normalize(pos)));
-	vec3 right = normalize(cross(forward, up));
-
-	// vec3 dirNext = normalize(cross(normalize(next-pos), right));
-	// vec3 dirPrev = normalize(cross(normalize(prev-pos), -right));
-	// pos = mix(pos, next, y);
-	// pos += mix(dirPrev, dirNext, y) * thin;
-
-	mat4 rotation = rotationMatrix(forward, -anchor.x * PI);
-	
-	// pos -= point;
+	vec3 forwardNext = normalize(next - pos);
+	vec3 up = vec3(0,1,0);//normalize(cross(normalize(next), normalize(pos)));
+	// vec3 up = normalize(cross(vec3(0,1,0), normalize(cross(normalize(next), normalize(pos)))));
+	vec3 rightNext = normalize(cross(forwardNext, up));
+	vec3 forwardPrev = normalize(pos - prev);
+	vec3 rightPrev = normalize(cross(forwardPrev, up));
+	vec3 forward = normalize(mix(forwardPrev, forwardNext, y));
+	vec3 right = normalize(mix(rightPrev, rightNext, y));
+	mat4 rotation = rotationMatrix(forward, -anchor.x * PI);// + anchor.y + time);
 	right = (rotation * vec4(right,1)).xyz;
-	// pos += point;
-	vColor = vec3(0,1,0);
-	// vColor = fract(abs(pos));
 
-	pos += right * thin;
-	// pos.y += sin(anchor.y * 30.) * .1;
-	// pos -= right * anchor.x * .1;
-	// vNormal = (rotation * vec4(pos,1)).xyz;
-	vNormal = pos-point;
+	float base = smoothstep(0., 1., y);
+
+	pos += right * thin;// * base;// * (.5 + 5. * (.5 + .5 * sin(anchor.y * 3. - time)));
+	// pos.x += anchor.x * thin;
+
+	vNormal = right;
 	vView = cameraPosition-pos;
+	vColor = vec3(0,1,0);
+	vColor = right * .5 + .5;
 	
-	// lookAt(pos, cameraPosition, anchor * .1);
-
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
 }

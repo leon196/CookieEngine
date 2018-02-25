@@ -100,6 +100,7 @@ function load(callback) {
 			urls.forEach(url => urlCallbacks[url]());
 			return callback();
 		}
+		
 		const textureNames = Object.keys(descriptors.textures);
 		let pending = textureNames.length;
 		if (!pending)
@@ -116,6 +117,7 @@ function load(callback) {
 						return loadOtherAssets();
 				});
 			});
+
 
 		function loadOtherAssets() {
 			let pending = urls.length;

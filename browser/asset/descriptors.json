@@ -3,6 +3,9 @@
 	"fonts": {
 	},
 	"textures": {
+		"spritesheet": {
+			"file": "image/spritesheet.png"
+		}
 	},
 	"geometries": {
 	},

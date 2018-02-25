@@ -17,9 +17,9 @@ export default function() {
 		scene = new THREE.Scene();
 		
 		camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 1000);
-		camera.position.x = .2;
-		camera.position.y = 1;
-		camera.position.z = 2;
+		camera.position.x = .5;
+		camera.position.y = 1.5;
+		camera.position.z = 1;
 
 		controls = new OrbitControls(camera, renderer.domElement);
 		controls.enableDamping = true;
