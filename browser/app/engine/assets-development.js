@@ -1,6 +1,5 @@
 import descriptors from '../../asset/descriptors.json!';
 import makeAnimations from './make-animations';
-import parameters from './parameters';
 import { OBJLoader } from '../libs/OBJLoader';
 import { PLYLoader } from '../libs/PLYLoader';
 import { FBXLoader } from '../libs/FBXLoader';
@@ -35,8 +34,6 @@ function load(callback) {
 	const loader = new THREE.FileLoader();
 
 	loader.load(baseUrl + 'shader/header.glsl', shaderHeader => {
-
-		shaderHeader += 'uniform float ' + Object.keys(parameters).join(', ') + ';';
 
 		const plyLoader = new PLYLoader();
 		const objLoader = new OBJLoader();

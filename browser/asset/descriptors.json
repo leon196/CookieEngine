@@ -7,5 +7,13 @@
 	"geometries": {
 	},
 	"shaders": {
+		"mesh": {
+			"vertexShader": "shader/mesh.vert",
+			"fragmentShader": "shader/mesh.frag"
+		},
+		"plant": {
+			"vertexShader": "shader/plant.vert",
+			"fragmentShader": "shader/plant.frag"
+		}
 	}
 }

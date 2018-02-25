@@ -1,5 +1,3 @@
 export default {
-	property: {
-		value: 0
-	}
+	lineThin: 0.02
 }

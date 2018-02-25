@@ -5,10 +5,37 @@
 #define HALFPI 1.5707963267948966192313216916398
 #define HALF3PI 4.7123889803846898576939650749194
 
-#define repeat(v,s) (mod(v,s)-s/2.)
-#define sdist(p,r) (length(p)-r)
+
+void lookAt (inout vec3 pos, vec3 target, vec2 anchor)
+{
+	vec3 forward = normalize(target-pos);
+	vec3 right = normalize(cross(vec3(0,1,0), forward));
+	vec3 up = normalize(cross(forward, right));
+	pos += right * anchor.x + up * anchor.y;
+}
+
+void lookAtUp (inout vec3 pos, vec3 target, vec2 anchor)
+{
+	vec3 forward = normalize(target-pos);
+	vec3 right = normalize(cross(vec3(0,1,0), forward));
+	pos += right * anchor.x + vec3(0,1,0) * anchor.y;
+}
+
+mat4 rotationMatrix(vec3 axis, float angle) {
+    axis = normalize(axis);
+    float s = sin(angle);
+    float c = cos(angle);
+    float oc = 1.0 - c;
+    
+    return mat4(oc*axis.x*axis.x + c, oc*axis.x*axis.y - axis.z*s, oc*axis.z*axis.x + axis.y*s, 0.0,
+                oc*axis.x*axis.y + axis.z*s, oc*axis.y*axis.y + c, oc*axis.y*axis.z - axis.x*s, 0.0,
+                oc*axis.z*axis.x - axis.y*s, oc*axis.y*axis.z + axis.x*s, oc*axis.z*axis.z + c, 0.0,
+                0.0, 0.0, 0.0, 1.0);
+}
 
 // raymarch toolbox
+#define sdist(p,r) (length(p)-r)
+#define repeat(v,s) (mod(v,s)-s/2.)
 float rng (vec2 seed) { return fract(sin(dot(seed*.1684,vec2(54.649,321.547)))*450315.); }
 mat2 rot (float a) { float c=cos(a),s=sin(a); return mat2(c,-s,s,c); }
 float sdSphere (vec3 p, float r) { return length(p)-r; }
@@ -25,7 +52,7 @@ float smax (float a, float b, float r) { float h = smoo(a,b,r); return mix(a,b,h
 vec2 toroidal (vec2 p, float r) { return vec2(length(p.xy)-r, atan(p.y,p.x)); }
 float fOpUnionStairs(float a, float b, float r, float n) {
 	float s = r/n, u = b-r;
-  return min(min(a,b), 0.5 * (u + a + abs ((mod (u - a + s, 2. * s)) - s)));
+  return min(min(a,b), 0.5*(u + a + abs ((mod (u - a + s, 2. * s)) - s)));
 }
 // float map (vec3);
 // vec3 getNormal (vec3 p) { vec2 e = vec2(.01,0); return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx))); }

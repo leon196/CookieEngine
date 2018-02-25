@@ -4,9 +4,9 @@ import assets from './assets';
 import FrameBuffer from './FrameBuffer';
 import { closestPowerOfTwo, lerp, getRandomPoints } from './misc';
 
-export default class Particles {
+export default class Geometry {
 
-	static createGeometry (attributes, subdivisions) {
+	static create (attributes, subdivisions) {
 		subdivisions = subdivisions || [1,1];
 		var count = attributes.position.array.length / attributes.position.itemSize;
 		var geometries = [];
