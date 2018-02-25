@@ -1,3 +1,3 @@
 export default {
-	lineThin: 0.02
+	thin: 0.02
 }
