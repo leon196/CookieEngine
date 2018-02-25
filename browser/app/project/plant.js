@@ -35,10 +35,24 @@ export default class Plant extends THREE.Object3D {
 			this.add(new THREE.Mesh(geometry, this.material));
 		}.bind(this));
 
+		assets.shaders.mesh.uniforms.texture = { value: this.dataTexture };
+		this.add(new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), assets.shaders.mesh));
+
+		this.uniforms.framebuffer = { value: 0 };
+		assets.shaders.seed.uniforms.dataTexture = { value: this.dataTexture };
+		var dimension = this.dataTexture.image.width;
+		this.framebuffer = new FrameBuffer({
+			width: dimension, height: dimension,
+			material: assets.shaders.seed,
+		});
 	}
 
 	update (elapsed) {
 		this.uniforms.time.value = elapsed;
 		this.uniforms.thin.value = parameters.thin;
+
+		assets.shaders.mesh.uniforms.texture.value = this.framebuffer.getTexture();
+		this.uniforms.framebuffer.value = this.framebuffer.getTexture();
+		this.framebuffer.update(elapsed);
 	}
 }

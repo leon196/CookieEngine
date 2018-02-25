@@ -21,15 +21,18 @@ export default class {
 				}));
 		}
 
+		options.material.uniforms.framebuffer = { value: 0 };
+		options.material.uniforms.time = { value: 0 };
 		this.quad = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), options.material);
 		this.camera = new THREE.PerspectiveCamera(75, 1, 0.01, 100);
 		this.camera.position.z = 5;
-		this.renderer = options.render;
 	}
 
-	update () {
+	update (elapsed) {
+		this.quad.material.uniforms.framebuffer.value = this.getTexture();
+		this.quad.material.uniforms.time.value = elapsed;
 		this.swap();
-		this.renderer.render(this.quad, this.camera, this.getRenderTarget(), true);
+		renderer.render(this.quad, this.camera, this.getRenderTarget(), true);
 	}
 
 	getRenderTarget () {

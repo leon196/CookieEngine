@@ -14,6 +14,10 @@
 		"plant": {
 			"vertexShader": "shader/plant.vert",
 			"fragmentShader": "shader/plant.frag"
+		},
+		"seed": {
+			"vertexShader": "shader/seed.vert",
+			"fragmentShader": "shader/seed.frag"
 		}
 	}
 }
