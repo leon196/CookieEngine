@@ -1,10 +1,12 @@
 
 uniform sampler2D dataTexture, framebuffer;
-uniform float time;
+uniform float time, reset;
 varying vec2 vUv;
 
 void main () {
-	vec3 position = texture2D(dataTexture, vUv).xyz;
-	position.y += sin(time + position.x * 3.) * .1;
-	gl_FragColor = vec4(position, 1);
+	vec3 spawn = texture2D(dataTexture, vUv).xyz;
+	vec3 frame = texture2D(framebuffer, vUv).xyz;
+	// frame.y += sin(time + frame.x * 10.) * .001;
+	frame = mix(frame, spawn, reset);
+	gl_FragColor = vec4(frame, 1);
 }
