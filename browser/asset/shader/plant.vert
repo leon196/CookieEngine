@@ -7,13 +7,14 @@ uniform vec2 branchSegments;
 uniform sampler2D dataTexture, framebuffer;
 
 #define dimension dataTextureDimension
+#define segments branchSegments.y
+#define countDim branchCountDimension
 
 void main () {
 
-	float i = floor(indexMap.x * branchCountDimension) + floor(indexMap.y * branchCountDimension*branchCountDimension);
+	float i = indexMap.x * countDim + floor(indexMap.y*countDim) * countDim;
 	float y = anchor.y * .5 + .5;
-	float indexStem = (y*(branchSegments.y-1.));
-	i = mod(i*branchSegments.y + indexStem, dimension*dimension);
+	i = mod(i*segments + y*(segments-1.), dimension*dimension);
 	vec2 index = vec2(mod(i, dimension)/dimension, floor(i/dimension)/dimension);
 
 	vec3 pos = texture2D(framebuffer, index).xyz;
@@ -40,10 +41,11 @@ void main () {
 
 	pos += right * branchThin;// * base;// * (.5 + 5. * (.5 + .5 * sin(anchor.y * 3. - time)));
 	// pos.x += anchor.x * branchThin;
+	// lookAt(pos, vec3(0), anchor * .1);
 
 	vNormal = right;
 	vView = cameraPosition-pos;
-	vColor = vec3(.3,.8,.2);
+	vColor = vec3(.3,.8,.2)*y;
 	// vColor = right * .5 + .5;
 	
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
