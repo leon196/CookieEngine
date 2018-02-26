@@ -21,9 +21,9 @@ void main () {
 
 	branch *= PI2;
 
-	float angle = segment * 4. + branch;
-	float radius = segment * .6;
-	float height = segment * .5 + sin(segment*10.-time+branch*100.)*.2;
+	float angle = segment * 2. + branch + sin(segment*10.+time) * .5;
+	float radius = segment * 2.;
+	float height = segment * .5 + sin(segment*10.-time+branch*100.)*.1;
 	vec3 pos = vec3(cos(angle)*radius, height, sin(angle)*radius); 
 	pos = mix(vec3(0), pos, segment);
 

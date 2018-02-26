@@ -11,8 +11,8 @@ export default class Plant extends THREE.Object3D {
 	constructor() {
 		super();
 
-		this.branchCount = 8;
-		this.branchSegments = [3, 30];
+		this.branchCount = 3;
+		this.branchSegments = [5, 30];
 		this.dataTexture = FrameBuffer.createDataTexture(this.getOriginalSeed(), 3);
 
 		this.uniforms = {
