@@ -28,6 +28,10 @@ export default function() {
 
 		plant = new Plant();
 		scene.add(plant);
+
+		// assets.shaders.raymarch.uniforms.time = { value: 0 };
+		// assets.shaders.raymarch.uniforms.resolution = { value: [0,0] };
+		// scene.add(new THREE.Mesh(new THREE.PlaneGeometry(1,1), assets.shaders.raymarch));
 		
 		window.addEventListener('resize', onWindowResize, false);
 		requestAnimationFrame(animate);
@@ -39,20 +43,22 @@ export default function() {
 	function animate(elapsed) {
 		requestAnimationFrame(animate);
 
-		var sub = 8;
-		var count = 100;
 		elapsed /= 1000.;
 
 		plant.update(elapsed);
+
+		// assets.shaders.raymarch.uniforms.time.value = elapsed;
 
 		controls.update();
 		renderer.render(scene, camera);
 	}
 
 	function onWindowResize () {
-		var w = window.innerWidth, h = window.innerHeight;
+		var w = window.innerWidth/renderer.scale;
+		var h = window.innerHeight/renderer.scale;
+		// assets.shaders.raymarch.uniforms.resolution.value = [w, h];
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
-		renderer.setSize(w, h);
+		renderer.setSize(window.innerWidth, window.innerHeight);
 	}
 }

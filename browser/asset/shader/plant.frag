@@ -9,6 +9,7 @@ void main () {
 	float shade = ddot*.5+.5;
 	// float shade = clamp(ddot, 0., 1.);
 	// shade = pow(shade, 1./2.2);
-	// color *= shade;
+	color *= shade;
+	// color = mix(color, vec3(1), 1.-shade);
 	gl_FragColor = vec4(color, 1);
 }

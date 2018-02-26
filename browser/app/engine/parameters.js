@@ -1,3 +1,3 @@
 export default {
-	thin: 0.02
+	branchThin: 0.02
 }
