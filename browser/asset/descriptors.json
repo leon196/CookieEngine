@@ -15,12 +15,12 @@
 			"fragmentShader": "shader/mesh.frag"
 		},
 		"plant": {
-			"vertexShader": "shader/plant.vert",
-			"fragmentShader": "shader/plant.frag"
+			"vertexShader": "shader/tube.vert",
+			"fragmentShader": "shader/shaded.frag"
 		},
-		"seed": {
+		"node": {
 			"vertexShader": "shader/screen.vert",
-			"fragmentShader": "shader/seed.frag"
+			"fragmentShader": "shader/node.frag"
 		},
 		"raymarch": {
 			"vertexShader": "shader/screen.vert",

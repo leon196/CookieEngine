@@ -1,6 +1,7 @@
 
 import * as THREE from 'three.js';
 import { closestPowerOfTwo } from '../engine/misc';
+import { gui } from '../engine/gui';
 import assets from '../engine/assets';
 import parameters from '../engine/parameters';
 import FrameBuffer from '../engine/framebuffer';
@@ -11,33 +12,44 @@ export default class Plant extends THREE.Object3D {
 	constructor() {
 		super();
 
-		this.branchCount = 3;
-		this.branchSegments = [5, 30];
-		this.dataTexture = FrameBuffer.createDataTexture(this.getOriginalSeed(), 3);
+		this.sequenceCount = 10;
+		this.sequenceSegments = [8, 20];
+		this.sequenceTexture = FrameBuffer.createDataTexture(this.getOriginalSeed(), 3);
 
+		this.parameters = {
+			sequenceThin: .02,
+			growAngle: .5,
+			growRadius: .5,
+			growHeight: .5,
+		};
 		this.uniforms = {
 			time: { value: 0 },
 			reset: { value: 1 },
-			branchThin: { value: parameters.branchThin },
-			branchCount: { value: this.branchCount },
-			branchCountDimension: { value: closestPowerOfTwo(Math.sqrt(this.branchCount)) },
-			branchSegments: { value: [this.branchSegments[0]+1., this.branchSegments[1]+1.] },
-			dataTexture: { value: this.dataTexture },
-			dataTextureDimension: { value: this.dataTexture.image.width },
+			sequenceCount: { value: this.sequenceCount },
+			sequenceCountDimension: { value: closestPowerOfTwo(Math.sqrt(this.sequenceCount)) },
+			sequenceSegments: { value: [this.sequenceSegments[0]+1., this.sequenceSegments[1]+1.] },
+			sequenceTexture: { value: this.sequenceTexture },
+			sequenceTextureDimension: { value: this.sequenceTexture.image.width },
 			framebuffer: { value: 0 },
 		}
+		Object.keys(this.parameters).forEach(key => {
+			this.uniforms[key] = { value: this.parameters[key] };
+			var item = gui.add(this.parameters, key);
+			var type = typeof(this.parameters[key]);
+			if (type == 'number') item.step(0.01);
+		});
 
-		assets.shaders.seed.uniforms = this.uniforms;
+		assets.shaders.node.uniforms = this.uniforms;
 		this.framebuffer = new FrameBuffer({
-			width: this.dataTexture.image.width,
-			height: this.dataTexture.image.height,
-			material: assets.shaders.seed,
+			width: this.sequenceTexture.image.width,
+			height: this.sequenceTexture.image.height,
+			material: assets.shaders.node,
 		});
 		this.framebuffer.update(0);
 		this.uniforms.reset.value = 0.;
 
 		assets.shaders.plant.uniforms = this.uniforms;
-		Geometry.create(Geometry.randomPositionAttribute(this.branchCount), this.branchSegments)
+		Geometry.create(Geometry.randomPositionAttribute(this.sequenceCount), this.sequenceSegments)
 		.forEach(geometry => {
 			var mesh = new THREE.Mesh(geometry, assets.shaders.plant);
 			mesh.frustumCulled = false;
@@ -46,30 +58,25 @@ export default class Plant extends THREE.Object3D {
 
 		var material = assets.shaders.mesh.clone();
 		material.uniforms.texture = { value: this.framebuffer.getTexture() };
+		material.side = THREE.DoubleSide;
+		material.transparent = true;
 		var plane = new THREE.Mesh(new THREE.PlaneGeometry(1,1), material);
 		plane.rotateX(-Math.PI/2.);
-		plane.translateX(1.);
-		this.add(plane);
-		material = assets.shaders.mesh.clone();
-		material.uniforms.texture = { value: this.dataTexture };
-		plane = new THREE.Mesh(new THREE.PlaneGeometry(1,1), material);
-		plane.rotateX(-Math.PI/2.);
-		plane.translateX(-1.);
 		this.add(plane);
 	}
 
 	update (elapsed) {
 		this.uniforms.time.value = elapsed;
-		this.uniforms.branchThin.value = parameters.branchThin;
+		Object.keys(this.parameters).forEach(key => this.uniforms[key].value = this.parameters[key] );
 		this.uniforms.framebuffer.value = this.framebuffer.getTexture();
 		this.framebuffer.update();
 	}
 
 	getOriginalSeed () {
 		var array = [];
-		for (var branch = 0; branch < this.branchCount; ++branch) {
-			for (var segment = 0; segment < this.branchSegments[1]+1.; ++segment) {
-				var angle = (branch / this.branchCount) * Math.PI * 2. + Math.sin(segment * .3) * .5;
+		for (var sequence = 0; sequence < this.sequenceCount; ++sequence) {
+			for (var segment = 0; segment < this.sequenceSegments[1]+1.; ++segment) {
+				var angle = (sequence / this.sequenceCount) * Math.PI * 2. + Math.sin(segment * .3) * .5;
 				var radius = segment * .05;
 				var x = radius * Math.cos(angle);
 				var y = segment * .05;

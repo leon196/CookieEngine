@@ -27,16 +27,19 @@ void main () {
 	vec3 prev = texture2D(framebuffer, indexPrev).xyz;
 
 	// vec3 forward = normalize(next - pos);
+	vec3 up = vec3(0,1,0);
+	// vec3 up = normalize(next-prev);
 	vec3 forward = mix(normalize(next - pos), normalize(pos - prev), y);
-	vec3 right = normalize(cross(forward, vec3(0,1,0)));
+	vec3 right = normalize(cross(forward, up));
 	mat4 rotation = rotationMatrix(forward, -anchor.x * PI);// + anchor.y + time);
-	right = (rotation * vec4(right,1)).xyz;
+	// right = (rotation * vec4(right,1)).xyz;
 
 	float base = smoothstep(0., 1., y);
 
-	pos += right * branchThin;// * base;// * (.5 + 5. * (.5 + .5 * sin(anchor.y * 3. - time)));
+	// pos += right * branchThin;// * base;// * (.5 + 5. * (.5 + .5 * sin(anchor.y * 3. - time)));
+	// pos += right * anchor.x * branchThin;
 	// pos.x += anchor.x * branchThin;
-	// lookAt(pos, vec3(0), anchor * .1);
+	// lookAt(pos, cameraPosition, anchor * .1);
 
 	vNormal = right;
 	vView = cameraPosition-pos;
@@ -44,4 +47,5 @@ void main () {
 	// vColor = right * .5 + .5;
 	
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
+	gl_Position.xy += anchor * branchThin;
 }
