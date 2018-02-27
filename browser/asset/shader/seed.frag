@@ -1,13 +1,13 @@
 
-uniform sampler2D sequenceTexture, framebuffer;
-uniform float time, reset, sequenceTextureDimension;
-uniform float sequenceCount;
+uniform sampler2D branchTexture, framebuffer;
+uniform float time, reset, branchTextureDimension;
+uniform float branchCount;
 uniform float growAngle, growRadius, growHeight, growWave, growWaveScale, growWaveOffset, growTwist;
-uniform vec2 sequenceSegments;
+uniform vec2 branchSegments;
 varying vec2 vUv;
 
-#define dimension sequenceTextureDimension
-#define segments sequenceSegments.y
+#define dimension branchTextureDimension
+#define segments branchSegments.y
 
 void main () {
 
@@ -16,14 +16,14 @@ void main () {
 	float dim = dimension * dimension;
 	float index = mod(uv.x * dimension + floor(uv.y*dimension)*dimension, dim);
 	float segment = mod(index,segments)/segments;
-	float sequence = floor(index/segments);
-	float node = max(0., sequence-1.);
-	sequence /= sequenceCount;
-	sequence *= PI2;
+	float branch = floor(index/segments);
+	float node = max(0., branch-1.);
+	branch /= branchCount;
+	branch *= PI2;
 
-	float angle = segment * growAngle + sequence;
-	float radius = .5 + segment * growRadius;
-	float height = 1. + segment * growHeight + sin(segment*growWave-time+sequence*growWaveOffset)*growWaveScale;
+	float angle = segment * growAngle + branch;
+	float radius = segment * growRadius;
+	float height = 1. + segment * growHeight + sin(segment*growWave-time+branch*growWaveOffset)*growWaveScale;
 	vec3 pos = vec3(cos(angle)*radius, height, sin(angle)*radius);
 	pos.xz *= rot(pos.y*growTwist);
 	pos = mix(vec3(0), pos, segment);
@@ -31,11 +31,11 @@ void main () {
 	gl_FragColor = vec4(pos, node);	
 
 
-	// float indexGrow = mod(time * 10., sequenceSegments.y);
+	// float indexGrow = mod(time * 10., branchSegments.y);
 	// float index = floor(uv.x * dimension) + floor(uv.y * dim);
-	// float sequence = floor(index/sequenceSegments.y);
-	// float sequenceGrow = floor(indexGrow/sequenceSegments.y);
-	// float should = step(sequence-sequenceGrow, .01);
+	// float branch = floor(index/branchSegments.y);
+	// float branchGrow = floor(indexGrow/branchSegments.y);
+	// float should = step(branch-branchGrow, .01);
 	// vec2 uvGrow = vec2(mod(indexGrow, dimension) / dimension, floor(indexGrow/dimension)/dimension);
 	// vec2 uvPrev = vec2(mod(uvGrow.x - unit + 1., 1.), uvGrow.y - unit * step(uvGrow.x, 0.));
 	// vec3 posGrow = texture2D(framebuffer, uvGrow).xyz;

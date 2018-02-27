@@ -2,16 +2,16 @@
 attribute vec2 indexMap, anchor;
 varying vec3 vNormal, vView, vColor;
 varying vec2 vUv;
-uniform float time, sequenceTextureDimension;
-uniform float sequenceCount, sequenceCountDimension, thin;
+uniform float time, branchTextureDimension;
+uniform float branchCount, branchCountDimension, thin;
 uniform float capStart, capEnd;
-uniform vec2 sequenceSegments;
+uniform vec2 branchSegments;
 uniform vec3 color;
-uniform sampler2D sequenceTexture, framebuffer;
+uniform sampler2D branchTexture, framebuffer;
 
-#define dimension sequenceTextureDimension
-#define segments sequenceSegments.y
-#define countDim sequenceCountDimension
+#define dimension branchTextureDimension
+#define segments branchSegments.y
+#define countDim branchCountDimension
 
 void main () {
 

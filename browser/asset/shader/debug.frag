@@ -6,6 +6,7 @@ varying vec2 vUv;
 void main () {
 	vec3 color = texture2D(texture, vUv).rgb;
 	color = fract(abs(color));
+	color *= .9;
 	float shade = dot(normalize(vNormal), vec3(0,0,1))*.5+.5;
 	float alpha = luminance(color);
 	alpha = smoothstep(0.,.2,alpha);

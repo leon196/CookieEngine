@@ -49,6 +49,12 @@ export default class {
 		}
 	}
 
+	dispose () {
+		for (var i = 0; i < this.count; ++i) {
+			this.renderTextures[i].dispose();
+		}
+	}
+
 	static createDataTexture(dataArray, itemSize)	{
 		var dimension = closestPowerOfTwo(Math.sqrt(dataArray.length / itemSize));
 		var array = [];

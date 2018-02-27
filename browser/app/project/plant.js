@@ -11,12 +11,17 @@ export default class Plant extends THREE.Object3D {
 
 	constructor() {
 		super();
+		this.setup();
+		this.build();
+	}
 
-		this.sequenceCount = 10;
-		this.sequenceSegments = [1, 20];
-		this.sequenceTexture = FrameBuffer.createDataTexture(this.getOriginalSeed(), 3);
-
+	setup () {
+		this.branchCount = 10;
+		this.branchSegments = [1, 5];
 		this.parameters = {
+			branchCount: 10,
+			branchSegment: 5,
+			build: (e => this.build()),
 			color: [77, 204, 51],
 			thin: .02,
 			capStart: 1,
@@ -31,56 +36,46 @@ export default class Plant extends THREE.Object3D {
 		};
 		this.uniforms = {
 			time: { value: 0 },
-			reset: { value: 1 },
-			sequenceCount: { value: this.sequenceCount },
-			sequenceCountDimension: { value: closestPowerOfTwo(Math.sqrt(this.sequenceCount)) },
-			sequenceSegments: { value: [this.sequenceSegments[0]+1., this.sequenceSegments[1]+1.] },
-			sequenceTexture: { value: this.sequenceTexture },
-			sequenceTextureDimension: { value: this.sequenceTexture.image.width },
+			reset: { value: 0 },
+			branchCount: { value: this.branchCount },
+			branchCountDimension: { value: 0 },
+			branchSegments: { value: this.branchSegments },
+			branchTexture: { value: 0 },
+			branchTextureDimension: { value: 0 },
 			framebuffer: { value: 0 },
 		}
+		assets.shaders.seed.uniforms = this.uniforms;
+		assets.shaders.branch.uniforms = this.uniforms;
+		assets.shaders.branch.side = THREE.DoubleSide;
 		gui.remember(this.parameters);
-		Object.keys(this.parameters).forEach(key => {
-			var param = this.parameters[key];
-			var type = typeof(param);
-			if (type == 'number') {
-				this.uniforms[key] = { value: param };
-				var item = gui.add(this.parameters, key);
-				item.step(0.01);
-			} else {
-				if (param.length && param.length == 3) {
-					this.uniforms[key] = { value: [param[0]/255,param[1]/255,param[2]/255] };
-					gui.addColor(this.parameters, key);
-				}
-			}
-		});
+		this.setupGUI();
+	}
 
-		assets.shaders.node.uniforms = this.uniforms;
+	build () {
+		this.branchCount = this.parameters.branchCount;
+		this.branchSegments[1] = this.parameters.branchSegment;
+		this.branchTexture = FrameBuffer.createDataTexture(this.getOriginalSeed(), 3);
+		this.uniforms.branchCount.value = this.branchCount;
+		this.uniforms.branchCountDimension.value = closestPowerOfTwo(Math.sqrt(this.branchCount));
+		this.uniforms.branchSegments.value = [this.branchSegments[0]+1., this.branchSegments[1]+1.];
+		this.uniforms.branchTexture.value = this.branchTexture;
+		this.uniforms.branchTextureDimension.value = this.branchTexture.image.width;
+		this.uniforms.reset.value = 1.;
+		if (this.framebuffer) this.framebuffer.dispose();
 		this.framebuffer = new FrameBuffer({
-			width: this.sequenceTexture.image.width,
-			height: this.sequenceTexture.image.height,
-			material: assets.shaders.node,
+			width: this.branchTexture.image.width,
+			height: this.branchTexture.image.height,
+			material: assets.shaders.seed,
 		});
 		this.uniforms.framebuffer.value = this.framebuffer.getTexture();
 		this.framebuffer.update(0);
 		this.uniforms.reset.value = 0.;
-
-		assets.shaders.line.uniforms = this.uniforms;
-		assets.shaders.line.side = THREE.DoubleSide;
-		Geometry.create(Geometry.randomPositionAttribute(this.sequenceCount), this.sequenceSegments)
-		.forEach(geometry => {
-			var mesh = new THREE.Mesh(geometry, assets.shaders.line);
+		this.children.forEach(child => this.remove(child));
+		Geometry.create(Geometry.randomPositionAttribute(this.branchCount), this.branchSegments).forEach(geometry => {
+			var mesh = new THREE.Mesh(geometry, assets.shaders.branch);
 			mesh.frustumCulled = false;
 			this.add(mesh);
 		});
-
-		var material = assets.shaders.debug.clone();
-		material.uniforms.texture = { value: this.framebuffer.getTexture() };
-		material.side = THREE.DoubleSide;
-		material.transparent = true;
-		var plane = new THREE.Mesh(new THREE.PlaneGeometry(1,1), material);
-		plane.rotateX(-Math.PI/2.);
-		this.add(plane);
 	}
 
 	update (elapsed) {
@@ -90,7 +85,7 @@ export default class Plant extends THREE.Object3D {
 			var type = typeof(param);
 			if (type == 'number') {
 				this.uniforms[key].value = param;
-			} else {
+			} else if (type == 'object') {
 				if (param.length && param.length == 3) {
 					for (var c = 0; c < 3; ++c) this.uniforms[key].value[c] = param[c]/255;
 				}
@@ -101,9 +96,9 @@ export default class Plant extends THREE.Object3D {
 
 	getOriginalSeed () {
 		var array = [];
-		for (var sequence = 0; sequence < this.sequenceCount; ++sequence) {
-			for (var segment = 0; segment < this.sequenceSegments[1]+1.; ++segment) {
-				var angle = (sequence / this.sequenceCount) * Math.PI * 2. + Math.sin(segment * .3) * .5;
+		for (var branch = 0; branch < this.branchCount; ++branch) {
+			for (var segment = 0; segment < this.branchSegments[1]+1.; ++segment) {
+				var angle = (branch / this.branchCount) * Math.PI * 2. + Math.sin(segment * .3) * .5;
 				var radius = segment * .05;
 				var x = radius * Math.cos(angle);
 				var y = segment * .05;
@@ -112,5 +107,36 @@ export default class Plant extends THREE.Object3D {
 			}
 		}
 		return array;
+	}
+
+	addDebug () {
+		var material = assets.shaders.debug.clone();
+		material.uniforms.texture = { value: this.framebuffer.getTexture() };
+		material.side = THREE.DoubleSide;
+		material.transparent = true;
+		var plane = new THREE.Mesh(new THREE.PlaneGeometry(1,1), material);
+		plane.rotateX(-Math.PI/2.);
+		this.add(plane);
+	}
+
+	setupGUI () {
+		var folder = gui.addFolder('branch');
+		Object.keys(this.parameters).forEach(key => {
+			var param = this.parameters[key];
+			var type = typeof(param);
+			console.log(type)
+			if (type == 'number') {
+				this.uniforms[key] = { value: param };
+				var item = folder.add(this.parameters, key);
+				item.step(0.01);
+			} else if (type == 'function') {
+				folder.add(this.parameters, key);
+			} else if (type == 'object') {
+				if (param.length && param.length == 3) {
+					this.uniforms[key] = { value: [param[0]/255,param[1]/255,param[2]/255] };
+					folder.addColor(this.parameters, key);
+				}
+			}
+		});
 	}
 }

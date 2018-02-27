@@ -223,7 +223,7 @@ export var OrbitControls = function ( object, domElement ) {
 		document.removeEventListener( 'mousemove', onMouseMove, false );
 		document.removeEventListener( 'mouseup', onMouseUp, false );
 
-		window.removeEventListener( 'keydown', onKeyDown, false );
+		// window.removeEventListener( 'keydown', onKeyDown, false );
 
 		//scope.dispatchEvent( { type: 'dispose' } ); // should this be added here?
 
@@ -881,7 +881,7 @@ export var OrbitControls = function ( object, domElement ) {
 	scope.domElement.addEventListener( 'touchend', onTouchEnd, false );
 	scope.domElement.addEventListener( 'touchmove', onTouchMove, false );
 
-	window.addEventListener( 'keydown', onKeyDown, false );
+	// window.addEventListener( 'keydown', onKeyDown, false );
 
 	// force an update at start
 

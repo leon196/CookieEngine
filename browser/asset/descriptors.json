@@ -18,13 +18,13 @@
 			"vertexShader": "shader/tube.vert",
 			"fragmentShader": "shader/shaded.frag"
 		},
-		"line": {
-			"vertexShader": "shader/line.vert",
+		"branch": {
+			"vertexShader": "shader/branch.vert",
 			"fragmentShader": "shader/shaded.frag"
 		},
-		"node": {
+		"seed": {
 			"vertexShader": "shader/screen.vert",
-			"fragmentShader": "shader/node.frag"
+			"fragmentShader": "shader/seed.frag"
 		},
 		"raymarch": {
 			"vertexShader": "shader/screen.vert",
