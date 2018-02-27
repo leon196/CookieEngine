@@ -17,7 +17,10 @@ export default class Plant extends THREE.Object3D {
 		this.sequenceTexture = FrameBuffer.createDataTexture(this.getOriginalSeed(), 3);
 
 		this.parameters = {
-			sequenceThin: .02,
+			color: [77, 204, 51],
+			thin: .02,
+			capStart: 1,
+			capEnd: 1,
 			growAngle: .5,
 			growRadius: .5,
 			growHeight: .5,
@@ -36,11 +39,20 @@ export default class Plant extends THREE.Object3D {
 			sequenceTextureDimension: { value: this.sequenceTexture.image.width },
 			framebuffer: { value: 0 },
 		}
+		gui.remember(this.parameters);
 		Object.keys(this.parameters).forEach(key => {
-			this.uniforms[key] = { value: this.parameters[key] };
-			var item = gui.add(this.parameters, key);
-			var type = typeof(this.parameters[key]);
-			if (type == 'number') item.step(0.01);
+			var param = this.parameters[key];
+			var type = typeof(param);
+			if (type == 'number') {
+				this.uniforms[key] = { value: param };
+				var item = gui.add(this.parameters, key);
+				item.step(0.01);
+			} else {
+				if (param.length && param.length == 3) {
+					this.uniforms[key] = { value: [param[0]/255,param[1]/255,param[2]/255] };
+					gui.addColor(this.parameters, key);
+				}
+			}
 		});
 
 		assets.shaders.node.uniforms = this.uniforms;
@@ -49,6 +61,7 @@ export default class Plant extends THREE.Object3D {
 			height: this.sequenceTexture.image.height,
 			material: assets.shaders.node,
 		});
+		this.uniforms.framebuffer.value = this.framebuffer.getTexture();
 		this.framebuffer.update(0);
 		this.uniforms.reset.value = 0.;
 
@@ -72,8 +85,17 @@ export default class Plant extends THREE.Object3D {
 
 	update (elapsed) {
 		this.uniforms.time.value = elapsed;
-		Object.keys(this.parameters).forEach(key => this.uniforms[key].value = this.parameters[key] );
-		this.uniforms.framebuffer.value = this.framebuffer.getTexture();
+		Object.keys(this.parameters).forEach(key => {
+			var param = this.parameters[key];
+			var type = typeof(param);
+			if (type == 'number') {
+				this.uniforms[key].value = param;
+			} else {
+				if (param.length && param.length == 3) {
+					for (var c = 0; c < 3; ++c) this.uniforms[key].value[c] = param[c]/255;
+				}
+			}
+		});
 		this.framebuffer.update();
 	}
 

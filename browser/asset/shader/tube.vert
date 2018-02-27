@@ -2,7 +2,7 @@
 attribute vec2 indexMap, anchor;
 varying vec3 vNormal, vView, vColor;
 uniform float time, sequenceTextureDimension;
-uniform float sequenceCount, sequenceCountDimension, sequenceThin;
+uniform float sequenceCount, sequenceCountDimension, thin;
 uniform vec2 sequenceSegments;
 uniform sampler2D sequenceTexture, framebuffer;
 
@@ -31,7 +31,7 @@ void main () {
 	vec3 right = normalize(cross(forward, up));
 	mat4 rotation = rotationMatrix(forward, -anchor.x * PI);
 	right = (rotation * vec4(right,1)).xyz;
-	pos += right * sequenceThin;
+	pos += right * thin;
 
 	vNormal = right;
 	vView = cameraPosition-pos;
