@@ -1,13 +1,12 @@
 
-uniform sampler2D branchTexture, framebuffer;
-uniform float time, reset, branchTextureDimension;
-uniform float branchCount;
+uniform sampler2D branchTexture, branchParentTexture;
+uniform float time, reset, branchTextureDimension, branchParentTextureDimension;
+uniform float branchCount, branchSegments, branchParentCount, branchParentSegments;
 uniform float growAngle, growRadius, growHeight, growWave, growWaveScale, growWaveOffset, growTwist;
-uniform vec2 branchSegments;
 varying vec2 vUv;
 
 #define dimension branchTextureDimension
-#define segments branchSegments.y
+#define segments branchSegments
 
 void main () {
 
@@ -38,8 +37,7 @@ void main () {
 	// float should = step(branch-branchGrow, .01);
 	// vec2 uvGrow = vec2(mod(indexGrow, dimension) / dimension, floor(indexGrow/dimension)/dimension);
 	// vec2 uvPrev = vec2(mod(uvGrow.x - unit + 1., 1.), uvGrow.y - unit * step(uvGrow.x, 0.));
-	// vec3 posGrow = texture2D(framebuffer, uvGrow).xyz;
-	// vec3 prev = texture2D(framebuffer, uvPrev).xyz;
+	// vec3 posGrow = texture2D(branchTexture, uvGrow).xyz;
 
 	// vec3 dir = normalize(posGrow-prev);
 	// pos += dir * .001 * should;

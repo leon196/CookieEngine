@@ -73,24 +73,6 @@ export default class Geometry {
 		return geometries;
 	}
 
-	static getPoints (count) {
-	    var points = [];
-	    for (var i = 0; i < count * 3; ++i) points.push(0);
-	    return points;
-	}
-
-	static getValues (count) {
-	    var values = [];
-	    for (var i = 0; i < count; ++i) values.push(0);
-	    return values;
-	}
-
-	static getRandomPoints (count) {
-	    var points = [];
-	    for (var i = 0; i < count * 3; ++i) points.push(randomRange(-1,1));
-	    return points;
-	}
-
 	static randomPositionAttribute (count) {
 	    return {
 	        position: {
