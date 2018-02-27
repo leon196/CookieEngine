@@ -2,7 +2,7 @@
 uniform sampler2D sequenceTexture, framebuffer;
 uniform float time, reset, sequenceTextureDimension;
 uniform float sequenceCount;
-uniform float growAngle, growRadius, growHeight;
+uniform float growAngle, growRadius, growHeight, growWave, growWaveScale, growWaveOffset, growTwist;
 uniform vec2 sequenceSegments;
 varying vec2 vUv;
 
@@ -26,9 +26,9 @@ void main () {
 
 	float angle = segment * growAngle + sequence;// * 2. + sequence + sin(segment*10.+time) * .5;
 	float radius = segment * growRadius;
-	float height = segment * growHeight + sin(segment*10.-time+sequence*100.)*.1;
+	float height = segment * growHeight + sin(segment*growWave-time+sequence*growWaveOffset)*growWaveScale;
 	vec3 pos = vec3(cos(angle)*radius, height, sin(angle)*radius);
-	pos.xz *= rot(pos.y*2.);
+	pos.xz *= rot(pos.y*growTwist);
 	pos = mix(vec3(0), pos, segment);
 
 	gl_FragColor = vec4(pos, node);	

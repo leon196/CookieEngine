@@ -13,7 +13,7 @@ export default class Plant extends THREE.Object3D {
 		super();
 
 		this.sequenceCount = 10;
-		this.sequenceSegments = [8, 20];
+		this.sequenceSegments = [1, 20];
 		this.sequenceTexture = FrameBuffer.createDataTexture(this.getOriginalSeed(), 3);
 
 		this.parameters = {
@@ -21,6 +21,10 @@ export default class Plant extends THREE.Object3D {
 			growAngle: .5,
 			growRadius: .5,
 			growHeight: .5,
+			growWave: 10.,
+			growWaveScale: .2,
+			growWaveOffset: 100.,
+			growTwist: 2.,
 		};
 		this.uniforms = {
 			time: { value: 0 },
@@ -48,15 +52,16 @@ export default class Plant extends THREE.Object3D {
 		this.framebuffer.update(0);
 		this.uniforms.reset.value = 0.;
 
-		assets.shaders.plant.uniforms = this.uniforms;
+		assets.shaders.line.uniforms = this.uniforms;
+		assets.shaders.line.side = THREE.DoubleSide;
 		Geometry.create(Geometry.randomPositionAttribute(this.sequenceCount), this.sequenceSegments)
 		.forEach(geometry => {
-			var mesh = new THREE.Mesh(geometry, assets.shaders.plant);
+			var mesh = new THREE.Mesh(geometry, assets.shaders.line);
 			mesh.frustumCulled = false;
 			this.add(mesh);
 		});
 
-		var material = assets.shaders.mesh.clone();
+		var material = assets.shaders.debug.clone();
 		material.uniforms.texture = { value: this.framebuffer.getTexture() };
 		material.side = THREE.DoubleSide;
 		material.transparent = true;

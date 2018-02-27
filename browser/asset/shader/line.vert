@@ -1,14 +1,14 @@
 
 attribute vec2 indexMap, anchor;
 varying vec3 vNormal, vView, vColor;
-uniform float time, dataTextureDimension;
-uniform float branchCount, branchCountDimension, branchThin;
-uniform vec2 branchSegments;
-uniform sampler2D dataTexture, framebuffer;
+uniform float time, sequenceTextureDimension;
+uniform float sequenceCount, sequenceCountDimension, sequenceThin;
+uniform vec2 sequenceSegments;
+uniform sampler2D sequenceTexture, framebuffer;
 
-#define dimension dataTextureDimension
-#define segments branchSegments.y
-#define countDim branchCountDimension
+#define dimension sequenceTextureDimension
+#define segments sequenceSegments.y
+#define countDim sequenceCountDimension
 
 void main () {
 
@@ -36,16 +36,16 @@ void main () {
 
 	float base = smoothstep(0., 1., y);
 
-	// pos += right * branchThin;// * base;// * (.5 + 5. * (.5 + .5 * sin(anchor.y * 3. - time)));
-	// pos += right * anchor.x * branchThin;
-	// pos.x += anchor.x * branchThin;
-	// lookAt(pos, cameraPosition, anchor * .1);
+	// pos += right * sequenceThin;// * base;// * (.5 + 5. * (.5 + .5 * sin(anchor.y * 3. - time)));
+	// pos += right * anchor.x * sequenceThin;
+	// pos.x += anchor.x * sequenceThin;
+	vec2 pivot = vec2(anchor.x * sequenceThin,0);
+	lookAt(pos, cameraPosition, pivot);
 
-	vNormal = right;
+	vNormal = cross(forward, right);
 	vView = cameraPosition-pos;
 	vColor = vec3(.3,.8,.2);
 	// vColor = right * .5 + .5;
 	
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1);
-	gl_Position.xy += anchor * branchThin;
 }

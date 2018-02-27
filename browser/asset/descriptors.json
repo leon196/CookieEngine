@@ -10,12 +10,16 @@
 	"geometries": {
 	},
 	"shaders": {
-		"mesh": {
+		"debug": {
 			"vertexShader": "shader/mesh.vert",
-			"fragmentShader": "shader/mesh.frag"
+			"fragmentShader": "shader/debug.frag"
 		},
-		"plant": {
+		"tube": {
 			"vertexShader": "shader/tube.vert",
+			"fragmentShader": "shader/shaded.frag"
+		},
+		"line": {
+			"vertexShader": "shader/line.vert",
 			"fragmentShader": "shader/shaded.frag"
 		},
 		"node": {
