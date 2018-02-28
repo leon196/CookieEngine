@@ -11,6 +11,6 @@ void main () {
 	shade = sin(vUv.x * PI);
 	shade = pow(abs(shade), 1./2.2);
 	color *= shade*.5+.5;
-	color *= shade;
+	// color *= shade;
 	gl_FragColor = vec4(color, 1);
 }

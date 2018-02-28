@@ -22,10 +22,10 @@ void main () {
 
 	float angle = segment * growAngle + branch;
 	float radius = segment * growRadius;
-	float height = segment * growHeight + sin(segment*growWave-time+branch*growWaveOffset)*growWaveScale;
+	float height = segment * growHeight + segment * sin(segment*growWave-time+branch*growWaveOffset)*growWaveScale;
 	vec3 pos = vec3(cos(angle)*radius, height, sin(angle)*radius);
 	pos.xz *= rot(pos.y*growTwist);
-	pos = mix(vec3(0), pos, segment);
+	// pos = mix(vec3(0), pos, segment);
 
 	gl_FragColor = vec4(pos, node);	
 
