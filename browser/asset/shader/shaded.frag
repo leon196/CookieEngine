@@ -9,7 +9,7 @@ void main () {
 	float shade = ddot*.5+.5;
 	// color *= shade;
 	shade = sin(vUv.x * PI);
-	shade = pow(shade, 1./2.2);
+	shade = pow(abs(shade), 1./2.2);
 	color *= shade*.5+.5;
 	color *= shade;
 	gl_FragColor = vec4(color, 1);

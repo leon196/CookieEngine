@@ -16,6 +16,9 @@ export default class Plant extends THREE.Object3D {
 		this.branchesArray = [];
 		this.addBranches();
 		this.addBranches();
+
+		this.branchesArray[1].setParent(this.branchesArray[0]);
+		this.addDebug(this.branchesArray[1].framebuffer.getTexture());
 	}
 
 	addBranches () {

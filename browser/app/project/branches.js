@@ -35,6 +35,11 @@ export default class Branches extends THREE.Object3D {
 			branchSegments: { value: 0 },
 			branchTexture: { value: 0 },
 			branchTextureDimension: { value: 0 },
+			branchParentCount: { value: 0 },
+			branchParentCountDimension: { value: 0 },
+			branchParentSegments: { value: 0 },
+			branchParentTexture: { value: 0 },
+			branchParentTextureDimension: { value: 0 },
 		}
 	}
 
@@ -55,6 +60,7 @@ export default class Branches extends THREE.Object3D {
 		if (this.framebuffer) this.framebuffer.dispose();
 		var seedMaterial = assets.shaders.seed.clone();
 		seedMaterial.uniforms = this.uniforms;
+		assets.shaders.seed.cloned.push(seedMaterial);
 		this.framebuffer = new FrameBuffer({
 			width: resolution,
 			height: resolution,
@@ -68,6 +74,7 @@ export default class Branches extends THREE.Object3D {
 		var branchMaterial = assets.shaders.branch.clone();
 		branchMaterial.side = THREE.DoubleSide;
 		branchMaterial.uniforms = this.uniforms;
+		assets.shaders.branch.cloned.push(branchMaterial);
 
 		// meshes
 		this.children.forEach(child => this.remove(child));
@@ -76,6 +83,20 @@ export default class Branches extends THREE.Object3D {
 			mesh.frustumCulled = false;
 			this.add(mesh);
 		});
+	}
+
+	setParent (parent) {
+		// geometry
+		var count = parent.parameters.branchCount;
+		var segments = parent.parameters.branchSegments;
+		var resolution = closestPowerOfTwo(Math.sqrt(count*(segments+1)));
+
+		// uniforms
+		this.uniforms.branchParentCount.value = count;
+		this.uniforms.branchParentCountDimension.value = closestPowerOfTwo(Math.sqrt(count));
+		this.uniforms.branchParentSegments.value = segments+1;
+		this.uniforms.branchParentTexture.value = parent.framebuffer.getTexture();
+		this.uniforms.branchParentTextureDimension.value = resolution;
 	}
 
 	update (elapsed) {

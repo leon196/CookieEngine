@@ -1,7 +1,7 @@
 
-uniform sampler2D branchTexture, branchParentTexture;
-uniform float time, reset, branchTextureDimension, branchParentTextureDimension;
-uniform float branchCount, branchSegments, branchParentCount, branchParentSegments;
+uniform sampler2D branchTexture;
+uniform float time, reset, branchTextureDimension;
+uniform float branchCount, branchSegments;
 uniform float growAngle, growRadius, growHeight, growWave, growWaveScale, growWaveOffset, growTwist;
 varying vec2 vUv;
 
@@ -22,7 +22,7 @@ void main () {
 
 	float angle = segment * growAngle + branch;
 	float radius = segment * growRadius;
-	float height = 1. + segment * growHeight + sin(segment*growWave-time+branch*growWaveOffset)*growWaveScale;
+	float height = segment * growHeight + sin(segment*growWave-time+branch*growWaveOffset)*growWaveScale;
 	vec3 pos = vec3(cos(angle)*radius, height, sin(angle)*radius);
 	pos.xz *= rot(pos.y*growTwist);
 	pos = mix(vec3(0), pos, segment);

@@ -86,10 +86,16 @@ function load(callback) {
 						vertexShader: shaderHeader + files[vertexShaderUrl],
 						fragmentShader: shaderHeader + files[fragmentShaderUrl],
 					}));
+					assets.shaders[name].cloned = [];
 				} else {
 					assets.shaders[name].vertexShader = shaderHeader + files[vertexShaderUrl];
 					assets.shaders[name].fragmentShader = shaderHeader + files[fragmentShaderUrl];
 					assets.shaders[name].needsUpdate = true;
+					assets.shaders[name].cloned.forEach(clone => {
+						clone.vertexShader = shaderHeader + files[vertexShaderUrl];
+						clone.fragmentShader = shaderHeader + files[fragmentShaderUrl];
+						clone.needsUpdate = true;
+					})
 				}
 			});
 		});
