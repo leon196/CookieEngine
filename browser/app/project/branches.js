@@ -55,6 +55,7 @@ export default class Branches extends THREE.Object3D {
 		var segmentsX = this.parameters.segmentsX;
 		var segmentsY = this.parameters.segmentsY;
 		var resolution = closestPowerOfTwo(Math.sqrt(count*(segmentsY+1)));
+		console.log(count, segmentsY, resolution)
 
 		// uniforms
 		this.uniforms.count.value = count;

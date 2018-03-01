@@ -15,8 +15,8 @@ void main () {
 	float dim = dimension * dimension;
 	float index = mod(uv.x * dimension + floor(uv.y*dimension)*dimension, dim);
 	float segmentMod = mod(index,segments);
-	float segment = (segmentMod+step(mod(index-1.,segments),segments-1.))/segments;
-	// segment = clamp(segment, 0., 1.);
+	float segment = (segmentMod)/segments;
+	segment = clamp(segment, 0., 1.);
 	float branch = floor(index/segments);
 	float node = max(0., branch-1.);
 	branch /= count;
