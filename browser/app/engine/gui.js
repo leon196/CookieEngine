@@ -3,10 +3,10 @@ import parameters from './parameters';
 
 export const gui = new dat.gui.GUI();
 
-gui.addUniforms = function (name, parameters, uniforms) {
-	var folder = gui.addFolder(name);
+gui.addUniforms = function (folder, name, parameters, uniforms) {
+	var subfolder = folder.addFolder(name);
 	Object.keys(parameters).forEach(key => {
-		gui.addParameter(folder, parameters, key);
+		gui.addParameter(subfolder, parameters, key);
 		gui.addUniform(uniforms, key, parameters, key);
 	});
 }
@@ -47,19 +47,23 @@ gui.addUniform = function (uniforms, unikey, parameters, paramkey) {
 
 gui.updateUniforms = function (parameters, uniforms) {
 	Object.keys(parameters).forEach(key => {
-		var param = parameters[key];
-		var type = typeof(param);
-		if (type == 'number') {
-			uniforms[key].value = param;
-		} else if (type == 'object') {
-			if (param.length && param.length == 3) {
-				for (var c = 0; c < 3; ++c) uniforms[key].value[c] = param[c]/255;
-			} else if (Object.keys(param).length > 0) {
-				Object.keys(param).forEach(subkey => {
-					var unikey = key + subkey[0].toUpperCase() + subkey.substring(1, subkey.length);
-					uniforms[unikey].value = param[subkey];
-				});
-			}
-		}
+		gui.updateUniform(parameters, key, uniforms, key);
 	});
+}
+
+gui.updateUniform = function (parameters, key, uniforms, unikey) {
+	var param = parameters[key];
+	var type = typeof(param);
+	if (type == 'number') {
+		uniforms[unikey].value = param;
+	} else if (type == 'object') {
+		if (param.length && param.length == 3) {
+			for (var c = 0; c < 3; ++c) uniforms[unikey].value[c] = param[c]/255;
+		} else if (Object.keys(param).length > 0) {
+			Object.keys(param).forEach(subkey => {
+				var newunikey = key + subkey[0].toUpperCase() + subkey.substring(1, subkey.length);
+				gui.updateUniform(param, subkey, uniforms, newunikey);
+			});
+		}
+	}
 }

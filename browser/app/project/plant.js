@@ -12,25 +12,23 @@ export default class Plant extends THREE.Object3D {
 
 	constructor () {
 		super();
-
 		this.branchesArray = [];
-		var count = 2;
-		this.addBranches();
-		for (var i = 1; i < count; ++i) {
-			this.addBranches();
-			this.branchesArray[i].setParent(this.branchesArray[i-1]);
+		this.parameters = {
+			build: e => this.build(),
 		}
-		// this.addDebug(this.branchesArray[1].framebuffer.getTexture());
-	}
+		var count = 2;
+		var branchFolder = gui.addFolder('plant');
+		branchFolder.add(this.parameters, 'build');
+		for (var i = 0; i < count; ++i) {
+			var branches = new Branches();
+			gui.remember(branches.parameters);
+			gui.addUniforms(branchFolder, 'branch ' + this.branchesArray.length, branches.parameters, branches.uniforms);
+			this.branchesArray.push(branches);
+			this.add(branches);
+		}
+		this.build();
 
-	addBranches () {
-		var branches = new Branches();
-		gui.remember(branches.parameters);
-		gui.addUniforms('branch ' + this.branchesArray.length, branches.parameters, branches.uniforms);
-		branches.setGeometry(10, [1, 20]);
-		branches.build();
-		this.branchesArray.push(branches);
-		this.add(branches);
+		this.addDebug(this.branchesArray[0].framebuffer.getTexture());
 	}
 
 	update(elapsed) {
@@ -38,6 +36,14 @@ export default class Plant extends THREE.Object3D {
 			gui.updateUniforms(branches.parameters, branches.uniforms);
 			branches.update(elapsed);
 		})
+	}
+
+	build () {
+		for (var i = 0; i < this.branchesArray.length; ++i) {
+			var branches = this.branchesArray[i];
+			branches.build();
+			if (i > 0) branches.setParent(this.branchesArray[i-1]);
+		}
 	}
 
 	addDebug (texture) {

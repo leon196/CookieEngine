@@ -11,34 +11,35 @@ export default class Branches extends THREE.Object3D {
 
 	constructor() {
 		super();
-		this.count = 1;
-		this.segments = [1,1];
 		this.parameters = {
+			count: 1,
+			segmentsX: 1,
+			segmentsY: 1,
 			color: [77, 204, 51],
 			thin: .02,
 			capStart: 1,
 			capEnd: 1,
-			grow: {
-				angle: .5,
-				radius: .5,
-				height: .5,
-				wave: 10.,
-				waveScale: .2,
-				waveOffset: 100.,
-				twist: 2.,
-			},
+			angle: .5,
+			radius: .5,
+			height: .5,
+			wave: 10.,
+			waveScale: .2,
+			waveOffset: 100.,
+			twist: 2.,
 		};
 		this.uniforms = {
 			time: { value: 0 },
 			reset: { value: 0 },
 			count: { value: 0 },
 			countDimension: { value: 0 },
-			segments: { value: [0,0] },
+			segmentsX: { value: 0 },
+			segmentsY: { value: 0 },
 			texture: { value: 0 },
 			textureDimension: { value: 0 },
 			parentCount: { value: 0 },
 			parentCountDimension: { value: 0 },
-			parentSegments: { value: [0,0] },
+			parentSegmentsX: { value: 0 },
+			parentSegmentsY: { value: 0 },
 			parentTexture: { value: 0 },
 			parentTextureDimension: { value: 0 },
 		}
@@ -50,13 +51,16 @@ export default class Branches extends THREE.Object3D {
 	}
 
 	build () {
-		var resolution = closestPowerOfTwo(Math.sqrt(this.count*(this.segments[1]+1)));
+		var count = this.parameters.count;
+		var segmentsX = this.parameters.segmentsX;
+		var segmentsY = this.parameters.segmentsY;
+		var resolution = closestPowerOfTwo(Math.sqrt(count*(segmentsY+1)));
 
 		// uniforms
-		this.uniforms.count.value = this.count;
-		this.uniforms.countDimension.value = closestPowerOfTwo(Math.sqrt(this.count));
-		this.uniforms.segments.value[0] = this.segments[0]+1;
-		this.uniforms.segments.value[1] = this.segments[1]+1;
+		this.uniforms.count.value = count;
+		this.uniforms.countDimension.value = closestPowerOfTwo(Math.sqrt(count));
+		this.uniforms.segmentsX.value = segmentsX+1;
+		this.uniforms.segmentsY.value = segmentsY+1;
 		this.uniforms.textureDimension.value = resolution;
 		this.uniforms.reset.value = 1.;
 		
@@ -82,7 +86,7 @@ export default class Branches extends THREE.Object3D {
 
 		// meshes
 		this.children.forEach(child => this.remove(child));
-		var geometries = Geometry.create(Geometry.randomPositionAttribute(this.count), this.segments);
+		var geometries = Geometry.create(Geometry.randomPositionAttribute(count), [segmentsX, segmentsY]);
 		geometries.forEach(geometry => {
 			var mesh = new THREE.Mesh(geometry, material);
 			mesh.frustumCulled = false;
@@ -90,17 +94,15 @@ export default class Branches extends THREE.Object3D {
 		});
 	}
 
-	setGeometry (count, segments) {
-		this.count = count || 10;
-		this.segments = segments || [1,1];
-	}
-
 	setParent (parent) {
-		this.uniforms.parentCount.value = parent.count;
-		this.uniforms.parentCountDimension.value = closestPowerOfTwo(Math.sqrt(parent.count));
-		this.uniforms.parentSegments.value[0] = parent.segments[0]+1;
-		this.uniforms.parentSegments.value[1] = parent.segments[1]+1;
+		var count = parent.parameters.count;
+		var segmentsX = parent.parameters.segmentsX;
+		var segmentsY = parent.parameters.segmentsY;
+		this.uniforms.parentCount.value = count;
+		this.uniforms.parentCountDimension.value = closestPowerOfTwo(Math.sqrt(count));
+		this.uniforms.parentSegmentsX.value = segmentsX+1;
+		this.uniforms.parentSegmentsY.value = segmentsY+1;
 		this.uniforms.parentTexture.value = parent.framebuffer.getTexture();
-		this.uniforms.parentTextureDimension.value = closestPowerOfTwo(Math.sqrt(parent.count*(parent.segments[1]+1)));
+		this.uniforms.parentTextureDimension.value = closestPowerOfTwo(Math.sqrt(count*(segmentsY+1)));
 	}
 }
