@@ -11,49 +11,53 @@ export default class Branches extends THREE.Object3D {
 
 	constructor() {
 		super();
+		this.count = 1;
+		this.segments = [1,1];
 		this.parameters = {
-			branchCount: 10,
-			branchSegments: 5,
-			build: (e => this.build()),
 			color: [77, 204, 51],
 			thin: .02,
 			capStart: 1,
 			capEnd: 1,
-			growAngle: .5,
-			growRadius: .5,
-			growHeight: .5,
-			growWave: 10.,
-			growWaveScale: .2,
-			growWaveOffset: 100.,
-			growTwist: 2.,
+			grow: {
+				angle: .5,
+				radius: .5,
+				height: .5,
+				wave: 10.,
+				waveScale: .2,
+				waveOffset: 100.,
+				twist: 2.,
+			},
 		};
 		this.uniforms = {
 			time: { value: 0 },
 			reset: { value: 0 },
-			branchCount: { value: 0 },
-			branchCountDimension: { value: 0 },
-			branchSegments: { value: 0 },
-			branchTexture: { value: 0 },
-			branchTextureDimension: { value: 0 },
-			branchParentCount: { value: 0 },
-			branchParentCountDimension: { value: 0 },
-			branchParentSegments: { value: 0 },
-			branchParentTexture: { value: 0 },
-			branchParentTextureDimension: { value: 0 },
+			count: { value: 0 },
+			countDimension: { value: 0 },
+			segments: { value: [0,0] },
+			texture: { value: 0 },
+			textureDimension: { value: 0 },
+			parentCount: { value: 0 },
+			parentCountDimension: { value: 0 },
+			parentSegments: { value: [0,0] },
+			parentTexture: { value: 0 },
+			parentTextureDimension: { value: 0 },
 		}
 	}
 
+	update (elapsed) {
+		this.uniforms.time.value = elapsed;
+		this.framebuffer.update();
+	}
+
 	build () {
-		// geometry
-		var count = this.parameters.branchCount;
-		var segments = this.parameters.branchSegments;
-		var resolution = closestPowerOfTwo(Math.sqrt(count*(segments+1)));
+		var resolution = closestPowerOfTwo(Math.sqrt(this.count*(this.segments[1]+1)));
 
 		// uniforms
-		this.uniforms.branchCount.value = count;
-		this.uniforms.branchCountDimension.value = closestPowerOfTwo(Math.sqrt(count));
-		this.uniforms.branchSegments.value = segments+1;
-		this.uniforms.branchTextureDimension.value = resolution;
+		this.uniforms.count.value = this.count;
+		this.uniforms.countDimension.value = closestPowerOfTwo(Math.sqrt(this.count));
+		this.uniforms.segments.value[0] = this.segments[0]+1;
+		this.uniforms.segments.value[1] = this.segments[1]+1;
+		this.uniforms.textureDimension.value = resolution;
 		this.uniforms.reset.value = 1.;
 		
 		// framebuffer
@@ -66,41 +70,37 @@ export default class Branches extends THREE.Object3D {
 			height: resolution,
 			material: seedMaterial,
 		});
-		this.uniforms.branchTexture.value = this.framebuffer.getTexture();
+		this.uniforms.texture.value = this.framebuffer.getTexture();
 		this.framebuffer.update(0);
 		this.uniforms.reset.value = 0.;
 
 		// material
-		var branchMaterial = assets.shaders.branch.clone();
-		branchMaterial.side = THREE.DoubleSide;
-		branchMaterial.uniforms = this.uniforms;
-		assets.shaders.branch.cloned.push(branchMaterial);
+		var material = assets.shaders.branch.clone();
+		material.side = THREE.DoubleSide;
+		material.uniforms = this.uniforms;
+		assets.shaders.branch.cloned.push(material);
 
 		// meshes
 		this.children.forEach(child => this.remove(child));
-		Geometry.create(Geometry.randomPositionAttribute(count), [1, segments]).forEach(geometry => {
-			var mesh = new THREE.Mesh(geometry, branchMaterial);
+		var geometries = Geometry.create(Geometry.randomPositionAttribute(this.count), this.segments);
+		geometries.forEach(geometry => {
+			var mesh = new THREE.Mesh(geometry, material);
 			mesh.frustumCulled = false;
 			this.add(mesh);
 		});
 	}
 
-	setParent (parent) {
-		// geometry
-		var count = parent.parameters.branchCount;
-		var segments = parent.parameters.branchSegments;
-		var resolution = closestPowerOfTwo(Math.sqrt(count*(segments+1)));
-
-		// uniforms
-		this.uniforms.branchParentCount.value = count;
-		this.uniforms.branchParentCountDimension.value = closestPowerOfTwo(Math.sqrt(count));
-		this.uniforms.branchParentSegments.value = segments+1;
-		this.uniforms.branchParentTexture.value = parent.framebuffer.getTexture();
-		this.uniforms.branchParentTextureDimension.value = resolution;
+	setGeometry (count, segments) {
+		this.count = count || 10;
+		this.segments = segments || [1,1];
 	}
 
-	update (elapsed) {
-		this.uniforms.time.value = elapsed;
-		this.framebuffer.update();
+	setParent (parent) {
+		this.uniforms.parentCount.value = parent.count;
+		this.uniforms.parentCountDimension.value = closestPowerOfTwo(Math.sqrt(parent.count));
+		this.uniforms.parentSegments.value[0] = parent.segments[0]+1;
+		this.uniforms.parentSegments.value[1] = parent.segments[1]+1;
+		this.uniforms.parentTexture.value = parent.framebuffer.getTexture();
+		this.uniforms.parentTextureDimension.value = closestPowerOfTwo(Math.sqrt(parent.count*(parent.segments[1]+1)));
 	}
 }

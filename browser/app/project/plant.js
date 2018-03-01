@@ -14,17 +14,20 @@ export default class Plant extends THREE.Object3D {
 		super();
 
 		this.branchesArray = [];
+		var count = 2;
 		this.addBranches();
-		this.addBranches();
-
-		this.branchesArray[1].setParent(this.branchesArray[0]);
-		this.addDebug(this.branchesArray[1].framebuffer.getTexture());
+		for (var i = 1; i < count; ++i) {
+			this.addBranches();
+			this.branchesArray[i].setParent(this.branchesArray[i-1]);
+		}
+		// this.addDebug(this.branchesArray[1].framebuffer.getTexture());
 	}
 
 	addBranches () {
 		var branches = new Branches();
 		gui.remember(branches.parameters);
 		gui.addUniforms('branch ' + this.branchesArray.length, branches.parameters, branches.uniforms);
+		branches.setGeometry(10, [1, 20]);
 		branches.build();
 		this.branchesArray.push(branches);
 		this.add(branches);
