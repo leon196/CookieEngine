@@ -2,7 +2,7 @@
 uniform sampler2D noiseMap;
 uniform float time;
 varying vec2 vUv;
-varying vec3 vNormal, vView;
+varying vec3 vNormal, vView, vPosWorld;
 
 // https://www.shadertoy.com/view/4sfGzS
 const mat3 m = mat3( 0.00,  0.80,  0.60,
@@ -53,7 +53,8 @@ void main () {
 
 	displace(pos.xyz);
 
-	// pos.xz += normalize(pos.xz + vec2(.00001)) * pow(2., length(pos.xz) * .01);
+	vPosWorld = pos.xyz;
+
 	vView = pos.xyz - cameraPosition;
 
 	gl_Position = projectionMatrix * viewMatrix * pos;
