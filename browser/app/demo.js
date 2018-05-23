@@ -8,16 +8,17 @@ import * as timeline from './engine/timeline';
 import Mouse from './engine/mouse';
 import Tree from './project/tree';
 import Ground from './project/ground';
+import Sky from './project/sky';
 
 export default function() {
 	var scene, camera, controls, animation, cameraTarget;
-	var tree, ground;
+	var tree, ground, sky;
 
 	assets.load(function() {
 
 		scene = new THREE.Scene();
 		
-		camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 1000);
+		camera = new THREE.PerspectiveCamera(110, window.innerWidth / window.innerHeight, 0.01, 1000);
 		camera.position.x = 0;
 		camera.position.y = 2.5;
 		camera.position.z = 5;
@@ -31,8 +32,10 @@ export default function() {
 
 		tree = new Tree();
 		ground = new Ground();
+		sky = new Sky();
 		scene.add(tree);
 		scene.add(ground);
+		scene.add(sky);
 		
 		window.addEventListener('resize', onWindowResize, false);
 		requestAnimationFrame(animate);
@@ -58,6 +61,7 @@ export default function() {
 
 		tree.update(elapsed);
 		ground.update(elapsed);
+		sky.update(elapsed);
 
 		controls.update();
 		renderer.render(scene, camera);

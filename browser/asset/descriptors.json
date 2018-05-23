@@ -20,6 +20,10 @@
 		"ground": {
 			"vertexShader": "shader/ground.vert",
 			"fragmentShader": "shader/ground.frag"
+		},
+		"sky": {
+			"vertexShader": "shader/sky.vert",
+			"fragmentShader": "shader/sky.frag"
 		}
 	}
 }
