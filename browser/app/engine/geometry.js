@@ -1,7 +1,5 @@
 
 import * as THREE from 'three.js';
-import assets from './assets';
-import FrameBuffer from './FrameBuffer';
 import { closestPowerOfTwo, lerp, getRandomPoints } from './misc';
 
 export default class Geometry {

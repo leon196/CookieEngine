@@ -102,6 +102,33 @@ function load(callback) {
 
 		const urls = Object.keys(urlCallbacks);
 
+		let socket;
+
+		function connect() {
+			socket = io('http://localhost:5776');
+			socket.on('change', change);
+			socket.on('disconnect', connect);
+		}
+
+		function change(data) {
+
+			if (data.path.lastIndexOf(baseUrl, 0) === 0) {
+				const url = data.path.substr(baseUrl.length);
+				const callback = urlCallbacks[url];
+				if (callback) {
+					console.log('Reloading asset in 0.25 second', url);
+					setTimeout(function(){
+						return loader.load(baseUrl + url, data => {
+							files[url] = data;
+							return callback();
+						});
+					}, 250);
+				}
+			}
+		}
+
+		connect();
+
 		function parse() {
 			urls.forEach(url => urlCallbacks[url]());
 			return callback();
@@ -124,7 +151,6 @@ function load(callback) {
 				});
 			});
 
-
 		function loadOtherAssets() {
 			let pending = urls.length;
 			urls.forEach(url => {
@@ -137,32 +163,6 @@ function load(callback) {
 				});
 			});
 		}
-
-		let socket;
-
-		function connect() {
-			socket = io('http://localhost:5776');
-			socket.on('change', change);
-			socket.on('disconnect', connect);
-		}
-
-		function change(data) {
-			if (data.path.lastIndexOf(baseUrl, 0) === 0) {
-				const url = data.path.substr(baseUrl.length);
-				const callback = urlCallbacks[url];
-				if (callback) {
-					console.log('Reloading asset in 0.5 second', url);
-					setTimeout(function(){
-						return loader.load(baseUrl + url, data => {
-							files[url] = data;
-							return callback();
-						});
-					}, 500);
-				}
-			}
-		}
-
-		connect();
 	});
 }
 
