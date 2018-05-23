@@ -7,27 +7,31 @@ import parameters from '../engine/parameters';
 import FrameBuffer from '../engine/framebuffer';
 import Geometry from '../engine/geometry';
 
-export default class Tree extends THREE.Object3D {
+export default class Ground extends THREE.Object3D {
 
 	constructor() {
 		super();
+
+		var noiseTexture = assets.textures.noise1;
+		noiseTexture.wrapS = THREE.MirroredRepeatWrapping;
+		noiseTexture.wrapT = THREE.MirroredRepeatWrapping;
+		noiseTexture.needsUpdate = true;
+
 		this.uniforms = {
 			time: { value: 0 },
+			noiseMap: { value: noiseTexture },
 		}
 
-		var material = assets.shaders.tree.clone();
+		var material = assets.shaders.ground.clone();
 		material.side = THREE.FrontSide;
 		material.uniforms = this.uniforms;
-		// material.linecap = "round";
-		// material.linejoin = "round";
-		// material.linewidth = 1;
 		material.needsUpdate = true;
+		material.extensions.shaderTextureLOD = true;
+		assets.shaders.ground.cloned.push(material);
 
-		assets.shaders.tree.cloned.push(material);
-
-		assets.geometries.tree.children.forEach(mesh => mesh.material = material);
-		this.add(assets.geometries.tree);
-		console.log(assets.geometries.tree)
+		var mesh = new THREE.Mesh(new THREE.PlaneGeometry(100,100,300,300), material);
+		mesh.rotateX(-Math.PI/2.);
+		this.add(mesh);
 	}
 
 	update (elapsed) {

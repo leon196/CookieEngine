@@ -3,16 +3,23 @@
 	"fonts": {
 	},
 	"textures": {
+		"noise1": {
+			"file": "image/noise1.png"
+		}
 	},
 	"geometries": {
 		"tree": {
-			"file": "mesh/treeCurves.obj"
+			"file": "mesh/tree.obj"
 		}
 	},
 	"shaders": {
 		"tree": {
 			"vertexShader": "shader/tree.vert",
 			"fragmentShader": "shader/tree.frag"
+		},
+		"ground": {
+			"vertexShader": "shader/ground.vert",
+			"fragmentShader": "shader/ground.frag"
 		}
 	}
 }
