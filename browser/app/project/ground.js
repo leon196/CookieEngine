@@ -31,6 +31,8 @@ export default class Ground extends THREE.Object3D {
 
 		var mesh = new THREE.Mesh(new THREE.PlaneGeometry(100,100,300,300), material);
 		mesh.rotateX(-Math.PI/2.);
+		mesh.castShadow = false;
+		mesh.receiveShadow = true;
 		this.add(mesh);
 	}
 

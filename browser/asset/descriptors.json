@@ -24,6 +24,10 @@
 		"sky": {
 			"vertexShader": "shader/sky.vert",
 			"fragmentShader": "shader/sky.frag"
+		},
+		"leaves": {
+			"vertexShader": "shader/leaves.vert",
+			"fragmentShader": "shader/leaves.frag"
 		}
 	}
 }

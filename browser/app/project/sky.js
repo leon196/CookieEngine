@@ -28,7 +28,7 @@ export default class Sky extends THREE.Object3D {
 		material.needsUpdate = true;
 		assets.shaders.sky.cloned.push(material);
 
-		var mesh = new THREE.Mesh(new THREE.SphereGeometry(100,100,100), material);
+		var mesh = new THREE.Mesh(new THREE.SphereGeometry(100,10,10), material);
 		this.add(mesh);
 	}
 

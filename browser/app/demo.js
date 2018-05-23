@@ -9,10 +9,11 @@ import Mouse from './engine/mouse';
 import Tree from './project/tree';
 import Ground from './project/ground';
 import Sky from './project/sky';
+import Leaves from './project/leaves';
 
 export default function() {
 	var scene, camera, controls, animation, cameraTarget;
-	var tree, ground, sky;
+	var tree, ground, sky, leaves;
 
 	assets.load(function() {
 
@@ -33,9 +34,11 @@ export default function() {
 		tree = new Tree();
 		ground = new Ground();
 		sky = new Sky();
+		leaves = new Leaves();
 		scene.add(tree);
 		scene.add(ground);
 		scene.add(sky);
+		scene.add(leaves);
 		
 		window.addEventListener('resize', onWindowResize, false);
 		requestAnimationFrame(animate);
@@ -62,6 +65,7 @@ export default function() {
 		tree.update(elapsed);
 		ground.update(elapsed);
 		sky.update(elapsed);
+		leaves.update(elapsed);
 
 		controls.update();
 		renderer.render(scene, camera);

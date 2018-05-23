@@ -174,7 +174,7 @@ vec4 edge (sampler2D bitmap, vec2 uv, vec2 dimension)
 	return color;
 }
 
-float rand ( vec2 seed ){ return fract(sin(dot(seed.xy ,vec2(12.9898,78.233))) * 43758.5453); }
+// float rand ( vec2 seed ){ return fract(sin(dot(seed.xy ,vec2(12.9898,78.233))) * 43758.5453); }
 
 // hash based 3d value noise
 // function taken from https://www.shadertoy.com/view/XslGRr
@@ -200,22 +200,24 @@ float noiseIQ( vec3 x )
 	 mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
 }
 
-float fbm (vec3 p) {
+float fbm (vec3 p, float t, vec3 offset) {
     float value = 0.0;
     float amplitud = .5;
     for (float i = 1.; i <= 5.; i++) {
         value += amplitud * noiseIQ(p);
         p *= 2.;
+        p.xz *= rot(t);
+        p += offset;
         amplitud *= .5;
     }
     return value;
 }
 
-float pattern (vec3 p) {
-  vec3 q = vec3(fbm(p), fbm(p+vec3(10.5,51.5,7.5423)), fbm(p+vec3(1501.24,1254.324,658.6)));
-	// q.xz *= rot(iGlobalTime*.2);
-  return fbm(p + 8. * q);
-}
+// float pattern (vec3 p) {
+//   vec3 q = vec3(fbm(p), fbm(p+vec3(10.5,51.5,7.5423)), fbm(p+vec3(1501.24,1254.324,658.6)));
+// 	// q.xz *= rot(iGlobalTime*.2);
+//   return fbm(p + 8. * q);
+// }
 
 vec3 rotateY(vec3 v, float t)
 {
@@ -314,4 +316,19 @@ vec4 godRays (sampler2D bitmap, vec2 uv, float scale)
 		color += texture2D(bitmap, uv);
 	}
 	return color;
+}
+
+#define saturate(a) clamp( a, 0.0, 1.0 )
+#define whiteCompliment(a) ( 1.0 - saturate( a ) )
+
+float pow2( const in float x ) { return x*x; }
+float pow3( const in float x ) { return x*x*x; }
+float pow4( const in float x ) { float x2 = x*x; return x2*x2; }
+float average( const in vec3 color ) { return dot( color, vec3( 0.3333 ) ); }
+// expects values in the range of [0,1]x[0,1], returns values in the [0,1] range.
+// do not collapse into a single function per: http://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/
+highp float rand( const in vec2 uv ) {
+	const highp float a = 12.9898, b = 78.233, c = 43758.5453;
+	highp float dt = dot( uv.xy, vec2( a,b ) ), sn = mod( dt, PI );
+	return fract(sin(sn) * c);
 }

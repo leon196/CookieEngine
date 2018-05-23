@@ -7,7 +7,7 @@ import parameters from '../engine/parameters';
 import FrameBuffer from '../engine/framebuffer';
 import Geometry from '../engine/geometry';
 
-export default class Tree extends THREE.Object3D {
+export default class Leaves extends THREE.Object3D {
 
 	constructor() {
 		super();
@@ -15,19 +15,24 @@ export default class Tree extends THREE.Object3D {
 			time: { value: 0 },
 		}
 
-		var material = assets.shaders.tree.clone();
-		material.side = THREE.FrontSide;
+		var material = assets.shaders.leaves.clone();
+		material.side = THREE.DoubleSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
 
-		assets.shaders.tree.cloned.push(material);
+		assets.shaders.leaves.cloned.push(material);
 
-		assets.geometries.tree.children.forEach(mesh => {
-			mesh.material = material;
-			mesh.castShadow = true;
-			mesh.receiveShadow = false;
+		var attributes = {
+			position: {
+				array: assets.geometries.tree.children[0].geometry.attributes.position.array,
+				itemSize: 3,
+			}
+		}
+		var geometries = Geometry.create(attributes);
+		geometries.forEach(geo => {
+			var mesh = new THREE.Mesh(geo, material);
+			this.add(mesh);
 		});
-		this.add(assets.geometries.tree);
 	}
 
 	update (elapsed) {

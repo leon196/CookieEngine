@@ -19,18 +19,19 @@ float noiseIQ2( in vec3 x )
 	return mix( rg.x, rg.y, f.z );
 }
 
-void displace (inout vec3 p) {
-
-	float scale = .02;
-  vec3 q = 8.0*p.xzy * scale;
-	float f = noiseIQ2( 16.0*p.xzy * scale );
+float fbm2 ( in vec3 p ) {
+  vec3 q = 8.0*p.xzy;
+	float f = noiseIQ2( 16.0*p.xzy );
   f  = 0.5000*noiseIQ2(q); q = m*q*2.01;
   f += 0.2500*noiseIQ2(q); q = m*q*2.02;
   f += 0.1250*noiseIQ2(q); q = m*q*2.03;
   f += 0.0625*noiseIQ2(q); q = m*q*2.01;
+  return f;
+}
 
+void displace (inout vec3 p) {
   float d = length(p);
-	p.y += f * 3. * (clamp(d / 10., 0., 1.) + smoothstep(10.,40.,d) * 4.);
+	p.y += fbm2(p * .02) * 3. * (clamp(d / 10., 0., 1.) + smoothstep(10.,40.,d) * 4.);
 }
 
 void main () {
