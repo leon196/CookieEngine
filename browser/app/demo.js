@@ -13,11 +13,12 @@ import Ground from './project/ground';
 import Sky from './project/sky';
 import Leaves from './project/leaves';
 import Grass from './project/grass';
+import heightmap from './project/heightmap';
 
 export default function() {
 	var scene, camera, controls, animation, cameraTarget;
 	var frame, passEdge, passRender, bloom, renderUniforms;
-	var tree, ground, sky, leaves, grass;
+	var updates;
 
 	assets.load(function() {
 
@@ -29,11 +30,15 @@ export default function() {
 		camera.position.z = 5;
 		cameraTarget = new THREE.Vector3();
 
-		frame = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
+		frame = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
+			type: THREE.FloatType,
+		});
 		passEdge = new FrameBuffer({ count: 1, material: assets.shaders.edge });
 		passRender = new FrameBuffer({ count: 1, material: assets.shaders.postprocess });
+		// bloom = new Bloom(frame.texture);
 		bloom = new Bloom(passEdge.getTexture());
-		// bloom = new Bloom(passEdge.getTexture());
+		heightmap.init();
+
 		renderUniforms = {
 			time: { value: 0 },
 			resolution: { value: [window.innerWidth, window.innerHeight] },
@@ -41,6 +46,7 @@ export default function() {
 			passEdge: { value: passEdge.getTexture() },
 			passBlur: { value: bloom.blurTarget.texture },
 			passBloom: { value: bloom.bloomTarget.texture },
+			heightmap: { value: heightmap.texture },
 			passRender: { value: passRender.getTexture() },
 		};
 		assets.shaders.edge.uniforms = renderUniforms;
@@ -52,16 +58,15 @@ export default function() {
 		controls.dampingFactor = 0.5;
 		controls.rotateSpeed = 0.25;
 
-		tree = new Tree();
-		ground = new Ground();
-		sky = new Sky();
-		leaves = new Leaves();
-		grass = new Grass();
-		scene.add(tree);
-		scene.add(ground);
-		scene.add(sky);
-		scene.add(leaves);
-		scene.add(grass);
+		updates = [
+			new Tree(),
+			new Ground(),
+			new Sky(),
+			new Leaves(),
+			// new Grass(),
+		];
+		updates.forEach(item => scene.add(item));
+		updates.push(heightmap);
 		
 		window.addEventListener('resize', onWindowResize, false);
 		requestAnimationFrame(animate);
@@ -85,11 +90,7 @@ export default function() {
 		// cameraTarget.set(animCameraTarget[0], animCameraTarget[1], animCameraTarget[2]);
 		// camera.lookAt(cameraTarget);
 
-		tree.update(elapsed);
-		ground.update(elapsed);
-		sky.update(elapsed);
-		leaves.update(elapsed);
-		grass.update(elapsed);
+		updates.forEach(item => item.update(elapsed));
 
 		renderUniforms.time.value = elapsed;
 		renderer.render(scene, camera, frame);

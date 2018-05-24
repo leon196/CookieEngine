@@ -6,6 +6,7 @@ import assets from '../engine/assets';
 import parameters from '../engine/parameters';
 import FrameBuffer from '../engine/framebuffer';
 import Geometry from '../engine/geometry';
+import heightmap from './heightmap';
 
 export default class Ground extends THREE.Object3D {
 
@@ -20,6 +21,7 @@ export default class Ground extends THREE.Object3D {
 		this.uniforms = {
 			time: { value: 0 },
 			noiseMap: { value: noiseTexture },
+			heightmap: { value: heightmap.texture },
 		}
 
 		var material = assets.shaders.ground.clone();
@@ -31,8 +33,6 @@ export default class Ground extends THREE.Object3D {
 
 		var mesh = new THREE.Mesh(new THREE.PlaneGeometry(100,100,300,300), material);
 		mesh.rotateX(-Math.PI/2.);
-		mesh.castShadow = false;
-		mesh.receiveShadow = true;
 		this.add(mesh);
 	}
 

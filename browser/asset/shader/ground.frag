@@ -1,3 +1,4 @@
+uniform sampler2D heightmap;
 
 varying vec2 vUv;
 varying vec3 vNormal, vView, vPosWorld;
@@ -9,14 +10,18 @@ const vec3 greenLight = vec3(0.769,0.906,0.604);
 const vec3 greenDark = vec3(0.278,0.455,0.075);
 
 void main () {
-	vec3 normal = normalize(vNormal);
+	vec3 normal = (vNormal);
 	float shade = dot(vec3(1,0,0), normal) * .5 + .5;
 	// float dither = rand(vUv);
 	// shade += dither * .02;
-	float lod = 45.;
+	float height = texture2D(heightmap, vUv).x;
+	shade *= height;
+	float lod = 32.;
 	shade = ceil(shade * lod) / lod;
 	vec3 color = mix(brownLight, brownDark, shade);
-	color = mix(blueLight, color, smoothstep(50., 10., length(vPosWorld)));
+	color = mix(blueLight, color, smoothstep(80., 30., length(vPosWorld)));
+
+	// color *= height;
 
 	gl_FragColor = vec4(color, length(vView));
 }

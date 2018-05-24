@@ -6,6 +6,7 @@ import assets from '../engine/assets';
 import parameters from '../engine/parameters';
 import FrameBuffer from '../engine/framebuffer';
 import Geometry from '../engine/geometry';
+import heightmap from './heightmap';
 
 export default class Grass extends THREE.Object3D {
 
@@ -13,9 +14,10 @@ export default class Grass extends THREE.Object3D {
 		super();
 		this.uniforms = {
 			time: { value: 0 },
+			heightmap: { value: heightmap.texture },
 		}
 
-		var material = assets.shaders.leaves.clone();
+		var material = assets.shaders.grass.clone();
 		material.side = THREE.DoubleSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;

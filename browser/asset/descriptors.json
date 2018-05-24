@@ -33,6 +33,10 @@
 			"vertexShader": "shader/grass.vert",
 			"fragmentShader": "shader/grass.frag"
 		},
+		"heightmap": {
+			"vertexShader": "shader/heightmap.vert",
+			"fragmentShader": "shader/heightmap.frag"
+		},
 		"postprocess": {
 			"vertexShader": "shader/postprocess.vert",
 			"fragmentShader": "shader/postprocess.frag"

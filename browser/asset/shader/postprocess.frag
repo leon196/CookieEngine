@@ -1,6 +1,6 @@
 
 uniform float time;
-uniform sampler2D passScene, passRender, passBlur, passEdge, passBloom;
+uniform sampler2D passScene, passRender, passBlur, passEdge, passBloom, heightmap;
 uniform vec2 resolution;
 varying vec2 vUv;
 
@@ -11,6 +11,7 @@ void main () {
 	vec4 bloom = texture2D(passBloom, uv);
 	vec4 blur = texture2D(passBlur, uv);
 	vec4 edge = texture2D(passEdge, uv);
+	vec4 height = texture2D(heightmap, uv);
 
 	vec4 color = bloom;
 

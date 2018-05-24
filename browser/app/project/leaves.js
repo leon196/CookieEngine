@@ -25,9 +25,16 @@ export default class Leaves extends THREE.Object3D {
 
 		assets.shaders.leaves.cloned.push(material);
 
+		var array = assets.geometries.tree.children[0].geometry.attributes.position.array;
+		var arrayLOD = [];
+		var lod = 10.;
+		var count = array.length;
+		for (var i = 0; i < count; i += lod * 3) {
+			for (var x = 0; x < 3; ++x)	arrayLOD.push(array[i+x]);
+		} 
 		var attributes = {
 			position: {
-				array: assets.geometries.tree.children[0].geometry.attributes.position.array,
+				array: arrayLOD,
 				itemSize: 3,
 			}
 		}

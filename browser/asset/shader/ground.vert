@@ -1,5 +1,5 @@
 
-uniform sampler2D noiseMap;
+uniform sampler2D noiseMap, heightmap;
 uniform float time;
 varying vec2 vUv;
 varying vec3 vNormal, vView, vPosWorld;
@@ -29,9 +29,8 @@ float fbm2 ( in vec3 p ) {
   return f;
 }
 
-void displace (inout vec3 p) {
-  float d = length(p);
-	p.y += fbm2(p * .02) * 3. * (clamp(d / 10., 0., 1.) + smoothstep(10.,40.,d) * 4.);
+void displace (inout vec3 p, vec2 offset) {
+	p.y += texture2DLod(heightmap, uv + offset, 0.).y;
 }
 
 void main () {
@@ -40,19 +39,19 @@ void main () {
 
 	vec4 pos = modelMatrix * vec4(position, 1);
 
-
-	vec2 e = vec2(1.,0);
-	vec3 north = pos.xyz + e.yyx;
-	vec3 south = pos.xyz - e.yyx;
-	vec3 east = pos.xyz + e.xyy;
-	vec3 west = pos.xyz - e.xyy;
-	displace(north);
-	displace(south);
-	displace(east);
-	displace(west);
+	displace(pos.xyz, vec2(0));
+	
+	vec2 e = vec2(.001,0);
+	vec3 north = pos.xyz;
+	vec3 south = pos.xyz;
+	vec3 east = pos.xyz;
+	vec3 west = pos.xyz;
+	displace(north, e.yx);
+	displace(south, -e.yx);
+	displace(east, -e.xy);
+	displace(west, e.xy);
 	vNormal = cross(west - east, north - south);
 
-	displace(pos.xyz);
 
 	vPosWorld = pos.xyz;
 
