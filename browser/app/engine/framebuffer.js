@@ -14,21 +14,25 @@ export default class {
 				options.height || window.innerHeight, {
 					format: options.format || THREE.RGBAFormat,
 					type: options.type || THREE.FloatType,
-					minFilter: options.min || THREE.NearestFilter,
-					magFilter: options.mag || THREE.NearestFilter,
+					minFilter: options.min || THREE.LinearFilter,
+					magFilter: options.mag || THREE.LinearFilter,
 					stencilBuffer: options.stencil || true,
 					depthBuffer: options.depth || true
 				}));
 		}
 
-		this.quad = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), options.material);
+		this.scene = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), options.material);
 		this.camera = new THREE.PerspectiveCamera(75, 1, 0.01, 100);
 		this.camera.position.z = 5;
 	}
 
 	update () {
 		this.swap();
-		renderer.render(this.quad, this.camera, this.getRenderTarget(), true);
+		renderer.render(this.scene, this.camera, this.getRenderTarget(), true);
+	}
+
+	record (scene, camera) {
+		renderer.render(scene, camera, this.getRenderTarget(), true);
 	}
 
 	getRenderTarget () {

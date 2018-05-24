@@ -4,16 +4,20 @@ import { OrbitControls } from './libs/OrbitControls';
 import assets from './engine/assets';
 import renderer from './engine/renderer';
 import parameters from './engine/parameters';
+import Bloom from './libs/bloom/bloom';
 import * as timeline from './engine/timeline';
 import Mouse from './engine/mouse';
+import FrameBuffer from './engine/framebuffer';
 import Tree from './project/tree';
 import Ground from './project/ground';
 import Sky from './project/sky';
 import Leaves from './project/leaves';
+import Grass from './project/grass';
 
 export default function() {
 	var scene, camera, controls, animation, cameraTarget;
-	var tree, ground, sky, leaves;
+	var frame, passEdge, passRender, bloom, renderUniforms;
+	var tree, ground, sky, leaves, grass;
 
 	assets.load(function() {
 
@@ -23,8 +27,25 @@ export default function() {
 		camera.position.x = 0;
 		camera.position.y = 2.5;
 		camera.position.z = 5;
-
 		cameraTarget = new THREE.Vector3();
+
+		frame = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
+		passEdge = new FrameBuffer({ count: 1, material: assets.shaders.edge });
+		passRender = new FrameBuffer({ count: 1, material: assets.shaders.postprocess });
+		bloom = new Bloom(passEdge.getTexture());
+		// bloom = new Bloom(passEdge.getTexture());
+		renderUniforms = {
+			time: { value: 0 },
+			resolution: { value: [window.innerWidth, window.innerHeight] },
+			passScene: { value: frame.texture },
+			passEdge: { value: passEdge.getTexture() },
+			passBlur: { value: bloom.blurTarget.texture },
+			passBloom: { value: bloom.bloomTarget.texture },
+			passRender: { value: passRender.getTexture() },
+		};
+		assets.shaders.edge.uniforms = renderUniforms;
+		assets.shaders.blur.uniforms = renderUniforms;
+		assets.shaders.postprocess.uniforms = renderUniforms;
 
 		controls = new OrbitControls(camera, renderer.domElement);
 		controls.enableDamping = true;
@@ -35,10 +56,12 @@ export default function() {
 		ground = new Ground();
 		sky = new Sky();
 		leaves = new Leaves();
+		grass = new Grass();
 		scene.add(tree);
 		scene.add(ground);
 		scene.add(sky);
 		scene.add(leaves);
+		scene.add(grass);
 		
 		window.addEventListener('resize', onWindowResize, false);
 		requestAnimationFrame(animate);
@@ -51,8 +74,8 @@ export default function() {
 
 	function animate(elapsed) {
 		requestAnimationFrame(animate);
-
 		elapsed /= 1000.;
+		controls.update();
 		// elapsed = timeline.getTime();
 
 		// var animCameraPosition = assets.animations.getPosition("CameraAction", elapsed);
@@ -66,16 +89,23 @@ export default function() {
 		ground.update(elapsed);
 		sky.update(elapsed);
 		leaves.update(elapsed);
+		grass.update(elapsed);
 
-		controls.update();
-		renderer.render(scene, camera);
+		renderUniforms.time.value = elapsed;
+		renderer.render(scene, camera, frame);
+		passEdge.update();
+  	bloom.render(renderer);
+		renderer.render(passRender.scene, passRender.camera);
 	}
 
 	function onWindowResize () {
 		var w = window.innerWidth/renderer.scale;
 		var h = window.innerHeight/renderer.scale;
+		renderUniforms.resolution.value[0] = w;
+		renderUniforms.resolution.value[1] = h;
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
 		renderer.setSize(window.innerWidth, window.innerHeight);
+		bloom.resize();
 	}
 }

@@ -22,11 +22,8 @@ export default class Tree extends THREE.Object3D {
 
 		assets.shaders.tree.cloned.push(material);
 
-		assets.geometries.tree.children.forEach(mesh => {
-			mesh.material = material;
-			mesh.castShadow = true;
-			mesh.receiveShadow = false;
-		});
+		assets.geometries.tree.children.forEach(mesh => mesh.material = material );
+
 		this.add(assets.geometries.tree);
 	}
 

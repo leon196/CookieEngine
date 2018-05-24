@@ -36,12 +36,12 @@ float fbm2 ( in vec3 p ) {
 void main () {
 	vec3 view = normalize(vView);
 	vec3 color = view*.5+.5;
-	float shade = max(view.y, 0.);
+	float shade = abs(view.y);
 	shade *= fbm(view * 3., 0., vec3(time,0,0) * .5);
-	float dither = rand(vUv);
-	float lod = 16.;
-	shade += dither * .02;
+	float lod = 32.;
+	// float dither = rand(vUv);
+	// shade += dither * .01;
 	shade = ceil(shade * lod) / lod;
 	color = mix(blue1, vec3(1), shade);
-	gl_FragColor = vec4(color, 1);
+	gl_FragColor = vec4(color, length(vView));
 }

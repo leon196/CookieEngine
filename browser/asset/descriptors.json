@@ -28,6 +28,34 @@
 		"leaves": {
 			"vertexShader": "shader/leaves.vert",
 			"fragmentShader": "shader/leaves.frag"
+		},
+		"grass": {
+			"vertexShader": "shader/grass.vert",
+			"fragmentShader": "shader/grass.frag"
+		},
+		"postprocess": {
+			"vertexShader": "shader/postprocess.vert",
+			"fragmentShader": "shader/postprocess.frag"
+		},
+		"blur": {
+			"vertexShader": "shader/postprocess.vert",
+			"fragmentShader": "shader/blur.frag"
+		},
+		"edge": {
+			"vertexShader": "shader/postprocess.vert",
+			"fragmentShader": "shader/edge.frag"
+		},
+		"bloom": {
+			"vertexShader": "shader/bloom/bloom.vert",
+			"fragmentShader": "shader/bloom/bloom.frag"
+		},
+		"bright": {
+			"vertexShader": "shader/bloom/bright.vert",
+			"fragmentShader": "shader/bloom/bright.frag"
+		},
+		"gaussianBlur": {
+			"vertexShader": "shader/bloom/gaussian_blur.vert",
+			"fragmentShader": "shader/bloom/gaussian_blur.frag"
 		}
 	}
 }

@@ -17,6 +17,9 @@ export default class Leaves extends THREE.Object3D {
 
 		var material = assets.shaders.leaves.clone();
 		material.side = THREE.DoubleSide;
+		material.linecap = "round";
+		material.linejoin = "round";
+		material.linewidth = 1;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
 
@@ -31,6 +34,7 @@ export default class Leaves extends THREE.Object3D {
 		var geometries = Geometry.create(attributes);
 		geometries.forEach(geo => {
 			var mesh = new THREE.Mesh(geo, material);
+			// var mesh = new THREE.LineSegments(geo, material);
 			this.add(mesh);
 		});
 	}
