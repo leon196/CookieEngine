@@ -24,9 +24,10 @@ export default class Grass extends THREE.Object3D {
 
 		assets.shaders.grass.cloned.push(material);
 
-		var geometries = Geometry.create(Geometry.randomPositionAttribute(128*128), [1,4]);
+		var geometries = Geometry.create(Geometry.randomPositionAttribute(64*64), [1,3]);
 		geometries.forEach(geo => {
 			var mesh = new THREE.Mesh(geo, material);
+			mesh.frustumCulled = false;
 			this.add(mesh);
 		});
 	}

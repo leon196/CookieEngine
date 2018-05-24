@@ -63,7 +63,7 @@ export default function() {
 			new Ground(),
 			new Sky(),
 			new Leaves(),
-			// new Grass(),
+			new Grass(),
 		];
 		updates.forEach(item => scene.add(item));
 		updates.push(heightmap);
