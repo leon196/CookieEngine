@@ -17,7 +17,7 @@ export default class Sky extends THREE.Object3D {
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
 		assets.shaders.sky.cloned.push(material);
-		var mesh = new THREE.Mesh(new THREE.SphereGeometry(100,10,10), material);
+		var mesh = new THREE.Mesh(new THREE.SphereGeometry(1000,10,10), material);
 		this.add(mesh);
 
 		// moon
@@ -39,21 +39,6 @@ export default class Sky extends THREE.Object3D {
 		this.meshSun = new THREE.Mesh(new THREE.SphereGeometry(10,30,30), material);
 		this.meshSun.frustumCulled = false;
 		this.add(this.meshSun);
-
-		// stars
-		var countResolution = 32;
-		this.uniforms.indexResolution = { value: countResolution };
-		material = assets.shaders.star.clone();
-		material.side = THREE.FrontSide;
-		material.uniforms = this.uniforms;
-		material.needsUpdate = true;
-		assets.shaders.star.cloned.push(material);
-		var geometries = Geometry.create(Geometry.randomPositionAttribute(countResolution*countResolution));
-		geometries.forEach(geo => {
-			var mesh = new THREE.Mesh(geo, material);
-			mesh.frustumCulled = false;
-			this.add(mesh);
-		});
 	}
 
 	update (elapsed) {

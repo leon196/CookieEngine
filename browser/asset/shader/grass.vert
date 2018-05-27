@@ -3,26 +3,30 @@ attribute vec2 anchor, indexMap;
 uniform float time, visible, indexResolution;
 uniform sampler2D heightmap;
 varying vec3 vColor, vNormal, vView;
+varying vec2 vUv;
 
 const vec3 greenLight = vec3(0.769,0.906,0.604);
 const vec3 greenDark = vec3(0.278,0.455,0.075);
+const vec3 brownLight = vec3(1,0.886,0.667);
+const vec3 brownDark = vec3(0.502,0.357,0.082);
 
 void main () {
 	vec4 pos = modelMatrix * vec4(position, 1);
 	float y = anchor.y*.5+.5;
-	float size = .02 * y * visible;
+	float size = 2. * visible;
 	float range = 10.;
-	float height = 1.;
+	float height = .7;
+	vUv = anchor * .5 + .5;
 	
 	pos.xz = (indexMap * 2. - 1.) * range;
 	float index = indexMap.x * indexResolution + indexMap.y * indexResolution * indexResolution;
+	// index += anchor.x * .1;
 	// float r = length(pos.xz);
 	// float a = atan(pos.z, pos.x);
-	float r = index * .001;
-	float a = index * .1;
+	float r = 2. + index * .03;
+	float a = index * 1.5;
 	pos.xz = vec2(cos(a),sin(a)) * r;
-	float fade = smoothstep(range*2.,range,length(pos.xz));
-	vec3 seed = pos.xyz / 2.;
+	vec3 seed = pos.xyz * 2. + anchor.xxx * 2.;
 	vec3 curl = vec3(0);
 	float noisy = noiseIQ(seed);
 	curl.x = noisy;
@@ -32,19 +36,23 @@ void main () {
 	curl = normalize(curl);
 	vNormal = curl;
 	vColor = mix(greenDark, greenLight, noisy);
-	vColor *= smoothstep(1.,.5,y);
-	// vColor = greenDark;
-	pos.xyz += curl * 2.;
-	pos.xz += fade*2.*sin(anchor.y / 2. + noisy * 10. + time)*.1*(1.-y);
+	vColor = mix(brownLight*.25, vColor, smoothstep(1.,.5,y));
+
+	vec3 right = curl;
+	vec3 up = vec3(0,1,0);
+
+	pos.xyz += curl * .1;
+
+	float fade = .5+.5*smoothstep(.0, .1, vUv.x) * smoothstep(1., .9, vUv.x);
+	pos.xyz += up * anchor.y * size * fade + right * anchor.x * size;
+	pos.xz += fade*sin(anchor.y / 2. + noisy * 2. + time)*.1*(1.-y);
+
 	vec2 st = (pos.xz / 50.) * .5 + .5;
 	st.y = 1. - st.y;
 	float ground = texture2D(heightmap, st).y;
 	pos.y = ground + fade*mix(height, 0., y);
-	// dir = normalize(pos.xyz - dir);
+
 	vView = pos.xyz - cameraPosition;
-	vec3 right = normalize(cross(vView, vec3(0,1,0)));
-	vec3 up = normalize(cross(vNormal, right));
-	// vNormal = normalize(cross(vView, right));
-	pos.xyz += (right * anchor.x + up * anchor.y) * size;
+
 	gl_Position = projectionMatrix * viewMatrix * pos;
 }

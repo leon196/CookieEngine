@@ -10,22 +10,27 @@ const vec3 greenDark = vec3(0.278,0.455,0.075);
 
 void main () {
 	float range = 20.;
-	float height = 40.;
-	float size = 1.;
+	float height = 100.;
+	float size = .2;
 	
 	vec4 pos = modelMatrix * vec4(position, 1);
 	float count = indexResolution * indexResolution;
 	float index = indexMap.x * indexResolution + indexMap.y * count;
-	float r = range * index / count;
-	float a = index * .1;
-	pos.xz = vec2(cos(a),sin(a)) * r;
+	float salt = rand(indexMap);
+	float a = index * .5564 + salt;
+	pos.x = 99.;
+	pos.xz *= rot(a*.9986);
+	pos.xy *= rot(a*.6654);
+	pos.zy *= rot(a*.36546);
+	pos.y = abs(pos.y);
 
 	vView = pos.xyz - cameraPosition;
-	vec3 right = normalize(cross(vView, vec3(0,1,0)));
-	vec3 up = normalize(cross(vec3(1,0,0), right));
+	vec3 up = vec3(0,1,0);
+	vec3 right = normalize(cross(vView, up));
+	size *= .5+.5*salt;
 	pos.xyz += (right * anchor.x + up * anchor.y) * size;
 
-	vColor = vec3(.75);
+	vColor = vec3(1);
 	vUv = anchor;
 
 	gl_Position = projectionMatrix * viewMatrix * pos;

@@ -13,6 +13,7 @@ import Ground from './project/ground';
 import Sky from './project/sky';
 import Grass from './project/grass';
 import Rain from './project/rain';
+import Starfield from './project/starfield';
 import heightmap from './project/heightmap';
 
 export default function() {
@@ -25,7 +26,7 @@ export default function() {
 		scene = new THREE.Scene();
 		sceneEdge = new THREE.Scene();
 		
-		camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 1000);
+		camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 2000);
 		camera.position.x = 0;
 		camera.position.y = 2.5;
 		camera.position.z = 5;
@@ -64,14 +65,13 @@ export default function() {
 		var tree = new Tree();
 		var ground = new Ground();
 		var sky = new Sky();
+		var starfield = new Starfield();
 		var grass = new Grass();
 		var rain = new Rain();
 		updates = [ tree, ground, sky ];
 		updates.forEach(item => sceneEdge.add(item));
-		updates.push(grass);
-		updates.push(rain);
-		scene.add(grass);
-		scene.add(rain);
+		updates.push(grass, rain, starfield);
+		scene.add(grass, rain, starfield);
 		updates.push(heightmap);
 		
 		window.addEventListener('resize', onWindowResize, false);

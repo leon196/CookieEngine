@@ -10,7 +10,7 @@ export default class Grass extends THREE.Object3D {
 	constructor() {
 		super();
 
-		var countResolution = 128.;
+		var countResolution = 32.;
 
 		this.uniforms = {
 			time: { value: 0 },
@@ -26,7 +26,7 @@ export default class Grass extends THREE.Object3D {
 
 		assets.shaders.grass.cloned.push(material);
 
-		var geometries = Geometry.create(Geometry.randomPositionAttribute(countResolution*countResolution), [1,3]);
+		var geometries = Geometry.create(Geometry.randomPositionAttribute(countResolution*countResolution), [6,2]);
 		geometries.forEach(geo => {
 			var mesh = new THREE.Mesh(geo, material);
 			mesh.frustumCulled = false;
