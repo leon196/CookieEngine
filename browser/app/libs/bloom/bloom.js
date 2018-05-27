@@ -47,5 +47,6 @@ export default class Bloom {
     this.renderTarget[1].setSize(window.innerWidth / 4, window.innerHeight / 4);
     this.plane.blurh.resize();
     this.plane.blurv.resize();
+    this.bloomTarget.setSize(window.innerWidth, window.innerHeight);
   }
 }

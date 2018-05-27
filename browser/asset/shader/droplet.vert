@@ -1,0 +1,56 @@
+
+attribute vec2 anchor, indexMap;
+uniform float time, visible, indexResolution;
+uniform sampler2D heightmap, heightNormalMap;
+varying vec3 vColor, vNormal, vView;
+varying vec2 vUv;
+varying float vSplashing;
+
+const vec3 greenLight = vec3(0.769,0.906,0.604);
+const vec3 greenDark = vec3(0.278,0.455,0.075);
+
+void main () {
+	float range = 20.;
+	float height = 4.;
+	float size = .04 * visible;
+	
+	vec4 pos = modelMatrix * vec4(position, 1);
+
+	vec3 seed = pos.xyz * 4. + indexMap.xyy * 100.;
+	vec3 curl = vec3(0);
+	curl.x = noiseIQ(seed);
+	// curl.y = noiseIQ(seed+vec3(11.5013240, 5.134, 9.0329));
+	curl.z = noiseIQ(seed+vec3(9.459,39.1239,15.0));
+	curl = curl * 2. - 1.;
+	curl = normalize(curl);
+
+	vec2 st = (pos.xz / 50.) * .5 + .5;
+	st.y = 1. - st.y;
+	float ground = texture2D(heightmap, st).y;
+	float salt = rand(st);
+	float ratio = mod(time + salt, 1.);
+	float splashAt = .9;
+	float ratioFall = smoothstep(.0, splashAt, ratio);
+	float ratioSplash = smoothstep(1., splashAt, ratio);
+
+	// float splashing = step(.0001, ratioSplash);
+	// y = mix(y, anchor.y, splashing);
+	// size = mix(size, mix(vec2(0), sizeSplash, ratioSplash), splashing);
+	// pos.y = mix(max(ground + .1 * splashing, pos.y - height), pos.y, (1.-ratioFall));
+	pos.xyz += curl * ratio * 2.;
+	pos.y += sin(ratio*PI);
+
+	vView = pos.xyz - cameraPosition;
+	vec3 right = normalize(cross(vView, vec3(0,1,0)));
+	vec3 up = normalize(cross(vView, right));
+	vec3 normalMap = texture2D(heightNormalMap, st).xyz;
+	// right = mix(right, normalize(cross(normalMap, vec3(0,1,0))), splashing);
+	// up = mix(up, normalize(cross(normalMap, right)), splashing);
+	pos.xyz += (right * anchor.x + up * anchor.y) * size * ratioSplash;
+
+	vColor = vec3(.9);
+	// vSplashing = splashing;
+	vUv = anchor;
+
+	gl_Position = projectionMatrix * viewMatrix * pos;
+}

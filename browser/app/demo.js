@@ -11,42 +11,45 @@ import FrameBuffer from './engine/framebuffer';
 import Tree from './project/tree';
 import Ground from './project/ground';
 import Sky from './project/sky';
-import Leaves from './project/leaves';
 import Grass from './project/grass';
+import Rain from './project/rain';
 import heightmap from './project/heightmap';
 
 export default function() {
-	var scene, camera, controls, animation, cameraTarget;
-	var frame, passEdge, passRender, bloom, renderUniforms;
-	var updates;
+	var scene, sceneEdge, camera, controls, animation, cameraTarget;
+	var frame, frameEdge, passEdge, passRender, bloom, renderUniforms;
+	var updates, frames;
 
 	assets.load(function() {
 
 		scene = new THREE.Scene();
+		sceneEdge = new THREE.Scene();
 		
-		camera = new THREE.PerspectiveCamera(110, window.innerWidth / window.innerHeight, 0.01, 1000);
+		camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 1000);
 		camera.position.x = 0;
 		camera.position.y = 2.5;
 		camera.position.z = 5;
 		cameraTarget = new THREE.Vector3();
 
-		frame = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
-			type: THREE.FloatType,
-		});
+		frame = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
+		frameEdge = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
 		passEdge = new FrameBuffer({ count: 1, material: assets.shaders.edge });
 		passRender = new FrameBuffer({ count: 1, material: assets.shaders.postprocess });
-		// bloom = new Bloom(frame.texture);
-		bloom = new Bloom(passEdge.getTexture());
+		// bloom = new Bloom(passEdge.getTexture());
+		frames = [frame, frameEdge, passEdge, passRender];
 		heightmap.init();
+		heightmap.update();
 
 		renderUniforms = {
 			time: { value: 0 },
 			resolution: { value: [window.innerWidth, window.innerHeight] },
 			passScene: { value: frame.texture },
+			frameEdge: { value: frameEdge.texture },
 			passEdge: { value: passEdge.getTexture() },
-			passBlur: { value: bloom.blurTarget.texture },
-			passBloom: { value: bloom.bloomTarget.texture },
+			// passBlur: { value: bloom.blurTarget.texture },
+			// passBloom: { value: bloom.bloomTarget.texture },
 			heightmap: { value: heightmap.texture },
+			heightNormalMap: { value: heightmap.normalMap.texture },
 			passRender: { value: passRender.getTexture() },
 		};
 		assets.shaders.edge.uniforms = renderUniforms;
@@ -58,14 +61,17 @@ export default function() {
 		controls.dampingFactor = 0.5;
 		controls.rotateSpeed = 0.25;
 
-		updates = [
-			new Tree(),
-			new Ground(),
-			new Sky(),
-			new Leaves(),
-			new Grass(),
-		];
-		updates.forEach(item => scene.add(item));
+		var tree = new Tree();
+		var ground = new Ground();
+		var sky = new Sky();
+		var grass = new Grass();
+		var rain = new Rain();
+		updates = [ tree, ground, sky ];
+		updates.forEach(item => sceneEdge.add(item));
+		updates.push(grass);
+		updates.push(rain);
+		scene.add(grass);
+		scene.add(rain);
 		updates.push(heightmap);
 		
 		window.addEventListener('resize', onWindowResize, false);
@@ -75,6 +81,9 @@ export default function() {
 		document.addEventListener('mousemove', Mouse.onMove);
 
 		timeline.start();
+
+		parameters.scene.leaves = 1;
+		parameters.scene.grass = 1;
 	});
 
 	function animate(elapsed) {
@@ -94,19 +103,21 @@ export default function() {
 
 		renderUniforms.time.value = elapsed;
 		renderer.render(scene, camera, frame);
+		renderer.render(sceneEdge, camera, frameEdge);
 		passEdge.update();
-  	bloom.render(renderer);
+		// bloom.render(renderer);
 		renderer.render(passRender.scene, passRender.camera);
 	}
 
 	function onWindowResize () {
-		var w = window.innerWidth/renderer.scale;
-		var h = window.innerHeight/renderer.scale;
+		var w = window.innerWidth;
+		var h = window.innerHeight;
+		renderer.setSize(w, h);
 		renderUniforms.resolution.value[0] = w;
 		renderUniforms.resolution.value[1] = h;
+		frames.forEach(item => item.setSize(w, h));
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
-		renderer.setSize(window.innerWidth, window.innerHeight);
-		bloom.resize();
+		// bloom.resize();
 	}
 }

@@ -200,6 +200,19 @@ float noiseIQ( vec3 x )
 	 mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
 }
 
+float fbm3 (vec3 p, float t, vec3 offset) {
+    float value = 0.0;
+    float amplitud = .5;
+    for (float i = 3.; i >= 1.; --i) {
+        value += amplitud * noiseIQ(p);
+        p *= 2.;
+        p.xz *= rot(t);
+        p += offset;
+        amplitud *= .5;
+    }
+    return value;
+}
+
 float fbm4 (vec3 p, float t, vec3 offset) {
     float value = 0.0;
     float amplitud = .5;

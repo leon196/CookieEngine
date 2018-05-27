@@ -3,9 +3,6 @@
 	"fonts": {
 	},
 	"textures": {
-		"noise1": {
-			"file": "image/noise1.png"
-		}
 	},
 	"geometries": {
 		"tree": {
@@ -25,6 +22,18 @@
 			"vertexShader": "shader/sky.vert",
 			"fragmentShader": "shader/sky.frag"
 		},
+		"moon": {
+			"vertexShader": "shader/moon.vert",
+			"fragmentShader": "shader/moon.frag"
+		},
+		"sun": {
+			"vertexShader": "shader/sun.vert",
+			"fragmentShader": "shader/sun.frag"
+		},
+		"star": {
+			"vertexShader": "shader/star.vert",
+			"fragmentShader": "shader/star.frag"
+		},
 		"leaves": {
 			"vertexShader": "shader/leaves.vert",
 			"fragmentShader": "shader/leaves.frag"
@@ -32,6 +41,14 @@
 		"grass": {
 			"vertexShader": "shader/grass.vert",
 			"fragmentShader": "shader/grass.frag"
+		},
+		"rain": {
+			"vertexShader": "shader/rain.vert",
+			"fragmentShader": "shader/rain.frag"
+		},
+		"droplet": {
+			"vertexShader": "shader/droplet.vert",
+			"fragmentShader": "shader/droplet.frag"
 		},
 		"heightmap": {
 			"vertexShader": "shader/heightmap.vert",
