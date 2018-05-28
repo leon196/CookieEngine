@@ -28,9 +28,6 @@ export default class Tree extends THREE.Object3D {
 		}
 		material = assets.shaders.leaves.clone();
 		material.side = THREE.DoubleSide;
-		material.linecap = "round";
-		material.linejoin = "round";
-		material.linewidth = 1;
 		material.uniforms = this.leavesUniforms;
 		material.needsUpdate = true;
 		assets.shaders.leaves.cloned.push(material);
@@ -46,11 +43,36 @@ export default class Tree extends THREE.Object3D {
 			var mesh = new THREE.Mesh(geo, material);
 			this.add(mesh);
 		});
+
+		// froot
+		this.frootUniforms = {
+			time: { value: 0 },
+			visible: { value: 0 },
+		}
+		material = assets.shaders.froot.clone();
+		material.side = THREE.DoubleSide;
+		material.uniforms = this.frootUniforms;
+		material.needsUpdate = true;
+		assets.shaders.froot.cloned.push(material);
+		array = assets.geometries.tree.children[0].geometry.attributes.position.array;
+		arrayLOD = [];
+		lod = 120.;
+		count = array.length;
+		for (var i = 0; i < count; i += lod * 3)
+			for (var x = 0; x < 3; ++x)	arrayLOD.push(array[i+x]);
+		attributes = { position: { array: arrayLOD, itemSize: 3 }}
+		geometries = Geometry.create(attributes);
+		geometries.forEach(geo => {
+			var mesh = new THREE.Mesh(geo, material);
+			this.add(mesh);
+		});
 	}
 
 	update (elapsed) {
 		this.treeUniforms.time.value = elapsed;
 		this.leavesUniforms.time.value = elapsed;
 		this.leavesUniforms.visible.value = parameters.scene.leaves;
+		this.frootUniforms.time.value = elapsed;
+		this.frootUniforms.visible.value = parameters.scene.froot;
 	}
 }

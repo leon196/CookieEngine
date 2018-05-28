@@ -15,7 +15,7 @@ void main () {
 	float height = texture2D(heightmap, vUv).x;
 	shade *= height;
 
-	float lod = 32.;
+	float lod = 50.;
 	shade = ceil(shade * lod) / lod;
 	vec3 color = mix(brownLight, brownDark, shade);
 	color = mix(blueLight, color, smoothstep(80., 30., length(vPosWorld)));

@@ -18,7 +18,7 @@ void main () {
 	float index = indexMap.x * indexResolution + indexMap.y * count;
 	float salt = rand(indexMap);
 	float a = index * .5564 + salt;
-	pos.x = 99.;
+	pos.x = 90.;
 	pos.xz *= rot(a*.9986);
 	pos.xy *= rot(a*.6654);
 	pos.zy *= rot(a*.36546);

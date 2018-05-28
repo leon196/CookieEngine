@@ -12,11 +12,11 @@ void main () {
 	vec3 view = normalize(vView);
 	vec3 color = view*.5+.5;
 	float shade = abs(view.y);
-	shade *= fbm3(view * 3., 0., vec3(time*.5,0,0) * .5);
-	float lod = 45.;
+	shade *= fbm3(view * 3., 0., vec3(time,0,0) * .5);
+	float lod = 50.;
 	// float dither = rand(vUv);
 	// shade *= 1.+dither * .02;
 	shade = ceil(shade * lod) / lod;
-	color = mix(blue1, vec3(1), smoothstep(.1,.6,shade));
+	color = mix(blue1, blue2, smoothstep(.0,.8,shade));
 	gl_FragColor = vec4(color, length(vView));
 }

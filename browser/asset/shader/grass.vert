@@ -13,7 +13,7 @@ const vec3 brownDark = vec3(0.502,0.357,0.082);
 void main () {
 	vec4 pos = modelMatrix * vec4(position, 1);
 	float y = anchor.y*.5+.5;
-	float size = 2. * visible;
+	float size = 2.;
 	float range = 10.;
 	float height = .7;
 	vUv = anchor * .5 + .5;
@@ -44,7 +44,8 @@ void main () {
 	pos.xyz += curl * .1;
 
 	float fade = .5+.5*smoothstep(.0, .1, vUv.x) * smoothstep(1., .9, vUv.x);
-	pos.xyz += up * anchor.y * size * fade + right * anchor.x * size;
+	fade *= smoothstep(80.*visible, 50.*visible, length(pos.xz));
+	pos.xyz += right * anchor.x * size;
 	pos.xz += fade*sin(anchor.y / 2. + noisy * 2. + time)*.1*(1.-y);
 
 	vec2 st = (pos.xz / 50.) * .5 + .5;

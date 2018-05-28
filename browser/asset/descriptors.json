@@ -38,6 +38,10 @@
 			"vertexShader": "shader/leaves.vert",
 			"fragmentShader": "shader/leaves.frag"
 		},
+		"froot": {
+			"vertexShader": "shader/froot.vert",
+			"fragmentShader": "shader/froot.frag"
+		},
 		"grass": {
 			"vertexShader": "shader/grass.vert",
 			"fragmentShader": "shader/grass.frag"

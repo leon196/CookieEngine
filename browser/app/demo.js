@@ -4,6 +4,7 @@ import { OrbitControls } from './libs/OrbitControls';
 import assets from './engine/assets';
 import renderer from './engine/renderer';
 import parameters from './engine/parameters';
+import { lerp, lerpArray, lerpVector, lerpVectorArray } from './engine/misc';
 import Bloom from './libs/bloom/bloom';
 import * as timeline from './engine/timeline';
 import Mouse from './engine/mouse';
@@ -15,14 +16,15 @@ import Grass from './project/grass';
 import Rain from './project/rain';
 import Starfield from './project/starfield';
 import heightmap from './project/heightmap';
+import text from './project/text';
 
 export default function() {
-	var scene, sceneEdge, camera, controls, animation, cameraTarget;
-	var frame, frameEdge, passEdge, passRender, bloom, renderUniforms;
+	var scene, sceneEdge, camera, controls, animation, cameraPosition, cameraTarget;
+	var frameFlat, frameEdge, passEdge, passRender, bloom, renderUniforms;
 	var updates, frames;
+	var timeElapsed, lastElapsed;
 
 	assets.load(function() {
-
 		scene = new THREE.Scene();
 		sceneEdge = new THREE.Scene();
 		
@@ -30,25 +32,25 @@ export default function() {
 		camera.position.x = 0;
 		camera.position.y = 2.5;
 		camera.position.z = 5;
-		cameraTarget = new THREE.Vector3();
+		cameraPosition = new THREE.Vector3(.001,.001,.001);
+		cameraTarget = new THREE.Vector3(.001,.001,.001);
 
-		frame = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
+		frameFlat = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
 		frameEdge = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
 		passEdge = new FrameBuffer({ count: 1, material: assets.shaders.edge });
 		passRender = new FrameBuffer({ count: 1, material: assets.shaders.postprocess });
-		// bloom = new Bloom(passEdge.getTexture());
-		frames = [frame, frameEdge, passEdge, passRender];
+		frames = [frameFlat, frameEdge, passEdge, passRender];
 		heightmap.init();
 		heightmap.update();
 
 		renderUniforms = {
 			time: { value: 0 },
+			textVisible: { value: 1 },
 			resolution: { value: [window.innerWidth, window.innerHeight] },
-			passScene: { value: frame.texture },
+			frameFlat: { value: frameFlat.texture },
 			frameEdge: { value: frameEdge.texture },
+			frameText: { value: text },
 			passEdge: { value: passEdge.getTexture() },
-			// passBlur: { value: bloom.blurTarget.texture },
-			// passBloom: { value: bloom.bloomTarget.texture },
 			heightmap: { value: heightmap.texture },
 			heightNormalMap: { value: heightmap.normalMap.texture },
 			passRender: { value: passRender.getTexture() },
@@ -72,41 +74,66 @@ export default function() {
 		updates.forEach(item => sceneEdge.add(item));
 		updates.push(grass, rain, starfield);
 		scene.add(grass, rain, starfield);
-		updates.push(heightmap);
-		
-		window.addEventListener('resize', onWindowResize, false);
-		requestAnimationFrame(animate);
-		onWindowResize();
-
-		document.addEventListener('mousemove', Mouse.onMove);
-
-		timeline.start();
+		// updates.push(heightmap);
 
 		parameters.scene.leaves = 1;
+		parameters.scene.froot = 1;
 		parameters.scene.grass = 1;
+		parameters.scene.text = 1;
+		
+		window.addEventListener('resize', onWindowResize, false);
+		onWindowResize();
+		document.addEventListener('mousemove', Mouse.onMove);
+
+		var info = document.getElementById('info');
+		info.innerHTML = '';
+		var startButton = document.createElement('input');
+		startButton.type = 'button';
+		startButton.value = 'start';
+		startButton.onclick = start;
+		info.appendChild(startButton);
+		start();
 	});
+
+	function start () {
+		requestAnimationFrame(animate);
+		timeline.start();
+		document.getElementById('overlay').remove();
+		timeElapsed = 0.;
+		lastElapsed = 0.;
+	}
 
 	function animate(elapsed) {
 		requestAnimationFrame(animate);
+
 		elapsed /= 1000.;
 		controls.update();
-		// elapsed = timeline.getTime();
 
-		// var animCameraPosition = assets.animations.getPosition("CameraAction", elapsed);
-		// camera.position.set(animCameraPosition[0], animCameraPosition[1], animCameraPosition[2]);
+		var delta = Math.max(.001, Math.abs(elapsed - lastElapsed));
+		lastElapsed = elapsed;
+		var animDamping = 10. * delta;
 
-		// var animCameraTarget = assets.animations.getPosition("CameraTargetAction", elapsed);
-		// cameraTarget.set(animCameraTarget[0], animCameraTarget[1], animCameraTarget[2]);
-		// camera.lookAt(cameraTarget);
+		// timeElapsed = lerp(timeElapsed, timeline.getTime(), animDamping);
+		timeElapsed = timeline.getTime();
 
-		updates.forEach(item => item.update(elapsed));
+		cameraPosition = lerpVectorArray(cameraPosition, assets.animations.getPosition("CameraAction", timeElapsed), animDamping);
+		camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
 
-		renderUniforms.time.value = elapsed;
-		renderer.render(scene, camera, frame);
+		cameraTarget = lerpVectorArray(cameraTarget, assets.animations.getPosition("CameraTargetAction", timeElapsed), animDamping);
+		camera.lookAt(cameraTarget);
+
+		// renderUniforms.textVisible.value = parameters.scene.text;
+		renderUniforms.textVisible.value = lerp(renderUniforms.textVisible.value, assets.animations.getValue("TextAction", timeElapsed), animDamping);
+
+		updates.forEach(item => item.update(timeElapsed));
+
+		renderUniforms.time.value = timeElapsed;
+		renderer.render(scene, camera, frameFlat);
 		renderer.render(sceneEdge, camera, frameEdge);
 		passEdge.update();
 		// bloom.render(renderer);
 		renderer.render(passRender.scene, passRender.camera);
+
 	}
 
 	function onWindowResize () {
@@ -118,6 +145,5 @@ export default function() {
 		frames.forEach(item => item.setSize(w, h));
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
-		// bloom.resize();
 	}
 }

@@ -17,7 +17,8 @@ export default class Sky extends THREE.Object3D {
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
 		assets.shaders.sky.cloned.push(material);
-		var mesh = new THREE.Mesh(new THREE.SphereGeometry(1000,10,10), material);
+		var mesh = new THREE.Mesh(new THREE.SphereGeometry(100,10,10), material);
+		mesh.frustumCulled = false;
 		this.add(mesh);
 
 		// moon

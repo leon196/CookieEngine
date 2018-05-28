@@ -40,13 +40,20 @@ export default class Rain extends THREE.Object3D {
 		material.needsUpdate = true;
 		assets.shaders.droplet.cloned.push(material);
 
-		var array = assets.geometries.tree.children[0].geometry.attributes.position.array;
-		var arrayLOD = [];
-		var lod = 30.;
-		var count = array.length;
-		for (var i = 0; i < count; i += lod * 3)
-			for (var x = 0; x < 3; ++x)	arrayLOD.push(array[i+x]);
-		var attributes = { position: { array: arrayLOD, itemSize: 3 } };
+		var arrayPos = assets.geometries.tree.children[0].geometry.attributes.position.array;
+		var arrayNormal = assets.geometries.tree.children[0].geometry.attributes.normal.array;
+		var arrayPosLOD = [];
+		var arrayNormalLOD = [];
+		var lod = 20.;
+		var count = arrayPos.length;
+		for (var i = 0; i < count; i += lod * 3) {
+			for (var x = 0; x < 3; ++x)	arrayPosLOD.push(arrayPos[i+x]);
+			for (var x = 0; x < 3; ++x)	arrayNormalLOD.push(arrayNormal[i+x]);
+		}
+		var attributes = {
+			position: { array: arrayPosLOD, itemSize: 3 },
+			normal: { array: arrayNormalLOD, itemSize: 3 },
+		};
 		geometries = Geometry.create(attributes);
 		geometries.forEach(geo => {
 			var mesh = new THREE.Mesh(geo, material);

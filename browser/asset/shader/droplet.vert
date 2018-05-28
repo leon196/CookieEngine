@@ -13,8 +13,10 @@ void main () {
 	float range = 20.;
 	float height = 4.;
 	float size = .04 * visible;
-	
+	float speed = 2.;
+
 	vec4 pos = modelMatrix * vec4(position, 1);
+	pos.xyz += normal * .5;
 
 	vec3 seed = pos.xyz * 4. + indexMap.xyy * 100.;
 	vec3 curl = vec3(0);
@@ -28,7 +30,7 @@ void main () {
 	st.y = 1. - st.y;
 	float ground = texture2D(heightmap, st).y;
 	float salt = rand(st);
-	float ratio = mod(time + salt, 1.);
+	float ratio = mod(time * speed + salt, 1.);
 	float splashAt = .9;
 	float ratioFall = smoothstep(.0, splashAt, ratio);
 	float ratioSplash = smoothstep(1., splashAt, ratio);

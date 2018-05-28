@@ -47,6 +47,20 @@ export function lerpArray(a0, a1, t) {
 	return a0;
 }
 
+export function lerpVector(a0, a1, t) {
+	a0.x = lerp(a0.x, a1.x, t);
+	a0.y = lerp(a0.y, a1.y, t);
+	a0.z = lerp(a0.z, a1.z, t);
+	return a0;
+}
+
+export function lerpVectorArray(a0, a1, t) {
+	a0.x = lerp(a0.x, a1[0], t);
+	a0.y = lerp(a0.y, a1[1], t);
+	a0.z = lerp(a0.z, a1[2], t);
+	return a0;
+}
+
 // Find the closest power of 2
 export function closestPowerOfTwo (num) {
 	return Math.pow(2, Math.ceil(Math.log(num) / Math.log(2)));

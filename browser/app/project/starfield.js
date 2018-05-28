@@ -12,7 +12,7 @@ export default class Starfield extends THREE.Object3D {
 			time: { value: 0 },
 		}
 
-		var countResolution = 32;
+		var countResolution = 64;
 		this.uniforms.indexResolution = { value: countResolution };
 		var material = assets.shaders.star.clone();
 		material.side = THREE.FrontSide;
