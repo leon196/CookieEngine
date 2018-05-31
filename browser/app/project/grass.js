@@ -36,6 +36,5 @@ export default class Grass extends THREE.Object3D {
 
 	update (elapsed) {
 		this.uniforms.time.value = elapsed;
-		this.uniforms.visible.value = parameters.scene.grass;
 	}
 }

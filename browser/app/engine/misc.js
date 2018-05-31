@@ -35,6 +35,10 @@ export function clamp(value, min, max) {
 	return Math.max(min, Math.min(max, value));
 }
 
+export function saturate(value) {
+	return Math.max(0, Math.min(1, value));
+}
+
 //https://github.com/mattdesl/lerp/blob/master/index.js
 export function lerp(v0, v1, t) {
 	return v0*(1-t)+v1*t;

@@ -56,7 +56,7 @@ export default class Tree extends THREE.Object3D {
 		assets.shaders.froot.cloned.push(material);
 		array = assets.geometries.tree.children[0].geometry.attributes.position.array;
 		arrayLOD = [];
-		lod = 120.;
+		lod = 200.;
 		count = array.length;
 		for (var i = 0; i < count; i += lod * 3)
 			for (var x = 0; x < 3; ++x)	arrayLOD.push(array[i+x]);
@@ -71,8 +71,6 @@ export default class Tree extends THREE.Object3D {
 	update (elapsed) {
 		this.treeUniforms.time.value = elapsed;
 		this.leavesUniforms.time.value = elapsed;
-		this.leavesUniforms.visible.value = parameters.scene.leaves;
 		this.frootUniforms.time.value = elapsed;
-		this.frootUniforms.visible.value = parameters.scene.froot;
 	}
 }

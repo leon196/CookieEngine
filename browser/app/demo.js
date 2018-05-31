@@ -4,7 +4,7 @@ import { OrbitControls } from './libs/OrbitControls';
 import assets from './engine/assets';
 import renderer from './engine/renderer';
 import parameters from './engine/parameters';
-import { lerp, lerpArray, lerpVector, lerpVectorArray } from './engine/misc';
+import { lerp, lerpArray, lerpVector, lerpVectorArray, saturate } from './engine/misc';
 import Bloom from './libs/bloom/bloom';
 import * as timeline from './engine/timeline';
 import Mouse from './engine/mouse';
@@ -20,9 +20,10 @@ import text from './project/text';
 
 export default function() {
 	var scene, sceneEdge, camera, controls, animation, cameraPosition, cameraTarget;
-	var frameFlat, frameEdge, passEdge, passRender, bloom, renderUniforms;
+	var frameFlat, frameEdge, passEdge, passRender, renderUniforms;
 	var updates, frames;
-	var timeElapsed, lastElapsed;
+	var timeElapsed, lastElapsed, delta, animDamping;
+	var tree, ground, sky, starfield, grass, rain;
 
 	assets.load(function() {
 		scene = new THREE.Scene();
@@ -32,8 +33,8 @@ export default function() {
 		camera.position.x = 0;
 		camera.position.y = 2.5;
 		camera.position.z = 5;
-		cameraPosition = new THREE.Vector3(.001,.001,.001);
-		cameraTarget = new THREE.Vector3(.001,.001,.001);
+		cameraPosition = new THREE.Vector3();
+		cameraTarget = new THREE.Vector3();
 
 		frameFlat = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
 		frameEdge = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
@@ -64,12 +65,12 @@ export default function() {
 		controls.dampingFactor = 0.5;
 		controls.rotateSpeed = 0.25;
 
-		var tree = new Tree();
-		var ground = new Ground();
-		var sky = new Sky();
-		var starfield = new Starfield();
-		var grass = new Grass();
-		var rain = new Rain();
+		tree = new Tree();
+		ground = new Ground();
+		sky = new Sky();
+		starfield = new Starfield();
+		grass = new Grass();
+		rain = new Rain();
 		updates = [ tree, ground, sky ];
 		updates.forEach(item => sceneEdge.add(item));
 		updates.push(grass, rain, starfield);
@@ -103,27 +104,42 @@ export default function() {
 		lastElapsed = 0.;
 	}
 
+	function getPosition (vector, name) {
+		return lerpVectorArray(vector, assets.animations.getPosition(name, timeElapsed), animDamping);
+	}
+
+	function getValue (value, name) {
+		return saturate(lerp(value, assets.animations.getValue(name, timeElapsed), animDamping));
+	}
+
 	function animate(elapsed) {
 		requestAnimationFrame(animate);
-
 		elapsed /= 1000.;
-		controls.update();
 
-		var delta = Math.max(.001, Math.abs(elapsed - lastElapsed));
-		lastElapsed = elapsed;
-		var animDamping = 10. * delta;
+		if (parameters.other.animation) {
+			delta = Math.max(.001, Math.abs(elapsed - lastElapsed));
+			lastElapsed = elapsed;
+			animDamping = 10. * delta;
+			timeElapsed = timeline.getTime();
 
-		// timeElapsed = lerp(timeElapsed, timeline.getTime(), animDamping);
-		timeElapsed = timeline.getTime();
+			cameraPosition = getPosition(cameraPosition, "CameraAction");
+			camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+			cameraTarget = getPosition(cameraTarget, "CameraTargetAction");
+			camera.lookAt(cameraTarget);
 
-		cameraPosition = lerpVectorArray(cameraPosition, assets.animations.getPosition("CameraAction", timeElapsed), animDamping);
-		camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+			renderUniforms.textVisible.value = getValue(renderUniforms.textVisible.value, "TextAction");
+			tree.leavesUniforms.visible.value = getValue(tree.leavesUniforms.visible.value, "LeavesAction");
+			tree.frootUniforms.visible.value = getValue(tree.frootUniforms.visible.value, "FrootAction");
+			grass.uniforms.visible.value = getValue(grass.uniforms.visible.value, "GrassAction");
 
-		cameraTarget = lerpVectorArray(cameraTarget, assets.animations.getPosition("CameraTargetAction", timeElapsed), animDamping);
-		camera.lookAt(cameraTarget);
+		} else {
+			renderUniforms.textVisible.value = parameters.scene.text;
+			tree.leavesUniforms.visible.value = parameters.scene.leaves;
+			tree.frootUniforms.visible.value = parameters.scene.froot;
+			grass.uniforms.visible.value = parameters.scene.grass;
 
-		// renderUniforms.textVisible.value = parameters.scene.text;
-		renderUniforms.textVisible.value = lerp(renderUniforms.textVisible.value, assets.animations.getValue("TextAction", timeElapsed), animDamping);
+			controls.update();
+		}
 
 		updates.forEach(item => item.update(timeElapsed));
 
@@ -131,7 +147,6 @@ export default function() {
 		renderer.render(scene, camera, frameFlat);
 		renderer.render(sceneEdge, camera, frameEdge);
 		passEdge.update();
-		// bloom.render(renderer);
 		renderer.render(passRender.scene, passRender.camera);
 
 	}

@@ -6,4 +6,7 @@ export default {
 		rain: 0,
 		text: 0,
 	},
+	other: {
+		animation: true,
+	}
 }
