@@ -131,12 +131,16 @@ export default function() {
 			tree.leavesUniforms.visible.value = getValue(tree.leavesUniforms.visible.value, "LeavesAction");
 			tree.frootUniforms.visible.value = getValue(tree.frootUniforms.visible.value, "FrootAction");
 			grass.uniforms.visible.value = getValue(grass.uniforms.visible.value, "GrassAction");
+			rain.uniforms.visible.value = getValue(rain.uniforms.visible.value, "RainAction");
+			rain.uniforms.stormIntensity.value = getValue(rain.uniforms.stormIntensity.value, "StormAction");
+			rain.uniforms.stormDirection.value = getPosition(rain.uniforms.stormDirection.value, "StormDirectionAction");
 
 		} else {
 			renderUniforms.textVisible.value = parameters.scene.text;
 			tree.leavesUniforms.visible.value = parameters.scene.leaves;
 			tree.frootUniforms.visible.value = parameters.scene.froot;
 			grass.uniforms.visible.value = parameters.scene.grass;
+			rain.uniforms.visible.value = parameters.scene.rain;
 
 			controls.update();
 		}

@@ -15,6 +15,8 @@ export default class Rain extends THREE.Object3D {
 		this.uniforms = {
 			time: { value: 0 },
 			visible: { value: 0 },
+			stormIntensity: { value: 0 },
+			stormDirection: { value: [0,-1,0] },
 			heightmap: { value: heightmap.texture },
 			heightNormalMap: { value: heightmap.normalMap.texture },
 			indexResolution: { value: countResolution },
@@ -64,6 +66,5 @@ export default class Rain extends THREE.Object3D {
 
 	update (elapsed) {
 		this.uniforms.time.value = elapsed;
-		this.uniforms.visible.value = parameters.scene.rain;
 	}
 }

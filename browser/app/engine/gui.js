@@ -23,4 +23,4 @@ Object.keys(parameters).forEach(keyRoot => {
 	}
 	folder.open();
 });
-// gui.close();
+gui.close();
