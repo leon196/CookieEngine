@@ -1,6 +1,7 @@
 
 attribute vec2 anchor, indexMap;
-uniform float time, visible, indexResolution;
+uniform float time, visible, indexResolution, stormIntensity;
+uniform vec3 stormDirection;
 uniform sampler2D heightmap, heightNormalMap;
 varying vec3 vColor, vNormal, vView;
 varying vec2 vUv;
@@ -40,7 +41,9 @@ void main () {
 	// size = mix(size, mix(vec2(0), sizeSplash, ratioSplash), splashing);
 	// pos.y = mix(max(ground + .1 * splashing, pos.y - height), pos.y, (1.-ratioFall));
 	pos.xyz += curl * ratio * 2.;
-	pos.y += sin(ratio*PI);
+	pos.y += mix(sin(ratio*PI), -ratio, clamp(stormIntensity, 0., 1.));
+
+	pos.xz += -normalize(stormDirection).xz * stormIntensity * pos.y * ratioFall * .1; 
 
 	vView = pos.xyz - cameraPosition;
 	vec3 right = normalize(cross(vView, vec3(0,1,0)));

@@ -104,8 +104,12 @@ export default function() {
 		lastElapsed = 0.;
 	}
 
-	function getPosition (vector, name) {
+	function getVectorPosition (vector, name) {
 		return lerpVectorArray(vector, assets.animations.getPosition(name, timeElapsed), animDamping);
+	}
+
+	function getPosition (array, name) {
+		return lerpArray(array, assets.animations.getPosition(name, timeElapsed), animDamping);
 	}
 
 	function getValue (value, name) {
@@ -122,9 +126,9 @@ export default function() {
 			animDamping = 10. * delta;
 			timeElapsed = timeline.getTime();
 
-			cameraPosition = getPosition(cameraPosition, "CameraAction");
+			cameraPosition = getVectorPosition(cameraPosition, "CameraAction");
 			camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-			cameraTarget = getPosition(cameraTarget, "CameraTargetAction");
+			cameraTarget = getVectorPosition(cameraTarget, "CameraTargetAction");
 			camera.lookAt(cameraTarget);
 
 			renderUniforms.textVisible.value = getValue(renderUniforms.textVisible.value, "TextAction");
