@@ -8,4 +8,4 @@ WebGL demo for Alchimie demoparty 2017.
 
 [Gaeel](http://nanoleptic.net/gaeel): music.
 
-[Ponk](https://www.shaderland.com): art code.
+[Ponk](http://www.shaderland.com): art code.
