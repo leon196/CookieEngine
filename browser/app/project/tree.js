@@ -29,7 +29,7 @@ export default class Tree extends THREE.Object3D {
 			twist: { value: 0 },
 		}
 		material = assets.shaders.leaves
-		material.side = THREE.DoubleSide;
+		material.side = THREE.FrontSide;
 		material.uniforms = this.leavesUniforms;
 		material.needsUpdate = true;
 		var array = assets.geometries.tree.children[0].geometry.attributes.position.array;
@@ -53,7 +53,7 @@ export default class Tree extends THREE.Object3D {
 			heightNormalMap: { value: heightmap.normalMap.texture },
 		}
 		material = assets.shaders.froot;
-		material.side = THREE.DoubleSide;
+		material.side = THREE.FrontSide;
 		material.uniforms = this.frootUniforms;
 		material.needsUpdate = true;
 		array = assets.geometries.tree.children[0].geometry.attributes.position.array;

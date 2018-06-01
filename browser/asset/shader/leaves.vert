@@ -7,10 +7,11 @@ const vec3 greenLight = vec3(0.769,0.906,0.604);
 const vec3 greenDark = vec3(0.278,0.455,0.075);
 
 void main () {
+	float salt = rand(indexMap);
 	vec4 pos = modelMatrix * vec4(position, 1);
 	vec2 pivot = anchor * rot(PI/4.);
 	float y = (pivot.y*.5+.5)*2.;
-	float size = .1 * visible;
+	float size = (.05 + .05 * salt) * visible;
 	vec3 curl = vec3(0);
 	vec3 seed = pos.xyz * 4. + indexMap.xyy * 100.;
 	vec3 dir = pos.xyz;
@@ -23,7 +24,6 @@ void main () {
 	vNormal = curl;
 	vColor = mix(greenLight, greenDark, noisy);
 
-	float salt = rand(indexMap);
 	seed = pos.xyz*.2;
 	seed.xz *= rot(time*.9551);
 	seed.yz *= rot(time*.6519);
@@ -35,10 +35,11 @@ void main () {
 	// pos.xz *= rot(d * shouldBounce * twist);
 	// pos.yz *= rot(d * shouldBounce * twist * .6);
 	// pos.yx *= rot(d * shouldBounce * twist * .3);
-
+	
 	pos.xyz += curl * (1.+y) * size * 2. * visible;
 	vView = pos.xyz - cameraPosition;
-	vec3 right = normalize(cross(curl, vec3(0,1,0)));
+	vec3 right = normalize(cross(curl, -vView));//vec3(0,1,0)));
 	pos.xyz += right * pivot.x * size;
+
 	gl_Position = projectionMatrix * viewMatrix * pos;
 }

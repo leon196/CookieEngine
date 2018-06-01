@@ -23,10 +23,10 @@ void main () {
 	// index += anchor.x * .1;
 	// float r = length(pos.xz);
 	// float a = atan(pos.z, pos.x);
-	float r = 2. + index * .03;
-	float a = index * 1.5;
+	float a = index * .4;
+	float r = 1. + index * .07 + sin(anchor.x * 3. + index) * .5;
 	pos.xz = vec2(cos(a),sin(a)) * r;
-	vec3 seed = pos.xyz * 2. + anchor.xxx * 2.;
+	vec3 seed = pos.xyz * 2. + anchor.xxx * 4.;
 	vec3 curl = vec3(0);
 	float noisy = noiseIQ(seed);
 	curl.x = noisy;
@@ -38,10 +38,10 @@ void main () {
 	vColor = mix(greenDark, greenLight, noisy);
 	vColor = mix(brownLight*.25, vColor, smoothstep(1.,.5,y));
 
-	vec3 right = curl;
+	vec3 right = curl * .5 + normalize(vec3(pos.z, pos.y, -pos.x));//normalize(cross(curl, vView));
 	vec3 up = vec3(0,1,0);
 
-	pos.xyz += curl * .1;
+	// pos.xyz += curl * .5;
 
 	float fade = .5+.5*smoothstep(.0, .1, vUv.x) * smoothstep(1., .9, vUv.x);
 	fade *= smoothstep(80.*visible, 50.*visible, length(pos.xz));

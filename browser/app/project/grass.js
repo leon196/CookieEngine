@@ -10,7 +10,7 @@ export default class Grass extends THREE.Object3D {
 	constructor() {
 		super();
 
-		var countResolution = 32.;
+		var countResolution = 16.;
 
 		this.uniforms = {
 			time: { value: 0 },

@@ -50,6 +50,6 @@ void main () {
 	vView = pos.xyz - cameraPosition;
 	vec3 right = normalize(cross(vView, vec3(0,1,0)));
 	vec3 up = normalize(cross(vView, right));
-	pos.xyz += (right * anchor.x * visible + up * y) * size;
+	pos.xyz += (-right * anchor.x * visible + up * y) * size;
 	gl_Position = projectionMatrix * viewMatrix * pos;
 }

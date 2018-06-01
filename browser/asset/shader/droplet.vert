@@ -59,7 +59,7 @@ void main () {
 
 	vView = pos.xyz - cameraPosition;
 	vec3 right = normalize(cross(vView, vec3(0,1,0)));
-	vec3 up = normalize(cross(vView, right));
+	vec3 up = normalize(cross(vView, -right));
 	vec3 normalMap = texture2D(heightNormalMap, st).xyz;
 	// right = mix(right, normalize(cross(normalMap, vec3(0,1,0))), splashing);
 	// up = mix(up, normalize(cross(normalMap, right)), splashing);

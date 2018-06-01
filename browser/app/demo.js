@@ -97,7 +97,7 @@ export default function() {
 		parameters.scene.leaves = 1;
 		parameters.scene.froot = 1;
 		parameters.scene.grass = 1;
-		parameters.scene.text = 1;
+		parameters.scene.text = 0;
 		
 		window.addEventListener('resize', onWindowResize, false);
 		onWindowResize();
@@ -185,7 +185,6 @@ export default function() {
 		renderer.render(scene, camera, frameFlat);
 		renderer.render(sceneEdge, camera, frameEdge);
 		renderer.render(passRender.scene, passRender.camera);
-		// renderer.render(sceneEdge, camera);
 
 		lastElapsed = elapsed;
 	}

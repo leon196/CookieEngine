@@ -13,7 +13,7 @@ const vec3 greenDark = vec3(0.278,0.455,0.075);
 void main () {
 	float range = 20.;
 	float height = 40.;
-	vec2 size = visible * vec2(.02, 2.);
+	vec2 size = visible * vec2(.01, 2.);
 	vec2 sizeSplash = visible * vec2(.2);
 	
 	vec4 pos = modelMatrix * vec4(position, 1);
@@ -36,11 +36,11 @@ void main () {
 	float splashing = step(.0001, ratioSplash);
 	y = mix(y, anchor.y, splashing);
 	size = mix(size, mix(vec2(0), sizeSplash, ratioSplash), splashing);
-	pos.y = ground + height * (1.-ratioFall) + .1 * splashing;
+	pos.y = ground + height * (1.-ratioFall) + .02 * splashing;
 
 	vView = pos.xyz - cameraPosition;
 	vec3 right = normalize(cross(vView, vec3(0,1,0)));
-	vec3 up = normalize(cross(vec3(1,0,0), right));
+	vec3 up = vec3(0,1,0);//normalize(cross(vec3(1,0,0), right));
 	vec3 normalMap = texture2D(heightNormalMap, st).xyz;
 	right = mix(right, normalize(cross(normalMap, vec3(0,1,0))), splashing);
 	up = mix(up, normalize(cross(normalMap, right)), splashing);

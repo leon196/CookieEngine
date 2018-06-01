@@ -25,7 +25,7 @@ export default class Rain extends THREE.Object3D {
 		}
 
 		var material = assets.shaders.rain;
-		material.side = THREE.DoubleSide;
+		material.side = THREE.FrontSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
 
@@ -38,7 +38,7 @@ export default class Rain extends THREE.Object3D {
 
 		// droplets
 		material = assets.shaders.droplet;
-		material.side = THREE.DoubleSide;
+		material.side = THREE.FrontSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
 
