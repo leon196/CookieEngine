@@ -1,13 +1,11 @@
-# And The Crowd Gathered At Cookie
+# La Chimie du Cookie
 
-Invitro for Cookie demoparty 2017.
+WebGL demo for Alchimie demoparty 2017.
 
 <img src="/Screenshot.png?raw=true" alt="Screenshot" width="100%"/>
 
 ## Credits
 
-[Fergus](https://github.com/Simon-L): music.
+[Gaeel](http://nanoleptic.net/gaeel): music.
 
-[Koltes](https://github.com/KoltesDigital): code.
-
-[Ponk](https://github.com/leon196): artcode.
+[Ponk](https://www.shaderland.com): art code.
