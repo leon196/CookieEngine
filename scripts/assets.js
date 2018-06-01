@@ -79,7 +79,6 @@ Object.keys(descriptors.shaders).forEach(name => {
 		name + ': new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.' + name + ', {',
 		'vertexShader: shaderHeader + ' + vertexShaderImportName + ',',
 		'fragmentShader: shaderHeader + ' + fragmentShaderImportName + ',',
-		'uniforms: uniforms,',
 		'})),'
 	);
 });
@@ -95,7 +94,6 @@ const lines = [
 	'/* This file is generated with "npm run assets", do not edit by hand. */',
 	'import descriptors from "../../asset/descriptors.json!";',
 	'import makeAnimations from "./make-animations";',
-	'import uniforms from "./uniforms";',
 	'import { OBJLoader } from "../libs/OBJLoader";',
 	'import { PLYLoader } from "../libs/PLYLoader";',
 	'import * as THREE from "three.js";',

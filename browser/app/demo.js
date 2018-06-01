@@ -4,9 +4,10 @@ import { OrbitControls } from './libs/OrbitControls';
 import assets from './engine/assets';
 import renderer from './engine/renderer';
 import parameters from './engine/parameters';
-import { lerp, lerpArray, lerpVector, lerpVectorArray, saturate } from './engine/misc';
+import { clamp, lerp, lerpArray, lerpVector, lerpVectorArray, saturate } from './engine/misc';
 import Bloom from './libs/bloom/bloom';
 import * as timeline from './engine/timeline';
+import * as makeText from './engine/make-text';
 import Mouse from './engine/mouse';
 import FrameBuffer from './engine/framebuffer';
 import Tree from './project/tree';
@@ -16,14 +17,13 @@ import Grass from './project/grass';
 import Rain from './project/rain';
 import Starfield from './project/starfield';
 import heightmap from './project/heightmap';
-import text from './project/text';
 
 export default function() {
 	var scene, sceneEdge, camera, controls, animation, cameraPosition, cameraTarget;
 	var frameFlat, frameEdge, passEdge, passRender, renderUniforms;
 	var updates, frames;
 	var timeElapsed, lastElapsed, delta, animDamping;
-	var tree, ground, sky, starfield, grass, rain;
+	var tree, ground, sky, starfield, grass, rain, text;
 
 	assets.load(function() {
 		scene = new THREE.Scene();
@@ -38,20 +38,37 @@ export default function() {
 
 		frameFlat = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
 		frameEdge = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.FloatType });
-		passEdge = new FrameBuffer({ count: 1, material: assets.shaders.edge });
 		passRender = new FrameBuffer({ count: 1, material: assets.shaders.postprocess });
-		frames = [frameFlat, frameEdge, passEdge, passRender];
+		frames = [frameFlat, frameEdge, passRender];
 		heightmap.init();
 		heightmap.update();
+
+		text = makeText.createTexture([{
+			text: 'From Brain\nWith Love',
+			font: 'bowlbyonesc',
+			textAlign: 'center',
+			fontSize: 150,
+			fillStyle: 'white',
+			textBaseline: 'middle',
+			width: 1024,
+			height: 1024,
+			shadowColor: 'rgba(0,0,0,.5)',
+			shadowBlur: 4,
+			offsetY: -100,
+		},{
+			text: 'music by Grizzly Cogs\nart coded by ponk\ndev tool by Koltes',
+			fontSize: 70,
+			offsetY: 200,
+		},
+	]);
 
 		renderUniforms = {
 			time: { value: 0 },
 			textVisible: { value: 1 },
 			resolution: { value: [window.innerWidth, window.innerHeight] },
 			frameFlat: { value: frameFlat.texture },
-			frameEdge: { value: frameEdge.texture },
 			frameText: { value: text },
-			passEdge: { value: passEdge.getTexture() },
+			frameEdge: { value: frameEdge.texture },
 			heightmap: { value: heightmap.texture },
 			heightNormalMap: { value: heightmap.normalMap.texture },
 			passRender: { value: passRender.getTexture() },
@@ -93,7 +110,6 @@ export default function() {
 		startButton.value = 'start';
 		startButton.onclick = start;
 		info.appendChild(startButton);
-		start();
 	});
 
 	function start () {
@@ -105,14 +121,23 @@ export default function() {
 	}
 
 	function getVectorPosition (vector, name) {
+		// var array = assets.animations.getPosition(name, timeElapsed);
+		// return new THREE.Vector3(array[0], array[1], array[2]);
 		return lerpVectorArray(vector, assets.animations.getPosition(name, timeElapsed), animDamping);
 	}
 
 	function getPosition (array, name) {
+		// return assets.animations.getPosition(name, timeElapsed);
 		return lerpArray(array, assets.animations.getPosition(name, timeElapsed), animDamping);
 	}
 
 	function getValue (value, name) {
+		// return assets.animations.getValue(name, timeElapsed);
+		return lerp(value, assets.animations.getValue(name, timeElapsed), animDamping);
+	}
+
+	function getValueClamped (value, name) {
+		// return assets.animations.getValue(name, timeElapsed);
 		return saturate(lerp(value, assets.animations.getValue(name, timeElapsed), animDamping));
 	}
 
@@ -122,21 +147,26 @@ export default function() {
 
 		if (parameters.other.animation) {
 			delta = Math.max(.001, Math.abs(elapsed - lastElapsed));
-			lastElapsed = elapsed;
-			animDamping = 10. * delta;
+			animDamping = clamp(10. * delta, 0.001, 1.);
 			timeElapsed = timeline.getTime();
 
 			cameraPosition = getVectorPosition(cameraPosition, "CameraAction");
 			camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
 			cameraTarget = getVectorPosition(cameraTarget, "CameraTargetAction");
 			camera.lookAt(cameraTarget);
+			camera.fov = getValue(camera.fov, "FOVAction");
+			camera.updateProjectionMatrix();
 
-			renderUniforms.textVisible.value = getValue(renderUniforms.textVisible.value, "TextAction");
-			tree.leavesUniforms.visible.value = getValue(tree.leavesUniforms.visible.value, "LeavesAction");
-			tree.frootUniforms.visible.value = getValue(tree.frootUniforms.visible.value, "FrootAction");
-			grass.uniforms.visible.value = getValue(grass.uniforms.visible.value, "GrassAction");
-			rain.uniforms.visible.value = getValue(rain.uniforms.visible.value, "RainAction");
-			rain.uniforms.stormIntensity.value = getValue(rain.uniforms.stormIntensity.value, "StormAction");
+			renderUniforms.textVisible.value = getValueClamped(renderUniforms.textVisible.value, "TextAction");
+			tree.leavesUniforms.visible.value = getValueClamped(tree.leavesUniforms.visible.value, "LeavesAction");
+			tree.leavesUniforms.bounce.value = getValueClamped(tree.leavesUniforms.bounce.value, "BounceAction");
+			tree.leavesUniforms.twist.value = getValueClamped(tree.leavesUniforms.twist.value, "TwistAction");
+			rain.uniforms.bounce.value = tree.leavesUniforms.bounce.value;
+			rain.uniforms.twist.value = tree.leavesUniforms.twist.value;
+			tree.frootUniforms.visible.value = getValueClamped(tree.frootUniforms.visible.value, "FrootAction");
+			grass.uniforms.visible.value = getValueClamped(grass.uniforms.visible.value, "GrassAction");
+			rain.uniforms.visible.value = getValueClamped(rain.uniforms.visible.value, "RainAction");
+			rain.uniforms.stormIntensity.value = getValueClamped(rain.uniforms.stormIntensity.value, "StormAction");
 			rain.uniforms.stormDirection.value = getPosition(rain.uniforms.stormDirection.value, "StormDirectionAction");
 
 		} else {
@@ -145,7 +175,7 @@ export default function() {
 			tree.frootUniforms.visible.value = parameters.scene.froot;
 			grass.uniforms.visible.value = parameters.scene.grass;
 			rain.uniforms.visible.value = parameters.scene.rain;
-
+			timeElapsed = elapsed;
 			controls.update();
 		}
 
@@ -154,15 +184,16 @@ export default function() {
 		renderUniforms.time.value = timeElapsed;
 		renderer.render(scene, camera, frameFlat);
 		renderer.render(sceneEdge, camera, frameEdge);
-		passEdge.update();
 		renderer.render(passRender.scene, passRender.camera);
+		// renderer.render(sceneEdge, camera);
 
+		lastElapsed = elapsed;
 	}
 
 	function onWindowResize () {
-		var w = window.innerWidth;
-		var h = window.innerHeight;
-		renderer.setSize(w, h);
+		var w = window.innerWidth / renderer.scale;
+		var h = window.innerHeight / renderer.scale;
+		renderer.setSize(window.innerWidth, window.innerHeight);
 		renderUniforms.resolution.value[0] = w;
 		renderUniforms.resolution.value[1] = h;
 		frames.forEach(item => item.setSize(w, h));

@@ -14,11 +14,10 @@ export default class Starfield extends THREE.Object3D {
 
 		var countResolution = 64;
 		this.uniforms.indexResolution = { value: countResolution };
-		var material = assets.shaders.star.clone();
+		var material = assets.shaders.star;
 		material.side = THREE.FrontSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
-		assets.shaders.star.cloned.push(material);
 		var geometries = Geometry.create(Geometry.randomPositionAttribute(countResolution*countResolution));
 		geometries.forEach(geo => {
 			var mesh = new THREE.Mesh(geo, material);

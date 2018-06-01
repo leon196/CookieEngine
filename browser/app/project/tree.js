@@ -3,6 +3,7 @@ import * as THREE from 'three.js';
 import assets from '../engine/assets';
 import Geometry from '../engine/geometry';
 import parameters from '../engine/parameters';
+import heightmap from './heightmap'
 
 export default class Tree extends THREE.Object3D {
 
@@ -13,11 +14,10 @@ export default class Tree extends THREE.Object3D {
 			time: { value: 0 },
 		}
 		var mesh = assets.geometries.tree.clone();
-		var material = assets.shaders.tree.clone();
+		var material = assets.shaders.tree
 		material.side = THREE.FrontSide;
 		material.uniforms = this.treeUniforms;
 		material.needsUpdate = true;
-		assets.shaders.tree.cloned.push(material);
 		mesh.children.forEach(child => child.material = material );
 		this.add(mesh);
 
@@ -25,12 +25,13 @@ export default class Tree extends THREE.Object3D {
 		this.leavesUniforms = {
 			time: { value: 0 },
 			visible: { value: 0 },
+			bounce: { value: 0 },
+			twist: { value: 0 },
 		}
-		material = assets.shaders.leaves.clone();
+		material = assets.shaders.leaves
 		material.side = THREE.DoubleSide;
 		material.uniforms = this.leavesUniforms;
 		material.needsUpdate = true;
-		assets.shaders.leaves.cloned.push(material);
 		var array = assets.geometries.tree.children[0].geometry.attributes.position.array;
 		var arrayLOD = [];
 		var lod = 10.;
@@ -48,15 +49,16 @@ export default class Tree extends THREE.Object3D {
 		this.frootUniforms = {
 			time: { value: 0 },
 			visible: { value: 0 },
+			heightmap: { value: heightmap.texture },
+			heightNormalMap: { value: heightmap.normalMap.texture },
 		}
-		material = assets.shaders.froot.clone();
+		material = assets.shaders.froot;
 		material.side = THREE.DoubleSide;
 		material.uniforms = this.frootUniforms;
 		material.needsUpdate = true;
-		assets.shaders.froot.cloned.push(material);
 		array = assets.geometries.tree.children[0].geometry.attributes.position.array;
 		arrayLOD = [];
-		lod = 200.;
+		lod = 50.;
 		count = array.length;
 		for (var i = 0; i < count; i += lod * 3)
 			for (var x = 0; x < 3; ++x)	arrayLOD.push(array[i+x]);

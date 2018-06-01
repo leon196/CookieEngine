@@ -15,6 +15,8 @@ export default class Rain extends THREE.Object3D {
 		this.uniforms = {
 			time: { value: 0 },
 			visible: { value: 0 },
+			bounce: { value: 0 },
+			twist: { value: 0 },
 			stormIntensity: { value: 0 },
 			stormDirection: { value: [0,-1,0] },
 			heightmap: { value: heightmap.texture },
@@ -22,11 +24,10 @@ export default class Rain extends THREE.Object3D {
 			indexResolution: { value: countResolution },
 		}
 
-		var material = assets.shaders.rain.clone();
+		var material = assets.shaders.rain;
 		material.side = THREE.DoubleSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
-		assets.shaders.rain.cloned.push(material);
 
 		var geometries = Geometry.create(Geometry.randomPositionAttribute(countResolution*countResolution));
 		geometries.forEach(geo => {
@@ -36,11 +37,10 @@ export default class Rain extends THREE.Object3D {
 		});
 
 		// droplets
-		material = assets.shaders.droplet.clone();
+		material = assets.shaders.droplet;
 		material.side = THREE.DoubleSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
-		assets.shaders.droplet.cloned.push(material);
 
 		var arrayPos = assets.geometries.tree.children[0].geometry.attributes.position.array;
 		var arrayNormal = assets.geometries.tree.children[0].geometry.attributes.normal.array;

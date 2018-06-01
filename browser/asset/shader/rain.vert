@@ -13,7 +13,7 @@ const vec3 greenDark = vec3(0.278,0.455,0.075);
 void main () {
 	float range = 20.;
 	float height = 40.;
-	vec2 size = visible * vec2(.005, 2.);
+	vec2 size = visible * vec2(.02, 2.);
 	vec2 sizeSplash = visible * vec2(.2);
 	
 	vec4 pos = modelMatrix * vec4(position, 1);

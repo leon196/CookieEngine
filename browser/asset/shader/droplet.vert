@@ -1,6 +1,6 @@
 
 attribute vec2 anchor, indexMap;
-uniform float time, visible, indexResolution, stormIntensity;
+uniform float time, visible, indexResolution, stormIntensity, bounce, twist;
 uniform vec3 stormDirection;
 uniform sampler2D heightmap, heightNormalMap;
 varying vec3 vColor, vNormal, vView;
@@ -30,11 +30,23 @@ void main () {
 	vec2 st = (pos.xz / 50.) * .5 + .5;
 	st.y = 1. - st.y;
 	float ground = texture2D(heightmap, st).y;
-	float salt = rand(st);
+	float salt = rand(indexMap);
 	float ratio = mod(time * speed + salt, 1.);
 	float splashAt = .9;
 	float ratioFall = smoothstep(.0, splashAt, ratio);
 	float ratioSplash = smoothstep(1., splashAt, ratio);
+
+	seed = pos.xyz*.2;
+	seed.xz *= rot(time*1.9551);
+	seed.yz *= rot(time*1.6519);
+	seed.yx *= rot(time*1.3216);
+	float shouldBounce = bounce * smoothstep(.3, 1., noiseIQ(seed));
+	pos.xyz += curl * abs(sin(salt + time * 2. * PI)) * shouldBounce * 4.;
+	float d = length(pos.xz);
+	d = sin(d * .5 + time * 4.);
+	pos.xz *= rot(d * shouldBounce * twist);
+	pos.yz *= rot(d * shouldBounce * twist * .6);
+	pos.yx *= rot(d * shouldBounce * twist * .3);
 
 	// float splashing = step(.0001, ratioSplash);
 	// y = mix(y, anchor.y, splashing);

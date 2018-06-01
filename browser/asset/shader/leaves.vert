@@ -1,6 +1,6 @@
 
 attribute vec2 anchor, indexMap;
-uniform float time, visible;
+uniform float time, visible, bounce, twist;
 varying vec3 vColor, vNormal, vView;
 
 const vec3 greenLight = vec3(0.769,0.906,0.604);
@@ -13,13 +13,6 @@ void main () {
 	float size = .1 * visible;
 	vec3 curl = vec3(0);
 	vec3 seed = pos.xyz * 4. + indexMap.xyy * 100.;
-	// seed.xz *= rot(time*.1);
-	// seed.yz *= rot(time*.1);
-	// seed.yx *= rot(time*.1);
-	// float salt = rand(indexMap);
-	// float ratio = mod(time * .2 + salt, 1.);
-	// size *= smoothstep(.0, .2, ratio) * smoothstep(1., .8, ratio);
-	// pos.y -= smoothstep(.1, .9, ratio) * 5.;
 	vec3 dir = pos.xyz;
 	float noisy = noiseIQ(seed);
 	curl.x = noisy;
@@ -28,11 +21,22 @@ void main () {
 	curl = curl * 2. - 1.;
 	curl = normalize(curl);
 	vNormal = curl;
-	// curl *= 1. + ratio * 10.;
 	vColor = mix(greenLight, greenDark, noisy);
-	// vColor = greenLight;
+
+	float salt = rand(indexMap);
+	seed = pos.xyz*.2;
+	seed.xz *= rot(time*.9551);
+	seed.yz *= rot(time*.6519);
+	seed.yx *= rot(time*.3216);
+	float shouldBounce = bounce * smoothstep(.3, 1., noiseIQ(seed));
+	pos.xyz += curl * abs(sin(salt + time * PI)) * shouldBounce * 12.;
+	float d = length(pos.xz);
+	d = sin(d * .5 + time * 4.);
+	// pos.xz *= rot(d * shouldBounce * twist);
+	// pos.yz *= rot(d * shouldBounce * twist * .6);
+	// pos.yx *= rot(d * shouldBounce * twist * .3);
+
 	pos.xyz += curl * (1.+y) * size * 2. * visible;
-	// dir = normalize(pos.xyz - dir);
 	vView = pos.xyz - cameraPosition;
 	vec3 right = normalize(cross(curl, vec3(0,1,0)));
 	pos.xyz += right * pivot.x * size;

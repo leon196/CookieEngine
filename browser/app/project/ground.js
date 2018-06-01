@@ -15,12 +15,11 @@ export default class Ground extends THREE.Object3D {
 			heightNormalMap: { value: heightmap.normalMap.texture },
 		}
 
-		var material = assets.shaders.ground.clone();
+		var material = assets.shaders.ground;
 		material.side = THREE.FrontSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
 		material.extensions.shaderTextureLOD = true;
-		assets.shaders.ground.cloned.push(material);
 
 		var mesh = new THREE.Mesh(new THREE.PlaneGeometry(100,100,300,300), material);
 		mesh.rotateX(-Math.PI/2.);

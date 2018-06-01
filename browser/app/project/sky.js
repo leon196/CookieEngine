@@ -12,31 +12,28 @@ export default class Sky extends THREE.Object3D {
 			time: { value: 0 },
 		}
 
-		var material = assets.shaders.sky.clone();
+		var material = assets.shaders.sky;
 		material.side = THREE.BackSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
-		assets.shaders.sky.cloned.push(material);
 		var mesh = new THREE.Mesh(new THREE.SphereGeometry(100,10,10), material);
 		mesh.frustumCulled = false;
 		this.add(mesh);
 
 		// moon
-		material = assets.shaders.moon.clone();
+		material = assets.shaders.moon;
 		material.side = THREE.FrontSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
-		assets.shaders.moon.cloned.push(material);
 		this.meshMoon = new THREE.Mesh(new THREE.SphereGeometry(10,30,30), material);
 		this.meshMoon.frustumCulled = false;
 		this.add(this.meshMoon);
 
 		// sun
-		material = assets.shaders.sun.clone();
+		material = assets.shaders.sun;
 		material.side = THREE.FrontSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
-		assets.shaders.sun.cloned.push(material);
 		this.meshSun = new THREE.Mesh(new THREE.SphereGeometry(10,30,30), material);
 		this.meshSun.frustumCulled = false;
 		this.add(this.meshSun);

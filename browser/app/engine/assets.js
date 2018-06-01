@@ -2,7 +2,6 @@
 /* This file is generated with "npm run assets", do not edit by hand. */
 import descriptors from "../../asset/descriptors.json!";
 import makeAnimations from "./make-animations";
-import uniforms from "./uniforms";
 import { OBJLoader } from "../libs/OBJLoader";
 import { PLYLoader } from "../libs/PLYLoader";
 import * as THREE from "three.js";
@@ -57,92 +56,74 @@ shaders: {
 tree: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.tree, {
 vertexShader: shaderHeader + shader_tree_vert,
 fragmentShader: shaderHeader + shader_tree_frag,
-uniforms: uniforms,
 })),
 ground: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.ground, {
 vertexShader: shaderHeader + shader_ground_vert,
 fragmentShader: shaderHeader + shader_ground_frag,
-uniforms: uniforms,
 })),
 sky: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.sky, {
 vertexShader: shaderHeader + shader_sky_vert,
 fragmentShader: shaderHeader + shader_sky_frag,
-uniforms: uniforms,
 })),
 moon: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.moon, {
 vertexShader: shaderHeader + shader_moon_vert,
 fragmentShader: shaderHeader + shader_moon_frag,
-uniforms: uniforms,
 })),
 sun: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.sun, {
 vertexShader: shaderHeader + shader_sun_vert,
 fragmentShader: shaderHeader + shader_sun_frag,
-uniforms: uniforms,
 })),
 star: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.star, {
 vertexShader: shaderHeader + shader_star_vert,
 fragmentShader: shaderHeader + shader_star_frag,
-uniforms: uniforms,
 })),
 leaves: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.leaves, {
 vertexShader: shaderHeader + shader_leaves_vert,
 fragmentShader: shaderHeader + shader_leaves_frag,
-uniforms: uniforms,
 })),
 froot: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.froot, {
 vertexShader: shaderHeader + shader_froot_vert,
 fragmentShader: shaderHeader + shader_froot_frag,
-uniforms: uniforms,
 })),
 grass: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.grass, {
 vertexShader: shaderHeader + shader_grass_vert,
 fragmentShader: shaderHeader + shader_grass_frag,
-uniforms: uniforms,
 })),
 rain: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.rain, {
 vertexShader: shaderHeader + shader_rain_vert,
 fragmentShader: shaderHeader + shader_rain_frag,
-uniforms: uniforms,
 })),
 droplet: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.droplet, {
 vertexShader: shaderHeader + shader_droplet_vert,
 fragmentShader: shaderHeader + shader_droplet_frag,
-uniforms: uniforms,
 })),
 heightmap: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.heightmap, {
 vertexShader: shaderHeader + shader_heightmap_vert,
 fragmentShader: shaderHeader + shader_heightmap_frag,
-uniforms: uniforms,
 })),
 postprocess: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.postprocess, {
 vertexShader: shaderHeader + shader_postprocess_vert,
 fragmentShader: shaderHeader + shader_postprocess_frag,
-uniforms: uniforms,
 })),
 blur: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.blur, {
 vertexShader: shaderHeader + shader_postprocess_vert,
 fragmentShader: shaderHeader + shader_blur_frag,
-uniforms: uniforms,
 })),
 edge: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.edge, {
 vertexShader: shaderHeader + shader_postprocess_vert,
 fragmentShader: shaderHeader + shader_edge_frag,
-uniforms: uniforms,
 })),
 bloom: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.bloom, {
 vertexShader: shaderHeader + shader_bloom_bloom_vert,
 fragmentShader: shaderHeader + shader_bloom_bloom_frag,
-uniforms: uniforms,
 })),
 bright: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.bright, {
 vertexShader: shaderHeader + shader_bloom_bright_vert,
 fragmentShader: shaderHeader + shader_bloom_bright_frag,
-uniforms: uniforms,
 })),
 gaussianBlur: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.gaussianBlur, {
 vertexShader: shaderHeader + shader_bloom_gaussian_blur_vert,
 fragmentShader: shaderHeader + shader_bloom_gaussian_blur_frag,
-uniforms: uniforms,
 })),
 },
 load: function(callback) { return callback(); }

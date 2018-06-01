@@ -19,12 +19,10 @@ export default class Grass extends THREE.Object3D {
 			indexResolution: { value: countResolution },
 		}
 
-		var material = assets.shaders.grass.clone();
+		var material = assets.shaders.grass;
 		material.side = THREE.DoubleSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
-
-		assets.shaders.grass.cloned.push(material);
 
 		var geometries = Geometry.create(Geometry.randomPositionAttribute(countResolution*countResolution), [6,2]);
 		geometries.forEach(geo => {

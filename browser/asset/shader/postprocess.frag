@@ -1,6 +1,6 @@
 
 uniform float time, textVisible;
-uniform sampler2D frameEdge, frameFlat, frameText, passEdge;
+uniform sampler2D frameEdge, frameFlat, frameText;
 uniform vec2 resolution;
 varying vec2 vUv;
 
@@ -11,8 +11,13 @@ void main () {
 	// uv = 1.-uv;
 
 	vec4 scene = texture2D(frameEdge, uv);
+
+	// vec4 scene = texture2D(frameEdge, vUv);
+	// scene *= smoothstep(.0, .1, abs(luminance(edge(frameEdge, vUv, resolution*4.).rgb)));
+
 	vec4 sceneFlat = texture2D(frameFlat, uv);
-	vec4 edge = texture2D(passEdge, uv);
+	vec4 edgy = texture2D(frameEdge, vUv);
+	edgy *= smoothstep(.0, .1, abs(luminance(edge(frameEdge, vUv, resolution*4.).rgb)));
 
 	float aspect = resolution.x/resolution.y;
 
@@ -37,7 +42,7 @@ void main () {
 
 	float blend = step(.0001,luminance(sceneFlat.rgb));
 	blend *= step(depthFlat, depth);
-	vec4 color = edge*.75 + scene * .25;
+	vec4 color = edgy*.75 + scene * .25;
 	color = mix(scene, color, dof);
 	color = mix(color, sceneFlat, blend);
 	// color = mix(color, text, text.a);
