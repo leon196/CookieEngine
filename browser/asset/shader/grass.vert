@@ -1,6 +1,6 @@
 
 attribute vec2 anchor, indexMap;
-uniform float time, visible, indexResolution;
+uniform float time, visible, indexResolution, wavy;
 uniform sampler2D heightmap;
 varying vec3 vColor, vNormal, vView;
 varying vec2 vUv;
@@ -24,7 +24,7 @@ void main () {
 	// float r = length(pos.xz);
 	// float a = atan(pos.z, pos.x);
 	float a = index * .4;
-	float r = 1. + index * .07 + sin(anchor.x * 3. + index) * .5;
+	float r = 1. + index * .07 + sin(anchor.x * 3. + index + wavy) * .5;
 	pos.xz = vec2(cos(a),sin(a)) * r;
 	vec3 seed = pos.xyz * 2. + anchor.xxx * 4.;
 	vec3 curl = vec3(0);

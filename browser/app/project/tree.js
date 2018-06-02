@@ -49,6 +49,7 @@ export default class Tree extends THREE.Object3D {
 		this.frootUniforms = {
 			time: { value: 0 },
 			visible: { value: 0 },
+			bounce: { value: 0 },
 			heightmap: { value: heightmap.texture },
 			heightNormalMap: { value: heightmap.normalMap.texture },
 		}

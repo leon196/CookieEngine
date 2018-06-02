@@ -1,6 +1,6 @@
 
 attribute vec2 anchor, indexMap;
-uniform float time, visible;
+uniform float time, visible, bounce;
 uniform sampler2D heightmap, heightNormalMap;
 varying vec3 vColor, vNormal, vView;
 varying vec2 vUv;
@@ -13,10 +13,9 @@ void main () {
 	vec4 pos = modelMatrix * vec4(position, 1);
 	float salt = rand(indexMap);
 	vUv = anchor;
-	float y = (anchor.y*.5+.5)*2. * visible+1.;
 	float size = (.05 + salt * .1);
 
-	vec3 seed = pos.xyz*.4;
+	vec3 seed = pos.xyz*.4 + indexMap.xyy * 2.;
 	seed.xz *= rot(time*.9551);
 	seed.yz *= rot(time*.6519);
 	seed.yx *= rot(time*.3216);
@@ -28,9 +27,10 @@ void main () {
 	curl = curl * 2. - 1.;
 	curl = normalize(curl);
 
-	pos.xyz += curl * .2;
+	pos.xyz += curl * .4 * salt * bounce;
 
-	vBounce = smoothstep(.5, .8, noisy);
+	vBounce = bounce * smoothstep(.5, .8, noisy);
+	float y = (1.+vBounce) * (anchor.y*.5+.5)*2. * visible;
 
 	size *= 1. + .5 * abs(sin(time * 8.)) * vBounce;
 
@@ -50,6 +50,6 @@ void main () {
 	vView = pos.xyz - cameraPosition;
 	vec3 right = normalize(cross(vView, vec3(0,1,0)));
 	vec3 up = normalize(cross(vView, right));
-	pos.xyz += (-right * anchor.x * visible + up * y) * size;
+	pos.xyz += (-right * anchor.x * visible * (1.+vBounce) + up * y) * size;
 	gl_Position = projectionMatrix * viewMatrix * pos;
 }

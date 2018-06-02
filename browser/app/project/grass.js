@@ -15,6 +15,7 @@ export default class Grass extends THREE.Object3D {
 		this.uniforms = {
 			time: { value: 0 },
 			visible: { value: 0 },
+			wavy: { value: 0 },
 			heightmap: { value: heightmap.texture },
 			indexResolution: { value: countResolution },
 		}

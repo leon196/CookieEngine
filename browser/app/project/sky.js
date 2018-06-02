@@ -25,7 +25,7 @@ export default class Sky extends THREE.Object3D {
 		material.side = THREE.FrontSide;
 		material.uniforms = this.uniforms;
 		material.needsUpdate = true;
-		this.meshMoon = new THREE.Mesh(new THREE.SphereGeometry(10,30,30), material);
+		this.meshMoon = new THREE.Mesh(new THREE.SphereGeometry(5,30,30), material);
 		this.meshMoon.frustumCulled = false;
 		this.add(this.meshMoon);
 

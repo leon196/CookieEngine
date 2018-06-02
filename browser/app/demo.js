@@ -64,6 +64,9 @@ export default function() {
 
 		renderUniforms = {
 			time: { value: 0 },
+			mirrorX: { value: 0 },
+			mirrorY: { value: 0 },
+			inverseMirror: { value: 0 },
 			textVisible: { value: 1 },
 			resolution: { value: [window.innerWidth, window.innerHeight] },
 			frameFlat: { value: frameFlat.texture },
@@ -116,6 +119,7 @@ export default function() {
 		requestAnimationFrame(animate);
 		timeline.start();
 		document.getElementById('overlay').remove();
+		document.getElementsByTagName("BODY")[0].style.cursor = "none";
 		timeElapsed = 0.;
 		lastElapsed = 0.;
 	}
@@ -158,14 +162,20 @@ export default function() {
 			camera.updateProjectionMatrix();
 
 			renderUniforms.textVisible.value = getValueClamped(renderUniforms.textVisible.value, "TextAction");
+			renderUniforms.mirrorX.value = getValueClamped(renderUniforms.mirrorX.value, "MirrorXAction");
+			renderUniforms.mirrorY.value = getValueClamped(renderUniforms.mirrorY.value, "MirrorYAction");
+			renderUniforms.inverseMirror.value = getValueClamped(renderUniforms.inverseMirror.value, "MirrorInverseAction");
 			tree.leavesUniforms.visible.value = getValueClamped(tree.leavesUniforms.visible.value, "LeavesAction");
 			tree.leavesUniforms.bounce.value = getValueClamped(tree.leavesUniforms.bounce.value, "BounceAction");
+			tree.frootUniforms.bounce.value = getValueClamped(tree.frootUniforms.bounce.value, "BounceFrootAction");
 			tree.leavesUniforms.twist.value = getValueClamped(tree.leavesUniforms.twist.value, "TwistAction");
 			rain.uniforms.bounce.value = tree.leavesUniforms.bounce.value;
 			rain.uniforms.twist.value = tree.leavesUniforms.twist.value;
 			tree.frootUniforms.visible.value = getValueClamped(tree.frootUniforms.visible.value, "FrootAction");
 			grass.uniforms.visible.value = getValueClamped(grass.uniforms.visible.value, "GrassAction");
+			grass.uniforms.wavy.value = getValue(grass.uniforms.wavy.value, "WavyAction");
 			rain.uniforms.visible.value = getValueClamped(rain.uniforms.visible.value, "RainAction");
+			starfield.uniforms.star.value = getValue(starfield.uniforms.star.value, "StarAction");
 			rain.uniforms.stormIntensity.value = getValueClamped(rain.uniforms.stormIntensity.value, "StormAction");
 			rain.uniforms.stormDirection.value = getPosition(rain.uniforms.stormDirection.value, "StormDirectionAction");
 
@@ -185,6 +195,7 @@ export default function() {
 		renderer.render(scene, camera, frameFlat);
 		renderer.render(sceneEdge, camera, frameEdge);
 		renderer.render(passRender.scene, passRender.camera);
+		// renderer.render(sceneEdge, camera);
 
 		lastElapsed = elapsed;
 	}

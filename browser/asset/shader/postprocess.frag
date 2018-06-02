@@ -1,14 +1,14 @@
 
-uniform float time, textVisible;
+uniform float time, textVisible, mirrorX, mirrorY, inverseMirror;
 uniform sampler2D frameEdge, frameFlat, frameText;
 uniform vec2 resolution;
 varying vec2 vUv;
 
 void main () {
 	vec2 uv = vUv;
-	// uv.x = .5-abs(uv.x-.5);
-	// uv.y = .5-abs(uv.y-.5);
-	// uv = 1.-uv;
+	uv.x = mix(uv.x, .5-abs(uv.x-.5), mirrorX);
+	uv.y = mix(uv.y, 1.-(.5-abs(uv.y-.5)), mirrorY);
+	uv = mix(uv, 1.-uv, inverseMirror);
 
 	vec4 scene = texture2D(frameEdge, uv);
 
@@ -16,8 +16,8 @@ void main () {
 	// scene *= smoothstep(.0, .1, abs(luminance(edge(frameEdge, vUv, resolution*4.).rgb)));
 
 	vec4 sceneFlat = texture2D(frameFlat, uv);
-	vec4 edgy = texture2D(frameEdge, vUv);
-	edgy *= smoothstep(.0, .1, abs(luminance(edge(frameEdge, vUv, resolution*4.).rgb)));
+	vec4 edgy = texture2D(frameEdge, uv);
+	edgy *= smoothstep(.0, .1, abs(luminance(edge(frameEdge, uv, resolution*4.).rgb)));
 
 	float aspect = resolution.x/resolution.y;
 
