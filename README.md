@@ -1,13 +1,13 @@
-# And The Crowd Gathered At Cookie
+# From Brain With Love
 
-Invitro for Cookie demoparty 2017.
+Three.js demo for VIP 2018
 
 <img src="/Screenshot.png?raw=true" alt="Screenshot" width="100%"/>
 
 ## Credits
 
-[Fergus](https://github.com/Simon-L): music.
+[Grizzly Cogs](https://soundcloud.com/grizzly-cogs) (music)
 
-[Koltes](https://github.com/KoltesDigital): code.
+[Koltes](http://koltes.digital/) (dev tool)
 
-[Ponk](https://github.com/leon196): artcode.
+[ponk](http://shaderland.com) (art code)
