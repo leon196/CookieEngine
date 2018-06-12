@@ -8,16 +8,8 @@ import * as THREE from "three.js";
 import shaderHeader from "../../asset/shader/header.glsl!text";
 import animation_scene_json from "../../asset/animation/scene.json!text";
 import mesh_tree_obj from "../../asset/mesh/tree.obj!text";
-import shader_bloom_bloom_frag from "../../asset/shader/bloom/bloom.frag!text";
-import shader_bloom_bloom_vert from "../../asset/shader/bloom/bloom.vert!text";
-import shader_bloom_bright_frag from "../../asset/shader/bloom/bright.frag!text";
-import shader_bloom_bright_vert from "../../asset/shader/bloom/bright.vert!text";
-import shader_bloom_gaussian_blur_frag from "../../asset/shader/bloom/gaussian_blur.frag!text";
-import shader_bloom_gaussian_blur_vert from "../../asset/shader/bloom/gaussian_blur.vert!text";
-import shader_blur_frag from "../../asset/shader/blur.frag!text";
 import shader_droplet_frag from "../../asset/shader/droplet.frag!text";
 import shader_droplet_vert from "../../asset/shader/droplet.vert!text";
-import shader_edge_frag from "../../asset/shader/edge.frag!text";
 import shader_froot_frag from "../../asset/shader/froot.frag!text";
 import shader_froot_vert from "../../asset/shader/froot.vert!text";
 import shader_grass_frag from "../../asset/shader/grass.frag!text";
@@ -104,26 +96,6 @@ fragmentShader: shaderHeader + shader_heightmap_frag,
 postprocess: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.postprocess, {
 vertexShader: shaderHeader + shader_postprocess_vert,
 fragmentShader: shaderHeader + shader_postprocess_frag,
-})),
-blur: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.blur, {
-vertexShader: shaderHeader + shader_postprocess_vert,
-fragmentShader: shaderHeader + shader_blur_frag,
-})),
-edge: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.edge, {
-vertexShader: shaderHeader + shader_postprocess_vert,
-fragmentShader: shaderHeader + shader_edge_frag,
-})),
-bloom: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.bloom, {
-vertexShader: shaderHeader + shader_bloom_bloom_vert,
-fragmentShader: shaderHeader + shader_bloom_bloom_frag,
-})),
-bright: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.bright, {
-vertexShader: shaderHeader + shader_bloom_bright_vert,
-fragmentShader: shaderHeader + shader_bloom_bright_frag,
-})),
-gaussianBlur: new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders.gaussianBlur, {
-vertexShader: shaderHeader + shader_bloom_gaussian_blur_vert,
-fragmentShader: shaderHeader + shader_bloom_gaussian_blur_frag,
 })),
 },
 load: function(callback) { return callback(); }

@@ -1,3 +1,6 @@
 import demo from './demo';
+import { gui } from './engine/gui';
 
-demo();
+window.onload = function() {
+	demo();
+}

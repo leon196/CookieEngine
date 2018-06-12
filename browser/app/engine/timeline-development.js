@@ -22,3 +22,7 @@ export function getTime() {
 	else
 		return clock.getElapsedTime();
 }
+
+export function getDuration() {
+	return 100000000;
+}

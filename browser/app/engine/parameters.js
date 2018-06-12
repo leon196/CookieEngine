@@ -6,7 +6,14 @@ export default {
 		rain: 0,
 		text: 0,
 	},
-	other: {
-		animation: true,
-	}
+	animation: {
+		bounce: 0,
+		bounceFroot: 0,
+		star: 0,
+	},
+	postFX: {
+		mirrorX: 0,
+		mirrorY: 0,
+		mirrorInverse: 0,
+	},
 }

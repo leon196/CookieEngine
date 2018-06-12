@@ -7,41 +7,8 @@
 	font-style: normal;
 }
 
-@font-face {
-	font-family: 'litchis_island';
-	src: url('litchis_island.woff2') format('woff2'),
-	url('litchis_island.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'trashhand';
-	src: url('trashhand-webfont.woff2') format('woff2'),
-	url('trashhand-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'rhinos_rocksregular';
-	src: url('rhinos_rocks_1-webfont.woff2') format('woff2'),
-	url('rhinos_rocks_1-webfont.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-
-@font-face {
-    font-family: 'barlow';
-    src: url('barlowcondensed-regular-webfont.woff2') format('woff2'),
-         url('barlowcondensed-regular-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
 body {
+	font-family: 'bowlbyonesc';
 	background: #000;
 	margin: 0;
 	overflow: hidden;
@@ -49,16 +16,16 @@ body {
 
 #overlay {
 	color: white;
-  width: 100%;
-  height: 100vh;
-  line-height: 100vh;
-  text-align: center;
+	width: 100%;
+	height: 100vh;
+	line-height: 100vh;
+	text-align: center;
 }
 
 #overlay span {
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;
 }
 
 

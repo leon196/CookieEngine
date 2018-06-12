@@ -17,6 +17,7 @@ import Grass from './project/grass';
 import Rain from './project/rain';
 import Starfield from './project/starfield';
 import heightmap from './project/heightmap';
+import { gui } from './engine/gui';
 
 export default function() {
 	var scene, sceneEdge, camera, controls, animation, cameraPosition, cameraTarget;
@@ -59,8 +60,7 @@ export default function() {
 			text: 'music by Grizzly Cogs\nart coded by ponk\ndev tool by Koltes',
 			fontSize: 70,
 			offsetY: 200,
-		},
-	]);
+		}]);
 
 		renderUniforms = {
 			time: { value: 0 },
@@ -76,14 +76,7 @@ export default function() {
 			heightNormalMap: { value: heightmap.normalMap.texture },
 			passRender: { value: passRender.getTexture() },
 		};
-		assets.shaders.edge.uniforms = renderUniforms;
-		assets.shaders.blur.uniforms = renderUniforms;
 		assets.shaders.postprocess.uniforms = renderUniforms;
-
-		controls = new OrbitControls(camera, renderer.domElement);
-		controls.enableDamping = true;
-		controls.dampingFactor = 0.5;
-		controls.rotateSpeed = 0.25;
 
 		tree = new Tree();
 		ground = new Ground();
@@ -95,12 +88,6 @@ export default function() {
 		updates.forEach(item => sceneEdge.add(item));
 		updates.push(grass, rain, starfield);
 		scene.add(grass, rain, starfield);
-		// updates.push(heightmap);
-
-		parameters.scene.leaves = 1;
-		parameters.scene.froot = 1;
-		parameters.scene.grass = 1;
-		parameters.scene.text = 0;
 		
 		window.addEventListener('resize', onWindowResize, false);
 		onWindowResize();
@@ -112,6 +99,7 @@ export default function() {
 		startButton.type = 'button';
 		startButton.value = 'start';
 		startButton.onclick = start;
+		startButton.style.fontFamily = 'bowlbyonesc';
 		info.appendChild(startButton);
 	});
 
@@ -124,32 +112,16 @@ export default function() {
 		lastElapsed = 0.;
 	}
 
-	function getVectorPosition (vector, name) {
-		// var array = assets.animations.getPosition(name, timeElapsed);
-		// return new THREE.Vector3(array[0], array[1], array[2]);
-		return lerpVectorArray(vector, assets.animations.getPosition(name, timeElapsed), animDamping);
-	}
-
-	function getPosition (array, name) {
-		// return assets.animations.getPosition(name, timeElapsed);
-		return lerpArray(array, assets.animations.getPosition(name, timeElapsed), animDamping);
-	}
-
-	function getValue (value, name) {
-		// return assets.animations.getValue(name, timeElapsed);
-		return lerp(value, assets.animations.getValue(name, timeElapsed), animDamping);
-	}
-
-	function getValueClamped (value, name) {
-		// return assets.animations.getValue(name, timeElapsed);
-		return saturate(lerp(value, assets.animations.getValue(name, timeElapsed), animDamping));
-	}
+	function getVectorPosition (vector, name) { return lerpVectorArray(vector, assets.animations.getPosition(name, timeElapsed), animDamping); }
+	function getPosition (array, name) { return lerpArray(array, assets.animations.getPosition(name, timeElapsed), animDamping); }
+	function getValue (value, name) { return lerp(value, assets.animations.getValue(name, timeElapsed), animDamping); }
+	function getValueClamped (value, name) { return saturate(lerp(value, assets.animations.getValue(name, timeElapsed), animDamping)); }
 
 	function animate(elapsed) {
 		requestAnimationFrame(animate);
 		elapsed /= 1000.;
 
-		if (parameters.other.animation) {
+		if (timeline.getTime() <= timeline.getDuration()) {
 			delta = Math.max(.001, Math.abs(elapsed - lastElapsed));
 			animDamping = clamp(10. * delta, 0.001, 1.);
 			timeElapsed = timeline.getTime();
@@ -180,11 +152,36 @@ export default function() {
 			rain.uniforms.stormDirection.value = getPosition(rain.uniforms.stormDirection.value, "StormDirectionAction");
 
 		} else {
+
+			if (!gui.gone) {
+				gui.go();
+				parameters.scene.leaves = 1;
+				parameters.scene.froot = 1;
+				parameters.scene.grass = 1;
+				parameters.scene.text = 0;
+				document.getElementsByTagName("BODY")[0].style.cursor = "default";
+				controls = new OrbitControls(camera, renderer.domElement);
+				controls.enableDamping = true;
+				controls.dampingFactor = 0.5;
+				controls.rotateSpeed = 0.25;
+				controls.target = getVectorPosition(cameraTarget, "CameraTargetAction");
+			}
+
 			renderUniforms.textVisible.value = parameters.scene.text;
 			tree.leavesUniforms.visible.value = parameters.scene.leaves;
 			tree.frootUniforms.visible.value = parameters.scene.froot;
 			grass.uniforms.visible.value = parameters.scene.grass;
 			rain.uniforms.visible.value = parameters.scene.rain;
+
+			renderUniforms.mirrorX.value = parameters.postFX.mirrorX;
+			renderUniforms.mirrorY.value = parameters.postFX.mirrorY;
+			renderUniforms.inverseMirror.value = parameters.postFX.mirrorInverse;
+
+			tree.leavesUniforms.bounce.value = parameters.animation.bounce;
+			tree.frootUniforms.bounce.value = parameters.animation.bounceFroot;
+			rain.uniforms.bounce.value = parameters.animation.bounce;
+			starfield.uniforms.star.value = parameters.animation.star;
+
 			timeElapsed = elapsed;
 			controls.update();
 		}
@@ -195,7 +192,6 @@ export default function() {
 		renderer.render(scene, camera, frameFlat);
 		renderer.render(sceneEdge, camera, frameEdge);
 		renderer.render(passRender.scene, passRender.camera);
-		// renderer.render(sceneEdge, camera);
 
 		lastElapsed = elapsed;
 	}
