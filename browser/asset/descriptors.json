@@ -5,58 +5,15 @@
 	"textures": {
 	},
 	"geometries": {
-		"tree": {
-			"file": "mesh/tree.obj"
-		}
 	},
 	"shaders": {
-		"tree": {
-			"vertexShader": "shader/tree.vert",
-			"fragmentShader": "shader/tree.frag"
+		"plant": {
+			"vertexShader": "shader/plant.vert",
+			"fragmentShader": "shader/plant.frag"
 		},
-		"ground": {
-			"vertexShader": "shader/ground.vert",
-			"fragmentShader": "shader/ground.frag"
-		},
-		"sky": {
-			"vertexShader": "shader/sky.vert",
-			"fragmentShader": "shader/sky.frag"
-		},
-		"moon": {
-			"vertexShader": "shader/moon.vert",
-			"fragmentShader": "shader/moon.frag"
-		},
-		"sun": {
-			"vertexShader": "shader/sun.vert",
-			"fragmentShader": "shader/sun.frag"
-		},
-		"star": {
-			"vertexShader": "shader/star.vert",
-			"fragmentShader": "shader/star.frag"
-		},
-		"leaves": {
-			"vertexShader": "shader/leaves.vert",
-			"fragmentShader": "shader/leaves.frag"
-		},
-		"froot": {
-			"vertexShader": "shader/froot.vert",
-			"fragmentShader": "shader/froot.frag"
-		},
-		"grass": {
-			"vertexShader": "shader/grass.vert",
-			"fragmentShader": "shader/grass.frag"
-		},
-		"rain": {
-			"vertexShader": "shader/rain.vert",
-			"fragmentShader": "shader/rain.frag"
-		},
-		"droplet": {
-			"vertexShader": "shader/droplet.vert",
-			"fragmentShader": "shader/droplet.frag"
-		},
-		"heightmap": {
-			"vertexShader": "shader/heightmap.vert",
-			"fragmentShader": "shader/heightmap.frag"
+		"raymarching": {
+			"vertexShader": "shader/postprocess.vert",
+			"fragmentShader": "shader/raymarching.frag"
 		},
 		"postprocess": {
 			"vertexShader": "shader/postprocess.vert",

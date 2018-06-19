@@ -7,12 +7,12 @@
 
 mat2 rot (float a) { float c=cos(a),s=sin(a); return mat2(c,-s,s,c); }
 
-void lookAt (inout vec3 pos, vec3 target, vec2 anchor)
+vec3 lookAt (vec3 eye, vec3 target, vec2 anchor)
 {
-	vec3 forward = normalize(target-pos);
-	vec3 right = normalize(cross(vec3(0,1,0), forward));
-	vec3 up = normalize(cross(forward, right));
-	pos += right * anchor.x + up * anchor.y;
+	vec3 forward = normalize(target-eye);
+	vec3 right = normalize(cross(forward, vec3(0,1,0)));
+	vec3 up = normalize(cross(right, forward));
+	return normalize(forward + right * anchor.x + up * anchor.y);
 }
 
 void lookAtUp (inout vec3 pos, vec3 target, vec2 anchor)
